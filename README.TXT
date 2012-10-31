@@ -8,5 +8,5 @@ PROJECT TITLE: Smart Canteen
 PURPOSE OF PROJECT:
 VERSION or DATE:
 HOW TO START THIS PROJECT:
-AUTHORS: Marcel Baxmann, Francesco Luciano, Tim Sahling
+AUTHORS: Tim Sahling
 USER INSTRUCTIONS:
