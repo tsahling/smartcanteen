@@ -5,11 +5,14 @@
  * @author (your name here)
  * @version (version number or date here)
  */
-public abstract class AbstractCanteen
+public abstract class Canteen
 {
     // instance variables - replace the example below with your own
     private int x;
 
+    public Canteen() {
+    }
+    
     /**
      * An example of a method - replace this comment with your own
      * 
