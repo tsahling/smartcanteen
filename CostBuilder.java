@@ -1,21 +1,20 @@
 
 /**
- * Write a description of class MenuBuilder here.
+ * Write a description of class CostBuilder here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class MenuBuilder
+public class CostBuilder
 {
     // instance variables - replace the example below with your own
     private int x;
 
     /**
-     * Constructor for objects of class MenuBuilder
+     * Constructor for objects of class CostBuilder
      */
-    public MenuBuilder()
+    public CostBuilder()
     {
-        
         
         
         // initialise instance variables

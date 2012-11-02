@@ -1,19 +1,22 @@
+import java.util.List;
 
 /**
- * Write a description of class Farmer here.
+ * Write a description of class RecipeList here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Farmer extends Provider
+public class Recipes
 {
     // instance variables - replace the example below with your own
     private int x;
 
+    private List<Meal> meals;
+    
     /**
-     * Constructor for objects of class Farmer
+     * Constructor for objects of class RecipeList
      */
-    public Farmer()
+    public Recipes()
     {
         // initialise instance variables
         x = 0;

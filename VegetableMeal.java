@@ -1,23 +1,20 @@
 
 /**
- * Write a description of class MenuBuilder here.
+ * Write a description of class VegetableMeal here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class MenuBuilder
+public class VegetableMeal extends Meal
 {
     // instance variables - replace the example below with your own
     private int x;
 
     /**
-     * Constructor for objects of class MenuBuilder
+     * Constructor for objects of class VegetableMeal
      */
-    public MenuBuilder()
+    public VegetableMeal()
     {
-        
-        
-        
         // initialise instance variables
         x = 0;
     }

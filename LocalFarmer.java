@@ -1,19 +1,19 @@
 
 /**
- * Write a description of class VegyMeal here.
+ * Write a description of class LocalFarmer here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class VegiMeal extends Meal
+public class LocalFarmer extends Provider
 {
     // instance variables - replace the example below with your own
     private int x;
 
     /**
-     * Constructor for objects of class VegyMeal
+     * Constructor for objects of class LocalFarmer
      */
-    public VegiMeal()
+    public LocalFarmer()
     {
         // initialise instance variables
         x = 0;
