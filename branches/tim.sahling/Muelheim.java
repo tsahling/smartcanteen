@@ -1,7 +1,7 @@
 import java.util.List;
 
 /**
- * Write a description of class MuehlheimCanteen here.
+ * Write a description of class Muelheim here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
@@ -10,11 +10,11 @@ public class Muelheim extends Canteen
 {
     // instance variables - replace the example below with your own
     private int x;
-    
-    private List<FavoriteMeal> favoriteMeals;
+
+    private FavoriteMeals favoriteMeals;
     
     /**
-     * Constructor for objects of class MuehlheimCanteen
+     * Constructor for objects of class Muelheim
      */
     public Muelheim()
     {

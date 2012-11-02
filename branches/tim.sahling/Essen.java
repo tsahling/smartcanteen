@@ -1,7 +1,7 @@
 import java.util.List;
 
 /**
- * Write a description of class EssenCanteen here.
+ * Write a description of class Essen here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
@@ -11,10 +11,10 @@ public class Essen extends Canteen
     // instance variables - replace the example below with your own
     private int x;
 
-    List<FavoriteMeal> favoriteMeals;
+    private FavoriteMeals favoriteMeals;
     
     /**
-     * Constructor for objects of class EssenCanteen
+     * Constructor for objects of class Essen
      */
     public Essen()
     {

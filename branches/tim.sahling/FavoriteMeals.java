@@ -1,22 +1,22 @@
 import java.util.List;
 
 /**
- * Write a description of class PriceList here.
+ * Write a description of class FavoriteMealList here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class PriceList
+public class FavoriteMeals
 {
     // instance variables - replace the example below with your own
     private int x;
-    
-    private List<Ingredient> ingredients;
 
+    private List<Meal> meals;
+    
     /**
-     * Constructor for objects of class PriceList
+     * Constructor for objects of class FavoriteMealList
      */
-    public PriceList()
+    public FavoriteMeals()
     {
         // initialise instance variables
         x = 0;

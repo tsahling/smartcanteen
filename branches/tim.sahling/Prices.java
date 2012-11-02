@@ -1,23 +1,23 @@
+import java.util.List;
 
 /**
- * Write a description of class MenuBuilder here.
+ * Write a description of class PriceList here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class MenuBuilder
+public class Prices
 {
     // instance variables - replace the example below with your own
     private int x;
+    
+    private List<Ingredient> ingredients;
 
     /**
-     * Constructor for objects of class MenuBuilder
+     * Constructor for objects of class PriceList
      */
-    public MenuBuilder()
+    public Prices()
     {
-        
-        
-        
         // initialise instance variables
         x = 0;
     }

@@ -7,21 +7,15 @@
  */
 public class Ingredient
 {
-    private String name;
+    // instance variables - replace the example below with your own
+    private int x;
 
     /**
      * Constructor for objects of class Ingredient
      */
     public Ingredient()
     {
-
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
+        // initialise instance variables
+        x = 0;
     }
 }

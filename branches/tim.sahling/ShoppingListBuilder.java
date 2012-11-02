@@ -1,23 +1,23 @@
 
 /**
- * Write a description of class FavoriteMeal here.
+ * Write a description of class ShoppingListBuilder here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class FavoriteMeal
+public class ShoppingListBuilder
 {
     // instance variables - replace the example below with your own
     private int x;
 
-    private Meal meal;
-    private int rank;
-    
     /**
-     * Constructor for objects of class FavoriteMeal
+     * Constructor for objects of class ShoppingListBuilder
      */
-    public FavoriteMeal()
+    public ShoppingListBuilder()
     {
+        
+       Ingredient test = new Ingredient();
+
         // initialise instance variables
         x = 0;
     }

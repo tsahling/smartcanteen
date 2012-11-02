@@ -1,10 +1,11 @@
+
 /**
  * Write a description of class HTMLOutput here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class HTMLOutput implements IOutput
+public class HTMLOutput extends Output
 {
     // instance variables - replace the example below with your own
     private int x;
@@ -13,7 +14,7 @@ public class HTMLOutput implements IOutput
      * Constructor for objects of class HTMLOutput
      */
     public HTMLOutput()
-    {        
+    {
         // initialise instance variables
         x = 0;
     }

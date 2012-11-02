@@ -1,4 +1,4 @@
-
+import java.util.List;
 
 /**
  * Abstract class Provider - write a description of the class here
@@ -8,7 +8,20 @@
  */
 public abstract class Provider
 {
+    // instance variables - replace the example below with your own
+    private int x;
     
-    private PriceList priceList;
-    
+    private Prices prices;
+
+    /**
+     * An example of a method - replace this comment with your own
+     * 
+     * @param  y    a sample parameter for a method
+     * @return        the sum of x and y 
+     */
+    public int sampleMethod(int y)
+    {
+        // put your code here
+        return x + y;
+    }
 }

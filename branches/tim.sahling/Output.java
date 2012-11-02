@@ -1,11 +1,11 @@
 
 /**
- * Abstract class Canteen - write a description of the class here
+ * Abstract class Output - write a description of the class here
  * 
  * @author (your name here)
  * @version (version number or date here)
  */
-public abstract class Canteen
+public abstract class Output 
 {
     // instance variables - replace the example below with your own
     private int x;
