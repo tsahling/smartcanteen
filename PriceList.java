@@ -1,22 +1,22 @@
 import java.util.List;
 
 /**
- * Write a description of class MuehlheimCanteen here.
+ * Write a description of class PriceList here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class MuelheimCanteen extends Canteen
+public class PriceList
 {
     // instance variables - replace the example below with your own
     private int x;
     
-    private List<Meal> favoriteMeals;
-    
+    private List<Ingredient> ingredients;
+
     /**
-     * Constructor for objects of class MuehlheimCanteen
+     * Constructor for objects of class PriceList
      */
-    public MuelheimCanteen()
+    public PriceList()
     {
         // initialise instance variables
         x = 0;

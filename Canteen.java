@@ -10,6 +10,8 @@ public abstract class Canteen
     // instance variables - replace the example below with your own
     private int x;
 
+    private String name;
+    
     public Canteen() {
     }
     
