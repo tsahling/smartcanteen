@@ -10,13 +10,12 @@ public class CostBuilder
     // instance variables - replace the example below with your own
     private int x;
 
+    
     /**
      * Constructor for objects of class CostBuilder
      */
     public CostBuilder()
     {
-        
-        
         // initialise instance variables
         x = 0;
     }

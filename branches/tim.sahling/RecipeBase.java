@@ -1,22 +1,19 @@
-import java.util.List;
 
 /**
- * Write a description of class RecipeList here.
+ * Write a description of class RecipeBase here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Recipes
+public class RecipeBase
 {
     // instance variables - replace the example below with your own
     private int x;
 
-    private List<Meal> meals;
-    
     /**
-     * Constructor for objects of class RecipeList
+     * Constructor for objects of class RecipeBase
      */
-    public Recipes()
+    public RecipeBase()
     {
         // initialise instance variables
         x = 0;

@@ -1,6 +1,6 @@
 
 /**
- * Write a description of class MenuBuilder here.
+ * Write a description of class MenuBilder here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
@@ -11,13 +11,10 @@ public class MenuBuilder
     private int x;
 
     /**
-     * Constructor for objects of class MenuBuilder
+     * Constructor for objects of class MenuBilder
      */
     public MenuBuilder()
     {
-        
-        
-        
         // initialise instance variables
         x = 0;
     }
