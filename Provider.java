@@ -11,7 +11,7 @@ public abstract class Provider
     // instance variables - replace the example below with your own
     private int x;
     
-    private Prices prices;
+    
 
     /**
      * An example of a method - replace this comment with your own

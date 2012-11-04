@@ -1,22 +1,19 @@
-import java.util.List;
 
 /**
- * Write a description of class FavoriteMealList here.
+ * Write a description of class FavoriteMealBase here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class FavoriteMeals
+public class FavoriteMealBase
 {
     // instance variables - replace the example below with your own
     private int x;
 
-    private List<Meal> meals;
-    
     /**
-     * Constructor for objects of class FavoriteMealList
+     * Constructor for objects of class FavoriteMealBase
      */
-    public FavoriteMeals()
+    public FavoriteMealBase()
     {
         // initialise instance variables
         x = 0;

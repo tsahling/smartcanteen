@@ -15,9 +15,6 @@ public class ShoppingListBuilder
      */
     public ShoppingListBuilder()
     {
-        
-       Ingredient test = new Ingredient();
-
         // initialise instance variables
         x = 0;
     }
