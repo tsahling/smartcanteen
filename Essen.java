@@ -5,7 +5,7 @@
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Essen extends Kantine
+public class Essen extends Canteen
 {
     // instance variables - replace the example below with your own
     private int x;
