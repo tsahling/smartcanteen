@@ -1,19 +1,19 @@
 
 /**
- * Write a description of class Recipes here.
+ * Write a description of class Ingriedents here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Recipe
+public class Ingriedents
 {
     // instance variables - replace the example below with your own
     private int x;
 
     /**
-     * Constructor for objects of class Recipes
+     * Constructor for objects of class Ingriedents
      */
-    public Recipe()
+    public Ingriedents()
     {
         // initialise instance variables
         x = 0;

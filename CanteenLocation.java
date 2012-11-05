@@ -1,19 +1,19 @@
 
 /**
- * Write a description of class Recipes here.
+ * Write a description of class CanteenLocation here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Recipe
+public class CanteenLocation extends Canteen
 {
     // instance variables - replace the example below with your own
     private int x;
 
     /**
-     * Constructor for objects of class Recipes
+     * Constructor for objects of class CanteenLocation
      */
-    public Recipe()
+    public CanteenLocation()
     {
         // initialise instance variables
         x = 0;
