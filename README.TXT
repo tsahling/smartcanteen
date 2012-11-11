@@ -10,3 +10,12 @@ VERSION or DATE:
 HOW TO START THIS PROJECT:
 AUTHORS:
 USER INSTRUCTIONS:
+
+
+
+
+
+Beziehungen:
+IngredientDistributor->PriceList: Distiributor stellt Preisliste zur Verfügung.
+
+Meal->Ingredient: enhält
