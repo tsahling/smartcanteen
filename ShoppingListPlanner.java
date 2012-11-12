@@ -1,19 +1,19 @@
 
 /**
- * Write a description of class MenuOptimization here.
+ * Write a description of class ShoppingListPlanner here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class MenuOptimization
+public class ShoppingListPlanner
 {
     // instance variables - replace the example below with your own
     private int x;
 
     /**
-     * Constructor for objects of class MenuOptimization
+     * Constructor for objects of class ShoppingListPlanner
      */
-    public MenuOptimization()
+    public ShoppingListPlanner()
     {
         // initialise instance variables
         x = 0;

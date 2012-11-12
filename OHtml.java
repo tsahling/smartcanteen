@@ -1,19 +1,19 @@
 
 /**
- * Write a description of class CostPlan here.
+ * Write a description of class OHtml here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class CostPlan
+public class OHtml extends IOclass
 {
     // instance variables - replace the example below with your own
     private int x;
 
     /**
-     * Constructor for objects of class CostPlan
+     * Constructor for objects of class OHtml
      */
-    public CostPlan()
+    public OHtml()
     {
         // initialise instance variables
         x = 0;

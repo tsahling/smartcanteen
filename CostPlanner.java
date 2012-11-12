@@ -1,19 +1,19 @@
 
 /**
- * Write a description of class ShoppingList here.
+ * Write a description of class CostPlanner here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class ShoppingList
+public class CostPlanner
 {
     // instance variables - replace the example below with your own
     private int x;
 
     /**
-     * Constructor for objects of class ShoppingList
+     * Constructor for objects of class CostPlanner
      */
-    public ShoppingList()
+    public CostPlanner()
     {
         // initialise instance variables
         x = 0;
