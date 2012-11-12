@@ -1,19 +1,19 @@
 
 /**
- * Write a description of class CostOptmization here.
+ * Write a description of class OText here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class CostOptmization
+public class OText extends IOclass
 {
     // instance variables - replace the example below with your own
     private int x;
 
     /**
-     * Constructor for objects of class CostOptmization
+     * Constructor for objects of class OText
      */
-    public CostOptmization()
+    public OText()
     {
         // initialise instance variables
         x = 0;
