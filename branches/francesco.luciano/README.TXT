@@ -7,7 +7,7 @@ Rudimentäre Beschreibung des Klassendiagramm:
 
 CanteenControll
 ----------------
-Die Klasse CanteenControll ist die Kontroll-Klasse des Programm, hier laufen die Informationen aus den anderen Klassen zusammen und werden delegiert. In dieser Klasse können auch Methoden aus den anderen Klassen gesteuert werden wie z.b das erzeugen einer Speiseplan, das Erzeugen einer Einkaufsliste. Die Klasse hat selber keine Programmlogik sondern muss eher als zusammenlaufen vieler Schnittstellen gesehen werden und als Händler zwischen ihnen.
+Die Klasse CanteenControll ist die Kontroll-Klasse des Programm, hier laufen die Informationen aus den anderen Klassen zusammen und werden delegiert. In dieser Klasse können auch Methoden aus den anderen Klassen gesteuert werden wie z.b das erzeugen einer Speiseplan, das Erzeugen einer Einkaufsliste. Die Klasse hat selber keine Programmlogik sondern muss eher als zusammenlaufen vieler Schnittstellen gesehen werden und als Handler zwischen ihnen.
 
 ConfigFileHelper
 ----------------
@@ -75,7 +75,7 @@ Abgeleitete Klasse der Basisklasse FoodDistributer für einen Großmarkt.
 
 PurchasingOptimization
 -----------------------
-Die Klasse PurchasingOptimization vergleicht die Preise der angebotenen Waren der einzelnen Anbieter und liefert die kostengünstigste alternative.
+Die Klasse PurchasingOptimization vergleicht die Preise der angebotenen Waren der einzelnen Anbieter und liefert die kostengünstigste Alternative.
 
 ShoppingListGenerator
 ----------------------
