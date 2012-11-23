@@ -2,6 +2,7 @@ package de.osjava.smartcanteen.application;
 
 import java.util.logging.Logger;
 
+import de.osjava.smartcanteen.enums.MealType;
 import de.osjava.smartcanteen.helper.LogHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 
@@ -19,6 +20,7 @@ public class Bootstrapper {
      */
     public Bootstrapper() {
 
+  
     }
 
     /**
