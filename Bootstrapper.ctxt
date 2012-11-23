@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Bootstrapper()
+comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Bootstrapper\r\n
+comment1.params=
+comment1.target=void\ bootstrap()
+comment2.params=
+comment2.target=void\ startApplication()
+numComments=3
