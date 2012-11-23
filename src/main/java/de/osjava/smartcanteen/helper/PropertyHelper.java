@@ -16,8 +16,7 @@ public class PropertyHelper {
 
     private static final Logger LOG = LogHelper.getLogger(PropertyHelper.class.getName());
 
-    private static final InputStream PROPERTIES_FILE = ClassLoader
-            .getSystemResourceAsStream("properties/smartcanteen.properties");
+    private static final InputStream PROPERTIES_FILE = ClassLoader.getSystemResourceAsStream("properties/smartcanteen.properties");
 
     private static Properties properties;
 

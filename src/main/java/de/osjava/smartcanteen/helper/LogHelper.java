@@ -27,13 +27,13 @@ public class LogHelper {
     /**
      * 
      * @param className
-     * @param logfileName
+     * @param logFilename
      * @return
      */
-    public static Logger getLogger(String className, String logfileName) {
+    public static Logger getLogger(String className, String logFilename) {
         Logger logger = Logger.getLogger(className);
         try {
-            logger.addHandler(new FileHandler(logfileName));
+            logger.addHandler(new FileHandler(logFilename));
         } catch (SecurityException se) {
             logger.log(Level.SEVERE, null, se);
         } catch (IOException ioe) {
