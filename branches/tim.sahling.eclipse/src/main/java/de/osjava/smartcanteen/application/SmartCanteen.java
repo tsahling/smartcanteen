@@ -23,7 +23,7 @@ public class SmartCanteen {
         try {
             new Bootstrapper().bootstrap(args);
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, null, e);
+            LOG.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 }

@@ -27,10 +27,18 @@ public class Bootstrapper {
      * @throws Exception
      */
     public void bootstrap(final String[] args) throws Exception {
-
-        // Read input files and put into base
-
+    	initInput(args);    	
         startApplication();
+    }
+    
+    /**
+     * 
+     * @param args
+     */
+    private void initInput(final String[] args) {
+    	if(args != null && args.length > 0) {
+    		
+    	}
     }
 
     /**
@@ -38,11 +46,10 @@ public class Bootstrapper {
      */
     private void startApplication() {
 
-        String property = PropertyHelper.getProperty("outputPath");
+        String applicationName = PropertyHelper.getProperty("application.name");
 
-        System.out.println(property);
+        System.out.println(applicationName);
 
-        property = PropertyHelper.getProperty("outputPath", "1");
     }
 
 }
