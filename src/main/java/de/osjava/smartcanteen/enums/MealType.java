@@ -1,28 +1,27 @@
 package de.osjava.smartcanteen.enums;
 
-
- /**
+/**
  * @author Tim Sahling
  */
 public enum MealType {
 
-    MEAT ("Fleisch", "Fleischgericht"),
-    FISH ("Fisch", "Fischgericht"),
-    VEGETABLE ("Vegetarisch", "Vegetarisches Gericht");
-    
-    private final String code;
+    MEAT("Fleisch", "Fleischgericht"),
+    FISH("Fisch", "Fischgericht"),
+    VEGETABLE("Vegetarisch", "Vegetarisches Gericht");
+
     private final String name;
-    
-    private MealType(String code, String name) {
-        this.code = code;
+    private final String fullname;
+
+    private MealType(String name, String fullname) {
         this.name = name;
+        this.fullname = fullname;
     }
-    
-    public String getCode() {
-        return this.code;
-    }
-    
+
     public String getName() {
         return this.name;
+    }
+
+    public String getFullname() {
+        return this.fullname;
     }
 }

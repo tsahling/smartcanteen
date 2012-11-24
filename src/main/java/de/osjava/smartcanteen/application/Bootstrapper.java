@@ -1,5 +1,6 @@
 package de.osjava.smartcanteen.application;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
@@ -16,7 +17,9 @@ public class Bootstrapper {
 
     private static final Logger LOG = LogHelper.getLogger(Bootstrapper.class.getName());
 
-    private static final String SPLIT = ";";
+    private static final String ARG_SPLIT = "=";
+    private static final String INPUT_FILE_SPLIT = ";";
+    private static final String EMPTY = "";
 
     /**
      * 
@@ -41,12 +44,12 @@ public class Bootstrapper {
      * @param args
      */
     private boolean initInput(final String[] args) {
-        String inputFiles = null;
+        String inputFiles = EMPTY;
 
         if (args.length == 0) {
             inputFiles = JOptionPane.showInputDialog(null,
                     PropertyHelper.getProperty("message.missingInputFiles.message"),
-                    PropertyHelper.getProperty("message.missingInputFiles.title"), JOptionPane.QUESTION_MESSAGE).trim();
+                    PropertyHelper.getProperty("message.missingInputFiles.title"), JOptionPane.QUESTION_MESSAGE);
         }
         else if (args.length == 1 && args[0].equals(PropertyHelper.getProperty("param.help"))) {
             System.out.println(PropertyHelper.getProperty("application.usageInfo"));
@@ -54,24 +57,40 @@ public class Bootstrapper {
         }
         else {
             for (String arg : args) {
-                inputFiles = inputFiles.concat(SPLIT).concat(arg.trim());
+
+                if (arg.contains(PropertyHelper.getProperty("param.inputFiles"))) {
+                    String[] argSplit = arg.split(ARG_SPLIT);
+
+                    if (argSplit.length > 1) {
+                        inputFiles = inputFiles.concat(argSplit[1].trim()).concat(INPUT_FILE_SPLIT);
+                    }
+                }
             }
         }
 
-        if (inputFiles != null) {
-            String[] inputFileSplit = inputFiles.split(SPLIT);
+        boolean wrongInputFile = false;
+
+        if (inputFiles != null && !inputFiles.equals(EMPTY)) {
+            String[] inputFileSplit = inputFiles.split(INPUT_FILE_SPLIT);
 
             if (inputFileSplit.length > 0) {
                 for (String inputFile : inputFileSplit) {
 
-                    // einlesen in base dateien
+                    File file = new File(inputFile);
 
-                    System.out.println(inputFile.trim());
+                    if (file.exists()) {
+
+                    }
+                    else {
+                        wrongInputFile = true;
+                        break;
+                    }
                 }
 
-                return true;
+                if (!wrongInputFile) {
+                    return true;
+                }
             }
-
         }
 
         throw new IllegalArgumentException(PropertyHelper.getProperty("message.missingInputFiles.exception"));
