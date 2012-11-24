@@ -7,6 +7,6 @@ package de.osjava.smartcanteen.base;
  * @author Tim Sahling
  *
  */
-public class FavoriteMealBase {
+public class FavMealBase {
 
 }
