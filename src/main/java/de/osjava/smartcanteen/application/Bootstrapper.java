@@ -16,7 +16,7 @@ public class Bootstrapper {
 
     private static final Logger LOG = LogHelper.getLogger(Bootstrapper.class.getName());
 
-    private static final String STRING_EMPTY = " ";
+    private static final String SPLIT = ";";
 
     /**
      * 
@@ -31,40 +31,50 @@ public class Bootstrapper {
      * @throws Exception
      */
     public void bootstrap(final String[] args) throws Exception {
-        initInput(args);
-        startApplication();
+        if (initInput(args)) {
+            startApplication();
+        }
     }
 
     /**
      * 
      * @param args
      */
-    private void initInput(final String[] args) {
+    private boolean initInput(final String[] args) {
         String inputFiles = null;
 
-        if (args == null || (args != null && args.length == 0)) {
+        if (args.length == 0) {
             inputFiles = JOptionPane.showInputDialog(null,
                     PropertyHelper.getProperty("message.missingInputFiles.message"),
-                    PropertyHelper.getProperty("message.missingInputFiles.title"), JOptionPane.QUESTION_MESSAGE);
+                    PropertyHelper.getProperty("message.missingInputFiles.title"), JOptionPane.QUESTION_MESSAGE).trim();
+        }
+        else if (args.length == 1 && args[0].equals(PropertyHelper.getProperty("param.help"))) {
+            System.out.println(PropertyHelper.getProperty("application.usageInfo"));
+            return false;
         }
         else {
             for (String arg : args) {
-                inputFiles = inputFiles.concat(STRING_EMPTY).concat(arg);
+                inputFiles = inputFiles.concat(SPLIT).concat(arg.trim());
             }
         }
 
-        if (inputFiles == null || (inputFiles != null && inputFiles.length() == 0)) {
-            throw new IllegalArgumentException(PropertyHelper.getProperty("message.missingInputFiles.exception"));
+        if (inputFiles != null) {
+            String[] inputFileSplit = inputFiles.split(SPLIT);
+
+            if (inputFileSplit.length > 0) {
+                for (String inputFile : inputFileSplit) {
+
+                    // einlesen in base dateien
+
+                    System.out.println(inputFile.trim());
+                }
+
+                return true;
+            }
+
         }
 
-        String[] inputFileSplit = inputFiles.split(STRING_EMPTY);
-
-        for (String inputFile : inputFileSplit) {
-
-            // einlesen in base dateien
-
-            System.out.println(inputFile);
-        }
+        throw new IllegalArgumentException(PropertyHelper.getProperty("message.missingInputFiles.exception"));
     }
 
     /**
