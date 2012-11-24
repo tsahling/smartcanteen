@@ -1,2 +1,8 @@
 #BlueJ class context
-numComments=0
+comment0.params=code\ name
+comment0.target=MealType(java.lang.String,\ java.lang.String)
+comment1.params=
+comment1.target=java.lang.String\ getCode()
+comment2.params=
+comment2.target=java.lang.String\ getName()
+numComments=3
