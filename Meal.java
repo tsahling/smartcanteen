@@ -1,3 +1,4 @@
+import java.util.List;
 
 /**
  * Write a description of class Meal here.
@@ -8,6 +9,7 @@
 public class Meal
 {
     private MealType mealType;
+    private List<Ingredient> ingredients;
     
     /**
      * Constructor for objects of class Meal
