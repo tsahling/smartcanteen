@@ -1,6 +1,6 @@
 package de.osjava.smartcanteen.application;
 
-import java.io.File;
+import java.net.URL;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
@@ -76,9 +76,10 @@ public class Bootstrapper {
             if (inputFileSplit.length > 0) {
                 for (String inputFile : inputFileSplit) {
 
-                    File file = new File(inputFile);
+                    URL inputFileUrl = ClassLoader.getSystemResource(PropertyHelper
+                            .getProperty("application.inputFilePath") + inputFile);
 
-                    if (file.exists()) {
+                    if (inputFileUrl != null) {
 
                     }
                     else {
