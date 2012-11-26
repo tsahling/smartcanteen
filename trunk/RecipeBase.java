@@ -1,4 +1,4 @@
-import java.util.List;
+import java.util.Set;
 
 /**
  * Write a description of class RecipeBase here.
@@ -11,7 +11,7 @@ public class RecipeBase
     // instance variables - replace the example below with your own
     private int x;
 
-    private List<Meal> meals;
+    private Set<Meal> meals;
     
     /**
      * Constructor for objects of class RecipeBase
