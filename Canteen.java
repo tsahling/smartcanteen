@@ -7,6 +7,7 @@
  */
 public class Canteen
 {
+    private String name;
     private CanteenLocation location;
     private int numberOfEmployees;  
     

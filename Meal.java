@@ -8,7 +8,8 @@ import java.util.List;
  */
 public class Meal
 {
-    private MealType mealType;
+    private String name;
+    private MealType type;
     private List<Ingredient> ingredients;
     
     /**

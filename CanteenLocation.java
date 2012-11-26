@@ -7,8 +7,8 @@
  */
 public enum CanteenLocation
 {
-    ESSEN ("Essen", "Essen", 51.455644, 7.011554),
-    MUELHEIM ("Mülheim", "Mülheim an der Ruhr", 51.430958, 6.880744);
+    ESSEN("Essen", "Essen", 51.455644, 7.011554),
+    MUELHEIM("Mülheim", "Mülheim an der Ruhr", 51.430958, 6.880744);
     
     private final String name;
     private final String fullname;
