@@ -7,9 +7,9 @@
  */
 public enum MealType
 {
-    MEAT ("Fleisch", "Fleischgericht"),
-    FISH ("Fisch", "Fischgericht"),
-    VEGETABLE ("Vegetarisch", "Vegetarisches Gericht");
+    MEAT("Fleisch", "Fleischgericht"),
+    FISH("Fisch", "Fischgericht"),
+    VEGETABLE("Vegetarisch", "Vegetarisches Gericht");
     
     private final String name;
     private final String fullname;

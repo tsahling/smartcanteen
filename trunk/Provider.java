@@ -8,6 +8,7 @@ import java.util.Set;
  */
 public abstract class Provider
 {
+    private String name;
     private Set<Ingredient> ingredients;
     
 }
