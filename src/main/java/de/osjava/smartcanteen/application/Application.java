@@ -8,14 +8,9 @@ import javax.swing.JOptionPane;
 import de.osjava.smartcanteen.helper.LogHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 
-/**
- * 
- * @author Tim Sahling
- * 
- */
-public class Bootstrapper {
+public class Application {
 
-    private static final Logger LOG = LogHelper.getLogger(Bootstrapper.class.getName());
+    private static final Logger LOG = LogHelper.getLogger(Application.class.getName());
 
     private static final String ARG_SPLIT = "=";
     private static final String INPUT_FILE_SPLIT = ";";
@@ -24,7 +19,7 @@ public class Bootstrapper {
     /**
      * 
      */
-    public Bootstrapper() {
+    public Application() {
 
     }
 
@@ -101,10 +96,6 @@ public class Bootstrapper {
      * 
      */
     private void startApplication() {
-
-        String applicationName = PropertyHelper.getProperty("application.name");
-
-        System.out.println(applicationName);
 
     }
 
