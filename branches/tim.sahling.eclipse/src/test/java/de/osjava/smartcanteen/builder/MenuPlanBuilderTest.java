@@ -5,13 +5,13 @@ import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 
-import de.osjava.smartcanteen.data.Meal;
+import de.osjava.smartcanteen.data.Recipe;
 
-public class MenuBuilderTest {
+public class MenuPlanBuilderTest {
 
 	@Test
 	public void testMethod() {
-		Meal meal = mock(Meal.class);
+		Recipe meal = mock(Recipe.class);
 		
 		assertEquals(0, 0);
 	}
