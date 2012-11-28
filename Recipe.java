@@ -7,6 +7,7 @@
  */
 public class Recipe
 {
+    private String name;
     private RecipeType type;
     private IngredientList ingredientList;
     private int popularity;
@@ -17,6 +18,10 @@ public class Recipe
     public Recipe()
     {
 
+    }
+    
+    public String getName() {
+        return this.name;
     }
     
     public RecipeType getType() {

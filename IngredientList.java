@@ -1,4 +1,4 @@
-import java.util.List;
+import java.util.Set;
 
 /**
  * Write a description of class IngredientList here.
@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class IngredientList
 {
-    List<IngredientListItem> ingredientListItems;   
+    Set<IngredientListItem> ingredientListItems;   
 
 
     /**
