@@ -1,4 +1,4 @@
-import java.util.List;
+import java.util.Set;
 
 /**
  * Write a description of class PriceList here.
@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class PriceList
 {
-    private List<PriceListItem> priceListItems;
+    private Set<PriceListItem> priceListItems;
     
     /**
      * Constructor for objects of class PriceList
@@ -17,5 +17,16 @@ public class PriceList
     {
 
     }
-
+    
+    public PriceListItem addPriceListItem() {
+        return null;
+    }
+    
+    public PriceListItem updatePriceListItem() {
+        return null;
+    }
+    
+    public void removePriceListItem() {
+        
+    }
 }

@@ -1,3 +1,4 @@
+import java.util.Set;
 
 /**
  * Abstract class Provider - write a description of the class here
@@ -7,6 +8,7 @@
  */
 public abstract class Provider
 {    
+    private String name;
     private PriceList priceList;
     
     protected abstract Provider createProvider();
