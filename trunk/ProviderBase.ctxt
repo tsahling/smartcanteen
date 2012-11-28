@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.params=
+comment0.target=ProviderBase()
+comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ ProviderBase\r\n
+comment1.params=
+comment1.target=Provider\ addProvider()
+comment2.params=
+comment2.target=Provider\ updateProvider()
+comment3.params=
+comment3.target=void\ removeProvider()
+comment4.params=ingredient
+comment4.target=Provider\ findBestPriceProviderOfIngredient(Ingredient)
+numComments=5

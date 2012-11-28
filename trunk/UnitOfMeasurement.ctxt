@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.params=code\ name\ shortName
+comment0.target=UnitOfMeasurement(java.lang.String,\ java.lang.String,\ java.lang.String)
+comment1.params=
+comment1.target=java.lang.String\ getCode()
+comment1.text=\r\n\ \r\n\ @return\ the\ {@link\ \#code}\ value.\r\n
+comment2.params=
+comment2.target=java.lang.String\ getName()
+comment2.text=\r\n\ \r\n\ @return\ the\ {@link\ \#name}\ value.\r\n
+comment3.params=
+comment3.target=java.lang.String\ getShortName()
+comment3.text=\r\n\ \r\n\ @return\ the\ {@link\ \#shortName}\ value.\r\n
+numComments=4

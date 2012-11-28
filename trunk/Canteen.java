@@ -1,18 +1,17 @@
 
 /**
- * Write a description of class Cantine here.
+ * Write a description of class Canteen here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
 public class Canteen
 {
-    private String name;
     private CanteenLocation location;
-    private int numberOfEmployees;  
-    
+    private int numberOfEmployees; 
+
     /**
-     * Constructor for objects of class Cantine
+     * Constructor for objects of class Canteen
      */
     public Canteen()
     {
