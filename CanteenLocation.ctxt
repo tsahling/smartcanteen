@@ -1,10 +1,10 @@
 #BlueJ class context
-comment0.params=name\ fullname\ latitude\ longitude
+comment0.params=code\ name\ latitude\ longitude
 comment0.target=CanteenLocation(java.lang.String,\ java.lang.String,\ double,\ double)
 comment1.params=
-comment1.target=java.lang.String\ getName()
+comment1.target=java.lang.String\ getCode()
 comment2.params=
-comment2.target=java.lang.String\ getFullname()
+comment2.target=java.lang.String\ getName()
 comment3.params=
 comment3.target=double\ getLatitude()
 comment4.params=
