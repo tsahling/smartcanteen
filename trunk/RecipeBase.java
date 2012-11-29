@@ -24,34 +24,19 @@ public class RecipeBase
         return this.recipes;
     }
     
-    public Set<Recipe> findRecipesOfRecipeType(RecipeType recipeType) {
-        Set<Recipe> result = new HashSet<Recipe>();
-        
-        for(Recipe recipe : recipes) {
-            if(recipeType.equals(recipe.getType())) {
-                result.add(recipe);
-            }
-        }
-        
-        return result;
-    }
-    
-    public Set<Recipe> findRecipesSortedByPopularity() {
-        Set<Recipe> result = new TreeSet<Recipe>(new Comparator<Recipe>() {
-                @Override
-                public int compare(Recipe o1, Recipe o2) {
-                    return Integer.valueOf(o1.getPopularity()).compareTo(Integer.valueOf(o2.getPopularity()));
-                }         
-        });      
-        result.addAll(this.recipes);      
-        return result;
-    }
-    
-    public Recipe findMostPopularRecipe() {
+    public Set<Recipe> findRecipesByRecipeType(RecipeType recipeType) {       
         return null;
     }
     
-    public Recipe findLowestPopularRecipe() {
+    public Set<Recipe> findRecipesSortedByRank() {
+        return null;
+    }
+    
+    public Recipe findHighestRankRecipe() {
+        return null;
+    }
+    
+    public Recipe findLowestRankRecipe() {
         return null;
     }
 }

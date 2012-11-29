@@ -1,5 +1,12 @@
 #BlueJ class context
 comment0.params=
 comment0.target=HitListBase()
-comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ HitListBase\r\n
-numComments=1
+comment1.params=hitListItem
+comment1.target=HitListItem\ addHitListItem(HitListItem)
+comment2.params=hitListItem
+comment2.target=HitListItem\ updateHitListItem(HitListItem)
+comment3.params=hitListItem
+comment3.target=void\ removeHitListItem(HitListItem)
+comment4.params=name
+comment4.target=HitListItem\ findHitListItemByName(java.lang.String)
+numComments=5

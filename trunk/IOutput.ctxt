@@ -1,5 +1,8 @@
 #BlueJ class context
-comment0.params=y
-comment0.target=int\ sampleMethod(int)
-comment0.text=\r\n\ An\ example\ of\ a\ method\ header\ -\ replace\ this\ comment\ with\ your\ own\r\n\ \r\n\ @param\ \ y\ \ \ \ a\ sample\ parameter\ for\ a\ method\r\n\ @return\ \ \ \ \ \ \ \ the\ result\ produced\ by\ sampleMethod\ \r\n
-numComments=1
+comment0.params=shoppingList
+comment0.target=void\ outputShoppingList(ShoppingList)
+comment1.params=canteen
+comment1.target=void\ outputMenuPlan(Canteen)
+comment2.params=shoppingList
+comment2.target=void\ outputTotalCosts(ShoppingList)
+numComments=3

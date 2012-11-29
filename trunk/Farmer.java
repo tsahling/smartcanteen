@@ -17,8 +17,6 @@ public class Farmer extends Provider
 
     }
     
-    
-    
     @Override
     protected Farmer createProvider() {
         return null;
@@ -33,4 +31,5 @@ public class Farmer extends Provider
     protected void deleteProvider() {
 
     }    
+    
 }

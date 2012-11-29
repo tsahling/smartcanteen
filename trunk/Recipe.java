@@ -1,3 +1,4 @@
+import java.util.Set;
 
 /**
  * Write a description of class Recipe here.
@@ -9,8 +10,8 @@ public class Recipe
 {
     private String name;
     private RecipeType type;
-    private IngredientList ingredientList;
-    private int popularity;
+    private Set<IngredientListItem> ingredientList;
+    private int rank;
     
     /**
      * Constructor for objects of class Recipe
@@ -19,17 +20,16 @@ public class Recipe
     {
 
     }
-    
-    public String getName() {
-        return this.name;
+        
+    public IngredientListItem addIngredientListItem() {
+        return null;
     }
     
-    public RecipeType getType() {
-        return this.type;
+    public IngredientListItem updateIngredientListItem() {
+        return null;
     }
     
-    public int getPopularity() {
-        return this.popularity;
+    public void removeIngredientListItem() {       
     }
     
     public boolean isFishRecipe() {

@@ -3,8 +3,7 @@ import java.util.Set;
 /**
  * Write a description of class ProviderBase here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Francesco Luciano
  */
 public class ProviderBase
 {
@@ -29,7 +28,11 @@ public class ProviderBase
     public void removeProvider() {
     }
     
-    public Provider findBestPriceProviderOfIngredient(Ingredient ingredient) {
+    public Provider findProviderByName(String name) {
+        return null;
+    }
+    
+    public Provider findBestPriceProviderByIngredient(Ingredient ingredient) {
         return null;
     }
 }

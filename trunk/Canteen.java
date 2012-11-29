@@ -9,7 +9,8 @@ public class Canteen
 {
     private CanteenLocation location;
     private int numberOfEmployees; 
-
+    private MenuPlan menuPlan;
+    
     /**
      * Constructor for objects of class Canteen
      */
