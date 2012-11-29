@@ -1,23 +1,50 @@
 import java.util.List;
 
 /**
- * Write a description of class ShoppingList here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Tim Sahling
  */
-public class ShoppingList
-{
+public class ShoppingList {
+
     private List<ShoppingListItem> shoppingListItems;
 
-    /**
-     * Constructor for objects of class ShoppingList
-     */
-    public ShoppingList()
-    {
+    public ShoppingList() {
+
     }
 
     public Amount calculateTotalPrice() {
+        return null;
+    }
+
+    /**
+     * @return the shoppingListItems
+     */
+    public List<ShoppingListItem> getShoppingListItems() {
+        return shoppingListItems;
+    }
+
+    /**
+     * Sets the shoppingListItems.
+     * 
+     * @param shoppingListItems the shoppingListItems to set
+     */
+    public void setShoppingListItems(List<ShoppingListItem> shoppingListItems) {
+        this.shoppingListItems = shoppingListItems;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        return true;
+    }
+
+    @Override
+    public String toString() {
         return null;
     }
 }

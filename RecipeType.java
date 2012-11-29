@@ -1,6 +1,10 @@
 
-public enum RecipeType
-{
+/**
+ * 
+ * @author Marcel Baxmann
+ */
+public enum RecipeType {
+
     MEAT("MEAT", "Fleischgericht", "Fleisch"),
     FISH("FISH", "Fischgericht", "Fisch"),
     VEGETABLE("VEGETABLE", "Vegetarisches Gericht", "Vegetarisch");

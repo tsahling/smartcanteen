@@ -1,33 +1,26 @@
-
+import java.util.logging.Logger;
 /**
- * Write a description of class LogHelper here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Tim Sahling
  */
-public class LogHelper
-{
-    // instance variables - replace the example below with your own
-    private int x;
+public class LogHelper {
 
     /**
-     * Constructor for objects of class LogHelper
+     * 
+     * @param className
+     * @return
      */
-    public LogHelper()
-    {
-        // initialise instance variables
-        x = 0;
+    public static Logger getLogger(String className) {
+        return null;
     }
 
     /**
-     * An example of a method - replace this comment with your own
      * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
+     * @param className
+     * @param logFilename
+     * @return
      */
-    public int sampleMethod(int y)
-    {
-        // put your code here
-        return x + y;
+    public static Logger getLogger(String className, String logFilename) {
+        return null;
     }
 }

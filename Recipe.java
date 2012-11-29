@@ -1,46 +1,100 @@
 import java.util.Set;
 
 /**
- * Write a description of class Recipe here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Tim Sahling
  */
-public class Recipe
-{
+public class Recipe {
+
     private String name;
     private RecipeType type;
     private Set<IngredientListItem> ingredientList;
     private int rank;
-    
-    /**
-     * Constructor for objects of class Recipe
-     */
-    public Recipe()
-    {
+
+    public Recipe() {
 
     }
-        
-    public IngredientListItem addIngredientListItem() {
-        return null;
-    }
-    
-    public IngredientListItem updateIngredientListItem() {
-        return null;
-    }
-    
-    public void removeIngredientListItem() {       
-    }
-    
-    public boolean isFishRecipe() {
-        return RecipeType.FISH.equals(this.type);
-    }
-    
+
     public boolean isMeatRecipe() {
-        return RecipeType.MEAT.equals(this.type);
+        return RecipeType.MEAT.equals(type);
     }
-    
+
+    public boolean isFishRecipe() {
+        return RecipeType.FISH.equals(type);
+    }
+
     public boolean isVegetableRecipe() {
-        return RecipeType.VEGETABLE.equals(this.type);
+        return RecipeType.VEGETABLE.equals(type);
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return the type
+     */
+    public RecipeType getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(RecipeType type) {
+        this.type = type;
+    }
+
+    /**
+     * @return the ingredientList
+     */
+    public Set<IngredientListItem> getIngredientList() {
+        return ingredientList;
+    }
+
+    /**
+     * @param ingredientList the ingredientList to set
+     */
+    public void setIngredientList(Set<IngredientListItem> ingredientList) {
+        this.ingredientList = ingredientList;
+    }
+
+    /**
+     * @return the rank
+     */
+    public int getRank() {
+        return rank;
+    }
+
+    /**
+     * @param rank the rank to set
+     */
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+
+    @Override
+    public int hashCode() {
+         return 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return null;
     }
 }

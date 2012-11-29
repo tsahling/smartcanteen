@@ -1,55 +1,68 @@
 import java.math.BigDecimal;
 
 /**
- * Write a description of class Amount here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Marcel Baxmann
  */
-public class Amount
-{
+public class Amount {
+
     private BigDecimal value;
     private UnitOfMeasurement unit;
 
-
     /**
      * 
+     * @param value
+     * @param unit
      */
-    public Amount(BigDecimal value, UnitOfMeasurement unit)
-    {
+    public Amount(BigDecimal value, UnitOfMeasurement unit) {
         this.value = value;
         this.unit = unit;
     }
 
     /**
-     * 
-     * @return the {@link #value} value.
+     * @return the value
      */
     public BigDecimal getValue() {
-        return this.value;
+        return value;
     }
 
     /**
+     * Sets the value.
      * 
-     * @param value
+     * @param value the value to set
      */
     public void setValue(BigDecimal value) {
         this.value = value;
     }
 
     /**
-     * 
-     * @return the {@link #unit} value.
+     * @return the unit
      */
     public UnitOfMeasurement getUnit() {
-        return this.unit;
+        return unit;
     }
 
     /**
+     * Sets the unit.
      * 
-     * @param unit
+     * @param unit the unit to set
      */
     public void setUnit(UnitOfMeasurement unit) {
         this.unit = unit;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return null;
     }
 }

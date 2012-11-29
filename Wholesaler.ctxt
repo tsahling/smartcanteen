@@ -1,11 +1,14 @@
 #BlueJ class context
 comment0.params=
-comment0.target=Wholesaler()
-comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Wholesaler\r\n
+comment0.target=Wholesaler\ createProvider()
 comment1.params=
-comment1.target=Wholesaler\ createProvider()
+comment1.target=Wholesaler\ updateProvider()
 comment2.params=
-comment2.target=Wholesaler\ updateProvider()
+comment2.target=void\ deleteProvider()
 comment3.params=
-comment3.target=void\ deleteProvider()
-numComments=4
+comment3.target=int\ hashCode()
+comment4.params=obj
+comment4.target=boolean\ equals(java.lang.Object)
+comment5.params=
+comment5.target=java.lang.String\ toString()
+numComments=6

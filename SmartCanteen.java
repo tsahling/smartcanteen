@@ -1,13 +1,13 @@
-
 /**
- * Write a description of class SmartCanteen here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Tim Sahling
  */
-public class SmartCanteen
-{
+public class SmartCanteen {
+
+    /**
+     * 
+     * @param args
+     */
     public static void main(final String[] args) {
-        
-    }
+     }
 }

@@ -1,31 +1,23 @@
-
 /**
- * Write a description of class Bootstrapper here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Tim Sahling
  */
-public class Application
-{
+public class Application {
 
     /**
-     * Constructor for objects of class Bootstrapper
+     * 
      */
-    public Application()
-    {
+    public Application() {
 
     }
-    
+
+    /**
+     * Versetzt die Anwendung in einen initialen und konstanten Zustand und ruft nach erfolgreichem Einlesen der
+     * Eingabedaten die Logiken der Applikationsroutine auf.
+     * 
+     * @param args
+     * @throws Exception
+     */
     public void bootstrap(final String[] args) throws Exception {
-        if(initInput(args)) {
-            startApplication();
-        }
-    }
-    
-    private boolean initInput(final String[] args) {
-        return true;
-    }
-    
-    private void startApplication() {
     }
 }

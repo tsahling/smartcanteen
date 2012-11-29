@@ -1,11 +1,8 @@
 #BlueJ class context
 comment0.params=
 comment0.target=Application()
-comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Bootstrapper\r\n
+comment0.text=\r\n\ \r\n
 comment1.params=args
 comment1.target=void\ bootstrap(java.lang.String[])
-comment2.params=args
-comment2.target=boolean\ initInput(java.lang.String[])
-comment3.params=
-comment3.target=void\ startApplication()
-numComments=4
+comment1.text=\r\n\ Versetzt\ die\ Anwendung\ in\ einen\ initialen\ und\ konstanten\ Zustand\ und\ ruft\ nach\ erfolgreichem\ Einlesen\ der\r\n\ Eingabedaten\ die\ Logiken\ der\ Applikationsroutine\ auf.\r\n\ \r\n\ @param\ args\r\n\ @throws\ Exception\r\n
+numComments=2

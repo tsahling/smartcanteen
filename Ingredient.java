@@ -1,19 +1,43 @@
-
 /**
- * Write a description of class Ingredient here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Tim Sahling
  */
-public class Ingredient
-{
+public class Ingredient {
+
     private String name;
 
-    /**
-     * Constructor for objects of class Ingredient
-     */
-    public Ingredient()
-    {
+    public Ingredient(String name) {
+        this.name = name;
     }
 
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the name.
+     * 
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return null;
+    }
 }

@@ -1,22 +1,84 @@
 
 /**
- * Write a description of class PriceListItem here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Franceso Luciano
  */
-public class PriceListItem
-{
+public class PriceListItem {
+
     private Ingredient ingredient;
     private Amount price;
     private int quantityOfIngredient;
-    
-    /**
-     * Constructor for objects of class PriceListItem
-     */
-    public PriceListItem()
-    {
 
+    /**
+     * 
+     * @param ingredient
+     * @param price
+     * @param quantityOfIngredient
+     */
+    public PriceListItem(Ingredient ingredient, Amount price, int quantityOfIngredient) {
+        this.ingredient = ingredient;
+        this.price = price;
+        this.quantityOfIngredient = quantityOfIngredient;
+    }
+
+    /**
+     * @return the ingredient
+     */
+    public Ingredient getIngredient() {
+        return ingredient;
+    }
+
+    /**
+     * @param ingredient
+     *            the ingredient to set
+     */
+    public void setIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
+    }
+
+    /**
+     * @return the price
+     */
+    public Amount getPrice() {
+        return price;
+    }
+
+    /**
+     * @param price
+     *            the price to set
+     */
+    public void setPrice(Amount price) {
+        this.price = price;
+    }
+
+    /**
+     * @return the quantityOfIngredient
+     */
+    public int getQuantityOfIngredient() {
+        return quantityOfIngredient;
+    }
+
+    /**
+     * @param quantityOfIngredient
+     *            the quantityOfIngredient to set
+     */
+    public void setQuantityOfIngredient(int quantityOfIngredient) {
+        this.quantityOfIngredient = quantityOfIngredient;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return null;
     }
 
 }
