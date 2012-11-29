@@ -9,7 +9,7 @@ public enum UnitOfMeasurement {
     KMR("KMR", "Kilometer", "km"),
     MLR("MLR", "Milliliter", "ml"),
     LTR("LTR", "Liter", "l"),
-    STK("STK", "Stück", "stk"),
+    STK("STK", "Stueck", "stk"),
     EUR("EUR", "Euro", "Eur");
 
     private final String code;
