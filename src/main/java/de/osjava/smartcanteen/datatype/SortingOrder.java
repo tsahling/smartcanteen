@@ -4,15 +4,13 @@ package de.osjava.smartcanteen.datatype;
  * 
  * @author Marcel Baxmann
  */
-public enum RecipeType {
+public enum SortingOrder {
 
-    MEAT("MEAT", "Fleischgericht", "Fleisch"),
-    FISH("FISH", "Fischgericht", "Fisch"),
-    VEGETABLE("VEGETABLE", "Vegetarisches Gericht", "Vegetarisch");
+    ASC("ASC", "Ascending"),
+    DESC("DESC", "Descending");
 
     private final String code;
     private final String name;
-    private final String shortName;
 
     /**
      * 
@@ -20,10 +18,10 @@ public enum RecipeType {
      * @param name
      * @param shortName
      */
-    private RecipeType(String code, String name, String shortName) {
+    private SortingOrder(String code, String name) {
         this.code = code;
         this.name = name;
-        this.shortName = shortName;
+
     }
 
     /**
@@ -38,12 +36,5 @@ public enum RecipeType {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * @return the shortName
-     */
-    public String getShortName() {
-        return shortName;
     }
 }

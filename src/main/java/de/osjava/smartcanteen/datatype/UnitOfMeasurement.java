@@ -1,5 +1,9 @@
 package de.osjava.smartcanteen.datatype;
 
+/**
+ * 
+ * @author Marcel Baxmann
+ */
 public enum UnitOfMeasurement {
 
     GRM("GRM", "Gramm", "g"),

@@ -1,5 +1,9 @@
 package de.osjava.smartcanteen.datatype;
 
+/**
+ * 
+ * @author Marcel Baxmann
+ */
 public enum CanteenLocation {
 
     ESSEN("ESSEN", "Essen", "Essen", 51.455644, 7.011554),
@@ -27,23 +31,23 @@ public enum CanteenLocation {
         this.longitude = longitude;
     }
 
-	public String getCode() {
-		return code;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getShortName() {
-		return shortName;
-	}
+    public String getShortName() {
+        return shortName;
+    }
 
-	public double getLatitude() {
-		return latitude;
-	}
+    public double getLatitude() {
+        return latitude;
+    }
 
-	public double getLongitude() {
-		return longitude;
-	}
+    public double getLongitude() {
+        return longitude;
+    }
 }
