@@ -1,38 +1,65 @@
 import java.util.Set;
 
 /**
- * Abstract class Provider - write a description of the class here
  * 
- * @author (your name here)
- * @version (version number or date here)
+ * @author Tim Sahling
  */
 public abstract class Provider
 {    
     private String name;
     private Set<PriceListItem> priceList;
-    
+
     protected abstract Provider createProvider();
-    
+
     protected abstract Provider updateProvider();
-    
+
     protected abstract void deleteProvider();
-        
-    public PriceListItem addPriceListItem() {
-        return null;
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
     }
-    
-    public PriceListItem updatePriceListItem() {
-        return null;
+
+    /**
+     * Sets the name.
+     * 
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
     }
-    
-    public void removePriceListItem() {       
+
+    /**
+     * @return the priceList
+     */
+    public Set<PriceListItem> getPriceList() {
+        return priceList;
     }
-    
-    public Amount findPriceByIngredient(Ingredient ingredient) {
-        return null;
+
+    /**
+     * Sets the priceList.
+     * 
+     * @param priceList the priceList to set
+     */
+    public void setPriceList(Set<PriceListItem> priceList) {
+        this.priceList = priceList;
     }
-    
-    public int findMaxQuantityOfIngredientByIngredient(Ingredient ingredient) {
+
+    @Override
+    public int hashCode() {
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return null;
     }
 }

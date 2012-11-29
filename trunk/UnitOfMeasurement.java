@@ -1,14 +1,18 @@
 
-public enum UnitOfMeasurement
-{
-   GRM("GRM", "Gramm", "g"),
+/**
+ * 
+ * @author Marcel Baxmann
+ */
+public enum UnitOfMeasurement {
+
+    GRM("GRM", "Gramm", "g"),
     KGM("KGM", "Kilogramm", "kg"),
     TON("TON", "Tonne", "t"),
     MTR("MTR", "Meter", "m"),
     KMR("KMR", "Kilometer", "km"),
     MLR("MLR", "Milliliter", "ml"),
     LTR("LTR", "Liter", "l"),
-    STK("STK", "Stück", "stk"),
+    STK("STK", "Stueck", "stk"),
     EUR("EUR", "Euro", "Eur");
 
     private final String code;

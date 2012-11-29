@@ -1,5 +1,23 @@
 #BlueJ class context
-comment0.params=
-comment0.target=IngredientListItem()
-comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ IngredientListItem\r\n
-numComments=1
+comment0.params=ingredient\ quantity
+comment0.target=IngredientListItem(Ingredient,\ Amount)
+comment0.text=\r\n\ \r\n\ @param\ ingredient\r\n\ @param\ quantity\r\n
+comment1.params=
+comment1.target=Ingredient\ getIngredient()
+comment1.text=\r\n\ @return\ the\ ingredient\r\n
+comment2.params=ingredient
+comment2.target=void\ setIngredient(Ingredient)
+comment2.text=\r\n\ @param\ ingredient\ the\ ingredient\ to\ set\r\n
+comment3.params=
+comment3.target=Amount\ getQuantity()
+comment3.text=\r\n\ @return\ the\ quantity\r\n
+comment4.params=quantity
+comment4.target=void\ setQuantity(Amount)
+comment4.text=\r\n\ @param\ quantity\ the\ quantity\ to\ set\r\n
+comment5.params=
+comment5.target=int\ hashCode()
+comment6.params=obj
+comment6.target=boolean\ equals(java.lang.Object)
+comment7.params=
+comment7.target=java.lang.String\ toString()
+numComments=8

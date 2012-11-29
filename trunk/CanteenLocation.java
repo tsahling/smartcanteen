@@ -1,8 +1,12 @@
 
-public enum CanteenLocation
-{
+/**
+ * 
+ * @author Marcel Baxmann
+ */
+public enum CanteenLocation {
+
     ESSEN("ESSEN", "Essen", "Essen", 51.455644, 7.011554),
-    MUELHEIM("MUELHEIM", "Mülheim an der Ruhr", "Mülheim", 51.430958, 6.880744);
+    MUELHEIM("MUELHEIM", "Muelheim an der Ruhr", "Muelheim", 51.430958, 6.880744);
 
     private final String code;
     private final String name;
@@ -26,37 +30,22 @@ public enum CanteenLocation
         this.longitude = longitude;
     }
 
-    /**
-     * @return the code
-     */
     public String getCode() {
         return code;
     }
 
-    /**
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * @return the shortName
-     */
     public String getShortName() {
         return shortName;
     }
-    
-    /**
-     * @return the latitude
-     */
+
     public double getLatitude() {
         return latitude;
     }
 
-    /**
-     * @return the longitude
-     */
     public double getLongitude() {
         return longitude;
     }

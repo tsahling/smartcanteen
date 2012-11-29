@@ -1,5 +1,18 @@
 #BlueJ class context
 comment0.params=
 comment0.target=MenuPlan()
-comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ MenuPlan\r\n
-numComments=1
+comment1.params=
+comment1.target=java.util.List\ getMealsSortedByDate()
+comment2.params=
+comment2.target=java.util.List\ getMeals()
+comment2.text=\r\n\ @return\ the\ meals\r\n
+comment3.params=meals
+comment3.target=void\ setMeals(java.util.List)
+comment3.text=\r\n\ @param\ meals\r\n\ \ \ \ \ \ \ \ \ \ \ \ the\ meals\ to\ set\r\n
+comment4.params=
+comment4.target=int\ hashCode()
+comment5.params=obj
+comment5.target=boolean\ equals(java.lang.Object)
+comment6.params=
+comment6.target=java.lang.String\ toString()
+numComments=7

@@ -1,8 +1,14 @@
 #BlueJ class context
 comment0.params=
-comment0.target=PropertyHelper()
-comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ PropertyHelper\r\n
-comment1.params=y
-comment1.target=int\ sampleMethod(int)
-comment1.text=\r\n\ An\ example\ of\ a\ method\ -\ replace\ this\ comment\ with\ your\ own\r\n\ \r\n\ @param\ \ y\ \ \ a\ sample\ parameter\ for\ a\ method\r\n\ @return\ \ \ \ \ the\ sum\ of\ x\ and\ y\ \r\n
-numComments=2
+comment0.target=java.util.Properties\ getProperties()
+comment0.text=\r\n\ \r\n\ @return\r\n
+comment1.params=propertyName
+comment1.target=java.lang.String\ getProperty(java.lang.String)
+comment1.text=\r\n\ \r\n\ @param\ propertyName\r\n\ @return\r\n
+comment2.params=propertyName\ defaultValue
+comment2.target=java.lang.String\ getProperty(java.lang.String,\ java.lang.String)
+comment2.text=\r\n\ \r\n\ @param\ propertyName\r\n\ @param\ defaultValue\r\n\ @return\r\n
+comment3.params=
+comment3.target=java.util.Properties\ loadProperties()
+comment3.text=\r\n\ \r\n\ @return\r\n
+numComments=4

@@ -1,20 +1,61 @@
 import java.util.Date;
 
 /**
- * Write a description of class Meal here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Marcel Baxmann
  */
-public class Meal
-{
+public class Meal {
+
     private Recipe recipe;
     private Date date;
 
+    public Meal() {
+
+    }
+
     /**
-     * Constructor for objects of class Meal
+     * @return the recipe
      */
-    public Meal()
-    {
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    /**
+     * @param recipe
+     *            the recipe to set
+     */
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
+
+    /**
+     * @return the date
+     */
+    public Date getDate() {
+        return date;
+    }
+
+    /**
+     * @param date
+     *            the date to set
+     */
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    @Override
+    public int hashCode() {
+          return 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return null;
     }
 }

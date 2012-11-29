@@ -1,15 +1,13 @@
 
 /**
- * Write a description of interface IOutput here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Marcel Baxmann
  */
-public interface IOutput
-{
-    void outputShoppingList(ShoppingList shoppingList);
-        
+public interface IOutput {
+
     void outputMenuPlan(Canteen canteen);
-    
+
+    void outputShoppingList(ShoppingList shoppingList);
+
     void outputTotalCosts(ShoppingList shoppingList);
 }

@@ -1,7 +1,18 @@
 #BlueJ class context
 comment0.params=
 comment0.target=ShoppingList()
-comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ ShoppingList\r\n
 comment1.params=
 comment1.target=Amount\ calculateTotalPrice()
-numComments=2
+comment2.params=
+comment2.target=java.util.List\ getShoppingListItems()
+comment2.text=\r\n\ @return\ the\ shoppingListItems\r\n
+comment3.params=shoppingListItems
+comment3.target=void\ setShoppingListItems(java.util.List)
+comment3.text=\r\n\ Sets\ the\ shoppingListItems.\r\n\ \r\n\ @param\ shoppingListItems\ the\ shoppingListItems\ to\ set\r\n
+comment4.params=
+comment4.target=int\ hashCode()
+comment5.params=obj
+comment5.target=boolean\ equals(java.lang.Object)
+comment6.params=
+comment6.target=java.lang.String\ toString()
+numComments=7

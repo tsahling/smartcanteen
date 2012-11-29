@@ -1,26 +1,66 @@
 import java.util.List;
 
-public class HitListBase
-{
-    private List<HitListItem> hitList;
+/**
+ * 
+ * @author Francesco Luciano
+ */
+public class HitListBase {
 
-    public HitListBase()
-    {
+    List<HitListItem> hitListItems;
+
+    public HitListBase() {
+
     }
-    
-    public HitListItem addHitListItem(HitListItem hitListItem) {
+
+    public HitListItem addHitListItem() {
         return null;
     }
-    
-    public HitListItem updateHitListItem(HitListItem hitListItem) {
+
+    public HitListItem updateHitListItem() {
         return null;
     }
-        
-    public void removeHitListItem(HitListItem hitListItem) {
+
+    public void removeHitListItem() {
     }
-    
+
     public HitListItem findHitListItemByName(String name) {
         return null;
     }
 
+    public HitListItem findHitListItemByRank(int rank) {
+        return null;
+    }
+
+    /**
+     * 
+     * @return the hitListItems
+     */
+    public List<HitListItem> getHitListItems() {
+        return hitListItems;
+    }
+
+    /**
+     * Sets the hitListItems.
+     * 
+     * @param hitListItems the hitListItems to set
+     */
+    public void setHitListItems(List<HitListItem> hitListItems) {
+        this.hitListItems = hitListItems;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return null;
+    }
 }
