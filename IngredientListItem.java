@@ -8,7 +8,7 @@
 public class IngredientListItem
 {
     private Ingredient ingredient;
-    private Amount amount;
+    private Amount quantity;
     
     /**
      * Constructor for objects of class IngredientListItem

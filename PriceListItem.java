@@ -8,8 +8,8 @@
 public class PriceListItem
 {
     private Ingredient ingredient;
-    private Amount amount;
-    private int maxAmountOfIngredient;
+    private Amount price;
+    private int quantityOfIngredient;
     
     /**
      * Constructor for objects of class PriceListItem

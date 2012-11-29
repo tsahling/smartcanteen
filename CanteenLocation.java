@@ -1,12 +1,12 @@
 
 public enum CanteenLocation
 {
-    ESSEN("Essen", "Essen", 500, 51.455644, 7.011554),
-    MUELHEIM("Mülheim", "Mülheim an der Ruhr", 300, 51.430958, 6.880744);
+    ESSEN("ESSEN", "Essen", "Essen", 51.455644, 7.011554),
+    MUELHEIM("MUELHEIM", "Mülheim an der Ruhr", "Mülheim", 51.430958, 6.880744);
 
     private final String code;
     private final String name;
-    private final int numberOfEmployees;
+    private final String shortName;
     private final double latitude;
     private final double longitude;
 
@@ -14,14 +14,14 @@ public enum CanteenLocation
      * 
      * @param code
      * @param name
-     * @param numberOfEmployees
+     * @param shortName
      * @param latitude
      * @param longitude
      */
-    private CanteenLocation(String code, String name, int numberOfEmployees, double latitude, double longitude) {
+    private CanteenLocation(String code, String name, String shortName, double latitude, double longitude) {
         this.code = code;
         this.name = name;
-        this.numberOfEmployees = numberOfEmployees;
+        this.shortName = shortName;
         this.latitude = latitude;
         this.longitude = longitude;
     }
@@ -41,12 +41,12 @@ public enum CanteenLocation
     }
 
     /**
-     * @return the numberOfEmployees
+     * @return the shortName
      */
-    public int getNumberOfEmployees() {
-        return numberOfEmployees;
+    public String getShortName() {
+        return shortName;
     }
-
+    
     /**
      * @return the latitude
      */

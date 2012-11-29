@@ -9,15 +9,30 @@ import java.util.Set;
 public abstract class Provider
 {    
     private String name;
-    private PriceList priceList;
+    private Set<PriceListItem> priceList;
     
     protected abstract Provider createProvider();
     
     protected abstract Provider updateProvider();
     
     protected abstract void deleteProvider();
-    
-    public Amount findAmountOfIngredient(Ingredient ingredient) {
+        
+    public PriceListItem addPriceListItem() {
         return null;
+    }
+    
+    public PriceListItem updatePriceListItem() {
+        return null;
+    }
+    
+    public void removePriceListItem() {       
+    }
+    
+    public Amount findPriceByIngredient(Ingredient ingredient) {
+        return null;
+    }
+    
+    public int findMaxQuantityOfIngredientByIngredient(Ingredient ingredient) {
+        return 0;
     }
 }

@@ -1,21 +1,26 @@
 import java.util.List;
 
-/**
- * Write a description of class HitListBase here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
 public class HitListBase
 {
-    private List<HitListItem> hitListItems;
+    private List<HitListItem> hitList;
 
-    /**
-     * Constructor for objects of class HitListBase
-     */
     public HitListBase()
     {
-
+    }
+    
+    public HitListItem addHitListItem(HitListItem hitListItem) {
+        return null;
+    }
+    
+    public HitListItem updateHitListItem(HitListItem hitListItem) {
+        return null;
+    }
+        
+    public void removeHitListItem(HitListItem hitListItem) {
+    }
+    
+    public HitListItem findHitListItemByName(String name) {
+        return null;
     }
 
 }
