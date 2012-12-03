@@ -1,13 +1,13 @@
 #BlueJ class context
 comment0.params=
 comment0.target=java.util.Properties\ getProperties()
-comment0.text=\r\n\ \r\n\ @return\r\n
+comment0.text=\r\n\ Liest\ alle\ in\ der\ .properties-Datei\ vorhandenen\ Einstellungen.\r\n\ \r\n\ @return\ Eine\ statische\ Instanz\ von\ {@link\ Properties}\r\n
 comment1.params=propertyName
 comment1.target=java.lang.String\ getProperty(java.lang.String)
-comment1.text=\r\n\ \r\n\ @param\ propertyName\r\n\ @return\r\n
+comment1.text=\r\n\ Gibt\ einen\ Einstellungswert\ fuer\ einen\ uebergebenen\ Einstellungsnamen\ zurueck.\r\n\ \r\n\ @param\ propertyName\ Der\ Name\ der\ Einstellung\ die\ zurueckgegeben\ werden\ soll\r\n\ @return\ Der\ Wert\ der\ Einstellung\r\n
 comment2.params=propertyName\ defaultValue
 comment2.target=java.lang.String\ getProperty(java.lang.String,\ java.lang.String)
-comment2.text=\r\n\ \r\n\ @param\ propertyName\r\n\ @param\ defaultValue\r\n\ @return\r\n
+comment2.text=\r\n\ Gibt\ einen\ Einstellungswert\ fuer\ einen\ uebergebenen\ Einstellungsnamen\ zurueck.\ Kann\ der\r\n\ uebergebene\ Einstellungsname\ nicht\ gefunden\ werden,\ wird\ der\ uebergebene\ Standardwert\r\n\ zurueckgegeben.\r\n\ \r\n\ @param\ propertyName\ Der\ Name\ der\ Einstellung\ die\ zurueckgegeben\ werden\ soll\r\n\ @param\ defaultValue\ Der\ Standardwert\ der\ zurueckgegeben\ werden\ soll\ wenn\ kein\ Wert\ fuer\ den\r\n\ uebergebenen\ Einstellungsnamen\ gefunden\ wird\r\n\ @return\ Der\ Wert\ der\ Einstellung\ oder\ der\ Standardwert\r\n
 comment3.params=
 comment3.target=java.util.Properties\ loadProperties()
 comment3.text=\r\n\ \r\n\ @return\r\n

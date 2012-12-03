@@ -1,8 +1,8 @@
 #BlueJ class context
 comment0.params=className
 comment0.target=java.util.logging.Logger\ getLogger(java.lang.String)
-comment0.text=\r\n\ \r\n\ @param\ className\r\n\ @return\r\n
+comment0.text=\r\n\ Erzeugt\ eine\ Logger-Instanz\ fuer\ einen\ bestimmten\ Klassennamen.\r\n\ \r\n\ @param\ className\ Der\ Klassenname\ fuer\ den\ die\ Logger-Instanz\ erzeugt\ werden\ soll\r\n\ @return\ Eine\ statische\ Instanz\ von\ {@link\ Logger}\r\n
 comment1.params=className\ logFilename
 comment1.target=java.util.logging.Logger\ getLogger(java.lang.String,\ java.lang.String)
-comment1.text=\r\n\ \r\n\ @param\ className\r\n\ @param\ logFilename\r\n\ @return\r\n
+comment1.text=\r\n\ Erzeugt\ eine\ Logger-Instanz\ fuer\ einen\ bestimmten\ Klassennamen\ und\ speichert\ die\ Ausgabe\ des\ \r\n\ Logs\ in\ einer\ uebergebenen\ Datei.\r\n\ \r\n\ @param\ className\ Der\ Klassenname\ fuer\ den\ die\ Logger-Instanz\ erzeugt\ werden\ soll\r\n\ @param\ logFilename\ Der\ Dateiname\ in\ der\ die\ Ausgabe\ gespeichert\ werden\ soll\r\n\ @return\ Eine\ statische\ Instanz\ von\ {@link\ Logger}\r\n
 numComments=2

@@ -1,6 +1,6 @@
 /**
  * 
- * @author Tim Sahling
+ * @author Francesco Luciano
  */
 public class Ingredient {
 

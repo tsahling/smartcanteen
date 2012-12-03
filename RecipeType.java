@@ -1,7 +1,7 @@
 
 /**
  * 
- * @author Marcel Baxmann
+ * @author Francesco Luciano
  */
 public enum RecipeType {
 
