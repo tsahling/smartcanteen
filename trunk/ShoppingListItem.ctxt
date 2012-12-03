@@ -1,10 +1,13 @@
 #BlueJ class context
 comment0.params=
 comment0.target=ShoppingListItem()
+comment0.text=\r\n\ Standardkonstruktor\r\n
 comment1.params=
 comment1.target=Amount\ calculatePrice()
+comment1.text=\r\n\ Berechnet\ den\ Preis\ der\ Einkaufslistenposition.\r\n\ \r\n\ @return\ Den\ Preis\ der\ Einkaufslistenposition\r\n
 comment10.params=
 comment10.target=java.lang.String\ toString()
+comment10.text=\r\n\ Erstellt\ die\ String-Representation\ des\ Objekts\ {@link\ ShoppingListItem}.\r\n\ \r\n\ @return\ Die\ String-Representation\ von\ {@link\ ShoppingListItem}\r\n
 comment2.params=
 comment2.target=Ingredient\ getIngredient()
 comment2.text=\r\n\ @return\ the\ ingredient\r\n
@@ -25,6 +28,8 @@ comment7.target=void\ setProvider(Provider)
 comment7.text=\r\n\ @param\ provider\r\n\ \ \ \ \ \ \ \ \ \ \ \ the\ provider\ to\ set\r\n
 comment8.params=
 comment8.target=int\ hashCode()
+comment8.text=\r\n\ Diese\ Methode\ gibt\ den\ HashCode-Wert\ fuer\ das\ Objekt\ zurueck,\ von\ dem\ die\ Methode\ aufgerufen\ \r\n\ wurde.\r\n\ \r\n\ @return\ Der\ HashCode-Wert\ des\ Objekts\ als\ int-Representation\r\n
 comment9.params=obj
 comment9.target=boolean\ equals(java.lang.Object)
+comment9.text=\r\n\ Diese\ Methode\ prueft,\ ob\ das\ uebergebene\ Objekt\ gleich\ dem\ Objekt\ ist,\ von\ dem\ die\ Methode\ \r\n\ aufgerufen\ wurde.\r\n\ \r\n\ @return\ wahr/falsch,\ je\ nachdem\ ob\ zu\ vergleichende\ Objekte\ gleich\ sind\r\n
 numComments=11

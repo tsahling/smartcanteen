@@ -16,8 +16,7 @@ public class MenuPlanBuilder {
 
 	/**
 	 * Der Standardkonstruktor der {@link MenuPlanBuilder} initialisiert die
-	 * Klasse beim Erstellen und nimmt einige wichtige Eingangsdaten bzw.
-	 * -klassen entgegen.
+	 * Klasse beim Erstellen und nimmt einige wichtige Eingangsdaten bzw. -klassen entgegen.
 	 * 
 	 * @param providerBase
 	 *            Die {@link ProviderBase} Verwaltungs- bzw. Containerklasse

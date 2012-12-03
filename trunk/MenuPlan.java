@@ -8,6 +8,9 @@ public class MenuPlan {
 
     List<Meal> meals;
 
+    /**
+     * Standardkonstruktor
+     */
     public MenuPlan() {
 
     }
@@ -31,20 +34,14 @@ public class MenuPlan {
         this.meals = meals;
     }
 
-    @Override
-    public int hashCode() {
-        return 0;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return true;
-    }
-
+    /**
+     * Erstellt die String-Representation des Objekts {@link MenuPlan}.
+     * 
+     * @return Die String-Representation von {@link MenuPlan}
+     */
     @Override
     public String toString() {
         return null;
     }
-
 }
 
