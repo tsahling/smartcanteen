@@ -1,7 +1,7 @@
 
 /**
  * 
- * @author Tim Sahling
+ * @author Marcel Baxmann
  */
 public class Canteen {
 

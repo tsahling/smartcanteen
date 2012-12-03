@@ -2,7 +2,7 @@ import java.util.Set;
 
 /**
  * 
- * @author Tim Sahling
+ * @author Franceso Luciano
  */
 public class Recipe {
 
