@@ -1,8 +1,11 @@
 #BlueJ class context
-comment0.params=canteen
-comment0.target=void\ outputMenuPlan(Canteen)
-comment1.params=shoppingList
-comment1.target=void\ outputShoppingList(ShoppingList)
+comment0.params=
+comment0.target=FileOutput()
+comment0.text=\r\n\ Standardkonstruktor\r\n
+comment1.params=canteen
+comment1.target=void\ outputMenuPlan(Canteen)
 comment2.params=shoppingList
-comment2.target=void\ outputTotalCosts(ShoppingList)
-numComments=3
+comment2.target=void\ outputShoppingList(ShoppingList)
+comment3.params=shoppingList
+comment3.target=void\ outputTotalCosts(ShoppingList)
+numComments=4

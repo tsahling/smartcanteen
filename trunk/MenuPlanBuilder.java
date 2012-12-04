@@ -38,9 +38,9 @@ public class MenuPlanBuilder {
 	}
 
 	/**
-	 * Die einzige oeffentliche Methode der Klasse {@link MenuPlanBuilder} ruft
-	 * die Applikationslogik und den damit verbundenen Optimierungsalgorithmus
-	 * für die Generierung des {@link MenuPlan} und der {@link Meal}s auf.
+	 * Die einzige oeffentliche Methode der Klasse {@link MenuPlanBuilder} ruft die Applikationslogik 
+	 * und den damit verbundenen Optimierungsalgorithmus für die Generierung des {@link MenuPlan} 
+	 * und der {@link Meal}s auf.
 	 * 
 	 * @return Eine {@link ShoppingList} fuer die Verwendung im Output
 	 */

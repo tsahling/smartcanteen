@@ -5,6 +5,9 @@
  */
 public class ApplicationGUI {
 
+    /**
+     * Standardkonstruktor
+     */
     public ApplicationGUI() {
         
     }

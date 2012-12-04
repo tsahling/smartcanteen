@@ -47,20 +47,15 @@ public class HitListBase {
     public void setHitListItems(List<HitListItem> hitListItems) {
         this.hitListItems = hitListItems;
     }
-
-    @Override
-    public int hashCode() {
-        return 0;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-
-        return true;
-    }
-
+    
+    /**
+     * Erstellt die String-Representation des Objekts {@link HitListBase}.
+     * 
+     * @return Die String-Representation von {@link HitListBase}
+     */
     @Override
     public String toString() {
         return null;
     }
+    
 }

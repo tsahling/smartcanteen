@@ -1,12 +1,9 @@
 #BlueJ class context
 comment0.params=
 comment0.target=ProviderBase()
+comment0.text=\r\n\ Standardkonstruktor\r\n
 comment1.params=
 comment1.target=Provider\ addProvider()
-comment10.params=obj
-comment10.target=boolean\ equals(java.lang.Object)
-comment11.params=
-comment11.target=java.lang.String\ toString()
 comment2.params=
 comment2.target=Provider\ updateProvider()
 comment3.params=
@@ -24,5 +21,6 @@ comment8.params=provider
 comment8.target=void\ setProvider(java.util.Set)
 comment8.text=\r\n\ Sets\ the\ provider.\r\n\ \r\n\ @param\ provider\ the\ provider\ to\ set\r\n
 comment9.params=
-comment9.target=int\ hashCode()
-numComments=12
+comment9.target=java.lang.String\ toString()
+comment9.text=\r\n\ Erstellt\ die\ String-Representation\ des\ Objekts\ {@link\ ProviderBase}.\r\n\ \r\n\ @return\ Die\ String-Representation\ von\ {@link\ ProviderBase}\r\n
+numComments=10

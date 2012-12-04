@@ -4,5 +4,5 @@ comment0.target=MenuPlanBuilder(ProviderBase,\ RecipeBase)
 comment0.text=\r\n\ Der\ Standardkonstruktor\ der\ {@link\ MenuPlanBuilder}\ initialisiert\ die\r\n\ Klasse\ beim\ Erstellen\ und\ nimmt\ einige\ wichtige\ Eingangsdaten\ bzw.\ -klassen\ entgegen.\r\n\ \r\n\ @param\ providerBase\r\n\ \ \ \ \ \ \ \ \ \ \ \ Die\ {@link\ ProviderBase}\ Verwaltungs-\ bzw.\ Containerklasse\r\n\ @param\ recipeBase\r\n\ \ \ \ \ \ \ \ \ \ \ \ Die\ {@link\ RecipeBase}\ Verwaltungs-\ bzw.\ Containerklasse\r\n
 comment1.params=
 comment1.target=Canteen[]\ buildMenuPlan()
-comment1.text=\r\n\ Die\ einzige\ oeffentliche\ Methode\ der\ Klasse\ {@link\ MenuPlanBuilder}\ ruft\r\n\ die\ Applikationslogik\ und\ den\ damit\ verbundenen\ Optimierungsalgorithmus\r\n\ f\u00FCr\ die\ Generierung\ des\ {@link\ MenuPlan}\ und\ der\ {@link\ Meal}s\ auf.\r\n\ \r\n\ @return\ Eine\ {@link\ ShoppingList}\ fuer\ die\ Verwendung\ im\ Output\r\n
+comment1.text=\r\n\ Die\ einzige\ oeffentliche\ Methode\ der\ Klasse\ {@link\ MenuPlanBuilder}\ ruft\ die\ Applikationslogik\ \r\n\ und\ den\ damit\ verbundenen\ Optimierungsalgorithmus\ f\u00FCr\ die\ Generierung\ des\ {@link\ MenuPlan}\ \r\n\ und\ der\ {@link\ Meal}s\ auf.\r\n\ \r\n\ @return\ Eine\ {@link\ ShoppingList}\ fuer\ die\ Verwendung\ im\ Output\r\n
 numComments=2

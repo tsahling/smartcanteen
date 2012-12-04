@@ -65,22 +65,15 @@ public class RecipeBase {
     public void setRecipes(Set<Recipe> recipes) {
         this.recipes = recipes;
     }
-
-    @Override
-    public int hashCode() {
-          return 0;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-
-        return true;
-    }
-
+    
+    /**
+     * Erstellt die String-Representation des Objekts {@link RecipeBase}.
+     * 
+     * @return Die String-Representation von {@link RecipeBase}
+     */
     @Override
     public String toString() {
         return null;
     }
-
 }
 

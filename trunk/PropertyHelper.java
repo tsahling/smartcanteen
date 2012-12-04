@@ -42,12 +42,4 @@ public class PropertyHelper {
     public static String getProperty(String propertyName, String defaultValue) {
         return null;
     }
-
-    /**
-     * 
-     * @return
-     */
-    private static Properties loadProperties() {
-        return null;
-    }
 }
