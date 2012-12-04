@@ -44,8 +44,7 @@ public class CSVTokenizer {
 					if (!nextLine.equals("")) // Schleife beenden
 						break;
 				}
-			} 
-		catch (IOException e) {
+			} catch (IOException e) {
 			}
 
 		if (nextLine != null)
@@ -87,8 +86,9 @@ public class CSVTokenizer {
 	}
 
 	/**
-	* Zeile in Felder zerlegen, wird von getNextLine() aufgerufen */
-	
+	 * Zeile in Felder zerlegen, wird von nextLine() aufgerufen
+	 */
+
 	private String[] splitLine(String line, char delimiter) {
 		Vector<String> fields = new Vector<String>();
 

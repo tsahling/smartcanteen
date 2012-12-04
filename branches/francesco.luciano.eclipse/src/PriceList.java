@@ -24,5 +24,19 @@ public class PriceList {
 		this.price = price;
 		this.existingQuantity = existingQuantity;
 	}
+	
+	@Override
+	public String toString() {
+		return getClass().getName() + 
+				"[typeOfTrader=" + typeOfTrader +
+		           ",nameOfTrader=" + nameOfTrader + 
+		           ",transportCost=" + transportCost +
+		           ",itemSize=" + itemSize +
+		           ",unitSize=" + unitSize +
+		           ",nameIngredient=" + nameIngredient +
+		           ",typeIngredient=" + typeIngredient +
+		           ",price=" + price +
+		           ",existingQuantity=" + existingQuantity + "]";
+	}
 
 }

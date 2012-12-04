@@ -9,5 +9,14 @@ public class HitList {
 		this.mealName = mealName;
 	}
 	
+	
+	 @Override
+	  public String toString()
+	  {
+	    return getClass().getName() +
+	           "[mealPlacement=" + mealPlacement +
+	           ",mealName=" + mealName + "]";
+	  }
+	
 
 }
