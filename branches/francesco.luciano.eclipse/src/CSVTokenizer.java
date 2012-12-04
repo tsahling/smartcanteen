@@ -30,17 +30,31 @@ public class CSVTokenizer {
 	}
 
 	/**
-	 * Liest die nächste Zeile lesen und speichert sie in nextLine Liefert im
-	 * Erfolgsfall true zurück und false, wenn keine Zeile mehr verfügbar.
-	 * Leerzeilen werden übersprungen
+	 * Liest die nächste Zeile lesen und speichert sie in nextLine Liefert im
+	 * Erfolgsfall true zurück und false, wenn keine Zeile mehr verfügbar.
+	 * Leerzeilen werden übersprungen
 	 */
 
 	public boolean hasMoreLines() {
+		
+		String[] fields = null;
 
 		if (nextLine == null)
 			try {
 				while ((nextLine = reader.readLine()) != null) {
 					nextLine = nextLine.trim(); // Wenn nicht leere Zeile
+					// Felder aus Zeile extrahieren
+					fields = splitLine(nextLine, delimiter);
+					
+					// Wenn erste Zeile, dann Anzahl Felder abspeichern
+					if (countFields == -1)
+						countFields = fields.length;
+					
+					// Sicherstellen, dass alle Zeilen die gleiche Anzahl Felder haben
+					if (countFields != fields.length) {
+						continue;
+					}
+					
 					if (!nextLine.equals("")) // Schleife beenden
 						break;
 				}
@@ -54,7 +68,7 @@ public class CSVTokenizer {
 	}
 
 	/**
-	 * Liefert ein String-Array mit den Feldern der nächsten Zeile zurück
+	 * Liefert ein String-Array mit den Feldern der nächsten Zeile zurück
 	 */
 
 	public String[] nextLine() throws ParseException {
@@ -62,25 +76,14 @@ public class CSVTokenizer {
 		String[] fields = null;
 		String line;
 
-		// Nächste Zeile in nextLine einlesen lassen
+		// Nächste Zeile in nextLine einlesen lassen
 		if (!hasMoreLines())
 			return null;
 
 		// Felder aus Zeile extrahieren
 		fields = splitLine(nextLine, delimiter);
-
-		// Wenn erste Zeile, dann Anzahl Felder abspeichern
-		if (countFields == -1)
-			countFields = fields.length;
-
-		++countLines; // nur für Exception-Handling
-
-		// Sicherstellen, dass alle Zeilen die gleiche Anzahl Felder haben
-		if (countFields != fields.length) {
-			throw new ParseException("Ungleiche Anzahl Felder in "
-					+ "Zeilen der CSV-Datei", countLines);
-		}
-		// nextLine zurück auf null setzen
+	
+		// nextLine zurück auf null setzen
 		nextLine = null;
 		return fields;
 	}
