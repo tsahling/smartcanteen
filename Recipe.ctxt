@@ -1,6 +1,7 @@
 #BlueJ class context
 comment0.params=
 comment0.target=Recipe()
+comment0.text=\r\n\ Standardkonstruktor\r\n
 comment1.params=
 comment1.target=boolean\ isMeatRecipe()
 comment10.params=
@@ -11,10 +12,13 @@ comment11.target=void\ setRank(int)
 comment11.text=\r\n\ @param\ rank\ the\ rank\ to\ set\r\n
 comment12.params=
 comment12.target=int\ hashCode()
+comment12.text=\r\n\ Diese\ Methode\ gibt\ den\ HashCode-Wert\ fuer\ das\ Objekt\ zurueck,\ von\ dem\ die\ Methode\ aufgerufen\ \r\n\ wurde.\r\n\ \r\n\ @return\ Der\ HashCode-Wert\ des\ Objekts\ als\ int-Representation\r\n
 comment13.params=obj
 comment13.target=boolean\ equals(java.lang.Object)
+comment13.text=\r\n\ Diese\ Methode\ prueft,\ ob\ das\ uebergebene\ Objekt\ gleich\ dem\ Objekt\ ist,\ von\ dem\ die\ Methode\ \r\n\ aufgerufen\ wurde.\r\n\ \r\n\ @return\ wahr/falsch,\ je\ nachdem\ ob\ zu\ vergleichende\ Objekte\ gleich\ sind\r\n
 comment14.params=
 comment14.target=java.lang.String\ toString()
+comment14.text=\r\n\ Erstellt\ die\ String-Representation\ des\ Objekts\ {@link\ Recipe}.\r\n\ \r\n\ @return\ Die\ String-Representation\ von\ {@link\ Recipe}\r\n
 comment2.params=
 comment2.target=boolean\ isFishRecipe()
 comment3.params=

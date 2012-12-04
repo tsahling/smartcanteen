@@ -8,9 +8,11 @@ public class ProviderBase {
 
     private Set<Provider> provider;
 
+    /**
+     * Standardkonstruktor
+     */
     public ProviderBase()
     {
-
     }
 
     public Provider addProvider() {
@@ -51,22 +53,14 @@ public class ProviderBase {
     public void setProvider(Set<Provider> provider) {
         this.provider = provider;
     }
-
-    @Override
-    public int hashCode() {
-
-        return 0;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-
-        return true;
-    }
-
+    
+    /**
+     * Erstellt die String-Representation des Objekts {@link ProviderBase}.
+     * 
+     * @return Die String-Representation von {@link ProviderBase}
+     */
     @Override
     public String toString() {
         return null;
     }
-
 }
