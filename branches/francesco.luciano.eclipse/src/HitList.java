@@ -1,11 +1,11 @@
 
 public class HitList {
 	
-	private int id;
+	private int mealPlacement;
 	private String mealName;
 	
 	public HitList (int id, String mealName) {
-		this.id = id;
+		this.mealPlacement = id;
 		this.mealName = mealName;
 	}
 	

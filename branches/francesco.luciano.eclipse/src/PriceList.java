@@ -1,28 +1,28 @@
 
 public class PriceList {
 	
-	private String artHaendler;
-	private String nameHaendler;
-	private float transportKosten;
+	private String typeOfTrader;
+	private String nameOfTrader;
+	private float transportCost;
 	
-	private int groesseGebinde;
-	private String mengenAngabe;
-	private String nameLebensmittel;
-	private String art;
-	private float preis;
-	private int vorhandeneMenge;
+	private int itemSize;
+	private String unitSize;
+	private String nameIngredient;
+	private String typeIngredient;
+	private float price;
+	private int existingQuantity;
 	
-	public PriceList(String artHaendler,String nameHaendler,float transportKosten,int groesseGebinde,String mengenAngabe,String nameLebensmittel,String art, float preis,int vorhandeneMenge){
+	public PriceList(String typeOfTrader, String nameOfTrader, float transportCost, int itemSize, String unitSize, String nameIngredient, String typeIngredient, float price, int existingQuantity){
 		
-		this.artHaendler = artHaendler;
-		this.nameHaendler = nameHaendler;
-		this.transportKosten = transportKosten;
-		this.groesseGebinde = groesseGebinde;
-		this.mengenAngabe = mengenAngabe;
-		this.nameLebensmittel = nameLebensmittel;
-		this.preis = preis;
-		this.vorhandeneMenge = vorhandeneMenge;
-		this.art = art;
+		this.typeOfTrader = typeOfTrader;
+		this.nameOfTrader = nameOfTrader;
+		this.transportCost = transportCost;
+		this.itemSize = itemSize;
+		this.unitSize = unitSize;
+		this.nameIngredient = nameIngredient;
+		this.typeIngredient = typeIngredient;
+		this.price = price;
+		this.existingQuantity = existingQuantity;
 	}
 
 }
