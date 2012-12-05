@@ -1,8 +1,8 @@
 #BlueJ class context
 comment0.params=providerBase\ recipeBase\ canteens
 comment0.target=ShoppingListBuilder(ProviderBase,\ RecipeBase,\ Canteen[])
-comment0.text=\n\ Der\ Standardkonstruktor\ der\ {@link\ ShoppingListBuilder}\ initialisiert\ die\n\ Klasse\ beim\ Erstellen\ und\ nimmt\ einige\ wichtige\ Eingangsdaten\ bzw.\n\ -klassen\ entgegen.\n\ \n\ @param\ providerBase\n\ \ \ \ \ \ \ \ \ \ \ \ Die\ {@link\ ProviderBase}\ Verwaltungs-\ bzw.\ Containerklasse\n\ @param\ recipeBase\n\ \ \ \ \ \ \ \ \ \ \ \ Die\ {@link\ RecipeBase}\ Verwaltungs-\ bzw.\ Containerklasse\n\ @param\ canteens\n\ \ \ \ \ \ \ \ \ \ \ \ Eine\ oder\ mehrere\ {@link\ Canteen}\n
+comment0.text=\r\n\ Der\ Standardkonstruktor\ der\ {@link\ ShoppingListBuilder}\ initialisiert\ die\r\n\ Klasse\ beim\ Erstellen\ und\ nimmt\ einige\ wichtige\ Eingangsdaten\ bzw.\r\n\ -klassen\ entgegen.\r\n\ \r\n\ @param\ providerBase\r\n\ \ \ \ \ \ \ \ \ \ \ \ Die\ {@link\ ProviderBase}\ Verwaltungs-\ bzw.\ Containerklasse\r\n\ @param\ recipeBase\r\n\ \ \ \ \ \ \ \ \ \ \ \ Die\ {@link\ RecipeBase}\ Verwaltungs-\ bzw.\ Containerklasse\r\n\ @param\ canteens\r\n\ \ \ \ \ \ \ \ \ \ \ \ Eine\ oder\ mehrere\ {@link\ Canteen}\r\n
 comment1.params=
 comment1.target=ShoppingList\ buildShoppingList()
-comment1.text=\n\ Die\ einzige\ oeffentliche\ Methode\ der\ Klasse\ {@link\ ShoppingListBuilder}\n\ ruft\ die\ Applikationslogik\ und\ den\ damit\ verbundenen\n\ Optimierungsalgorithmus\ f\u00FCr\ die\ Generierung\ der\ {@link\ ShoppingList}\ auf.\n\ \n\ @return\ Eine\ {@link\ ShoppingList}\ fuer\ die\ Verwendung\ im\ Output\n
+comment1.text=\r\n\ Die\ einzige\ oeffentliche\ Methode\ der\ Klasse\ {@link\ ShoppingListBuilder}\r\n\ ruft\ die\ Applikationslogik\ und\ den\ damit\ verbundenen\r\n\ Optimierungsalgorithmus\ f\u00FCr\ die\ Generierung\ der\ {@link\ ShoppingList}\ auf.\r\n\ \r\n\ @return\ Eine\ {@link\ ShoppingList}\ fuer\ die\ Verwendung\ im\ Output\r\n
 numComments=2

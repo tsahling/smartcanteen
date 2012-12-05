@@ -23,7 +23,7 @@ public class RecipeBase {
      * Mithilfe der Methode addRecipe() kann ein neues Rezept in die Datenstrukt recipes hinzugefügt werden
      * @return Die aktualisierte Datenstruktur recipes wird zurückgeben
      */
-    public Recipe addRecipe() {
+    public Recipe addRecipe(Recipe recipe) {
         return null;
     }
 
@@ -31,14 +31,14 @@ public class RecipeBase {
      * Mithilfe der Methode updateRecipe() kann ein bestehendes Rezept in die Datenstrukt recipes verändert werden
      * @return Die aktualisierte Datenstruktur recipes wird zurückgeben
      */
-    public Recipe updateRecipe() {
+    public Recipe updateRecipe(Recipe recipe) {
         return null;
     }
 
      /**
      * Mithilfe der Methode removeRecipe() kann ein bestehendes Rezept in der Datenstrukt recipes gelöscht werden
      */
-    public void removeRecipe() {
+    public void removeRecipe(Recipe recipe) {
     }
     
    /**

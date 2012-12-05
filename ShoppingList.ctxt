@@ -1,17 +1,17 @@
 #BlueJ class context
 comment0.params=
 comment0.target=ShoppingList()
-comment0.text=\n\ Standardkonstruktor\n
+comment0.text=\r\n\ Standardkonstruktor\r\n
 comment1.params=
 comment1.target=Amount\ calculateTotalPrice()
-comment1.text=\n\ Summiert\ die\ Preise\ aller\ Einkaufslistenpositionen\ zu\ einer\ Gesamtsumme.\n\ \n\ @return\ Die\ Gesamtsumme\ aller\ Einkaufslistenpositionen\n
+comment1.text=\r\n\ Summiert\ die\ Preise\ aller\ Einkaufslistenpositionen\ zu\ einer\ Gesamtsumme.\r\n\ \r\n\ @return\ Die\ Gesamtsumme\ aller\ Einkaufslistenpositionen\r\n
 comment2.params=
 comment2.target=java.util.List\ getShoppingListItems()
-comment2.text=\n\ @return\ Die\ Einkaufslistenpositionen\n
+comment2.text=\r\n\ @return\ Die\ Einkaufslistenpositionen\r\n
 comment3.params=shoppingListItems
 comment3.target=void\ setShoppingListItems(java.util.List)
-comment3.text=\n\ Setzt\ die\ Einkaufslistenpositionen.\n\ \n\ @param\ shoppingListItems\ Die\ zu\ setzenden\ Einkaufslistenpositionen\n
+comment3.text=\r\n\ Setzt\ die\ Einkaufslistenpositionen.\r\n\ \r\n\ @param\ shoppingListItems\ Die\ zu\ setzenden\ Einkaufslistenpositionen\r\n
 comment4.params=
 comment4.target=java.lang.String\ toString()
-comment4.text=\n\ Erstellt\ die\ String-Representation\ des\ Objekts\ {@link\ ShoppingList}.\n\ \n\ @return\ Die\ String-Representation\ von\ {@link\ ShoppingList}\n
+comment4.text=\r\n\ Erstellt\ die\ String-Representation\ des\ Objekts\ {@link\ ShoppingList}.\r\n\ \r\n\ @return\ Die\ String-Representation\ von\ {@link\ ShoppingList}\r\n
 numComments=5

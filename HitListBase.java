@@ -17,26 +17,25 @@ public class HitListBase {
 
      /**
      * Mithilfe der Methode addHitListItem() kann ein Gericht in die Hitliste hinzugefügt werden
-     * @return Hitliste wird zurückgeben
+     * @return HitListItem wird zurückgeben
      */
    
-    public HitListItem addHitListItem() {
+    public HitListItem addHitListItem(HitListItem hitListItem) {
         return null;
     }
 
     /**
      * Mithilfe der Methode updateHitListItem() kann ein Gericht in die Hitliste geändert werden
-     * @return Hitliste wird zurückgeben
+     * @return HitListItem wird zurückgeben
      */
-    public HitListItem updateHitListItem() {
+    public HitListItem updateHitListItem(HitListItem hitListItem) {
         return null;
     }
 
     /**
      * Mithilfe der Methode removeHitListItem() kann ein Gericht in die Hitliste gelöscht werden
-     * @return Hitliste wird zurückgeben
      */
-    public void removeHitListItem() {
+    public void removeHitListItem(HitListItem hitListItem) {
     }
 
      /**
