@@ -1,18 +1,21 @@
 package de.osjava.smartcanteen.builder;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 
-import de.osjava.smartcanteen.data.Recipe;
+import de.osjava.smartcanteen.data.Canteen;
 
-public class MenuPlanBuilderTest {
+public class MenuPlanBuilderTest extends AbstractBuilderTest {
 
 	@Test
-	public void testMethod() {
-		Recipe meal = mock(Recipe.class);
-		
+	public void testBuildMenuPlan() {
+		MenuPlanBuilder mpb = new MenuPlanBuilder(createProviderBase(),
+				createRecipeBase());
+
+		Canteen[] canteens = mpb.buildMenuPlan();
+
 		assertEquals(0, 0);
 	}
+
 }
