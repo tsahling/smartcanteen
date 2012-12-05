@@ -8,7 +8,7 @@ public class HitListItem {
     private int rank;
 
     /**
-     * 
+     * Stanartkonstruktor zum erzeugen eines Gericht mit Namen und Rang
      * @param name
      * @param rank
      */
@@ -18,30 +18,34 @@ public class HitListItem {
     }
 
     /**
-     * @return the name
+     * Methode um den Namen eines HitlistItem zur ermitteln
+     * @return Name des HitlistItem
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @param name
-     *            the name to set
+     * Methode um den Namen eines HitlistItem zu setzen
+     * @param  Name des HitlistItem 
+     * 
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * @return the rank
+     * Methode um den Rang eines HitlistItem zu ermitteln
+     * @return Rang des HitListItem
      */
     public int getRank() {
         return rank;
     }
 
     /**
+     * Methode um den Rang eines HitListItem zu setzen
      * @param rank
-     *            the rank to set
+     *
      */
     public void setRank(int rank) {
         this.rank = rank;
