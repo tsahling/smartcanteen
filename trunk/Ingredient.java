@@ -18,9 +18,9 @@ public class Ingredient {
     }
 
     /**
-     * Sets the name.
+     * Mthode um den Namen des Lebensmittel zu setzen
      * 
-     * @param name the name to set
+     * @param Name des Lebensmittel
      */
     public void setName(String name) {
         this.name = name;
