@@ -22,6 +22,14 @@ import de.osjava.smartcanteen.data.item.PriceListItem;
 // wie bereits gesagt gibt es bei den Bauernhöfen eine Pauschale des Kuriere die nur von der Entfenung abhängt und nicht
 // davon was oder wie viel bestellt wurde. Die Großhändler haben einen Lieferkostensatz, der mit der Anzahl Artikel
 // multipliziert wird.
+
+// Hallo Frau Meyer,
+//
+// die Pauschale liegt im Augenblick bei 2 Euro/Km.
+//
+// Herzliche Grüße
+//
+// J. Gourmand
 /**
  * 
  * @author Tim Sahling
