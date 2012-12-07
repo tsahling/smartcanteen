@@ -1,7 +1,9 @@
 
 /**
- * Die Klasse {@link RecipeType} stellt ein Detenobjekt vom Typ Enumeration dar. Durch die Klasse {@link RecipeType} wird der Typ (Fisch, Fleisch, Vegetarisch) eines Gericht deklariert.
- * 
+ * Die Klasse {@link RecipeType} stellt ein Detenobjekt vom Typ Enumeration dar. 
+ * Durch die Klasse {@link RecipeType} wird der Typ (Fisch, Fleisch, Vegetarisch) eines Gericht deklariert.
+ *  
+ *
  * @author Francesco Luciano
  */
 public enum RecipeType {
@@ -15,9 +17,11 @@ public enum RecipeType {
     private final String shortName;
 
     /**
-     * @param code
-     * @param name
-     * @param shortName
+	 * Standartkostruktor wird in diesem Fall gebraucht weil der Enum ergänzenden Informationen deklariert wird
+	 * Damit die Methoden getCode(), getName() und getShortName() funktionieren ist der Konstruktor notwendig
+     * @param code Deklaration des ENUM z.B. MEAT
+     * @param name Beschreibung des ENUM z.B. Fleischgericht
+     * @param shortName Kurzbeschreibung des ENUM z.B. Fleisch
      */
     private RecipeType(String code, String name, String shortName) {
         this.code = code;
@@ -26,21 +30,21 @@ public enum RecipeType {
     }
 
     /**
-     * @return the code
+     * @return Deklaration des ENUM 
      */
     public String getCode() {
         return code;
     }
 
     /**
-     * @return the name
+     * @return Beschreibung des ENUM
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @return the shortName
+     * @return Kurzbeschreibung des ENUM
      */
     public String getShortName() {
         return shortName;
