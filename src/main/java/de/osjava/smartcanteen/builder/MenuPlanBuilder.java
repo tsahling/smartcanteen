@@ -1,6 +1,10 @@
 package de.osjava.smartcanteen.builder;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Random;
 import java.util.Set;
+import java.util.TreeMap;
 
 import de.osjava.smartcanteen.base.ProviderBase;
 import de.osjava.smartcanteen.base.RecipeBase;
@@ -9,7 +13,6 @@ import de.osjava.smartcanteen.builder.result.MenuPlan;
 import de.osjava.smartcanteen.builder.result.ShoppingList;
 import de.osjava.smartcanteen.data.Canteen;
 import de.osjava.smartcanteen.data.Recipe;
-import de.osjava.smartcanteen.data.item.IngredientListItem;
 import de.osjava.smartcanteen.datatype.CanteenLocation;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 
@@ -28,81 +31,109 @@ import de.osjava.smartcanteen.helper.PropertyHelper;
 /**
  * Die {@link MenuPlanBuilder} ist eine der Geschaeftslogikklassen und fuer die
  * Erstellung je eines "optimalen" Speiseplans fuer die Kantinen in Essen und
- * Muelheim zustaendig. Als Ergebnis fuellt die Klasse die {@link MenuPlan} Attribute der {@link Canteen}, die dann im
- * Output bzw. zur Weiterverarbeitung
+ * Muelheim zustaendig. Als Ergebnis fuellt die Klasse die {@link MenuPlan}
+ * Attribute der {@link Canteen}, die dann im Output bzw. zur Weiterverarbeitung
  * verwendet werden koennen.
  * 
  * @author Tim Sahling
  */
 public class MenuPlanBuilder {
 
-    private ProviderBase providerBase;
-    private RecipeBase recipeBase;
-    private Canteen[] canteens;
+	private ProviderBase providerBase;
+	private RecipeBase recipeBase;
+	private Canteen[] canteens;
 
-    /**
-     * Der Standardkonstruktor der {@link MenuPlanBuilder} initialisiert die
-     * Klasse beim Erstellen und nimmt einige wichtige Eingangsdaten bzw.
-     * -klassen entgegen.
-     * 
-     * @param providerBase
-     *            Die {@link ProviderBase} Verwaltungs- bzw. Containerklasse
-     * @param recipeBase
-     *            Die {@link RecipeBase} Verwaltungs- bzw. Containerklasse
-     */
-    public MenuPlanBuilder(ProviderBase providerBase, RecipeBase recipeBase) {
-        this.providerBase = providerBase;
-        this.recipeBase = recipeBase;
-        this.canteens = new Canteen[]{
-                new Canteen(
-                        CanteenLocation.ESSEN,
-                        Integer.valueOf(PropertyHelper
-                                .getProperty("canteen.essen.numberOfEmployees"))),
-                new Canteen(
-                        CanteenLocation.MUELHEIM,
-                        Integer.valueOf(PropertyHelper
-                                .getProperty("canteen.muelheim.numberOfEmployees"))) };
-    }
+	/**
+	 * Der Standardkonstruktor der {@link MenuPlanBuilder} initialisiert die
+	 * Klasse beim Erstellen und nimmt einige wichtige Eingangsdaten bzw.
+	 * -klassen entgegen.
+	 * 
+	 * @param providerBase
+	 *            Die {@link ProviderBase} Verwaltungs- bzw. Containerklasse
+	 * @param recipeBase
+	 *            Die {@link RecipeBase} Verwaltungs- bzw. Containerklasse
+	 */
+	public MenuPlanBuilder(ProviderBase providerBase, RecipeBase recipeBase) {
+		this.providerBase = providerBase;
+		this.recipeBase = recipeBase;
+		this.canteens = new Canteen[] {
+				new Canteen(
+						CanteenLocation.ESSEN,
+						Integer.valueOf(PropertyHelper
+								.getProperty("canteen.essen.numberOfEmployees"))),
+				new Canteen(
+						CanteenLocation.MUELHEIM,
+						Integer.valueOf(PropertyHelper
+								.getProperty("canteen.muelheim.numberOfEmployees"))) };
+	}
 
-    /**
-     * Die einzige oeffentliche Methode der Klasse {@link MenuPlanBuilder} ruft
-     * die Applikationslogik und den damit verbundenen Optimierungsalgorithmus
-     * fuer die Generierung des {@link MenuPlan} und der {@link Meal}s auf.
-     * 
-     * @return Eine {@link ShoppingList} fuer die Verwendung im Output
-     */
-    public Canteen[] buildMenuPlan() {
+	/**
+	 * Die einzige oeffentliche Methode der Klasse {@link MenuPlanBuilder} ruft
+	 * die Applikationslogik und den damit verbundenen Optimierungsalgorithmus
+	 * fuer die Generierung des {@link MenuPlan} und der {@link Meal}s auf.
+	 * 
+	 * @return Eine {@link ShoppingList} fuer die Verwendung im Output
+	 */
+	public Canteen[] buildMenuPlan() {
 
-        // Varianten
-        //
-        // 1. Günstige Preise
-        //
-        // 1.1 Suche der am günstigsten zu kochenden Rezepte pro Kantine
-        // (Mitarbeiterzahl beachten) unter Berücksichtigung der bereits
-        // ausgewählten gerichte
-        // 1.2 Auswahl der Gerichte für einen Tag die am günstigsten zu kochen
-        // sind und am beliebtesten bei den mitarbeitern und anforderungen an
-        // fish, meat und vegetable abdecken
+		// Varianten
+		//
+		// 1. Günstige Preise
+		//
+		// 1.1 Suche der am günstigsten zu kochenden Rezepte pro Kantine
+		// (Mitarbeiterzahl beachten) unter Berücksichtigung der bereits
+		// ausgewählten gerichte
+		// 1.2 Auswahl der Gerichte für einen Tag die am günstigsten zu kochen
+		// sind und am beliebtesten bei den mitarbeitern und anforderungen an
+		// fish, meat und vegetable abdecken
 
-        // 2. Beliebteste Gerichte
+		// 2. Beliebteste Gerichte
 
-        // 2.1 Suche der beliebtesten Gerichte
-        // 2.2 Suche der günstigen Anbieter für Gerichte mit Bezug auf
-        // Mitarbeiteranzahl
-        // 2.3 Auswahl der Anbieter unter Berücksichtigung der anforderungen
-        // fish, meat, vegetable
+		// 2.1 Suche der beliebtesten Gerichte
+		// 2.2 Suche der günstigen Anbieter für Gerichte mit Bezug auf
+		// Mitarbeiteranzahl
+		// 2.3 Auswahl der Anbieter unter Berücksichtigung der anforderungen
+		// fish, meat, vegetable
 
-        Set<Recipe> recipes = recipeBase.getRecipes();
+		// 3. Menüverteilungsvariante
 
-        for (Recipe recipe : recipes) {
-            Set<IngredientListItem> ingredientList = recipe.getIngredientList();
+		// 3.1 Verfügbare Rezepte unter Beachtung der Regeln auf Kantinen und
+		// Tage verteilen
 
-        }
+		// 3.2 Ordner der Rezepte pro Tag nach Favoriten
 
-        return canteens;
-    }
+		// 3.3 Anhand der Portionsregeln die günstigste Providerzusammenstellung
+		// finden
 
-    private class TestTupel {
+		int daysOfPlaningPeriod = 15;
 
-    }
+		for (Canteen canteen : canteens) {
+
+			Set<Recipe> choosenRecipes = new HashSet<Recipe>();
+
+			Map<Integer, Set<Recipe>> planingPeriod = new TreeMap<Integer, Set<Recipe>>();
+
+			for (int i = 1; i <= daysOfPlaningPeriod; i++) {
+
+			}
+		}
+
+		return canteens;
+	}
+
+	private Recipe getRandomRecipe(Set<Recipe> recipes) {
+		int item = new Random().nextInt(recipes.size());
+		int i = 0;
+
+		for (Recipe recipe : recipes) {
+			if (i == item) {
+				return recipe;
+			}
+			i = i + 1;
+		}
+
+		return null;
+
+	}
+
 }
