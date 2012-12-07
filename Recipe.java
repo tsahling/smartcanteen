@@ -1,8 +1,12 @@
 import java.util.Set;
 
 /**
+ * Die Klasse {@link Recipe} stellt ein Datenobjekt eines speziellen Rezept {@link Recipe} aus der eingelesenen Datei Rezepte dar. Die Rezepte Datei wird 
+ * der Klasse {@Application} als Klassenparameter übergeben und von der Klasse {@link CSVTokenizer} verarbeitet und in ihre Datenfelder zerlegt.
+ * Sie enthaelt den Namen {@link name} des Rezept, eine Liste {@link ingredientList} 
+ * von Zutaten {@link IngredientListItem} und den Rang {@link rank} des dazugehörigen Gericht {@link Meal} in der Hitliste {@link HitListbase}.
  * 
- * @author Franceso Luciano
+ * @author Francesco Luciano
  */
 public class Recipe {
 
@@ -19,90 +23,89 @@ public class Recipe {
     }
 
     /**
-    * Anhand der Methode isMeatRecipe kann abgefragt werden ob es sich um ein Rezept für ein Fleischgericht handelt
-    * @return boolean
+    * Methode um abzufragen ob das Rezept {@link Recipe} vom Typ {@link RecipeType} Fleisch ist.
+    * @return Wenn das Rezept {@link Recipe} vom Typ {@link RecipeType} Fleisch ist TRUE sonst FALSE
     */
-
     public boolean isMeatRecipe() {
         return RecipeType.MEAT.equals(type);
     }
 
-    /**
-    * Anhand der Methode isFishRecipe kann abgefragt werden ob es sich um ein rezept für ein Fischgericht handelt
-    * @return boolean
+  /**
+    * Methode um abzufragen ob das Rezept {@link Recipe} vom Typ {@link RecipeType} Fisch ist.
+    * @return Wenn das Rezept {@link Recipe} vom Typ {@link RecipeType} Fisch ist TRUE sonst FALSE
     */
    
     public boolean isFishRecipe() {
         return RecipeType.FISH.equals(type);
     }
 
-    /**
-    * Anhand der Methode isVegetableRecipe kann abgefragt werden ob es sich um ein rezept für ein Vegetarischesgericht handelt
-    * @return boolean
+   /**
+    * Methode um abzufragen ob das Rezept {@link Recipe} vom Typ {@link RecipeType} Vegetarisch ist.
+    * @return Wenn das Rezept {@link Recipe} vom Typ {@link RecipeType} Vegetarisch ist TRUE sonst FALSE
     */
     public boolean isVegetableRecipe() {
         return RecipeType.VEGETABLE.equals(type);
     }
 
     /**
-     * Anhand der Methode getName kann der Name des Rezept ermittelt werden
-     * @return Rückgabe des Rezeptnamen
+     * Methode um den Namen {@link name} des des Rezept {@link Recipe} abzufragen 
+     * @return Name {@link name} des Rezept {@link Recipe}
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Anhand der Methode setName kann der Name des Rezept gesetzt werden
-     * @param Name des Rezept
+     * Methode um den Namen {@link name} des Rezept {@link Recipe} zu setzen
+     * @param name Name des Rezept
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-      * Anhand der Methode getType kann abgefragt werden um was für ein Rezepttyp (Fisch, Fleisch, Vegetarisch) es sich handelt
-     * @return Typ des Rezept
+      * Methode um den Typ {@link RecipeType} des Rezept {@link Recipe} abzufragen
+     * @return Typ {@link RecipeType} des Rezept {@link Recipe}
      */
     public RecipeType getType() {
         return type;
     }
 
     /**
-     * Anhand der Methode setType kann der Typ des Rezept gesetzt werden
-     * @param type the type to set
+     * Methode um den Typ {@link RecipeType} eines Rezept {@link Recipe} zu setzen
+     * @param type Typ {@link RecipeType} eines Rezept {@link Recipe} 
      */
     public void setType(RecipeType type) {
         this.type = type;
     }
 
     /**
-     * Anhand der Methode getIngredientList kann der die Inhaltsliste des Rezept ermittelt werden
-     * @return Rückgabe eines Collection welche die Inhalte enthält
+     * Methode um die Lebensmittelliste {@link ingredientList} des Rezept {@link Recipe} zu ermitteln
+     * @return Set {@link ingredientList}
      */
     public Set<IngredientListItem> getIngredientList() {
         return ingredientList;
     }
 
     /**
-     * Anhand der Methode setIngredientList kann  die Inhaltsliste des Rezept gesetzt werden
-     * @param Inhaltsliste welche zu dem Rezept gehört
+     * Methode um die Lebensmittelliste {@link ingredientList} des Rezept {@link Recipe} zu setzen
+     * @param ingredientList Lebensmittelliste {@link ingredientList} die zu dem Rezept {@link Recipe} gehört
      */
     public void setIngredientList(Set<IngredientListItem> ingredientList) {
         this.ingredientList = ingredientList;
     }
 
     /**
-     * Anhand der Methode getRank kann  der Rang des Gericht aus der Hitsliste zu dem das Rezept gehört ermittelt werden
-     * @return Rang des Gericht aus der Hitliste zu dem das Rezept gehört
+     * Methode um den Rang des Gericht {@link Meal} aus der Hitliste {@link HitListBase} die zum dem Rezept {@link Recipe} gehürt zu ermitteln
+     * @return Rang des Gericht {@link Meal} aus der Hitliste {@link HitListBase} das zu dem Rezept {@link Recipe} gehört
      */
     public int getRank() {
         return rank;
     }
 
     /**
-     * Anhand der Methode setRank kann  der Rang des Gericht aus der Hitsliste zu dem das Rezept gehört gesetzt werden
-     * @param Rang aus der Hitliste um den Rang zu setzen
+     * Metohde um den Rang des Gericht {@link Meal} aus der Hitsliste {@link HitListBase} zu dem das Rezept {@link Recipe} gehört zu setzen
+     * @param rank Rang aus der Hitliste {@link HitListBase}
      */
     public void setRank(int rank) {
         this.rank = rank;

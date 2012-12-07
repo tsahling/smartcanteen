@@ -1,8 +1,7 @@
 /**
  * Die Klasse {@link Application} versetzt das Programm anhand der übergebenen Aufparameter in einen 
  * initialen und konstanten Zustand. Dabei werden zu Beginn die übergebenen Aufparameter (in Form von 
- * Dateinamen) validiert und anhand der durch die Modulleitung zur Verfuegung gestellten Klassen aus dem 
- * Dateisystem eingelesen sowie in die entsprechenden Containerklassen uebergeben.
+ * Dateinamen) validiert und anhand der Klasse {@link CSVTokenizer} eingelesen sowie in die entsprechenden Containerklassen uebergeben.
  * 
  * Nach erfolgreicher Initialisierung startet die Klasse {@link Application} die eigentliche 
  * Programmlogik und sorgt ganz am Ende des Ablaufs für die Ausgabe der Ergebnisse.

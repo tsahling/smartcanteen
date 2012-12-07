@@ -1,6 +1,9 @@
 /**
+ * Die Klasse {@link HitListItem} stellt ein Gericht {@link Meal} in der Datenträgerklasse (@link HitListBase) dar. Die HitList Datei wird der Klasse {@Application} 
+ * als Klassenparameter übergeben und von der Klasse {@link CSVTokenizer} verarbeitet und in ihre Datenfelder zerlegt.
+ * Die Klasse {@link HitListItem} enthaelt eine Attribut für den Namen des Gericht {@link name} und den Rang {@link rank} des Gericht {@link Meal}
  * 
- * @author Franceso Luciano
+ * @author Francesco Luciano
  */
 public class HitListItem {
 
@@ -8,7 +11,7 @@ public class HitListItem {
     private int rank;
 
     /**
-     * Stanartkonstruktor zum erzeugen eines Gericht mit Namen und Rang
+     * Standartkonstruktor zum erzeugen eines Gericht mit Namen und Rang
      * @param name
      * @param rank
      */
@@ -18,16 +21,16 @@ public class HitListItem {
     }
 
     /**
-     * Methode um den Namen eines HitlistItem zur ermitteln
-     * @return Name des HitlistItem
+     * Methode um den Namen {@link name} eines Datenojekt {@link HitListItem} zur ermitteln
+     * @return Name des Datenojekt {@link HitListItem}
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Methode um den Namen eines HitlistItem zu setzen
-     * @param  Name des HitlistItem 
+     * Methode um den Namen {@link name} eines Datenojekt {@link HitListItem} zur setzen
+     * @param name Name des Datenojekt {@link HitListItem} 
      * 
      */
     public void setName(String name) {
@@ -35,16 +38,16 @@ public class HitListItem {
     }
 
     /**
-     * Methode um den Rang eines HitlistItem zu ermitteln
-     * @return Rang des HitListItem
+     * Methode um den Rang {@link rang} eines HitlistItem zu ermitteln
+     * @return Rang {link rang} des HitListItem
      */
     public int getRank() {
         return rank;
     }
 
     /**
-     * Methode um den Rang eines HitListItem zu setzen
-     * @param rank
+     * Methode um den Rang {@link rang} eines HitListItem zu setzen
+     * @param Rang desHitListItem
      *
      */
     public void setRank(int rank) {

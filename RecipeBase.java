@@ -4,7 +4,8 @@ import java.util.TreeSet;
 import java.util.Comparator;
 
 /**
- * Die Klasse Recipebase ist die Repräsentation der Rezepte Sammlung, welche als Eingabedatei übergeben wird.
+ * Die Klasse {@link Recipebase} ist eine Datenträgerklasse die in einer Java Collection vom Typ Set {@link recipes} die Informationen aus der einzulesenden Datei Rezepte 
+ * als Datenobjekt {@link Recipe} speichert.
  * @author Francesco Luciano
  */
 public class RecipeBase {
@@ -20,58 +21,59 @@ public class RecipeBase {
     }
     
     /**
-     * Mithilfe der Methode addRecipe() kann ein neues Rezept in die Datenstrukt recipes hinzugefügt werden
-     * @return Die aktualisierte Datenstruktur recipes wird zurückgeben
+     * Methode um ein Datenobjekt (@link Recipe) in das Set {@link recipes} hinzuzufügen.
+     * @param recipe Das einzufügende Datenobjekt (@link Recipe)
+     * @return Das aktualisierte Set {@link recipes}
      */
     public Recipe addRecipe(Recipe recipe) {
         return null;
     }
 
      /**
-     * Mithilfe der Methode updateRecipe() kann ein bestehendes Rezept in die Datenstrukt recipes verändert werden
-     * @return Die aktualisierte Datenstruktur recipes wird zurückgeben
+     * Methode um ein bestehendes Datenobjekt (@link Recipe) im Set {@link recipes} zu verändern.
+     * @return Das aktualisierte Set {@link recipes}
      */
     public Recipe updateRecipe(Recipe recipe) {
         return null;
     }
 
      /**
-     * Mithilfe der Methode removeRecipe() kann ein bestehendes Rezept in der Datenstrukt recipes gelöscht werden
+     * Methode um ein bestehendes Datenobjekt (@link Recipe) aus dem Set {@link recipes} zu löschen.
      */
     public void removeRecipe(Recipe recipe) {
     }
     
    /**
-     * Mithilfe der Methode findRecipeByName() kann ein bestimmtes Rezept in der Datenstrukt recipes gesucht werden
-     * @param Name des Rezept
-     * @return Das gefundene Rezept wird zurückgeben
+      * Methode um ein bestimmtes Datenobjekt (@link Recipe) in dem Set {@link recipes} zu suchen.
+     * @param name Name des Datenobjekt (@link Recipe)
+     * @return Das gefundene Datenobjekt (@link Recipe)
      */
     public Recipe findRecipeByName(String name) {
         return null;
     }
 
      /**
-     * Mithilfe der Methode findRecipesByRecipeType() können Rezept anhand ihres 
-     * RecipeType (Fleisch, Fisch, Vegetarisch) in der Datenstrukt recipes gesucht werden
-     * @param recipeType ((Fleisch, Fisch, Vegetarisch))
-     * @return Collection die den Inhalt der Rezepte welche auf den recipeType passen wird zurückgegeben
+     * Methode um im Set {@link recipes} ein Datenobjekt (@link Recipe) anhand ihres 
+     * Typ {@link RecipeType} zu suchen.
+     * @param recipeType Typ {@link RecipeType}  des Gericht
+     * @return Set {@link Recipe} mit dem Inhalt aller Datenobjekte (@link Recipe) die auf den angebenen Typ {@link RecipeTyp} matchen
      */
     public Set<Recipe> findRecipesByRecipeType(RecipeType recipeType) {
         return null;
     }
 
      /**
-     * Mithilfe der Methode getRecipesSortedByRank() können die Rezepte anhand des Rang der Gerichte  
-     * Hitliste sortiert werden
-     * @return Collection welche die Rezepte der Gerichte nach ihrem Rang in der Hitliste aufsteigen sortiert enthält wird zurückgegeben
+     * Methode um die Datenobjekte (@link Recipe) im Set {@link recipes} anhand des Rang {@link rank} der Gerichte {@link Meal}
+     * in der Hitliste {@link HitListBase} zu sortieren
+     * @return Set {@link recipes} in dem die Datenobjekte (@link Recipe) aufsteigend sortiert sind
      */
     public Set<Recipe> getRecipesSortedByRank() {
         return null;
     }
 
      /**
-     * Mithilfe der Methode findRecipeByRank() kann ein bestimmtes Rezept eines Gericht anhand des Rang in der Hitliste gefunden werden.
-     * @param Rang des Gericht in der Hitliste
+     * Methode um nach einem Datenobjekt (@link Recipe) eines Gericht {@link Meal} anhand des Rang {@link rank} in der Hitliste {@link HitListBase} zu suchen.
+     * @param rank Rang {@link rank} des Gericht {@link Meal} in der Hitliste {@link HitListBase}
      * @return Recipe welches zu dem Gericht gehört welches den übergebenden Rang in der Hitliste besitzt
      */
     public Recipe findRecipeByRank(int rank) {
@@ -79,23 +81,24 @@ public class RecipeBase {
     }
 
     /**
-     * Mithilfe der Methode findHighestRankRecipe() kann das Rezept des beliebstesten Gericht der Hitliste gefunden werden
-     * @return Recipe welches zum Gericht mit dem beliebtesten Gericht in der Hitliste gehört
+     *  Methode um das Datenobjekt {@link Recipe} der Hitliste {@link HitListBasse} mit dem höchsten Rang {@link rank} zu ermitteln
+     * @return Datenobjekt {@link Recipe} des beliebstesten Gericht der Hitliste
      */
     public Recipe findHighestRankRecipe() {
         return null;
     }
 
-       /**
-     * Mithilfe der Methode findLowestRankRecipe() kann das Rezept des unbeliebstesten Gericht der Hitliste gefunden werden
-     * @return Recipe welches zum Gericht mit dem unbeliebtesten Gericht in der Hitliste gehört
+    /**
+     *  Methode um das Datenobjekt {@link Recipe} der Hitliste {@link HitListBasse} mit dem niedrigsten Rang {@link rank} zu ermitteln
+     * @return Datenobjekt {@link Recipe} des unbeliebstesten Gericht der Hitliste
      */
     public Recipe findLowestRankRecipe() {
         return null;
     }
 
     /**
-     * @return the recipes
+     * Methode um alle Datenobjekte {@link recipes} aus dem Set {@link recipes} zu ermitteln
+     * @return Set {@link recipes}
      */
     public Set<Recipe> getRecipes() {
         return recipes;
