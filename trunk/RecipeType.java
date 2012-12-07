@@ -1,5 +1,6 @@
 
 /**
+ * Die Klasse {@link RecipeType} stellt ein Detenobjekt vom Typ Enumeration dar. Durch die Klasse {@link RecipeType} wird der Typ (Fisch, Fleisch, Vegetarisch) eines Gericht deklariert.
  * 
  * @author Francesco Luciano
  */
@@ -14,7 +15,6 @@ public enum RecipeType {
     private final String shortName;
 
     /**
-     * 
      * @param code
      * @param name
      * @param shortName

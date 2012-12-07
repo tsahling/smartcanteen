@@ -1,17 +1,21 @@
 
 /**
+ * Die Klasse {@link IngredientListItem} stellt eine Lebensmittelposition {@link Ingriedent} aus einem Rezept {@link Recipe} in dem Set (@link ingredientList) dar.
+ * Sie enthaelt einen Verweis auf die jeweilige zu verwendene Zutat ({@link Ingredient}), eine Menge ({@link Amount}) die angibt wieviel von 
+ * der Zutat benutzt werden muss.
  * 
- * @author Franceso Luciano
+ * @author Francesco Luciano
  */
+
 public class IngredientListItem {
 
     private Ingredient ingredient;
     private Amount quantity;
 
     /**
-     * 
-     * @param ingredient
-     * @param quantity
+     * Standartkonstruktor der Klasse {@link IngredientListItem}
+     * @param ingredient Das Lebenmittel {@link Ingredient}
+     * @param quantity Die benötigte Menge {@link Amount} die in dem Rezept {@link Recipe} angeben ist
      */
     public IngredientListItem(Ingredient ingredient, Amount quantity) {
         this.ingredient = ingredient;
@@ -19,28 +23,32 @@ public class IngredientListItem {
     }
 
     /**
-     * @return the ingredient
+     * Methode um das Lebensmittel {@link Ingredient} zu ermitteln 
+     * @return Das Lebensmittel {@link ingredient}
      */
     public Ingredient getIngredient() {
         return ingredient;
     }
 
     /**
-     * @param ingredient the ingredient to set
+     * Methode um das Lebensmittel {@link ingredient} zu setzen
+     * @param ingredient Das Lebensmittel {@link ingredient}
      */
     public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
     }
 
     /**
-     * @return the quantity
+     * Methode um die Menge {@link quantity} des Lebensmittel {@link ingredient} zu ermitteln 
+     * @return Die Menge {@link quantity} des Lebensmittel {@link ingredient}
      */
     public Amount getQuantity() {
         return quantity;
     }
 
     /**
-     * @param quantity the quantity to set
+     * Methode um die Menge {@link quantity} zu setzen
+     * @param quantity Die Menge {@link quantity} des Lebensmittel {@link ingredient}
      */
     public void setQuantity(Amount quantity) {
         this.quantity = quantity;

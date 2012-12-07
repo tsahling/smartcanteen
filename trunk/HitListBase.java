@@ -1,7 +1,8 @@
 import java.util.List;
 
 /**
- * 
+ * Die Klasse HitListBase {@link Recipebase} ist eine Datenträgerklasse die in einer List (@link hitListItems)
+ * die Datenobjekte {@link HitListItem} speichert.
  * @author Francesco Luciano
  */
 public class HitListBase {
@@ -16,8 +17,9 @@ public class HitListBase {
     }
 
      /**
-     * Mithilfe der Methode addHitListItem() kann ein Gericht in die Hitliste hinzugefügt werden
-     * @return HitListItem wird zurückgeben
+     * Methode um ein Datenobjekt (@link HitListItem) in die List {@link hitListItems} hinzuzufügen.
+     * @param recipe Das einzufügende Datenobjekt (@link hitListItem)
+     * @return Die aktualisierte Datenstruktur {@linkhitListItems} wird zurückgeben
      */
    
     public HitListItem addHitListItem(HitListItem hitListItem) {
@@ -25,42 +27,41 @@ public class HitListBase {
     }
 
     /**
-     * Mithilfe der Methode updateHitListItem() kann ein Gericht in die Hitliste geändert werden
-     * @return HitListItem wird zurückgeben
+     * Methode um ein bestehendes Datenobjekt {@link hitListItem} in der List {@link hitListItems zu verändern.
+     * @return Die aktualisierte Datenstruktur {@link hitListItems}
      */
     public HitListItem updateHitListItem(HitListItem hitListItem) {
         return null;
     }
 
-    /**
-     * Mithilfe der Methode removeHitListItem() kann ein Gericht in die Hitliste gelöscht werden
+     /**
+     * Methode um ein Datenobjekt {@link hitListItem} aus der List {@link hitListItems zu löschen.
      */
     public void removeHitListItem(HitListItem hitListItem) {
     }
 
-     /**
-     * Mithilfe der Methode findHitListItemByName() kann ein Gericht in die Hitliste 
-     * anhand des Namen des Gericht gefunden werden
-     * @param Name des Gericht
-     * @return Gericht aus der Hitliste wird zurückgeben
+    /**
+     * Methode um ein bestimmtes Datenobjekt {@link hitListItem} in der List {@link hitListItems zu suchen.
+     * @param name Name des Datenobjekt {@link hitListItem} 
+     * @return Das gefundene Datenobjekt {@link hitListItem} wird zurückgeben
      */
     public HitListItem findHitListItemByName(String name) {
         return null;
     }
 
-      /**
-     * Mithilfe der Methode findHitListItemByRank() kann ein Gericht in die Hitliste 
-     * anhand des Rang des Gericht gefunden werden
-     * @param Rang des Gericht
-     * @return Gericht aus der Hitliste wird zurückgeben
+   /**
+     * Methode ein Datenobjekt {@link hitListItem} anhand seines 
+     * Rank {@link rank} in der List {@link hitListItems zu suchen.
+     * @param rank Rank des Gericht
+     * @return Java Collection {@link HitListItem} mit dem passenden Rang
      */
     public HitListItem findHitListItemByRank(int rank) {
         return null;
     }
 
     /**
-     * 
-     * @return the hitListItems
+     * Methode um alle Datenobjekte {@link hitListItem} aus der List {@link hitListItems zu ermitteln
+     * @return Alle Datenobjekte {@link hitListItem} die in der List {@link hitListItems vorhanden sind.
      */
     public List<HitListItem> getHitListItems() {
         return hitListItems;

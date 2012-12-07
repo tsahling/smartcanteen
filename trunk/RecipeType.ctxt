@@ -1,14 +1,14 @@
 #BlueJ class context
 comment0.params=code\ name\ shortName
 comment0.target=RecipeType(java.lang.String,\ java.lang.String,\ java.lang.String)
-comment0.text=\r\n\ \r\n\ @param\ code\r\n\ @param\ name\r\n\ @param\ shortName\r\n
+comment0.text=\n\ \n\ @param\ code\n\ @param\ name\n\ @param\ shortName\n
 comment1.params=
 comment1.target=java.lang.String\ getCode()
-comment1.text=\r\n\ @return\ the\ code\r\n
+comment1.text=\n\ @return\ the\ code\n
 comment2.params=
 comment2.target=java.lang.String\ getName()
-comment2.text=\r\n\ @return\ the\ name\r\n
+comment2.text=\n\ @return\ the\ name\n
 comment3.params=
 comment3.target=java.lang.String\ getShortName()
-comment3.text=\r\n\ @return\ the\ shortName\r\n
+comment3.text=\n\ @return\ the\ shortName\n
 numComments=4
