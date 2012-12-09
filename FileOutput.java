@@ -18,7 +18,7 @@ public class FileOutput implements IOutput {
      * auf Basis der Daten eines Objekts Canteen gestaltet. Dieses Objekt muss der Methode
      * beim Aufruf uebergeben werden.
      * 
-     * @param Canteen Katinen-Objekt wird uebergeben
+     * @param canteen Katinen-Objekt wird uebergeben
      */
     @Override
     public void outputMenuPlan(Canteen canteen) {
@@ -30,7 +30,7 @@ public class FileOutput implements IOutput {
      * auf Basis der Daten eines Objekts ShoppingList gestaltet. Dieses Objekt muss der Methode
      * beim Aufruf uebergeben werden.
      * 
-     * @param Canteen Einkaufslisten-Objekt wird uebergeben
+     * @param shoppingList Einkaufslisten-Objekt wird uebergeben
      */
     @Override
     public void outputShoppingList(ShoppingList shoppingList) {
@@ -42,7 +42,7 @@ public class FileOutput implements IOutput {
      * auf Basis der Daten eines Objekts ShoppingList gestaltet. Dieses Objekt muss der Methode
      * beim Aufruf uebergeben werden.
      * 
-     * @param Canteen Einkaufslisten-Objekt wird uebergeben
+     * @param shoppingList Einkaufslisten-Objekt wird uebergeben
      */
     @Override
     public void outputTotalCosts(ShoppingList shoppingList) {
