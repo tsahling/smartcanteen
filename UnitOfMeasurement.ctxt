@@ -1,14 +1,14 @@
 #BlueJ class context
 comment0.params=code\ name\ shortName
 comment0.target=UnitOfMeasurement(java.lang.String,\ java.lang.String,\ java.lang.String)
-comment0.text=\r\n\ \r\n\ @param\ code\r\n\ @param\ name\r\n\ @param\ shortName\r\n
+comment0.text=\r\n\ Im\ Standardkonstruktor\ werden\ dem\ \ Enum\ {@link\ UnitOfMeasurement}\ Variablen\ \u00FCbergeben,\ die\ final\ gespeichert\ werden.\r\n\ \r\n\ @param\ code\ \ \ Deklaration\ des\ ENUM\ z.B.\ KGM\r\n\ @param\ name\ \ \ \ Beschreibung\ des\ ENUM\ z.B.\ Kilogramm\r\n\ @param\ shortName\ \ \ Kurzbeschreibung\ des\ ENUM\ z.B.\ kg\r\n
 comment1.params=
 comment1.target=java.lang.String\ getCode()
-comment1.text=\r\n\ @return\ the\ code\r\n
+comment1.text=\r\n\ Methode\ zum\ Abrufen\ des\ Werts\ Code\r\n\ \r\n\ @return\ code\ Deklaration\ \r\n
 comment2.params=
 comment2.target=java.lang.String\ getName()
-comment2.text=\r\n\ @return\ the\ name\r\n
+comment2.text=\r\n\ Methode\ zum\ Abrufen\ des\ Werts\ Name\r\n\ \r\n\ @return\ name\ Beschreibung\r\n
 comment3.params=
 comment3.target=java.lang.String\ getShortName()
-comment3.text=\r\n\ @return\ the\ shortName\r\n
+comment3.text=\r\n\ Methode\ zum\ Abrufen\ des\ Werts\ ShortName\r\n\ \r\n\ @return\ shortName\ Kurzbeschreibung\ \r\n
 numComments=4

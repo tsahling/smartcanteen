@@ -1,14 +1,14 @@
 #BlueJ class context
 comment0.params=code\ name\ shortName
 comment0.target=RecipeType(java.lang.String,\ java.lang.String,\ java.lang.String)
-comment0.text=\n\ \n\ @param\ code\n\ @param\ name\n\ @param\ shortName\n
+comment0.text=\r\n\ Standartkostruktor\ wird\ in\ diesem\ Fall\ gebraucht\ weil\ der\ Enum\ erg\uFFFDnzenden\ Informationen\ deklariert\ wird\r\n\ Damit\ die\ Methoden\ getCode(),\ getName()\ und\ getShortName()\ funktionieren\ ist\ der\ Konstruktor\ notwendig\r\n\ @param\ code\ Deklaration\ des\ ENUM\ z.B.\ MEAT\r\n\ @param\ name\ Beschreibung\ des\ ENUM\ z.B.\ Fleischgericht\r\n\ @param\ shortName\ Kurzbeschreibung\ des\ ENUM\ z.B.\ Fleisch\r\n
 comment1.params=
 comment1.target=java.lang.String\ getCode()
-comment1.text=\n\ @return\ the\ code\n
+comment1.text=\r\n\ @return\ Deklaration\ des\ ENUM\ \r\n
 comment2.params=
 comment2.target=java.lang.String\ getName()
-comment2.text=\n\ @return\ the\ name\n
+comment2.text=\r\n\ @return\ Beschreibung\ des\ ENUM\r\n
 comment3.params=
 comment3.target=java.lang.String\ getShortName()
-comment3.text=\n\ @return\ the\ shortName\n
+comment3.text=\r\n\ @return\ Kurzbeschreibung\ des\ ENUM\r\n
 numComments=4
