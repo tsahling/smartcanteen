@@ -1,5 +1,5 @@
 #BlueJ class context
 comment0.params=args
 comment0.target=void\ main(java.lang.String[])
-comment0.text=\n\ Die\ Methode\ wird\ zum\ Starten\ der\ Applikation\ benoetigt\ und\ behandelt\ ggf.\ auftretende\ Fehler\ \n\ in\ der\ Applikation,\ die\ in\ letzter\ Instanz\ mitgeloggt\ ({@link\ LogHelper})\ werden.\n\n\ @param\ args\ Aufparameter\ der\ Applikation\n
+comment0.text=\r\n\ Die\ Methode\ wird\ zum\ Starten\ der\ Applikation\ benoetigt\ und\ behandelt\ ggf.\ auftretende\ Fehler\ \r\n\ in\ der\ Applikation,\ die\ in\ letzter\ Instanz\ mitgeloggt\ ({@link\ LogHelper})\ werden.\r\n\r\n\ @param\ args\ Aufparameter\ der\ Applikation\r\n
 numComments=1

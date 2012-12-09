@@ -1,16 +1,17 @@
 #BlueJ class context
 comment0.params=
 comment0.target=MenuPlan()
-comment0.text=\n\ Standardkonstruktor\n
+comment0.text=\r\n\ Standardkonstruktor\r\n
 comment1.params=
 comment1.target=java.util.List\ getMealsSortedByDate()
+comment1.text=\r\n\ Sortierung\ der\ Menue-Liste\ nach\ Datum\r\n\ @return\ sortierte\ Liste\ nach\ Datum\r\n
 comment2.params=
 comment2.target=java.util.List\ getMeals()
-comment2.text=\n\ @return\ the\ meals\n
+comment2.text=\r\n\ Liefert\ die\ Menue-Liste\r\n\ @return\ Die\ Essen\ (meals)\r\n
 comment3.params=meals
 comment3.target=void\ setMeals(java.util.List)
-comment3.text=\n\ @param\ meals\n\ \ \ \ \ \ \ \ \ \ \ \ the\ meals\ to\ set\n
+comment3.text=\r\n\ Setzt\ die\ Menue-List\r\n\ @param\ meals\ \ the\ meals\ to\ set\r\n
 comment4.params=
 comment4.target=java.lang.String\ toString()
-comment4.text=\n\ Erstellt\ die\ String-Representation\ des\ Objekts\ {@link\ MenuPlan}.\n\ \n\ @return\ Die\ String-Representation\ von\ {@link\ MenuPlan}\n
+comment4.text=\r\n\ Erstellt\ die\ String-Representation\ des\ Objekts\ {@link\ MenuPlan}.\r\n\ \r\n\ @return\ Die\ String-Representation\ von\ {@link\ MenuPlan}\r\n
 numComments=5
