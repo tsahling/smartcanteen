@@ -1,6 +1,7 @@
 import java.util.List;
 
 /**
+ * grobe Beschreibung des MenuPlans / wofür ist er da
  * 
  * @author Marcel Baxmann
  */
@@ -14,7 +15,11 @@ public class MenuPlan {
     public MenuPlan() {
 
     }
-
+    
+    /**
+     * Methode allgemein beschreiben Sortierung nach Datum
+     * @return   sortierte Lsite
+     */
     public List<Meal> getMealsSortedByDate() {
         return null;
     }
@@ -27,8 +32,7 @@ public class MenuPlan {
     }
 
     /**
-     * @param meals
-     *            the meals to set
+     * @param meals  the meals to set
      */
     public void setMeals(List<Meal> meals) {
         this.meals = meals;
