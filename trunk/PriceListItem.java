@@ -1,7 +1,8 @@
-
 /**
+ * Die Klasse {@link PriceListItem} stellt eine Preislistenposition dar. Sie enthaelt einen Verweis 
+ * auf das jeweilige Lebensmittel ({@link Ingredient}) den Preis {@link price} und die verfügbare Menge {@link quantityOfIngredient}.
  * 
- * @author Franceso Luciano
+ * @author Francesco Luciano
  */
 public class PriceListItem {
 
@@ -11,9 +12,9 @@ public class PriceListItem {
 
     /**
      * 
-     * @param ingredient
-     * @param price
-     * @param quantityOfIngredient
+     * @param ingredient Lebensmittel
+     * @param price Preis des Lebensmittel
+     * @param quantityOfIngredient Menge des Lebensmittel
      */
     public PriceListItem(Ingredient ingredient, Amount price, int quantityOfIngredient) {
         this.ingredient = ingredient;
@@ -22,45 +23,48 @@ public class PriceListItem {
     }
 
     /**
-     * @return the ingredient
+     * Methode um ein Lebensmittel abzufragen.
+     * @return Lebenmittel
      */
     public Ingredient getIngredient() {
         return ingredient;
     }
 
     /**
-     * @param ingredient
-     *            the ingredient to set
+     * Methode um ein Lebensmittel dem Objekt {@link PriceListItem} hinzuzufügen
+     * @param Lebensmittel
      */
     public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
     }
 
     /**
-     * @return the price
+     * Methode um Preis des Lebensmittel abzufragen
+     * @return Preis des Lebensmittel
      */
     public Amount getPrice() {
         return price;
     }
 
     /**
-     * @param price
-     *            the price to set
+     * Methode um Preis eines Lebensmittel zu setzen
+     * @param price Preis des Lebensmittel
      */
     public void setPrice(Amount price) {
         this.price = price;
     }
 
     /**
-     * @return the quantityOfIngredient
+     * Methode um Preis die Menge eines Lebensmittel abzufragen
+     * @return Menge des Lebensmittel
      */
     public int getQuantityOfIngredient() {
         return quantityOfIngredient;
     }
 
-    /**
-     * @param quantityOfIngredient
-     *            the quantityOfIngredient to set
+      /**
+     * Methode um Menge eines Lebensmittel zu setzen
+     * @param price Menge des Lebensmittel
      */
     public void setQuantityOfIngredient(int quantityOfIngredient) {
         this.quantityOfIngredient = quantityOfIngredient;
