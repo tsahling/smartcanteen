@@ -1,5 +1,5 @@
 /**
- * Die Klasse {@link ShoppingListBuilder} ist eine der Geschaeftslogikklassen und für
+ * Die Klasse {@link ShoppingListBuilder} ist eine der Geschaeftslogikklassen und fuer
  * die Erstellung einer Einkaufsliste zustaendig, die Angibt welche Zutaten in
  * welcher Menge bei welchem Anbieter beschafft werden sollen. Als Ergebnis
  * liefert die Klasse eine {@link ShoppingList}, die dann im Output verwendet

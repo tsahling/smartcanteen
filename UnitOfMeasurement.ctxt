@@ -1,7 +1,7 @@
 #BlueJ class context
 comment0.params=code\ name\ shortName
 comment0.target=UnitOfMeasurement(java.lang.String,\ java.lang.String,\ java.lang.String)
-comment0.text=\r\n\ Im\ Standardkonstruktor\ werden\ dem\ \ Enum\ {@link\ UnitOfMeasurement}\ Variablen\ \u00FCbergeben,\ die\ final\ gespeichert\ werden.\r\n\ \r\n\ @param\ code\ \ \ Deklaration\ des\ ENUM\ z.B.\ KGM\r\n\ @param\ name\ \ \ \ Beschreibung\ des\ ENUM\ z.B.\ Kilogramm\r\n\ @param\ shortName\ \ \ Kurzbeschreibung\ des\ ENUM\ z.B.\ kg\r\n
+comment0.text=\r\n\ Im\ Standardkonstruktor\ werden\ dem\ \ Enum\ {@link\ UnitOfMeasurement}\ Variablen\ uebergeben,\ die\ final\ gespeichert\ werden.\r\n\ \r\n\ @param\ code\ \ \ Deklaration\ des\ ENUM\ z.B.\ KGM\r\n\ @param\ name\ \ \ \ Beschreibung\ des\ ENUM\ z.B.\ Kilogramm\r\n\ @param\ shortName\ \ \ Kurzbeschreibung\ des\ ENUM\ z.B.\ kg\r\n
 comment1.params=
 comment1.target=java.lang.String\ getCode()
 comment1.text=\r\n\ Methode\ zum\ Abrufen\ des\ Werts\ Code\r\n\ \r\n\ @return\ code\ Deklaration\ \r\n

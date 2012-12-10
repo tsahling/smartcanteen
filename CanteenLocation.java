@@ -1,9 +1,9 @@
 
 /**
- * {@link CanteenLocation} stellt ein Datenobjekt vom Typ Enumeration dar. Ein "Enum" verhält sich 
- * wie eine Klasse mit Attributen und Methoden kann jedoch nicht vererben.
- * Durch die Klasse {@link Canteen} wird der Typ (z.B. Essen, Muehlheim) einer Kantine deklariert.
- * Die Werte werden FInal gespeichert und daher nur get-Methoden bereit gestellt.
+ * {@link CanteenLocation} stellt ein Datenobjekt vom Typ Enumeration dar. Ein Enum verhaelt sich 
+ * wie eine Klasse mit Attributen und Methoden kann jedoch nicht vererben. Durch die Klasse 
+ * {@link Canteen} wird der Typ (z.B. Essen, Muehlheim) einer Kantine deklariert. Die Werte werden 
+ * final gespeichert und daher nur get-Methoden bereit gestellt.
  * 
  * @author Marcel Baxmann
  */
@@ -19,13 +19,14 @@ public enum CanteenLocation {
     private final double longitude;
 
     /**
-     * Im Standardkonstruktor werden dem  Enum {@link CanteenLocation} Variablen übergeben, die final gespeichert werden.
+     * Im Standardkonstruktor werden dem  Enum {@link CanteenLocation} Variablen 
+     * uebergeben, die final gespeichert werden.
      * 
-     * @param code  Deklaration des ENUM z.B. ESSEN
-     * @param name  Beschreibung des ENUM z.B. Stadt Essen
-     * @param shortName   Kurzbeschreibung des ENUM z.B. Essen
-     * @param latitude   Breitengrad der Ortes
-     * @param longitude   Längengrad des Ortes
+     * @param code Deklaration des ENUM z.B. ESSEN
+     * @param name Beschreibung des ENUM z.B. Stadt Essen
+     * @param shortName Kurzbeschreibung des ENUM z.B. Essen
+     * @param latitude Breitengrad der Ortes
+     * @param longitude Laengengrad des Ortes
      */
     private CanteenLocation(String code, String name, String shortName, double latitude, double longitude) {
         this.code = code;

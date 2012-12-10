@@ -1,7 +1,8 @@
 import java.util.Set;
 
 /**
- * Die Klasse {@link ProviderBase} ist eine Datenträgerklasse die in einem Set {@link provider} die Datenobjekte eines Lebensmittel Anbieter {@link Provider} speichert.
+ * Die Klasse {@link ProviderBase} ist eine Datentraegerklasse die in einem Set die Datenobjekte eines Lebensmittelanbieters {@link Provider} speichert.
+ * 
  * @author Francesco Luciano
  */
 public class ProviderBase {
@@ -15,70 +16,78 @@ public class ProviderBase {
     {
     }
     /**
-     * Methode um einen neuen Lebensmittel Anbieter {@link Provider} in dem Set {@link provider} hinzuzufügen
-     * @return aktualiserter Anbieter {@link Provider}
+     * Methode um einen neuen Lebensmittelanbieter {@link Provider} dem Set hinzuzufuegen
+     * 
+     * @param provider Der hinzuzufuegende Anbieter
+     * @return Aktualiserter Anbieter {@link Provider}
      */
-    public Provider addProvider() {
+    public Provider addProvider(Provider provider) {
         return null;
     }
 
     /**
-     * Methode un einen Lebensmittel Anbieter {@link Provider} in dem Set {@link provider} zu verändern
-     * @return  aktualiserter Anbieter {@link Provider}
+     * Methode un einen Lebensmittel Anbieter {@link Provider} in dem Set zu veraendern
+     * 
+     * @param provider Der zu bearbeitende Anbieter
+     * @return Aktualiserter Anbieter {@link Provider}
      */
-    public Provider updateProvider() {
+    public Provider updateProvider(Provider provider) {
         return null;
     }
 
     /**
-     * Methode um einen Anbieter {@link Provider} aus der Set {@link provider} zu löschen
+     * Methode um einen Anbieter {@link Provider} aus dem Set zu loeschen
+     * 
+     * @param provider Der zu loeschende Anbieter
      */
-    public void removeProvider() {
+    public void removeProvider(Provider provider) {
     }
 
-     /**
-     * Methode um einen Lebensmittel Anbieter {@link Provider} 
-     * anhand seines Namen in dem Set {@link provider} zu finden
-     * @param name Name des Lebensmittel Anbieter {@link Provider}
-     * @return Der Lebensmittel Anbieter {@link Provider} 
+    /**
+     * Methode um einen Lebensmittel Anbieter {@link Provider} anhand seines Namen in dem Set zu finden
+     * 
+     * @param name Name des Lebensmittelanbieters {@link Provider}
+     * @return Der Lebensmittelanbieter {@link Provider} 
      */
     public Provider findProviderByName(String name) {
         return null;
     }
 
-     /**
-     * Methode um den besten (günstigsten) Lebensmittel Anbieter {@link Provider}
-     * für ein Lebensmittel (@link ingredient) in dem Set {@link provider} zu ermitteln
-     * @param ingredient Name des Lebensmittel
-     * @return Der beste (günstigste) Lebensmittel Anbieter {@link Provider}
+    /**
+     * Methode um den besten (guenstigsten) Lebensmittelanbieter {@link Provider}
+     * fuer ein Lebensmittel in dem Set zu ermitteln.
+     * 
+     * @param ingredient Name des Lebensmittels
+     * @return Der beste (guenstigste) Lebensmittelanbieter
      */
     public Provider findBestPriceProviderByIngredient(Ingredient ingredient) {
         return null;
     }
 
-     /**
-     * Methode um einen Lebensmittel Anbieter {@link Provider} anhand von einem Lebensmittel (@link ingredient)
-     * und einer bestimmten Menge {@link quantity} zu ermitteln
-     * @param ingredient Name des Lebensmittel
-     * @param quantity Menge des Lebensmittel
-     * @return Die Lebensmittel Anbieter {@link Provider} die das Lebensmittel (@link ingredient) in der Menge {@link quantity} anbieten
+    /**
+     * Methode um einen Lebensmittelanbieter {@link Provider} anhand von einem Lebensmittel (@link Ingredient) und einer bestimmten Menge zu ermitteln.
+     * 
+     * @param ingredient Name des Lebensmittels
+     * @param quantity Menge des Lebensmittels
+     * @return Der Lebensmittelanbieter {@link Provider} der das Lebensmittel in der Menge anbietet
      */
     public Provider findProviderByIngredientAndQuantity(Ingredient ingredient, int quantity) {
         return null;
     }
 
-      /**
-     * Methode um einen die Lebensmittel Anbieter {@link Provider} zu ermitteln
-     * @return Die Lebensmittel Anbieter {@link provider}
+    /**
+     * Methode um eine die Lebensmittelanbieter zu ermitteln
+     * 
+     * @return Die Lebensmittelanbieter
      */
     public Set<Provider> getProvider() {
         return provider;
     }
 
     /**
-     * Sets the provider.
+     * Setzt die Lebensmittelanbieter.
      * 
-     * @param provider the provider to set
+     * @param provider Die zu setzenden Lebensmittelanbieter
      */
     public void setProvider(Set<Provider> provider) {
         this.provider = provider;

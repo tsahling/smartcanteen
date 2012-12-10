@@ -16,17 +16,17 @@ public class Farmer extends Provider {
     }
 
     @Override
-    protected Farmer createProvider() {
+    protected Farmer createProvider(Provider provider) {
         return null;
     }
 
     @Override
-    protected Farmer updateProvider() {
+    protected Farmer updateProvider(Provider provider) {
         return null;
     }
 
     @Override
-    protected void deleteProvider() {
+    protected void deleteProvider(Provider provider) {
     }
 
     /**

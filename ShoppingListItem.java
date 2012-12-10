@@ -1,10 +1,11 @@
 
 /**
- * Die Klasse {@link ShoppingListItem} stellt eine Einkaufslistenposition dar. Sie enthaelt einen Verweis 
- * auf die jeweilige zu bestellende Zutat ({@link Ingredient}), eine Menge ({@link Amount}), wieviel von 
- * der Zutat bestellt werden soll, und einen Verweis auf den Anbieter ({@link Provider}) von dem die Ware 
- * bezogen werden soll. Ueber den Verweis auf den Anbieter und die Menge kann der Preis für ein 
- * {@link ShoppingListItem} berechnet werden und muss nicht als extra Attribut enthalten sein.
+ * Die Klasse {@link ShoppingListItem} stellt eine Einkaufslistenposition dar. Sie enthaelt einen 
+ * Verweis auf die jeweilige zu bestellende Zutat ({@link Ingredient}), eine Menge ({@link Amount}), 
+ * wieviel von der Zutat bestellt werden soll, und einen Verweis auf den Anbieter ({@link Provider}) 
+ * von dem die Ware bezogen werden soll. Ueber der Verweis auf den Anbieter und die Menge kann der 
+ * Preis fuer ein {@link ShoppingListItem} berechnet werden und muss nicht als extra Attribut 
+ * enthalten sein.
  * 
  * @author Tim Sahling
  */

@@ -16,21 +16,25 @@ public abstract class Provider
     /**
      * Erstellt einen Anbieter.
      * 
+     * @param provider Der zu erstellende Anbieter
      * @return Der erstellte Anbieter
      */
-    protected abstract Provider createProvider();
+    protected abstract Provider createProvider(Provider provider);
 
     /**
      * Bearbeitet einen Anbieter.
      * 
+     * @param provider Der zu bearbeitende Anbieter
      * @return Der bearbeitete Anbieter
      */
-    protected abstract Provider updateProvider();
+    protected abstract Provider updateProvider(Provider provider);
 
     /**
      * Loescht einen Anbieter.
+     * 
+     * @param provider Der zu loeschende Anbieter
      */
-    protected abstract void deleteProvider();
+    protected abstract void deleteProvider(Provider provider);
 
     /**
      * 

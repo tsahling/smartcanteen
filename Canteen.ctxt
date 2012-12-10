@@ -1,10 +1,10 @@
 #BlueJ class context
 comment0.params=location\ numberOfEmployees
 comment0.target=Canteen(CanteenLocation,\ int)
-comment0.text=\r\n\ Standardkonstruktor\r\n\ Die\ Klasse\ nimmt\ bei\ Ihrer\ Erstellung\ Variablen\ die\ Sie\ beschreiben\ entgegen\r\n\ \r\n\ @param\ CanteenLocation\ \ Standort\ der\ Kantine\r\n\ \r\n\ @param\ numberOfEmployees\ \ Anzahl\ der\ Mitarbeiter\ am\ Standort\ der\ Kantine\r\n
+comment0.text=\r\n\ Standardkonstruktor.\ Die\ Klasse\ nimmt\ bei\ Ihrer\ Erstellung\ Variablen\ die\ Sie\ beschreiben\ \r\n\ entgegen.\r\n\ \r\n\ @param\ CanteenLocation\ Standort\ der\ Kantine\r\n\ @param\ numberOfEmployees\ Anzahl\ der\ Mitarbeiter\ am\ Standort\ der\ Kantine\r\n
 comment1.params=
 comment1.target=CanteenLocation\ getLocation()
-comment1.text=\r\n\ Mit\ dieser\ Methode\ wird\ der\ Standort\ der\ Kantine\ ausgegeben\r\n\ \r\n\ @return\ the\ location\r\n
+comment1.text=\r\n\ Mit\ dieser\ Methode\ wird\ der\ Standort\ der\ Kantine\ ausgegeben\r\n\ \r\n\ @return\ Der\ Standort\r\n
 comment2.params=location
 comment2.target=void\ setLocation(CanteenLocation)
 comment2.text=\r\n\ Mit\ dieser\ Methode\ wird\ der\ Standort\ der\ Kantine\ gesetzt\r\n\ \r\n\ @param\ location\ \ the\ location\ to\ set\r\n
@@ -13,7 +13,7 @@ comment3.target=int\ getNumberOfEmployees()
 comment3.text=\r\n\ Mit\ dieser\ Methode\ wird\ die\ Anzahl\ der\ Mitarbeiter\ am\ Standort\ der\ Kantine\ ausgegeben\r\n\ \r\n\ @return\ the\ numberOfEmployees\r\n
 comment4.params=numberOfEmployees
 comment4.target=void\ setNumberOfEmployees(int)
-comment4.text=\r\n\ Mit\ dieser\ Methode\ wird\ die\ Anzahl\ der\ Mitarbeiter\ am\ Standort\ der\ Kantine\ gesetzt\r\n\ \r\n\ @param\ numberOfEmployees\ \ \ the\ numberOfEmployees\ to\ set\r\n
+comment4.text=\r\n\ Mit\ dieser\ Methode\ wird\ die\ Anzahl\ der\ Mitarbeiter\ am\ Standort\ der\ Kantine\ gesetzt\r\n\ \r\n\ @param\ numberOfEmployees\ Die\ zu\ setzende\ Mitarbeiterzahl\r\n
 comment5.params=
 comment5.target=MenuPlan\ getMenuPlan()
 comment5.text=\r\n\ Mit\ dieser\ Methode\ wird\ der\ Menue-Plan\ ausgegeben\r\n\ \r\n\ @return\ the\ menuPlan\r\n

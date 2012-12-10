@@ -1,19 +1,19 @@
 #BlueJ class context
 comment0.params=ingredient\ quantity
 comment0.target=IngredientListItem(Ingredient,\ Amount)
-comment0.text=\r\n\ Standartkonstruktor\ der\ Klasse\ {@link\ IngredientListItem}\r\n\ @param\ ingredient\ Das\ Lebenmittel\ {@link\ Ingredient}\r\n\ @param\ quantity\ Die\ ben\u00F6tigte\ Menge\ {@link\ Amount}\ die\ in\ dem\ Rezept\ {@link\ Recipe}\ angeben\ ist\r\n
+comment0.text=\r\n\ Standartkonstruktor\ der\ Klasse\ {@link\ IngredientListItem}\r\n\ \r\n\ @param\ ingredient\ Das\ Lebenmittel\ {@link\ Ingredient}\r\n\ @param\ quantity\ Die\ ben\u00F6tigte\ Menge\ {@link\ Amount}\ die\ in\ dem\ Rezept\ {@link\ Recipe}\ angegeben\ ist\r\n
 comment1.params=
 comment1.target=Ingredient\ getIngredient()
-comment1.text=\r\n\ Methode\ um\ das\ Lebensmittel\ {@link\ Ingredient}\ zu\ ermitteln\ \r\n\ @return\ Das\ Lebensmittel\ {@link\ ingredient}\r\n
+comment1.text=\r\n\ Methode\ um\ das\ Lebensmittel\ {@link\ Ingredient}\ zu\ ermitteln\ \r\n\ \r\n\ @return\ Das\ Lebensmittel\ {@link\ ingredient}\r\n
 comment2.params=ingredient
 comment2.target=void\ setIngredient(Ingredient)
-comment2.text=\r\n\ Methode\ um\ das\ Lebensmittel\ {@link\ ingredient}\ zu\ setzen\r\n\ @param\ ingredient\ Das\ Lebensmittel\ {@link\ ingredient}\r\n
+comment2.text=\r\n\ Methode\ um\ das\ Lebensmittel\ {@link\ ingredient}\ zu\ setzen\r\n\ \r\n\ @param\ ingredient\ Das\ Lebensmittel\ {@link\ ingredient}\r\n
 comment3.params=
 comment3.target=Amount\ getQuantity()
-comment3.text=\r\n\ Methode\ um\ die\ Menge\ {@link\ quantity}\ des\ Lebensmittel\ {@link\ ingredient}\ zu\ ermitteln\ \r\n\ @return\ Die\ Menge\ {@link\ quantity}\ des\ Lebensmittel\ {@link\ ingredient}\r\n
+comment3.text=\r\n\ Methode\ um\ die\ Menge\ des\ Lebensmittels\ zu\ ermitteln\ \r\n\ \r\n\ @return\ Die\ Menge\ des\ Lebensmittels\r\n
 comment4.params=quantity
 comment4.target=void\ setQuantity(Amount)
-comment4.text=\r\n\ Methode\ um\ die\ Menge\ {@link\ quantity}\ zu\ setzen\r\n\ @param\ quantity\ Die\ Menge\ {@link\ quantity}\ des\ Lebensmittel\ {@link\ ingredient}\r\n
+comment4.text=\r\n\ Methode\ um\ die\ Menge\ zu\ setzen\r\n\ \r\n\ @param\ quantity\ Die\ Menge\ des\ Lebensmittels\r\n
 comment5.params=
 comment5.target=int\ hashCode()
 comment5.text=\r\n\ Diese\ Methode\ gibt\ den\ HashCode-Wert\ fuer\ das\ Objekt\ zurueck,\ von\ dem\ die\ Methode\ aufgerufen\ \r\n\ wurde.\r\n\ \r\n\ @return\ Der\ HashCode-Wert\ des\ Objekts\ als\ int-Representation\r\n
