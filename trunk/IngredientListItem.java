@@ -1,7 +1,7 @@
 
 /**
- * Die Klasse {@link IngredientListItem} stellt eine Lebensmittelposition {@link Ingriedent} aus einem Rezept {@link Recipe} in dem Set (@link ingredientList) dar.
- * Sie enthaelt einen Verweis auf die jeweilige zu verwendene Zutat ({@link Ingredient}), eine Menge ({@link Amount}) die angibt wieviel von 
+ * Die Klasse {@link IngredientListItem} stellt eine Lebensmittelposition {@link Ingriedent} aus einem Rezept {@link Recipe} dar.
+ * Sie enthaelt einen Verweis auf die jeweilige zu verwendende Zutat ({@link Ingredient}) und einer Menge ({@link Amount}) die angibt, wieviel von 
  * der Zutat benutzt werden muss.
  * 
  * @author Francesco Luciano
@@ -14,8 +14,9 @@ public class IngredientListItem {
 
     /**
      * Standartkonstruktor der Klasse {@link IngredientListItem}
+     * 
      * @param ingredient Das Lebenmittel {@link Ingredient}
-     * @param quantity Die benötigte Menge {@link Amount} die in dem Rezept {@link Recipe} angeben ist
+     * @param quantity Die benötigte Menge {@link Amount} die in dem Rezept {@link Recipe} angegeben ist
      */
     public IngredientListItem(Ingredient ingredient, Amount quantity) {
         this.ingredient = ingredient;
@@ -24,6 +25,7 @@ public class IngredientListItem {
 
     /**
      * Methode um das Lebensmittel {@link Ingredient} zu ermitteln 
+     * 
      * @return Das Lebensmittel {@link ingredient}
      */
     public Ingredient getIngredient() {
@@ -32,6 +34,7 @@ public class IngredientListItem {
 
     /**
      * Methode um das Lebensmittel {@link ingredient} zu setzen
+     * 
      * @param ingredient Das Lebensmittel {@link ingredient}
      */
     public void setIngredient(Ingredient ingredient) {
@@ -39,16 +42,18 @@ public class IngredientListItem {
     }
 
     /**
-     * Methode um die Menge {@link quantity} des Lebensmittel {@link ingredient} zu ermitteln 
-     * @return Die Menge {@link quantity} des Lebensmittel {@link ingredient}
+     * Methode um die Menge des Lebensmittels zu ermitteln 
+     * 
+     * @return Die Menge des Lebensmittels
      */
     public Amount getQuantity() {
         return quantity;
     }
 
     /**
-     * Methode um die Menge {@link quantity} zu setzen
-     * @param quantity Die Menge {@link quantity} des Lebensmittel {@link ingredient}
+     * Methode um die Menge zu setzen
+     * 
+     * @param quantity Die Menge des Lebensmittels
      */
     public void setQuantity(Amount quantity) {
         this.quantity = quantity;

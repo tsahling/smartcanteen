@@ -1,7 +1,7 @@
 #BlueJ class context
 comment0.params=value\ unit
 comment0.target=Amount(java.math.BigDecimal,\ UnitOfMeasurement)
-comment0.text=\r\n\ Den\ Standardkonstruktur\ werden\ Variablen\ \u00FCbergeben\r\n\ @param\ value\ \ Menge\ von\ Irgendetwas\r\n\ @param\ unit\ \ Einheit\ von\ Irgendetwas\r\n
+comment0.text=\r\n\ Dem\ Standardkonstruktur\ werden\ Variablen\ \u00FCbergeben\r\n\ \r\n\ @param\ value\ \ Menge\ von\ Irgendetwas\r\n\ @param\ unit\ \ Einheit\ von\ Irgendetwas\r\n
 comment1.params=
 comment1.target=java.math.BigDecimal\ getValue()
 comment1.text=\r\n\ Methode\ zum\ Abfragen\ des\ Werts\ /\ Menge\r\n\ \r\n\ @return\ the\ value\r\n

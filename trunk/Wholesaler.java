@@ -16,17 +16,17 @@ public class Wholesaler extends Provider {
     }
     
     @Override
-    protected Wholesaler createProvider() {
+    protected Wholesaler createProvider(Provider provider) {
         return null;
     }
 
     @Override
-    protected Wholesaler updateProvider() {
+    protected Wholesaler updateProvider(Provider provider) {
         return null;
     }
 
     @Override
-    protected void deleteProvider() {
+    protected void deleteProvider(Provider provider) {
     }
 
     /**

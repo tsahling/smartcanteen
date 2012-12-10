@@ -1,7 +1,7 @@
 
 /**
- * Die Klasse {@link MenuPlanBuilder} ist eine der Geschaeftslogikklassen und für die
- * Erstellung je eines "optimalen" Speiseplans für die Kantinen in Essen und
+ * Die Klasse {@link MenuPlanBuilder} ist eine der Geschaeftslogikklassen und fuer die
+ * Erstellung je eines optimalen Speiseplans fuer die Kantinen in Essen und
  * Muelheim zustaendig. Als Ergebnis fuellt die Klasse die {@link MenuPlan}
  * Attribute der {@link Canteen}, die dann im Output bzw. zur Weiterverarbeitung
  * verwendet werden koennen.

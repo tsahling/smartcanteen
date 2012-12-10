@@ -4,6 +4,7 @@ import java.util.List;
  * Die Klasse {@link MenuPlan} ist das Ergebnis der Geschaeftslogikklasse 
  * {@link MenuPlanBuilder} und stellt einen Menue-Plan dar. In Ihr wird eine Liste
  * der enthaltenen Essens-Positionen gefuehrt.
+ * 
  * @author Marcel Baxmann
  */
 public class MenuPlan {
@@ -19,7 +20,8 @@ public class MenuPlan {
     
     /**
      * Sortierung der Menue-Liste nach Datum
-     * @return sortierte Liste nach Datum
+     * 
+     * @return Sortierte Liste nach Datum
      */
     public List<Meal> getMealsSortedByDate() {
         return null;
@@ -27,7 +29,8 @@ public class MenuPlan {
 
     /**
      * Liefert die Menue-Liste
-     * @return Die Essen (meals)
+     * 
+     * @return Die Gerichte (meals)
      */
     public List<Meal> getMeals() {
         return meals;
@@ -35,7 +38,8 @@ public class MenuPlan {
 
     /**
      * Setzt die Menue-List
-     * @param meals  the meals to set
+     * 
+     * @param meals the meals to set
      */
     public void setMeals(List<Meal> meals) {
         this.meals = meals;

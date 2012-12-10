@@ -1,12 +1,13 @@
 #BlueJ class context
 comment0.params=name
 comment0.target=Ingredient(java.lang.String)
+comment0.text=\r\n\ Standardkonstruktor\r\n\ \r\n\ @param\ name\ Name\ des\ Lebensmittels\r\n
 comment1.params=
 comment1.target=java.lang.String\ getName()
-comment1.text=\r\n\ Methode\ um\ den\ Namen\ {@link\ name}\ des\ des\ Lebensmittel\ {@link\ Ingredient}\ abzufragen\ \r\n\ @return\ Name\ {@link\ name}\ des\ Lebensmittel\ {@link\ Ingredient}\r\n
+comment1.text=\r\n\ Methode\ um\ den\ Namen\ des\ Lebensmittels\ abzufragen\r\n\ \r\n\ @return\ Name\ des\ Lebensmittels\r\n
 comment2.params=name
 comment2.target=void\ setName(java.lang.String)
-comment2.text=\r\n\ Methode\ um\ den\ Namen\ {@link\ name}\ des\ des\ Lebensmittel\ {@link\ Ingredient}\ zu\ setzen\r\n
+comment2.text=\r\n\ Methode\ um\ den\ Namen\ des\ Lebensmittels\ zu\ setzen\r\n
 comment3.params=
 comment3.target=int\ hashCode()
 comment3.text=\r\n\ Diese\ Methode\ gibt\ den\ HashCode-Wert\ fuer\ das\ Objekt\ zurueck,\ von\ dem\ die\ Methode\ aufgerufen\ \r\n\ wurde.\r\n\ \r\n\ @return\ Der\ HashCode-Wert\ des\ Objekts\ als\ int-Representation\r\n

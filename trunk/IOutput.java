@@ -8,33 +8,31 @@
 public interface IOutput {
 
     /**
-     * Diese Methode stellt die Möglichkeit bereit ein Menue-Plan 
-     * als noch nicht weitergehend definierte Ausgabe bereitzustellen. Die Ausgabe wird
-     * auf Basis der Daten eines Objekts Canteen gestaltet. Dieses Objekt muss der Methode
-     * beim Aufruf uebergeben werden.
+     * Diese Methode stellt die Moeglichkeit bereit ein Menue-Plan als noch nicht weitergehend 
+     * definierte Ausgabe bereitzustellen. Die Ausgabe wird auf Basis der Daten eines Objekts 
+     * {@link Canteen} gestaltet. Dieses Objekt muss der Methode beim Aufruf uebergeben werden.
      * 
-     * @param Canteen Katinen-Objekt wird uebergeben
+     * @param canteen Katinen-Objekt wird uebergeben
      */
     void outputMenuPlan(Canteen canteen);
 
 
     /**
-     * Diese Methode stellt die Möglichkeit bereit eine Einkaufsliste 
-     * als noch nicht weitergehend definierte Ausgabe bereitzustellen. Die Ausgabe wird
-     * auf Basis der Daten eines Objekts ShoppingList gestaltet. Dieses Objekt muss der Methode
-     * beim Aufruf uebergeben werden.
+     * Diese Methode stellt die Moeglichkeit bereit eine Einkaufsliste als noch nicht weitergehend 
+     * definierte Ausgabe bereitzustellen. Die Ausgabe wird auf Basis der Daten eines Objekts 
+     * ShoppingList gestaltet. Dieses Objekt muss der Methode beim Aufruf uebergeben werden.
      * 
-     * @param Canteen Einkaufslisten-Objekt wird uebergeben
+     * @param shoppingList Einkaufslisten-Objekt wird uebergeben
      */
     void outputShoppingList(ShoppingList shoppingList);
 
     /**
-     * Diese Methode stellt die Möglichkeit bereit eine eine Kostenübersicht 
-     * als noch nicht weitergehend definierte Ausgabe bereitzustellen. Die Ausgabe wird
-     * auf Basis der Daten eines Objekts ShoppingList gestaltet. Dieses Objekt muss der Methode
-     * beim Aufruf uebergeben werden.
+     * Diese Methode stellt die Moeglichkeit bereit eine eine Kostenübersicht als noch nicht 
+     * weitergehend definierte Ausgabe bereitzustellen. Die Ausgabe wird auf Basis der Daten 
+     * eines Objekts {@link ShoppingList} gestaltet. Dieses Objekt muss der Methode beim Aufruf 
+     * uebergeben werden.
      * 
-     * @param Canteen Einkaufslisten-Objekt wird uebergeben
+     * @param shoppingList Einkaufslisten-Objekt wird uebergeben
      */
     void outputTotalCosts(ShoppingList shoppingList);
 }

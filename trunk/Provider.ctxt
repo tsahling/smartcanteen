@@ -1,13 +1,13 @@
 #BlueJ class context
-comment0.params=
-comment0.target=Provider\ createProvider()
-comment0.text=\r\n\ Erstellt\ einen\ Anbieter.\r\n\ \r\n\ @return\ Der\ erstellte\ Anbieter\r\n
-comment1.params=
-comment1.target=Provider\ updateProvider()
-comment1.text=\r\n\ Bearbeitet\ einen\ Anbieter.\r\n\ \r\n\ @return\ Der\ bearbeitete\ Anbieter\r\n
-comment2.params=
-comment2.target=void\ deleteProvider()
-comment2.text=\r\n\ Loescht\ einen\ Anbieter.\r\n
+comment0.params=provider
+comment0.target=Provider\ createProvider(Provider)
+comment0.text=\r\n\ Erstellt\ einen\ Anbieter.\r\n\ \r\n\ @param\ provider\ Der\ zu\ erstellende\ Anbieter\r\n\ @return\ Der\ erstellte\ Anbieter\r\n
+comment1.params=provider
+comment1.target=Provider\ updateProvider(Provider)
+comment1.text=\r\n\ Bearbeitet\ einen\ Anbieter.\r\n\ \r\n\ @param\ provider\ Der\ zu\ bearbeitende\ Anbieter\r\n\ @return\ Der\ bearbeitete\ Anbieter\r\n
+comment2.params=provider
+comment2.target=void\ deleteProvider(Provider)
+comment2.text=\r\n\ Loescht\ einen\ Anbieter.\r\n\ \r\n\ @param\ provider\ Der\ zu\ loeschende\ Anbieter\r\n
 comment3.params=
 comment3.target=java.lang.String\ getName()
 comment3.text=\r\n\ \r\n\ @return\ Der\ Name\ des\ Anbieters\r\n

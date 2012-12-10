@@ -1,4 +1,5 @@
 import java.util.logging.Logger;
+
 /**
  * Die Klasse {@link LogHelper} bietet Methoden zur Ausgabe von Log-Meldungen, die beliebig im Ablauf 
  * der  Applikation je nach Prioritaetsstufe ausgegeben werden koennen. Die erzeugten Meldungen 

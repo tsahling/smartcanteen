@@ -1,7 +1,7 @@
 /**
- * Die Klasse {@link HitListItem} stellt ein Gericht {@link Meal} in der Datenträgerklasse (@link HitListBase) dar. Die HitList Datei wird der Klasse {@Application} 
- * als Klassenparameter übergeben und von der Klasse {@link CSVTokenizer} verarbeitet und in ihre Datenfelder zerlegt.
- * Die Klasse {@link HitListItem} enthaelt eine Attribut für den Namen des Gericht {@link name} und den Rang {@link rank} des Gericht {@link Meal}
+ * Die Klasse {@link HitListItem} stellt ein Gericht {@link Recipe} anhand des Namens in der Datentraegerklasse (@link HitListBase) dar. 
+ * Die HitList Datei wird der Klasse {@link Application} als Aufrufparameter uebergeben und von der Klasse {@link CSVTokenizer} verarbeitet und in ihre Datenfelder zerlegt.
+ * Die Klasse {@link HitListItem} enthaelt ein Attribut für den Namen des Gerichts und den Rang des Gerichts.
  * 
  * @author Francesco Luciano
  */
@@ -11,7 +11,8 @@ public class HitListItem {
     private int rank;
 
     /**
-     * Standartkonstruktor zum erzeugen eines Gericht mit Namen und Rang
+     * Standartkonstruktor zum Erzeugen eines Gericht mit Namen und Rang
+     * 
      * @param name
      * @param rank
      */
@@ -21,34 +22,36 @@ public class HitListItem {
     }
 
     /**
-     * Methode um den Namen {@link name} eines Datenojekt {@link HitListItem} zur ermitteln
-     * @return Name des Datenojekt {@link HitListItem}
+     * Methode um den Namen eines Datenojekts zur ermitteln
+     * 
+     * @return Name des Datenojekts
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Methode um den Namen {@link name} eines Datenojekt {@link HitListItem} zur setzen
-     * @param name Name des Datenojekt {@link HitListItem} 
+     * Methode um den Namen eines Datenojekts zu setzen
      * 
+     * @param name Name des Datenojekts
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * Methode um den Rang {@link rang} eines HitlistItem zu ermitteln
-     * @return Rang {link rang} des HitListItem
+     * Methode um den Rang eines {@link HitlistItem} zu ermitteln
+     * 
+     * @return Rang des {@link HitlistItem}
      */
     public int getRank() {
         return rank;
     }
 
     /**
-     * Methode um den Rang {@link rang} eines HitListItem zu setzen
-     * @param Rang desHitListItem
-     *
+     * Methode um den Rang eines {@link HitlistItem} zu setzen
+     * 
+     * @param rank Rang des {@link HitlistItem}
      */
     public void setRank(int rank) {
         this.rank = rank;

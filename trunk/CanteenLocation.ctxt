@@ -1,7 +1,7 @@
 #BlueJ class context
 comment0.params=code\ name\ shortName\ latitude\ longitude
 comment0.target=CanteenLocation(java.lang.String,\ java.lang.String,\ java.lang.String,\ double,\ double)
-comment0.text=\r\n\ Im\ Standardkonstruktor\ werden\ dem\ \ Enum\ {@link\ CanteenLocation}\ Variablen\ \u00FCbergeben,\ die\ final\ gespeichert\ werden.\r\n\ \r\n\ @param\ code\ \ Deklaration\ des\ ENUM\ z.B.\ ESSEN\r\n\ @param\ name\ \ Beschreibung\ des\ ENUM\ z.B.\ Stadt\ Essen\r\n\ @param\ shortName\ \ \ Kurzbeschreibung\ des\ ENUM\ z.B.\ Essen\r\n\ @param\ latitude\ \ \ Breitengrad\ der\ Ortes\r\n\ @param\ longitude\ \ \ L\u00E4ngengrad\ des\ Ortes\r\n
+comment0.text=\r\n\ Im\ Standardkonstruktor\ werden\ dem\ \ Enum\ {@link\ CanteenLocation}\ Variablen\ \r\n\ uebergeben,\ die\ final\ gespeichert\ werden.\r\n\ \r\n\ @param\ code\ Deklaration\ des\ ENUM\ z.B.\ ESSEN\r\n\ @param\ name\ Beschreibung\ des\ ENUM\ z.B.\ Stadt\ Essen\r\n\ @param\ shortName\ Kurzbeschreibung\ des\ ENUM\ z.B.\ Essen\r\n\ @param\ latitude\ Breitengrad\ der\ Ortes\r\n\ @param\ longitude\ Laengengrad\ des\ Ortes\r\n
 comment1.params=
 comment1.target=java.lang.String\ getCode()
 comment1.text=\r\n\ Methode\ zum\ Abrufen\ des\ Werts\ Code\r\n\ \r\n\ @return\ code\ Deklaration\ \r\n

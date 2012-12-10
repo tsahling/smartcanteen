@@ -1,9 +1,9 @@
 
 /**
- * {@link UnitofMeasurement} stellt ein Datenobjekt vom Typ Enumeration dar. Ein "Enum" verhält sich 
- * wie eine Klasse mit Attributen und Methoden kann jedoch nicht vererben.
- * Durch die Klasse {@link Amount} wird der Typ (z.B. GRM oder EUR) eines Amount deklariert.
- * Die Werte werden final gespeichert und daher nur get-Methoden bereit gestellt.
+ * {@link UnitofMeasurement} stellt ein Datenobjekt vom Typ Enumeration dar. Ein "Enum" verhaelt sich 
+ * wie eine Klasse mit Attributen und Methoden kann jedoch nicht vererben. Durch die Klasse {@link Amount} 
+ * wird der Typ (z.B. GRM oder EUR) eines Amount deklariert. Die Werte werden final gespeichert und daher 
+ * nur get-Methoden bereit gestellt.
  * 
  * @author Marcel Baxmann
  */
@@ -24,7 +24,7 @@ public enum UnitOfMeasurement {
     private final String shortName;
 
     /**
-     * Im Standardkonstruktor werden dem  Enum {@link UnitOfMeasurement} Variablen übergeben, die final gespeichert werden.
+     * Im Standardkonstruktor werden dem  Enum {@link UnitOfMeasurement} Variablen uebergeben, die final gespeichert werden.
      * 
      * @param code   Deklaration des ENUM z.B. KGM
      * @param name    Beschreibung des ENUM z.B. Kilogramm

@@ -1,6 +1,5 @@
 /**
- * Die Klasse {@link Ingredient} stellt ein Datenobjekt eines Lebensmittel dar.
- * Sie enthaelt ein Atrribut für den Namen {@link name} des Lebensmittel.
+ * Die Klasse {@link Ingredient} stellt ein Datenobjekt eines Lebensmittels dar. Sie enthaelt ein Atrribut für den Namen des Lebensmittels.
  * 
  * @author Francesco Luciano
  */
@@ -8,20 +7,26 @@ public class Ingredient {
 
     private String name;
 
+    /**
+     * Standardkonstruktor
+     * 
+     * @param name Name des Lebensmittels
+     */
     public Ingredient(String name) {
         this.name = name;
     }
 
     /**
-     * Methode um den Namen {@link name} des des Lebensmittel {@link Ingredient} abzufragen 
-     * @return Name {@link name} des Lebensmittel {@link Ingredient}
+     * Methode um den Namen des Lebensmittels abzufragen
+     * 
+     * @return Name des Lebensmittels
      */
     public String getName() {
         return name;
     }
 
-     /**
-     * Methode um den Namen {@link name} des des Lebensmittel {@link Ingredient} zu setzen
+    /**
+     * Methode um den Namen des Lebensmittels zu setzen
      */
     public void setName(String name) {
         this.name = name;

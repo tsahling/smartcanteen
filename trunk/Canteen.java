@@ -1,8 +1,8 @@
 
 /**
- * Die Klasse {@link Canteen} ist ein Datenobjekt, welches sich an einem realen Objekt Kantine orientiert.
- * Die Klase beschreibt den Standort der Kantine sowie die Mitarbeiteranzahl. Sie bietet Methoden um 
- * den Menue-Plan einer Kantine auszugeben oder zu setzen.
+ * Die Klasse {@link Canteen} ist ein Datenobjekt, welches sich an einem realen Objekt Kantine 
+ * orientiert. Die Klasse beschreibt den Standort der Kantine sowie die Mitarbeiteranzahl. 
+ * Sie bietet Methoden um den Menue-Plan einer Kantine auszugeben oder zu setzen.
  * 
  * @author Marcel Baxmann 
  */
@@ -14,14 +14,12 @@ public class Canteen {
 
     
     /**
-     * Standardkonstruktor
-     * Die Klasse nimmt bei Ihrer Erstellung Variablen die Sie beschreiben entgegen
+     * Standardkonstruktor. Die Klasse nimmt bei Ihrer Erstellung Variablen die Sie beschreiben 
+     * entgegen.
      * 
-     * @param CanteenLocation  Standort der Kantine
-     * 
-     * @param numberOfEmployees  Anzahl der Mitarbeiter am Standort der Kantine
+     * @param CanteenLocation Standort der Kantine
+     * @param numberOfEmployees Anzahl der Mitarbeiter am Standort der Kantine
      */
-    
     public Canteen(CanteenLocation location, int numberOfEmployees) {
         this.location = location;
         this.numberOfEmployees = numberOfEmployees;
@@ -30,7 +28,7 @@ public class Canteen {
     /**
      * Mit dieser Methode wird der Standort der Kantine ausgegeben
      * 
-     * @return the location
+     * @return Der Standort
      */
     public CanteenLocation getLocation() {
         return location;
@@ -57,7 +55,7 @@ public class Canteen {
     /**
      * Mit dieser Methode wird die Anzahl der Mitarbeiter am Standort der Kantine gesetzt
      * 
-     * @param numberOfEmployees   the numberOfEmployees to set
+     * @param numberOfEmployees Die zu setzende Mitarbeiterzahl
      */
     public void setNumberOfEmployees(int numberOfEmployees) {
         this.numberOfEmployees = numberOfEmployees;

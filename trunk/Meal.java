@@ -2,8 +2,8 @@ import java.util.Date;
 
 /**
  * Die Klasse {@link Meal} stellt eine Position auf einem Menue-Plan dar. Sie enthaelt einen Verweis 
- * auf das jeweilige Rezept um das Essen zuzubereiten ({@link Recipe}) und ein Datum, an welchem das Essen 
- * auf dem Menue-Plan steht. 
+ * auf das jeweilige Rezept um das Essen zuzubereiten ({@link Recipe}) und ein Datum, an 
+ * welchem das Essen auf dem Menue-Plan steht. 
  * 
  * @author Marcel Baxmann
  */
@@ -22,6 +22,7 @@ public class Meal {
 
     /**
      * Ausgabe des Rezepts, welches zum jeweiligen Meal-Objekt gehoert
+     * 
      * @return Das Rezept
      */
     public Recipe getRecipe() {
@@ -30,6 +31,7 @@ public class Meal {
 
     /**
      * Setzen eines Rezeptes
+     * 
      * @param recipe  the recipe to set
      */
     public void setRecipe(Recipe recipe) {
@@ -38,6 +40,7 @@ public class Meal {
 
     /**
      * Rückgabe des Datums, an welchem das Essen auf dem Menue-Plan steht. 
+     * 
      * @return Das Datum
      */
     public Date getDate() {
@@ -46,6 +49,7 @@ public class Meal {
 
     /**
      * Setzen des Datums, an welchem das Essen auf dem Menue-Plan steht. 
+     * 
      * @param date  the date to set
      */
     public void setDate(Date date) {
