@@ -5,7 +5,9 @@ HOW TO START THIS PROJECT:
 AUTHORS: Marcel Baxmann, Francesco Luciano und Tim Sahling
 USER INSTRUCTIONS:
 
+Dies ist ein Commit-Test!
 
+----------------------------
 
  Hallo zusammen,
 
