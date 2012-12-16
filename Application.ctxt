@@ -1,8 +1,0 @@
-#BlueJ class context
-comment0.params=
-comment0.target=Application()
-comment0.text=\r\n\ Standardkonstruktor\r\n
-comment1.params=args
-comment1.target=void\ bootstrap(java.lang.String[])
-comment1.text=\r\n\ Versetzt\ die\ Anwendung\ in\ einen\ initialen\ und\ konstanten\ Zustand\ und\ ruft\ nach\ erfolgreichem\ \r\n\ Einlesen\ der\ Eingabedaten\ die\ Logiken\ der\ Applikationsroutine\ auf.\r\n\ \r\n\ @param\ args\ Aufparameter\ der\ Applikation\r\n\ @throws\ Exception\ Potenzielle\ Fehler\ in\ der\ Applikation\r\n
-numComments=2
