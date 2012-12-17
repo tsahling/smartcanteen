@@ -1,9 +1,13 @@
 package de.osjava.smartcanteen.application;
 
+import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
+
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
 import de.osjava.smartcanteen.base.HitListBase;
 import de.osjava.smartcanteen.base.ProviderBase;
@@ -11,6 +15,7 @@ import de.osjava.smartcanteen.base.RecipeBase;
 import de.osjava.smartcanteen.builder.MenuPlanBuilder;
 import de.osjava.smartcanteen.builder.result.ShoppingList;
 import de.osjava.smartcanteen.data.Canteen;
+import de.osjava.smartcanteen.data.item.HitListItem;
 import de.osjava.smartcanteen.helper.LogHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 
@@ -29,45 +34,45 @@ import de.osjava.smartcanteen.helper.PropertyHelper;
  */
 public class Application {
 
-	private static final Logger LOG = LogHelper.getLogger(Application.class
-			.getName());
+    private static final Logger LOG = LogHelper.getLogger(Application.class
+            .getName());
 
-	private static final String ARG_SPLIT = "=";
-	private static final String INPUT_FILE_SPLIT = ";";
-	private static final String EMPTY = "";
+    private static final String ARG_SPLIT = "=";
+    private static final String INPUT_FILE_SPLIT = ";";
+    private static final String EMPTY = "";
 
-	private HitListBase hitListBase;
-	private RecipeBase recipeBase;
-	private ProviderBase providerBase;
+    private HitListBase hitListBase;
+    private RecipeBase recipeBase;
+    private ProviderBase providerBase;
 
-	/**
-	 * Standardkonstruktor
-	 */
-	public Application() {
+    /**
+     * Standardkonstruktor
+     */
+    public Application() {
 
-	}
+    }
 
-	/**
-	 * Versetzt die Anwendung in einen initialen und konstanten Zustand und ruft
-	 * nach erfolgreichem Einlesen der Eingabedaten die Logiken der
-	 * Applikationsroutine auf.
-	 * 
-	 * @param args
-	 *            Aufparameter der Applikation
-	 * @throws Exception
-	 *             Potenzielle Fehler in der Applikation
-	 */
-	public void bootstrap(final String[] args) throws Exception {
-		if (initInput(args)) {
-			startApplication();
-		}
-	}
+    /**
+     * Versetzt die Anwendung in einen initialen und konstanten Zustand und ruft
+     * nach erfolgreichem Einlesen der Eingabedaten die Logiken der
+     * Applikationsroutine auf.
+     * 
+     * @param args
+     *            Aufparameter der Applikation
+     * @throws Exception
+     *             Potenzielle Fehler in der Applikation
+     */
+    public void bootstrap(final String[] args) throws Exception {
+        if (initInput(args)) {
+            startApplication();
+        }
+    }
 
-	/**
-	 * 
-	 * @param args
-	 */
-	private boolean initInput(final String[] args) {
+    /**
+     * 
+     * @param args
+     */
+    private boolean initInput(final String[] args) {
 		String inputFiles = EMPTY;
 
 		if (args.length == 0) {
@@ -113,6 +118,36 @@ public class Application {
 						// Dateisystem in die Verwaltungsklassen und erstellen
 						// der Verwaltungsklassen und zuweisen an
 						// Klassenattribute
+					    
+					    public HitListBase readHitlist() {
+
+					        Vector<String[]> lines = new Vector<String[]>();
+					        HitListBase hitlist = new HitListBase();
+					        Integer mealPlacement = null;
+					        String mealName = null;
+
+					        try {
+					            CSVTokenizer csv = new CSVTokenizer(
+					                    "/Users/frato/Desktop/hitliste.csv", ',');
+
+					            while (csv.hasMoreLines()) {
+					                lines.add(csv.nextLine());
+					            }
+					            for (int i = 0; i <= lines.size() - 1; i++) {
+
+					                mealPlacement = Integer.valueOf(lines.get(i)[0]);
+					                mealName = lines.get(i)[1];
+					                HitListItem oneHitListItem = new HitListItem(mealName, mealPlacement);
+					                hitlist.addHitListItem(oneHitListItem);
+					            }
+					        } catch (FileNotFoundException e) {
+					            e.printStackTrace();
+					        } catch (ParseException e) {
+					            e.printStackTrace();
+					        }
+					        return hitlist;
+					    }
+					    
 					} else {
 						wrongInputFile = true;
 						break;
@@ -130,24 +165,24 @@ public class Application {
 						.getProperty("message.missingInputFiles.exception"));
 	}
 
-	/**
+    /**
      * 
      */
-	private void startApplication() {
+    private void startApplication() {
 
-		MenuPlanBuilder mpb = new MenuPlanBuilder(providerBase, recipeBase);
+        MenuPlanBuilder mpb = new MenuPlanBuilder(providerBase, recipeBase);
 
-		outputApplicationResult(null, null);
-	}
+        outputApplicationResult(null, null);
+    }
 
-	/**
-	 * 
-	 * @param shoppingList
-	 * @param canteens
-	 */
-	private void outputApplicationResult(ShoppingList shoppingList,
-			Canteen... canteens) {
-		// TODO(Marcel Baxmann) Ergebnisse der Applikationslogik mit
-		// Output-Klassen verarbeiten
-	}
+    /**
+     * 
+     * @param shoppingList
+     * @param canteens
+     */
+    private void outputApplicationResult(ShoppingList shoppingList,
+            Canteen... canteens) {
+        // TODO(Marcel Baxmann) Ergebnisse der Applikationslogik mit
+        // Output-Klassen verarbeiten
+    }
 }
