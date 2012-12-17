@@ -12,6 +12,7 @@ import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
 import de.osjava.smartcanteen.base.HitListBase;
 import de.osjava.smartcanteen.base.ProviderBase;
+import de.osjava.smartcanteen.base.RecipeBase;
 import de.osjava.smartcanteen.data.Farmer;
 import de.osjava.smartcanteen.data.Ingredient;
 import de.osjava.smartcanteen.data.Wholesaler;
@@ -212,6 +213,40 @@ public class BaseProcessing {
         }
 
         return providerBase;
+    }
+
+    public RecipeBase readRecipeList(URL inputFileURL) {
+
+        Vector<String[]> lines = new Vector<String[]>();
+
+        String nameOfRecipe = null;
+        String quantityOfIntredient = null;
+        String unit = null;
+        UnitOfMeasurement unitUOM = null;
+        String nameIntgredient = null;
+        Ingredient ingredient = null;
+
+        try {
+            CSVTokenizer csv = new CSVTokenizer(inputFileURL, ',');
+            while (csv.hasMoreLines()) {
+                // Zeile, einlesen
+                lines.add(csv.nextLine());
+            }
+
+            for (int i = 0; i <= lines.size() - 1; i++) {
+                nameOfRecipe = lines.get(i)[0];
+                quantityOfIntredient = lines.get(i)[1];
+                unit = lines.get(i)[2];
+                nameIntgredient = lines.get(i)[3];
+
+            }
+
+        } catch (IOException e) {
+            // TODO(frato) handle this exception properly
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 }
