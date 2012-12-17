@@ -18,7 +18,10 @@ import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
  * splitLine() zur Verfügung stellen.
  * 
  * @author Francesco Luciano
+ * 
+ *         TODO(Francesco Luciano) Dokumentieren
  */
+
 public class CSVTokenizer {
 
     /**
