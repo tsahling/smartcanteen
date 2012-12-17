@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import de.osjava.smartcanteen.base.HitListBase;
+import de.osjava.smartcanteen.base.InputDataProcessing;
 import de.osjava.smartcanteen.base.ProviderBase;
 import de.osjava.smartcanteen.base.RecipeBase;
 import de.osjava.smartcanteen.builder.MenuPlanBuilder;
@@ -112,7 +113,7 @@ public class Application {
 
             if (inputFileSplit.length > 0) {
 
-                BaseProcessing baseProcessing = new BaseProcessing();
+                InputDataProcessing baseProcessing = new InputDataProcessing();
 
                 for (String inputFile : inputFileSplit) {
 
