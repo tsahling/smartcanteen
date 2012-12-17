@@ -111,6 +111,9 @@ public class Application {
             String[] inputFileSplit = inputFiles.split(INPUT_FILE_SPLIT);
 
             if (inputFileSplit.length > 0) {
+
+                BaseProcessing baseProcessing = new BaseProcessing();
+
                 for (String inputFile : inputFileSplit) {
 
                     URL inputFileUrl = ClassLoader
@@ -123,10 +126,10 @@ public class Application {
                         String file = inputFileUrl.getFile();
 
                         if (file.contains(INPUT_FILENAME_HITLIST)) {
-                            hitListBase = readHitlist(inputFileUrl);
+                            hitListBase = baseProcessing.readHitlist(inputFileUrl);
                         }
                         else if (file.contains(INPUT_FILENAME_PRICELIST)) {
-                            providerBase = readPriceList(inputFileUrl);
+                            providerBase = baseProcessing.readPriceList(inputFileUrl, providerBase);
                         }
                         else if (file.contains(INPUT_FILENAME_RECIPELIST)) {
                             // TODO(Francesco Luciano) Einlesen Rezepte in RecipeBase
@@ -171,14 +174,4 @@ public class Application {
         // TODO(Marcel Baxmann) Ergebnisse der Applikationslogik mit
         // Output-Klassen verarbeiten
     }
-
-    /**
-     * Methode um eine Preisliste einzulesen
-     * 
-     * @author Francesco Luciano
-     * @param inputFileURL
-     * @return
-     * @throws IOException
-     */
-
 }
