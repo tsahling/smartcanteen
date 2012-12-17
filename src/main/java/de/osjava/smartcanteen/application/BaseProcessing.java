@@ -29,6 +29,22 @@ import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.datatype.IngredientType;
 import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
 
+/**
+ * 
+ * 
+ * TODO(Francesco Luciano) Möglichst viel Codeduplizierung vermeiden. Das Einlesen ist ja immer gleich, vielleicht kann
+ * man da was in weiteren private Methoden zusammenfassen.
+ * TODO(Francesco Luciano) Gleiche If-Abfragen vermeiden, wie z.B. die Überprüfung der Unit oder von Types. Diese in
+ * eigene private-Methoden stecken und mit else if arbeiten
+ * TODO(Francesco Luciano) Naming von Variablen und Co überprüfen und vereinheitlichen
+ * TODO(Francesco Luciano) Fixe String Werte zu Properties machen und im Kopf der Klasse einlesen (siehe Application
+ * Beispiele)
+ * TODO(Francesco Luciano) Schöneren Namen für BaseProcessing überlegen und in base-package verschieben
+ * 
+ * 
+ * @author Francesco Luciano
+ * 
+ */
 public class BaseProcessing {
 
     /**
@@ -290,14 +306,13 @@ public class BaseProcessing {
             }
 
         } catch (IOException e) {
-            // TODO(frato) handle this exception properly
             e.printStackTrace();
         }
 
         return recipeBase;
     }
 
-    private final class RecipeListItem {
+    private static final class RecipeListItem {
         String quantityOfIntredient;
         String unit;
         String nameOfIngredient;
@@ -330,10 +345,49 @@ public class BaseProcessing {
         }
 
         @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((nameOfIngredient == null) ? 0 : nameOfIngredient.hashCode());
+            result = prime * result + ((quantityOfIntredient == null) ? 0 : quantityOfIntredient.hashCode());
+            result = prime * result + ((unit == null) ? 0 : unit.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            RecipeListItem other = (RecipeListItem) obj;
+            if (nameOfIngredient == null) {
+                if (other.nameOfIngredient != null)
+                    return false;
+            }
+            else if (!nameOfIngredient.equals(other.nameOfIngredient))
+                return false;
+            if (quantityOfIntredient == null) {
+                if (other.quantityOfIntredient != null)
+                    return false;
+            }
+            else if (!quantityOfIntredient.equals(other.quantityOfIntredient))
+                return false;
+            if (unit == null) {
+                if (other.unit != null)
+                    return false;
+            }
+            else if (!unit.equals(other.unit))
+                return false;
+            return true;
+        }
+
+        @Override
         public String toString() {
             return "RecipeListItem [quantityOfIntredient=" + quantityOfIntredient + ", unit=" + unit + ", nameOfIngredient=" + nameOfIngredient + "]";
         }
-
     }
 
 }
