@@ -138,7 +138,7 @@ public class Application {
                             hitListBase = readHitlist(inputFileUrl);
                         }
                         else if (file.contains(INPUT_FILENAME_PRICELIST)) {
-                            // TODO(Franceso Luciano) Einlesen Priceliste in ProviderBase
+                            providerBase = readPriceList(inputFileUrl);
                         }
                         else if (file.contains(INPUT_FILENAME_RECIPELIST)) {
                             // TODO(Francesco Luciano) Einlesen Rezepte in RecipeBase
