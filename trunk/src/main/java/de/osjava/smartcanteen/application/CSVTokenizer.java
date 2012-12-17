@@ -1,9 +1,9 @@
 package de.osjava.smartcanteen.application;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Vector;
 
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
@@ -26,16 +26,16 @@ public class CSVTokenizer {
      * 
      * @param filename Pfad & name der Datei
      * @param delimiter Trennzeichen der CSV Datei
+     * @throws IOException
      */
 
-    public CSVTokenizer(String filename, char delimiter)
-            /* Solle die Datei nicht gefunden werden wird eine Exception ausgegeben */
-            throws FileNotFoundException {
+    public CSVTokenizer(URL filename, char delimiter) throws IOException {
+        /* Solle die Datei nicht gefunden werden wird eine Exception ausgegeben */
 
         /* Variable reader wird eine neue Instanz von BufferedReader
          * mit einem Filereader der die in den Parametern übergebende
          * als Inhalt besitzt. */
-        this.reader = new BufferedReader(new FileReader(filename));
+        this.reader = new BufferedReader(new InputStreamReader(filename.openStream()));
 
         /* der Klassen Variable delimiter wird der Wert des Parameter delimieter übergeben */
         this.delimiter = delimiter;
