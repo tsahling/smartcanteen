@@ -186,6 +186,13 @@ public class Application {
         // Output-Klassen verarbeiten
     }
 
+    /**
+     * 
+     * @param inputFileURL
+     * @return
+     * @throws IOException
+     * @author Francesco Luciano
+     */
     public HitListBase readHitlist(URL inputFileURL) throws IOException {
 
         Vector<String[]> lines = new Vector<String[]>();
