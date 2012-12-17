@@ -58,6 +58,14 @@ public class BaseProcessing {
         return hitlist;
     }
 
+    /**
+     * Methode um eine Preisliste einzulesen
+     * 
+     * @author Francesco Luciano
+     * @param inputFileURL
+     * @return
+     * @throws IOException
+     */
     public ProviderBase readPriceList(URL inputFileURL, ProviderBase providerBase) throws IOException {
 
         Vector<String[]> lines = new Vector<String[]>();
