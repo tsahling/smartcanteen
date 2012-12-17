@@ -30,7 +30,7 @@ public class CSVTokenizer {
      */
 
     public CSVTokenizer(URL filename, char delimiter) throws IOException {
-        /* Solle die Datei nicht gefunden werden wird eine Exception ausgegeben */
+        /* Sollte die Datei nicht gefunden werden wird eine Exception ausgegeben */
 
         /* Variable reader wird eine neue Instanz von BufferedReader
          * mit einem Filereader der die in den Parametern übergebende
@@ -103,7 +103,7 @@ public class CSVTokenizer {
                     if (countFields != fields.length) {
                         continue;
                     }
-                    // TODO: Wird hier genau geprüft Leerzeile? Wieso break?
+
                     if (!nextLine.equals("")) // Schleife beenden
                         break;
                 }
