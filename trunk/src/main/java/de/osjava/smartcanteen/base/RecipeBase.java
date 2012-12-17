@@ -1,6 +1,7 @@
 package de.osjava.smartcanteen.base;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -32,7 +33,11 @@ public class RecipeBase {
      * @return Das aktualisierte Rezept {@link Recipe}
      */
     public Recipe addRecipe(Recipe recipe) {
-        return null;
+        if (recipes == null) {
+            recipes = new HashSet<Recipe>();
+        }
+        recipes.add(recipe);
+        return recipe;
     }
 
     /**

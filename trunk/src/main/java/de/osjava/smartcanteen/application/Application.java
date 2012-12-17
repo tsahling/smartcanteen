@@ -132,7 +132,7 @@ public class Application {
                             providerBase = baseProcessing.readPriceList(inputFileUrl, providerBase);
                         }
                         else if (file.contains(INPUT_FILENAME_RECIPELIST)) {
-                            // TODO(Francesco Luciano) Einlesen Rezepte in RecipeBase
+                            recipeBase = baseProcessing.readRecipeList(inputFileUrl);
                         }
                     }
                     else {
