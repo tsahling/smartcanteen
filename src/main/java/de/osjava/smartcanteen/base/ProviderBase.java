@@ -31,7 +31,6 @@ public class ProviderBase {
      * @return Aktualiserter Anbieter {@link AbstractProvider}
      */
     public AbstractProvider addProvider(AbstractProvider provider) {
-
         if (providers == null) {
             providers = new HashSet<AbstractProvider>();
         }
