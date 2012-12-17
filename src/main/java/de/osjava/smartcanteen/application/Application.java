@@ -42,6 +42,10 @@ public class Application {
     private static final String INPUT_FILE_SPLIT = ";";
     private static final String EMPTY = "";
 
+    private static final String INPUT_FILENAME_HITLIST = PropertyHelper.getProperty("inputFile.name.hitList");
+    private static final String INPUT_FILENAME_PRICELIST = PropertyHelper.getProperty("inputFile.name.priceList");
+    private static final String INPUT_FILENAME_RECIPELIST = PropertyHelper.getProperty("inputFile.name.recipeList");
+
     private HitListBase hitListBase;
     private RecipeBase recipeBase;
     private ProviderBase providerBase;
@@ -118,12 +122,18 @@ public class Application {
                                     + inputFile);
 
                     if (inputFileUrl != null) {
-                        // TODO(Francesco Luciano) Einlesen der Dateien aus
-                        // Dateisystem in die Verwaltungsklassen und erstellen
-                        // der Verwaltungsklassen und zuweisen an
-                        // Klassenattribute
-                        readHitlist(inputFileUrl);
 
+                        String file = inputFileUrl.getFile();
+
+                        if (file.contains(INPUT_FILENAME_HITLIST)) {
+                            hitListBase = readHitlist(inputFileUrl);
+                        }
+                        else if (file.contains(INPUT_FILENAME_PRICELIST)) {
+                            // TODO(Franceso Luciano) Einlesen Priceliste in ProviderBase
+                        }
+                        else if (file.contains(INPUT_FILENAME_RECIPELIST)) {
+                            // TODO(Francesco Luciano) Einlesen Rezepte in RecipeBase
+                        }
                     }
                     else {
                         wrongInputFile = true;
