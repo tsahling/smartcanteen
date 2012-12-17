@@ -4,7 +4,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
 
@@ -15,8 +20,10 @@ import de.osjava.smartcanteen.base.ProviderBase;
 import de.osjava.smartcanteen.base.RecipeBase;
 import de.osjava.smartcanteen.data.Farmer;
 import de.osjava.smartcanteen.data.Ingredient;
+import de.osjava.smartcanteen.data.Recipe;
 import de.osjava.smartcanteen.data.Wholesaler;
 import de.osjava.smartcanteen.data.item.HitListItem;
+import de.osjava.smartcanteen.data.item.IngredientListItem;
 import de.osjava.smartcanteen.data.item.PriceListItem;
 import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.datatype.IngredientType;
@@ -222,9 +229,11 @@ public class BaseProcessing {
         String nameOfRecipe = null;
         String quantityOfIntredient = null;
         String unit = null;
-        UnitOfMeasurement unitUOM = null;
-        String nameIntgredient = null;
-        Ingredient ingredient = null;
+        String nameOfIngredient = null;
+
+        RecipeBase recipeBase = new RecipeBase();
+
+        Map<String, List<RecipeListItem>> grouping = new HashMap<String, List<RecipeListItem>>();
 
         try {
             CSVTokenizer csv = new CSVTokenizer(inputFileURL, ',');
@@ -235,9 +244,48 @@ public class BaseProcessing {
 
             for (int i = 0; i <= lines.size() - 1; i++) {
                 nameOfRecipe = lines.get(i)[0];
-                quantityOfIntredient = lines.get(i)[1];
+                quantityOfIntredient = lines.get(i)[1].replace(",", ".");
                 unit = lines.get(i)[2];
-                nameIntgredient = lines.get(i)[3];
+                nameOfIngredient = lines.get(i)[3];
+
+                if (grouping.containsKey(nameOfRecipe)) {
+                    grouping.get(nameOfRecipe).add(new RecipeListItem(quantityOfIntredient, unit, nameOfIngredient));
+                }
+                else {
+                    List<RecipeListItem> list = new ArrayList<RecipeListItem>();
+                    list.add(new RecipeListItem(quantityOfIntredient, unit, nameOfIngredient));
+                    grouping.put(nameOfRecipe, list);
+                }
+            }
+
+            for (Entry<String, List<RecipeListItem>> entry : grouping.entrySet()) {
+
+                Recipe recipe = new Recipe(entry.getKey(), null, 0);
+                recipe.setIngredientList(new HashSet<IngredientListItem>());
+
+                for (RecipeListItem recipeListItem : entry.getValue()) {
+
+                    UnitOfMeasurement uom = null;
+                    BigDecimal value = new BigDecimal(recipeListItem.getQuantityOfIntredient());
+
+                    if (recipeListItem.getUnit().equals("g")) {
+
+                        uom = UnitOfMeasurement.GRM;
+
+                    }
+                    else if (recipeListItem.getUnit().equals("l")) {
+                        uom = UnitOfMeasurement.LTR;
+                    }
+                    else if (recipeListItem.getUnit().equals("")) {
+                        uom = UnitOfMeasurement.STK;
+                    }
+
+                    recipe.getIngredientList().add(
+                            new IngredientListItem(new Ingredient(recipeListItem.getNameOfIngredient(), null),
+                                    new Amount(value, uom)));
+                }
+
+                recipeBase.addRecipe(recipe);
 
             }
 
@@ -246,7 +294,46 @@ public class BaseProcessing {
             e.printStackTrace();
         }
 
-        return null;
+        return recipeBase;
+    }
+
+    private final class RecipeListItem {
+        String quantityOfIntredient;
+        String unit;
+        String nameOfIngredient;
+
+        public RecipeListItem(String quantityOfIntredient, String unit, String nameOfIngredient) {
+            this.quantityOfIntredient = quantityOfIntredient;
+            this.unit = unit;
+            this.nameOfIngredient = nameOfIngredient;
+        }
+
+        /**
+         * @return the quantityOfIntredient
+         */
+        public String getQuantityOfIntredient() {
+            return quantityOfIntredient;
+        }
+
+        /**
+         * @return the unit
+         */
+        public String getUnit() {
+            return unit;
+        }
+
+        /**
+         * @return the nameOfIngredient
+         */
+        public String getNameOfIngredient() {
+            return nameOfIngredient;
+        }
+
+        @Override
+        public String toString() {
+            return "RecipeListItem [quantityOfIntredient=" + quantityOfIntredient + ", unit=" + unit + ", nameOfIngredient=" + nameOfIngredient + "]";
+        }
+
     }
 
 }
