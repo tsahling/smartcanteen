@@ -71,10 +71,11 @@ public class Application {
      * nach erfolgreichem Einlesen der Eingabedaten die Logiken der
      * Applikationsroutine auf.
      * 
+     * @author Tim Sahling
      * @param args
      *            Aufparameter der Applikation
      * @throws Exception
-     *             Potenzielle Fehler in der Applikation
+     *             Alle auftretenden Fehler in der Applikation
      */
     public void bootstrap(final String[] args) throws Exception {
         if (initInput(args)) {
@@ -83,6 +84,7 @@ public class Application {
     }
 
     /**
+     * Liest die Eingabedaten ein und füllt die Datenträgerklassen
      * 
      * @param args
      * @throws IOException
@@ -225,6 +227,9 @@ public class Application {
         Vector<String[]> lines = new Vector<String[]>();
 
         /* Deklaration eines Händlers */
+        if (providerBase == null) {
+            providerBase = new ProviderBase();
+        }
 
         /* Typ des Händler zu speichern (Bauer oder Grosshändler) */
         String typeOfTrader = null;
@@ -349,21 +354,19 @@ public class Application {
             if (typeOfTrader.equals("Grosshandel")) {
                 Amount transportFee = new Amount(transportCostBD, UnitOfMeasurement.EUR);
                 Wholesaler wholesaler = new Wholesaler(nameOfTrader, transportFee, priceList);
-
+                providerBase.addProvider(wholesaler);
             }
-
-            /* Wenn es ein Bauer ist wird ein Farmer erzeugt */
-            if (typeOfTrader.equals("Bauer")) {
+            else if (typeOfTrader.equals("Bauer")) { /* Wenn es ein Bauer ist wird ein Farmer erzeugt */
                 Amount totalDistance = new Amount(transportCostBD, UnitOfMeasurement.KMR);
                 Farmer farmer = new Farmer(nameOfTrader, totalDistance, priceList);
+                providerBase.addProvider(farmer);
             }
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return providerBase;
     }
 }
