@@ -157,6 +157,8 @@ public class Application {
      */
     private void startApplication() {
 
+        System.out.println(hitListBase.getHitListItems().size());
+
         MenuPlanBuilder mpb = new MenuPlanBuilder(providerBase, recipeBase);
 
         outputApplicationResult(null, null);
