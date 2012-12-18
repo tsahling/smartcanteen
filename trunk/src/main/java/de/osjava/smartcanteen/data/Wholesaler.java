@@ -25,19 +25,18 @@ public class Wholesaler extends AbstractProvider {
 
     @Override
     protected AbstractProvider createProvider(AbstractProvider provider) {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
     @Override
     protected AbstractProvider updateProvider(AbstractProvider provider) {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
     @Override
     protected void deleteProvider(AbstractProvider provider) {
-        // TODO Auto-generated method stub
 
     }
 

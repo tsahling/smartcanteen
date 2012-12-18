@@ -34,12 +34,6 @@ import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
  * 
  * TODO(Francesco Luciano) Möglichst viel Codeduplizierung vermeiden. Das Einlesen ist ja immer gleich, vielleicht kann
  * man da was in weiteren private Methoden zusammenfassen.
- * TODO(Francesco Luciano) Gleiche If-Abfragen vermeiden, wie z.B. die Überprüfung der Unit oder von Types. Diese in
- * eigene private-Methoden stecken und mit else if arbeiten
- * TODO(Francesco Luciano) Naming von Variablen und Co überprüfen und vereinheitlichen
- * TODO(Francesco Luciano) Fixe String Werte zu Properties machen und im Kopf der Klasse einlesen (siehe Application
- * Beispiele)
- * TODO(Francesco Luciano) Schöneren Namen für BaseProcessing überlegen und in base-package verschieben
  * 
  * 
  * @author Francesco Luciano
