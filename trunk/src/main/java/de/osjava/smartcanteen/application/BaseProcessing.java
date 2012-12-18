@@ -276,7 +276,7 @@ public class BaseProcessing {
 
             for (Entry<String, List<RecipeListItem>> entry : grouping.entrySet()) {
 
-                Recipe recipe = new Recipe(entry.getKey(), null, 0);
+                Recipe recipe = new Recipe(entry.getKey(), 0);
                 recipe.setIngredientList(new HashSet<IngredientListItem>());
 
                 for (RecipeListItem recipeListItem : entry.getValue()) {
