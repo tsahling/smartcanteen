@@ -46,13 +46,14 @@ import de.osjava.smartcanteen.helper.PropertyHelper;
  */
 public class InputDataProcessing {
 
-    private static final String INPUT_DATA_FISH = PropertyHelper.getProperty("inputData.Type.fish");
-    private static final String INPUT_DATA_MEAT = PropertyHelper.getProperty("inputData.Type.meat");
-    private static final String INPUT_DATA_VEGETERIAN = PropertyHelper.getProperty("inputData.Type.vegetarian");
+    private static final String INPUT_DATA_FISH = PropertyHelper.getProperty("inputData.ingredientType.fish");
+    private static final String INPUT_DATA_MEAT = PropertyHelper.getProperty("inputData.ingredientType.meat");
+    private static final String INPUT_DATA_VEGETERIAN = PropertyHelper
+            .getProperty("inputData.ingredientType.vegetarian");
 
-    private static final String INPUT_DATA_UNIT_TYPE_GRAMM = PropertyHelper.getProperty("inputData.UnitType.gramm");
-    private static final String INPUT_DATA_UNIT_TYPE_LITER = PropertyHelper.getProperty("inputData.UnitType.liter");
-    private static final String INPUT_DATA_UNIT_TYPE_PICES = PropertyHelper.getProperty("inputData.UnitType.pices");
+    private static final String INPUT_DATA_UNIT_TYPE_GRAMM = PropertyHelper.getProperty("inputData.unitType.gramm");
+    private static final String INPUT_DATA_UNIT_TYPE_LITER = PropertyHelper.getProperty("inputData.unitType.liter");
+    private static final String INPUT_DATA_UNIT_TYPE_PICES = PropertyHelper.getProperty("inputData.unitType.pieces");
 
     private static final String INPUT_DATA_TYPE_OF_TRADER_WHOLESALER = PropertyHelper
             .getProperty("inputData.typeOfTrader.wholesaler");
