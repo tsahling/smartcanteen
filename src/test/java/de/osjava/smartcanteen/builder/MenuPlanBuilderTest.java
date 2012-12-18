@@ -1,20 +1,30 @@
 package de.osjava.smartcanteen.builder;
 
-import static org.junit.Assert.assertEquals;
-
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import de.osjava.smartcanteen.AbstractTest;
 import de.osjava.smartcanteen.data.Canteen;
 
-public class MenuPlanBuilderTest extends AbstractBuilderTest {
+public class MenuPlanBuilderTest extends AbstractTest {
 
-	@Test
-	public void testBuildMenuPlan() {
-		MenuPlanBuilder mpb = new MenuPlanBuilder(createProviderBase(),
-				createRecipeBase());
+    private MenuPlanBuilder menuPlanBuilder;
 
-		Canteen[] canteens = mpb.buildMenuPlan();
+    @Before
+    public void setUp() {
+        menuPlanBuilder = new MenuPlanBuilder(createProviderBase(), createRecipeBase());
+    }
 
-		assertEquals(0, 0);
-	}
+    @Test
+    public void testBuildMenuPlan() {
+
+        Canteen[] canteens = menuPlanBuilder.buildMenuPlan();
+
+    }
+
+    @After
+    public void tearDown() {
+
+    }
 }

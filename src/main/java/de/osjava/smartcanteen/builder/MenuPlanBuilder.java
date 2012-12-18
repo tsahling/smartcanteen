@@ -1,8 +1,13 @@
 package de.osjava.smartcanteen.builder;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.Set;
+import java.util.TreeSet;
 
 import de.osjava.smartcanteen.base.ProviderBase;
 import de.osjava.smartcanteen.base.RecipeBase;
@@ -59,12 +64,17 @@ public class MenuPlanBuilder {
      * @return Ein Array von Kantinen für die Verwendung im Output
      */
     public Canteen[] buildMenuPlan() {
+        // Initalisiert die Planungsperiode
+        Map<Integer, Map<Integer, Set<Recipe>>> planingPeriod = initPlaningPeriod();
+
+        // Holt die Rezepte sortiert nach Rang
         Set<Recipe> recipesSortedByRank = recipeBase.getRecipesSortedByRank();
 
-        List<Recipe> recipes = new ArrayList<Recipe>(recipesSortedByRank);
-
         for (Recipe recipe : recipesSortedByRank) {
+            Integer randomWeek = getRandomWeek(planingPeriod);
+            Integer randomWorkday = getRandomWeekWorkday(planingPeriod, randomWeek);
 
+            planingPeriod.get(randomWeek).get(randomWorkday).add(recipe);
         }
 
         // Variante 1:
@@ -83,8 +93,38 @@ public class MenuPlanBuilder {
         return canteens;
     }
 
-    private Recipe getRandomRecipe() {
-        return null;
+    private Map<Integer, Map<Integer, Set<Recipe>>> initPlaningPeriod() {
+        Map<Integer, Map<Integer, Set<Recipe>>> result = new HashMap<Integer, Map<Integer, Set<Recipe>>>();
 
+        Integer weeks = Integer.valueOf(PropertyHelper.getProperty("planingPeriod.weeks"));
+        Integer workdays = Integer.valueOf(PropertyHelper.getProperty("planingPeriod.weekWorkdays"));
+
+        for (int x = 1; x <= weeks; x++) {
+
+            result.put(x, new HashMap<Integer, Set<Recipe>>());
+
+            for (int y = 1; y <= workdays; y++) {
+
+                result.get(x).put(y, new TreeSet<Recipe>(new Comparator<Recipe>() {
+
+                    @Override
+                    public int compare(Recipe arg0, Recipe arg1) {
+                        return Integer.valueOf(arg0.getRank()).compareTo(Integer.valueOf(arg1.getRank()));
+                    }
+                }));
+            }
+        }
+
+        return result;
+    }
+
+    public Integer getRandomWeek(Map<Integer, Map<Integer, Set<Recipe>>> planingPeriod) {
+        List<Integer> keys = new ArrayList<Integer>(planingPeriod.keySet());
+        return keys.get(new Random().nextInt(keys.size()));
+    }
+
+    public Integer getRandomWeekWorkday(Map<Integer, Map<Integer, Set<Recipe>>> planingPeriod, Integer week) {
+        List<Integer> keys = new ArrayList<Integer>(planingPeriod.get(week).keySet());
+        return keys.get(new Random().nextInt(keys.size()));
     }
 }

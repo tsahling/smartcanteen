@@ -1,5 +1,7 @@
 package de.osjava.smartcanteen.builder;
 
-public class ShoppingListBuilderTest extends AbstractBuilderTest {
+import de.osjava.smartcanteen.AbstractTest;
+
+public class ShoppingListBuilderTest extends AbstractTest {
 
 }
