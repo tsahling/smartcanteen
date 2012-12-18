@@ -9,9 +9,9 @@ package de.osjava.smartcanteen.datatype;
  */
 public enum IngredientType {
 
-    MEAT("MEAT", "Fleischgericht", "Fleisch"), FISH("FISH", "Fischgericht",
-            "Fisch"), VEGETABLE("VEGETABLE", "Vegetarisches Gericht",
-            "Vegetarisch");
+    MEAT("MEAT", "Fleischgericht", "Fleisch"),
+    FISH("FISH", "Fischgericht", "Fisch"),
+    VEGETABLE("VEGETABLE", "Vegetarisches Gericht", "Vegetarisch");
 
     private final String code;
     private final String name;

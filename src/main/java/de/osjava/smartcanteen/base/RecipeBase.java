@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import de.osjava.smartcanteen.data.Recipe;
-import de.osjava.smartcanteen.datatype.RecipeType;
+import de.osjava.smartcanteen.datatype.IngredientType;
 
 /**
  * Die Klasse {@link RecipeBase} ist eine Datenträgerklasse die in einer Java
@@ -70,15 +70,13 @@ public class RecipeBase {
     }
 
     /**
-     * Methode um im Set eine Menge von Datenobjekten {@link Recipe} anhand
-     * ihres Typs {@link RecipeType} zu suchen.
+     * Methode um im Set eine Menge von Datenobjekten {@link Recipe} anhand ihres Typs {@link IngredientType} zu suchen.
      * 
-     * @param recipeType
-     *            Typ {@link RecipeType} des Rezepts
+     * @param ingredientType Typ {@link IngredientType} des Rezepts
      * @return Set {@link Recipe} mit dem Inhalt aller Datenobjekte {@link Recipe} die auf den angebenen Typ
-     *         {@link RecipeTyp} matchen
+     *         {@link IngredientType} matchen
      */
-    public Set<Recipe> findRecipesByRecipeType(RecipeType recipeType) {
+    public Set<Recipe> findRecipesByIngredientType(IngredientType ingredientType) {
         return null;
     }
 

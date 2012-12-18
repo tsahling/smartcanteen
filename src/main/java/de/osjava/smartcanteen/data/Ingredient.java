@@ -35,9 +35,29 @@ public class Ingredient {
 
     /**
      * Methode um den Namen des Lebensmittels zu setzen
+     * 
+     * @param name Der zu setzende Name des Lebensmittels
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Methode um den Type des Lebensmittels abzufragen
+     * 
+     * @return Typ des Lebensmittels
+     */
+    public IngredientType getIngredientType() {
+        return ingredientType;
+    }
+
+    /**
+     * Methode um den Typ des Lebensmittels zu setzen
+     * 
+     * @param ingredientType Der zu setzende Typ des Lebensmittels
+     */
+    public void setIngredientType(IngredientType ingredientType) {
+        this.ingredientType = ingredientType;
     }
 
     /**
@@ -50,6 +70,7 @@ public class Ingredient {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((ingredientType == null) ? 0 : ingredientType.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
@@ -69,6 +90,8 @@ public class Ingredient {
         if (getClass() != obj.getClass())
             return false;
         Ingredient other = (Ingredient) obj;
+        if (ingredientType != other.ingredientType)
+            return false;
         if (name == null) {
             if (other.name != null)
                 return false;
@@ -85,7 +108,7 @@ public class Ingredient {
      */
     @Override
     public String toString() {
-        return "Ingredient [name=" + name + "]";
+        return "Ingredient [name=" + name + ", ingredientType=" + ingredientType + "]";
     }
 
 }
