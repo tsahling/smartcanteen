@@ -63,6 +63,13 @@ public class HitListBase {
      * @return Das gefundene Datenobjekt wird zurückgegeben
      */
     public HitListItem findHitListItemByName(String name) {
+
+        for (HitListItem hitlistitem : hitListItems) {
+
+            if (hitlistitem.getName().equals(name)) {
+                return hitlistitem;
+            }
+        }
         return null;
     }
 
