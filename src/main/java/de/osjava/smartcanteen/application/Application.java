@@ -113,7 +113,7 @@ public class Application {
 
             if (inputFileSplit.length > 0) {
 
-                InputDataProcessing baseProcessing = new InputDataProcessing();
+                InputDataProcessing inputDataProcessing = new InputDataProcessing();
 
                 for (String inputFile : inputFileSplit) {
 
@@ -127,13 +127,13 @@ public class Application {
                         String file = inputFileUrl.getFile();
 
                         if (file.contains(INPUT_FILENAME_HITLIST)) {
-                            hitListBase = baseProcessing.readHitlist(inputFileUrl);
+                            hitListBase = inputDataProcessing.readHitlist(inputFileUrl);
                         }
                         else if (file.contains(INPUT_FILENAME_PRICELIST)) {
-                            providerBase = baseProcessing.readPriceList(inputFileUrl, providerBase);
+                            providerBase = inputDataProcessing.readPriceList(inputFileUrl, providerBase);
                         }
                         else if (file.contains(INPUT_FILENAME_RECIPELIST)) {
-                            recipeBase = baseProcessing.readRecipeList(inputFileUrl);
+                            recipeBase = inputDataProcessing.readRecipeList(inputFileUrl);
                         }
                     }
                     else {
@@ -143,6 +143,7 @@ public class Application {
                 }
 
                 if (!wrongInputFile) {
+                    inputDataProcessing.addRankToRecipes(recipeBase, hitListBase);
                     return true;
                 }
             }
