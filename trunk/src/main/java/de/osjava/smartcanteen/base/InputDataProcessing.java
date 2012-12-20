@@ -295,6 +295,13 @@ public class InputDataProcessing {
         return recipeBase;
     }
 
+    public void addRankToRecipes(RecipeBase recipeBase, HitListBase hitListBase) {
+
+        // TODO(Francesco Luciano) Iterieren über RecipeBase und je Rezept den Rang aus HitListeBase setzen. Anhand von
+        // Namen ermitteln hitListBase.findHitListItemByName
+
+    }
+
     private UnitOfMeasurement unitOfMeasurement(String inputUnit) {
 
         UnitOfMeasurement uom = null;
