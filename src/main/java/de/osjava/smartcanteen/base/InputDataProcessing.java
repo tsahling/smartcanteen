@@ -297,8 +297,11 @@ public class InputDataProcessing {
 
     public void addRankToRecipes(RecipeBase recipeBase, HitListBase hitListBase) {
 
-        // TODO(Francesco Luciano) Iterieren über RecipeBase und je Rezept den Rang aus HitListeBase setzen. Anhand von
-        // Namen ermitteln hitListBase.findHitListItemByName
+        for (Recipe r : recipeBase.getRecipes()) {
+
+            HitListItem hitListItem = hitListBase.findHitListItemByName(r.getName());
+            r.setRank(hitListItem.getRank());
+        }
 
     }
 
