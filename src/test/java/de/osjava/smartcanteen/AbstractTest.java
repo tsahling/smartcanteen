@@ -3,6 +3,7 @@ package de.osjava.smartcanteen;
 import static org.mockito.Mockito.mock;
 
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -31,6 +32,11 @@ public abstract class AbstractTest {
     private static final int RECIPES_FISH = 15;
     private static final int TOTAL_RECIPES = RECIPES_MEAT + RECIPES_VEGETABLE + RECIPES_FISH;
     private static final int INGREDIENTS_PER_RECIPE = 4;
+    private static final String INPUT_DIR_PATH = "input/";
+
+    protected URL getInputFileURL(String inputFilename) {
+        return ClassLoader.getSystemResource(INPUT_DIR_PATH + inputFilename);
+    }
 
     protected HitListBase createHitListBase() {
         return null;
