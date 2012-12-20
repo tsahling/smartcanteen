@@ -25,7 +25,10 @@ import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
 
 public abstract class AbstractTest {
 
-    private static final int RECIPES = 109;
+    private static final int RECIPES_MEAT = 46;
+    private static final int RECIPES_VEGETABLE = 48;
+    private static final int RECIPES_FISH = 15;
+    private static final int TOTAL_RECIPES = RECIPES_MEAT + RECIPES_VEGETABLE + RECIPES_FISH;
     private static final int INGREDIENTS_PER_RECIPE = 4;
 
     protected Canteen[] createCanteens() {
@@ -50,33 +53,77 @@ public abstract class AbstractTest {
     private Set<Recipe> createRecipes() {
         Set<Recipe> result = new HashSet<Recipe>();
 
-        for (int i = 1; i <= RECIPES; i++) {
-            result.add(createRecipe(Mockito.anyString(), i));
+        Set<Integer> ranks = createRanks();
+
+        for (int i = 1; i <= RECIPES_MEAT; i++) {
+            result.add(createMeatRecipe(Mockito.anyString(), getRandomRank(ranks)));
         }
 
+        for (int i = 1; i <= RECIPES_VEGETABLE; i++) {
+            result.add(createVegetableRecipe(Mockito.anyString(), getRandomRank(ranks)));
+        }
+
+        for (int i = 1; i <= RECIPES_FISH; i++) {
+            result.add(createFishRecipe(Mockito.anyString(), getRandomRank(ranks)));
+        }
+
+        return result;
+    }
+
+    private Set<Integer> createRanks() {
+        Set<Integer> result = new HashSet<Integer>();
+
+        for (int i = 1; i <= TOTAL_RECIPES; i++) {
+            result.add(i);
+        }
+
+        return result;
+    }
+
+    private int getRandomRank(Set<Integer> ranks) {
+        List<Integer> keys = new ArrayList<Integer>(ranks);
+        Integer result = keys.get(new Random().nextInt(keys.size()));
+        ranks.remove(result);
+        return result;
+    }
+
+    private Recipe createFishRecipe(String name, int rank) {
+        Recipe result = createRecipe(name, rank);
+        result.setIngredientList(createIngredientListItems(IngredientType.FISH, IngredientType.VEGETABLE));
+        return result;
+    }
+
+    private Recipe createVegetableRecipe(String name, int rank) {
+        Recipe result = createRecipe(name, rank);
+        result.setIngredientList(createIngredientListItems(IngredientType.VEGETABLE, IngredientType.VEGETABLE));
+        return result;
+    }
+
+    private Recipe createMeatRecipe(String name, int rank) {
+        Recipe result = createRecipe(name, rank);
+        result.setIngredientList(createIngredientListItems(IngredientType.MEAT, IngredientType.VEGETABLE));
         return result;
     }
 
     private Recipe createRecipe(String name, int rank) {
-        Recipe result = new Recipe(name, rank);
-        result.setIngredientList(createIngredientListItems());
-        return result;
+        return new Recipe(name, rank);
     }
 
-    private Set<IngredientListItem> createIngredientListItems() {
+    private Set<IngredientListItem> createIngredientListItems(IngredientType mainIngredientType,
+            IngredientType subIngredientType) {
         Set<IngredientListItem> result = new HashSet<IngredientListItem>();
 
-        result.add(createIngredientListItem(Mockito.anyString(), true));
+        result.add(createIngredientListItem(Mockito.anyString(), mainIngredientType));
 
         for (int i = 1; i <= INGREDIENTS_PER_RECIPE; i++) {
-            result.add(createIngredientListItem(Mockito.anyString(), false));
+            result.add(createIngredientListItem(Mockito.anyString(), subIngredientType));
         }
 
         return result;
     }
 
-    private IngredientListItem createIngredientListItem(String ingredientName, boolean randomIT) {
-        return new IngredientListItem(createIngredient(ingredientName, randomIT), createIngredientQuantity());
+    private IngredientListItem createIngredientListItem(String ingredientName, IngredientType ingredientType) {
+        return new IngredientListItem(createIngredient(ingredientName, ingredientType), createIngredientQuantity());
     }
 
     private Amount createIngredientQuantity() {
@@ -89,12 +136,7 @@ public abstract class AbstractTest {
         return keys.get(new Random().nextInt(keys.size()));
     }
 
-    private Ingredient createIngredient(String ingredientName, boolean randomIT) {
-        return new Ingredient(ingredientName, (randomIT ? getRandomIngredientType() : IngredientType.VEGETABLE));
-    }
-
-    private IngredientType getRandomIngredientType() {
-        List<IngredientType> keys = new ArrayList<IngredientType>(Arrays.asList(IngredientType.values()));
-        return keys.get(new Random().nextInt(keys.size()));
+    private Ingredient createIngredient(String ingredientName, IngredientType ingredientType) {
+        return new Ingredient(ingredientName, ingredientType);
     }
 }

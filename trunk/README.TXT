@@ -1,11 +1,24 @@
 PROJECT TITLE: SmartCanteen
-PURPOSE OF PROJECT:
+PURPOSE OF PROJECT: Ermittlung optimaler Speisepläne für die Kantinen der VAWi GmbH und Erstellung einer kostenoptimalen Einkaufsliste
 VERSION or DATE: 0.1
-HOW TO START THIS PROJECT:
+HOW TO START THIS PROJECT: java -jar SmartCanteen.jar [--help] [--inputFiles=Filename;Filename;Filename]
 AUTHORS: Marcel Baxmann, Francesco Luciano und Tim Sahling
 USER INSTRUCTIONS:
 
-Dies ist ein Commit-Test!
+----------------------------
+
+        // Variante 1:
+        // Alle Menüs nach Hitliste zufällig auf Tage/Wochen verteilen (Regeln beachten)
+        // danach gucken wo man es am günstigsten einkaufen kann
+
+        // Zusatzfeatures
+
+        // preisgünstige Varianten ermitteln für alle Tage und alle Gerichtskonstellationen
+
+        // Variable = wie hoch ist der Faktor der Essensanzahl die je Gericht am Kantinenstandort festgelegt werden
+        // sollen
+
+        // preisliste durchsuchen und auswahl günstiger zutaten durch el chefkoch
 
 ----------------------------
 
