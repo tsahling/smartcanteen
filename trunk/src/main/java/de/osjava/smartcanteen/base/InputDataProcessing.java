@@ -42,6 +42,8 @@ import de.osjava.smartcanteen.helper.PropertyHelper;
  */
 public class InputDataProcessing {
 
+    /* Hier werden feste Werte aus einer externen Properties Datei ausgelesen und auf String Variablen gespeichert */
+
     private static final String INPUT_DATA_FISH = PropertyHelper.getProperty("inputData.ingredientType.fish");
     private static final String INPUT_DATA_MEAT = PropertyHelper.getProperty("inputData.ingredientType.meat");
     private static final String INPUT_DATA_VEGETERIAN = PropertyHelper
@@ -57,32 +59,47 @@ public class InputDataProcessing {
             .getProperty("inputData.typeOfTrader.farmer");
 
     /**
+     * Methode um die Liste der beliebtesten Gerichte aus einer übergebenen Datei einzulesen.
      * 
-     * @param inputFileURL
+     * @param inputFileURL Url der einzulesenden Datei
      * 
      * @throws IOException
      * @author Francesco Luciano
-     * @return
+     * @return hitlist Java List mit Gerichten
      */
     public HitListBase readHitlist(URL inputFileURL) throws IOException {
 
         Vector<String[]> lines = new Vector<String[]>();
+
+        /* Variable vom Typ HitListBase um die Gerichte abzuspeichern */
         HitListBase hitlist = new HitListBase();
 
+        /* Variable die den Rang des Gerichtes speichert */
         Integer mealPlacement = null;
+        /* Variable des den Namen des Gerichtes speichert */
         String mealName = null;
+
+        /* Instanz vom Typ CSVTokenizer um die Datei einzulesen und zu verarbeiten */
 
         try {
             CSVTokenizer csv = new CSVTokenizer(inputFileURL, ',');
 
+            /* Solange es Zeilen in der Datei gibt, werden diese in den Vector lines gespeichert */
             while (csv.hasMoreLines()) {
                 lines.add(csv.nextLine());
             }
+
+            /* Iteration durch den Vector */
+
             for (int i = 0; i <= lines.size() - 1; i++) {
 
+                /* Der Rang des Gericht wird gesetzt */
                 mealPlacement = Integer.valueOf(lines.get(i)[0]);
+                /* Name des Gericht wird gesetzt */
                 mealName = lines.get(i)[1];
+                /* Neues HitlistItem wird erzeugt mit den vorher eingelesenen werten */
                 HitListItem oneHitListItem = new HitListItem(mealName, mealPlacement);
+                /* HitListItem wird der HitListBase hinzugefügt */
                 hitlist.addHitListItem(oneHitListItem);
             }
         } catch (FileNotFoundException e) {
@@ -94,10 +111,10 @@ public class InputDataProcessing {
     }
 
     /**
-     * Methode um eine Preisliste einzulesen
+     * Methode um eine Preisliste einzulesen.
      * 
      * @author Francesco Luciano
-     * @param inputFileURL
+     * @param inputFileURL URL der einzulesenden Datei
      * @return
      * @throws IOException
      */
@@ -230,17 +247,32 @@ public class InputDataProcessing {
         return providerBase;
     }
 
+    /**
+     * Methode um eine Rezepte Datei einzulesen
+     * 
+     * @author Francesco Luciano
+     * @param inputFileURL URL der einzulesenden Datei
+     * @return RecipeBase
+     */
+
     public RecipeBase readRecipeList(URL inputFileURL) {
 
         Vector<String[]> lines = new Vector<String[]>();
 
+        /* Name des Rezeptes -analog auch Name des Gericht- */
         String nameOfRecipe = null;
+        /* Menge des Lebensmittel */
         String quantityOfIngredient = null;
+        /* Masseinheit der Menge */
         String unitOfQuantityFromIngredient = null;
+        /* Namen des Lebensmittel */
         String nameOfIngredient = null;
 
+        /* Instanz von der Datenträgerklasse RecipeBase um die Rezepte abzulegen */
         RecipeBase recipeBase = new RecipeBase();
 
+        /* Eine Map um die eingelesenen Zeilen nach Namen zu gruppieren */
+        /* Die Hashmap wird mit einem String und einem Objekt vom Typ RecipeListItem gefüllt */
         Map<String, List<RecipeListItem>> grouping = new HashMap<String, List<RecipeListItem>>();
 
         try {
@@ -250,16 +282,32 @@ public class InputDataProcessing {
                 lines.add(csv.nextLine());
             }
 
+            /* Iteration durch den Vector der die eingelesenen Zeilen enthält */
             for (int i = 0; i <= lines.size() - 1; i++) {
+                /* Name des Rezept wird aus dem Array ausgelesen und auf die Variable geschrieben */
                 nameOfRecipe = lines.get(i)[0];
+                /* Menge des Lebensmittel wird aus dem Array ausgelesen und auf die Variable geschrieben */
                 quantityOfIngredient = lines.get(i)[1].replace(",", ".");
+                /* Masseinheit des Lebensmittel wird aus dem Array ausgelesen und auf die Variable geschrieben */
                 unitOfQuantityFromIngredient = lines.get(i)[2];
+                /* Name des Lebensmittel wird aus dem Array ausgelesen und auf die Variable geschrieben */
                 nameOfIngredient = lines.get(i)[3];
 
+                /* Wenn es in der Hashmap bereits ein Key mit dem Wert nameOfRecipe gibt,
+                 * dann hohle dir genau das Objekt und füge der Liste ein neues RecipeListItem hinzu. */
                 if (grouping.containsKey(nameOfRecipe)) {
                     grouping.get(nameOfRecipe).add(
                             new RecipeListItem(quantityOfIngredient, unitOfQuantityFromIngredient, nameOfIngredient));
                 }
+
+                /* Wenn die HashMap noch keinen Key mit dem Wert von nameOfRecipe besitzt,
+                 * also ein neues Rezept in der Datei anfängt. Dann erzeuge eine neue Java Liste die RecipeListItem
+                 * aufnimmt.
+                 * Erzeuge ein RecipeListItem mit den ausgelesenen Werten zu Mengenangaben, Masseinheiten und Namen des
+                 * Lebensmittel
+                 * und füge es der ebend erzeugten Liste zu.
+                 * Füge zur Hashmap grouping ein Element mit dem Key nameOfRecipe und der ebend erzeugten Liste mit
+                 * Inhalt RecipeListItem hinzu. */
                 else {
                     List<RecipeListItem> list = new ArrayList<RecipeListItem>();
                     list.add(new RecipeListItem(quantityOfIngredient, unitOfQuantityFromIngredient, nameOfIngredient));
@@ -267,23 +315,44 @@ public class InputDataProcessing {
                 }
             }
 
+            /* links vom Doppelpunkt vom erweiterten for deklaration einer Variable vom Typ
+             * Map.Entry-Objekt welche die Werte String und eine Liste mit RecipeListItem aufnehmen kann.
+             * rechts vom doppelpunkt vom erweiterten for Aufruf der Map eigenen Methode entryset()
+             * die ein Set mit Entry-Objekten zurückgibt, die Schlüssel sowie Wert gleichzeitig enthalten. */
             for (Entry<String, List<RecipeListItem>> entry : grouping.entrySet()) {
 
+                /* Erzeugen eines neuen Rezept vom Typ Recipe */
+                /* Setzen des Namen des Rezeptes durch entry.getKey() */
+                /* Standartkonstruktor erwartet als zweiten Parameter den Rang des Gerichtes, zu diesem Zeitpunkt setzen
+                 * wir den Rang auf 0. */
+                /* TODO(Tim Sahling, Francesco Luciano) Sollte hier evt. der Standartkonstruktor von Recipe verändert
+                 * werden oder ein
+                 * weiterer erzeugt werden der kein rank erwartet */
                 Recipe recipe = new Recipe(entry.getKey(), 0);
+                /* Eine HashSet erzeugen und dem Objekt vom Typ Recipe übergeben */
+                /* TODO(Francesco Luciano) Diese Zeile Code von Tim erklären lassen */
                 recipe.setIngredientList(new HashSet<IngredientListItem>());
 
+                /* Durch die Liste iterieren welche die Lebensmittel speichert */
                 for (RecipeListItem recipeListItem : entry.getValue()) {
 
+                    /* Variable zum um ide Masseinheit der Mengenangabe zu speichern */
                     UnitOfMeasurement uom = null;
+                    /* Variable um die Menge des Lebensmittel als BigDecimal zu speichern */
                     BigDecimal value = new BigDecimal(recipeListItem.getQuantityOfIntredient());
 
+                    /* Aufruf der Helfermethode unitOfMeasurement, der innere Methodenaufruf ist der eingelesene String
+                     * der Masseinheit */
                     uom = unitOfMeasurement(recipeListItem.getUnit());
 
+                    /* Erzeugung eines Objekt vom Typ IngredientListItem und hinzufügen zu der Liste */
+                    /* TODO(Tim Sahling, Francesco Luciano) Wieso ist der Ingriedent Type hier null? */
                     recipe.getIngredientList().add(
                             new IngredientListItem(new Ingredient(recipeListItem.getNameOfIngredient(), null),
                                     new Amount(value, uom)));
                 }
 
+                /* Das Rezept der RecipeBase hinzufügen */
                 recipeBase.addRecipe(recipe);
 
             }
@@ -295,53 +364,108 @@ public class InputDataProcessing {
         return recipeBase;
     }
 
+    /**
+     * Methode die ein Rezept mit dem Rang aus der Hitliste bestückt.
+     * 
+     * @param recipeBase sind die eingelesenen Rezepte
+     * @param hitListBase sind die eigelesenen Gerichte der Hitliste
+     */
     public void addRankToRecipes(RecipeBase recipeBase, HitListBase hitListBase) {
 
+        /* Iteartion durch das Set welches die eingelesenen Rezpte enthält */
         for (Recipe r : recipeBase.getRecipes()) {
 
+            /* Gericht in der HitListBase finden das den selben Namen wie das aktuelle Gericht in der RecipeBase hat
+             * Das gefunde Geicht aus der HitListBase auf eine Variable vom Typ HitListItem zur
+             * weiteren verarbeitung zwischen speichern. */
             HitListItem hitListItem = hitListBase.findHitListItemByName(r.getName());
+            /* Innere KLassen-Methode von HitListItem ruft den Rang von dem zwischengespeicherten Gericht
+             * aus der HitListBase ab -> Result ist ein int */
+            /* Äußere Methode verarbeitet das Ergebnis (int) direkt um mit der
+             * Klassen-Methode setRank von Recipe den Rang des Rezept zu setzen */
             r.setRank(hitListItem.getRank());
         }
 
     }
 
+    /**
+     * In den Rezepten und Preislisten sind Masseinheiten als String angeben, diese Strings sollen
+     * in Variablen vom Typ UnitOfMeasurement umgewandelt werden. Um keine keinen redundanten Quellcode in den
+     * Methoden {@link readPriceList} und {@link readRecipeList} zu erzeugen, wird das Vergleichen und erzeugen der
+     * Variable vom Typ UnitOfMeasurement mit dem passenden ENUM diese externe Methode ausgelagert.
+     * 
+     * @param inputUnit String Masseinheit der aus der Datei eingelesen wurde
+     * @return uom Variable vom Typ UnitOfMeasurement mit richtigem ENUM Typ
+     */
     private UnitOfMeasurement unitOfMeasurement(String inputUnit) {
 
+        /* Variablen deklaration */
         UnitOfMeasurement uom = null;
+
+        /* Vergleich ob der die übergebene Variable gleich dem Inhalt der Konstante INPUT_DATA_UNIT_TYPE_GRAMM ist */
+        /* Wenn der Vergleich TRUE ist wird der Variable uom der ENUM Typ GRM zugeordnet */
 
         if (inputUnit.equals(INPUT_DATA_UNIT_TYPE_GRAMM)) {
 
             uom = UnitOfMeasurement.GRM;
 
         }
+        /* Vergleich ob der die übergebene Variable gleich dem Inhalt der Konstante INPUT_DATA_UNIT_TYPE_LITER ist */
+        /* Wenn der Vergleich TRUE ist wird der Variable uom der ENUM Typ LTR zugeordnet */
         else if (inputUnit.equals(INPUT_DATA_UNIT_TYPE_LITER)) {
             uom = UnitOfMeasurement.LTR;
         }
+        /* Vergleich ob der die übergebene Variable gleich dem Inhalt der Konstante INPUT_DATA_UNIT_TYPE_PICES ist */
+        /* Wenn der Vergleich TRUE ist wird der Variable uom der ENUM Typ STK zugeordnet */
         else if (inputUnit.equals(INPUT_DATA_UNIT_TYPE_PICES)) {
             uom = UnitOfMeasurement.STK;
         }
 
+        /* Rückgabe der Variablen */
         return uom;
     }
 
+    /**
+     * In den Rezepten und Preislisten sind Lebensmittel als String angeben, diese Strings sollen
+     * in Variablen vom Typ IngredientType umgewandelt werden. Um keinen redundanten Quellcode in den
+     * Methoden {@link readPriceList} und {@link readRecipeList} zu erzeugen, wird das Vergleichen und erzeugen der
+     * Variable vom Typ IngredientType mit dem passenden ENUM diese externe Methode ausgelagert.
+     * 
+     * @param inputUnit String Masseinheit der aus der Datei eingelesen wurde
+     * @return uom Variable vom Typ UnitOfMeasurement mit richtigem ENUM Typ
+     */
     private IngredientType typeOfIngredient(String typeOfIngredient) {
 
+        /* Variablen deklaration */
         IngredientType ingt = null;
 
+        /* Vergleich ob der die übergebene Variable gleich dem Inhalt der Konstante INPUT_DATA_MEAT ist */
+        /* Wenn der Vergleich TRUE ist wird der Variable uom der ENUM Typ MEAT zugeordnet */
         if (typeOfIngredient.equals(INPUT_DATA_MEAT)) {
             ingt = IngredientType.MEAT;
         }
 
+        /* Vergleich ob der die übergebene Variable gleich dem Inhalt der Konstante INPUT_DATA_FISH ist */
+        /* Wenn der Vergleich TRUE ist wird der Variable uom der ENUM Typ FISH zugeordnet */
         else if (typeOfIngredient.equals(INPUT_DATA_FISH)) {
             ingt = IngredientType.FISH;
         }
-        /* Wenn das Feld typeIngredient leer ist, dann ist es Vegetarisch */
+
+        /* Vergleich ob der die übergebene Variable gleich dem Inhalt der Konstante INPUT_DATA_VEGETERIAN ist */
+        /* Wenn der Vergleich TRUE ist wird der Variable uom der ENUM Typ VEGETABLE zugeordnet */
         else if (typeOfIngredient.equals(INPUT_DATA_VEGETERIAN)) {
             ingt = IngredientType.VEGETABLE;
         }
 
         return ingt;
     }
+
+    /**
+     * Eingebettete Klasse RecipeListItem ist eine Datenträgerklasse die eine Zeile aus der Datei der Rezepte
+     * repräsentiert. Sie wird nur als zwischenspeicher gebraucht um ein Object vom Typ Recipe zu füllen.
+     * 
+     * @author Francesco Luciano
+     */
 
     private static final class RecipeListItem {
         String quantityOfIngredient;
