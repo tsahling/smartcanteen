@@ -190,10 +190,11 @@ public class MenuPlanBuilder {
      */
     private Date getNextMonday() {
         Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
 
+        // Ermitteln aktueller Wochentag
         int weekday = cal.get(Calendar.DAY_OF_WEEK);
 
+        // Wenn aktueller Wochentag nicht Montag ist, muss der nächste Montag ermittelt werden
         if (weekday != Calendar.MONDAY) {
             int days = (Calendar.SATURDAY - weekday + 2) % 7;
             cal.add(Calendar.DAY_OF_YEAR, days);
@@ -473,7 +474,7 @@ public class MenuPlanBuilder {
         }
 
         // Wenn nicht mindestens ein Fischgericht jede Woche vorhanden ist, muss dieses nachträglich eingefügt werden
-        if (countRecipesForIngredientType(planingPeriod, IngredientType.FISH) != PROP_PLANINGPERIOD_WEEKS) {
+        if (countRecipesForIngredientType(planingPeriod, IngredientType.FISH) < PROP_PLANINGPERIOD_WEEKS) {
             // TODO(Tim Sahling) Wochen auswählen in denen kein Fischgericht vorhanden ist und hinzufügen
 
         }
@@ -502,6 +503,12 @@ public class MenuPlanBuilder {
         return null;
     }
 
+    /**
+     * 
+     * @param planingPeriod
+     * @param weekWorkdays
+     * @return
+     */
     private WeekWorkday getSequentialWeekAndWorkday(Map<WeekWorkday, Set<Recipe>> planingPeriod,
             Set<WeekWorkday> weekWorkdays) {
 
@@ -534,6 +541,12 @@ public class MenuPlanBuilder {
         return null;
     }
 
+    /**
+     * 
+     * @param planingPeriod
+     * @param weekWorkdays
+     * @return
+     */
     private WeekWorkday getRandomWeekAndWorkday(Map<WeekWorkday, Set<Recipe>> planingPeriod,
             Set<WeekWorkday> weekWorkdays) {
         List<WeekWorkday> keys = new ArrayList<WeekWorkday>(planingPeriod.keySet());
