@@ -30,10 +30,6 @@ import de.osjava.smartcanteen.helper.PropertyHelper;
 
 /**
  * 
- * 
- * TODO(Francesco Luciano) Möglichst viel Codeduplizierung vermeiden. Das Einlesen ist ja immer gleich, vielleicht kann
- * man da was in weiteren private Methoden zusammenfassen.
- * 
  * TODO(Francesco Luciano) Dokumentieren
  * TODO(Francesco Luciano) Klassenbeschreibung JavaDoc
  * TODO(Francesco Luciano) Methodenbeschreibung JavaDoc
