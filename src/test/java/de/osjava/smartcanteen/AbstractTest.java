@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.mockito.Mockito;
 
+import de.osjava.smartcanteen.base.HitListBase;
 import de.osjava.smartcanteen.base.ProviderBase;
 import de.osjava.smartcanteen.base.RecipeBase;
 import de.osjava.smartcanteen.data.Canteen;
@@ -30,6 +31,10 @@ public abstract class AbstractTest {
     private static final int RECIPES_FISH = 15;
     private static final int TOTAL_RECIPES = RECIPES_MEAT + RECIPES_VEGETABLE + RECIPES_FISH;
     private static final int INGREDIENTS_PER_RECIPE = 4;
+
+    protected HitListBase createHitListBase() {
+        return null;
+    }
 
     protected Canteen[] createCanteens() {
         return new Canteen[]{ createCanteen(CanteenLocation.ESSEN, 500), createCanteen(CanteenLocation.MUELHEIM, 300) };
