@@ -24,8 +24,7 @@ public class InputDataProcessingTest extends AbstractTest {
     @Test
     public void testReadHitlist() {
 
-        URL inputFileUrl = ClassLoader
-                .getSystemResource("input/hitliste.csv");
+        URL inputFileUrl = getInputFileURL("hitliste.csv");
         HitListBase readHitlist = null;
         HitListBase tmpHitListBase = null;
 
