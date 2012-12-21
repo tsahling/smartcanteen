@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import de.osjava.smartcanteen.AbstractTest;
 
-public class InputDataProcessingTest extends AbstractTest {
+public class BaseHelperTest extends AbstractTest {
 
     private BaseHelper indp;
 
