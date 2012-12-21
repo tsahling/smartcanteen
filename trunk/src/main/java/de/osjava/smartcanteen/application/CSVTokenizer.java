@@ -6,16 +6,12 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Vector;
 
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
-
 /**
  * Die zur Verfügung gestellten CSV-Dateien werden mit Hilfe der Klasse {@link CSVTokenizer} eingelesen. Die Klasse
- * stellt Methoden zur Verfügung,
- * mit denen die Datei zeilenweise eingelesen werden kann. Die Methoden zum
- * Einlesen werden eine rudimentäre Fehlerbehandlung beinhalten, welche das
- * Einlesen von inkonsistenten Zeilen abfängt. Die Logik der Zerlegung der
- * eingelesenen Zeilen in die einzelnen Datenfelder wird die Klassenmethode
- * splitLine() zur Verfügung stellen.
+ * stellt Methoden zur Verfügung, mit denen die Datei zeilenweise eingelesen werden kann. Die Methoden zum Einlesen
+ * werden eine rudimentäre Fehlerbehandlung beinhalten, welche das Einlesen von inkonsistenten Zeilen abfängt. Die Logik
+ * der Zerlegung der eingelesenen Zeilen in die einzelnen Datenfelder wird die Klassenmethode splitLine() zur Verfügung
+ * stellen.
  * 
  * @author Francesco Luciano
  * 
@@ -23,6 +19,29 @@ import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
  */
 
 public class CSVTokenizer {
+
+    /**
+     * Ein Buffered Reader ist ein Java Reader welcher ein Zeichen Datenstrom verarbeiten kann. Dieser Reader
+     * implementiert die Methode readline() welche die Möglichkeit des Zeilenweise einlesen bietet.
+     */
+    private BufferedReader reader;
+
+    /** Die Variable delimiter repräsentiert das Trennzeichen welches in der CSV Datei benutzt wird */
+    private char delimiter;
+
+    /**
+     * Auf der Variable nextline wird der Inhalt der eingelesenen Zeile des Reader zur weiterverarbeitung
+     * zwischengespeichert
+     */
+    private String nextLine = null;
+
+    /**
+     * Die Variable countfields ist für das Error Handling zuständig, es wird überprüft ob die Feldlänge immer gleich
+     * ist. Sie wird auf -1 initialisert weil keine Zeile mit -1 Feldern existiert. Die erste Zeile der CSV Datei
+     * (Header) wird als Referenz für alle weiteren Zeilen genommen. Wenn der Header von der Feldlänge bereits
+     * inkonsistenz ist, dann funktioniert die weitere verabeitung nicht.
+     */
+    private int countFields = -1;
 
     /**
      * Konstruktor der Pfad der Datei und ein Trennzeichen erwartet
@@ -33,35 +52,15 @@ public class CSVTokenizer {
      */
 
     public CSVTokenizer(URL filename, char delimiter) throws IOException {
-        /* Sollte die Datei nicht gefunden werden wird eine Exception ausgegeben */
+        // Sollte die Datei nicht gefunden werden wird eine Exception ausgegeben
 
-        /* Variable reader wird eine neue Instanz von BufferedReader
-         * mit einem Filereader der die in den Parametern übergebende
-         * als Inhalt besitzt. */
+        // Variable reader wird eine neue Instanz von BufferedReader mit einem Filereader der die in den Parametern
+        // übergebende als Inhalt besitzt.
         this.reader = new BufferedReader(new InputStreamReader(filename.openStream()));
 
-        /* der Klassen Variable delimiter wird der Wert des Parameter delimieter übergeben */
+        // der Klassen Variable delimiter wird der Wert des Parameter delimieter übergeben
         this.delimiter = delimiter;
     }
-
-    /* Ein Buffered Reader ist ein Java Reader welcher ein Zeichen Datenstrom verarbeiten kann.
-     * Dieser Reader implementiert die Methode readline()
-     * welche die Möglichkeit des Zeilenweise einlesen bietet. */
-    private BufferedReader reader;
-
-    /* Die Variable delimiter repräsentiert das Trennzeichen welches in der CSV Datei benutzt wird */
-    private char delimiter;
-
-    /* Auf der Variable nextline wird der Inhalt der eingelesenen Zeile des Reader zur weiterverarbeitung
-     * zwischengespeichert */
-    private String nextLine = null;
-
-    /* Die Variable countfields ist für das Error Handling zuständig, es wird überprüft ob die Feldlänge immer gleich
-     * ist.
-     * Sie wird auf -1 initialisert weil keine Zeile mit -1 Feldern existiert.
-     * Die erste Zeile der CSV Datei (Header) wird als Referenz für alle weiteren Zeilen genommen.
-     * Wenn der Header von der Feldlänge bereits inkonsistenz ist, dann funktioniert die weitere verabeitung nicht. */
-    private int countFields = -1;
 
     /**
      * Liest die nächste Zeile in der Datei und speichert sie in nextLine <br>
@@ -69,48 +68,41 @@ public class CSVTokenizer {
      * Zeilen mit einer abweichenden Feldgrößen gemessen zum Header werden übersprungen
      * 
      * @return Liefert TRUE wenn noch eine Zeile vorhanden und FALSE wenn nicht
+     * @throws IOException
      */
-    public boolean hasMoreLines() {
-        /* Array Variable vom Typ String der den Inhalt der Felder einer Zeile aufnimmt.
-         * Der Inhalt der felder wird in dieser Methode eigentlich noch nicht gebraucht,
-         * um jedoch Syntax Fehler in der CSV abzufangen ist es notwendig die Feldlänge der Zeile zu
-         * ermitteln. Dafür muss die Zeile in einzelteile zerlegt werden. */
+    public boolean hasMoreLines() throws IOException {
+        // Array Variable vom Typ String der den Inhalt der Felder einer Zeile aufnimmt. Der Inhalt der felder wird in
+        // dieser Methode eigentlich noch nicht gebraucht, um jedoch Syntax Fehler in der CSV abzufangen ist es
+        // notwendig die Feldlänge der Zeile zu ermitteln. Dafür muss die Zeile in einzelteile zerlegt werden.
         String[] fields = null;
 
-        /* Wenn die Variable nextline den Wert null hat dann wird in die Logik eingestiegen */
+        // Wenn die Variable nextline den Wert null hat dann wird in die Logik eingestiegen
         if (nextLine == null)
 
-            /* Der try Block wird benötigt das es zu Fehlern beim Lesen einer Zeile kommen kann. */
-            try {
+            // Der Inhalt der Zeile wird auf die Variable nextline gespeichert, solange der Reader nicht den Wert null
+            // zurückgibt. Der reader gibt den Wert null zurück wenn das Ende der Datei erreicht wurde.
+            while ((nextLine = reader.readLine()) != null) {
+                // Die Leerzeichen aus der Variable nextline werden durch .trim() entfernt
+                nextLine = nextLine.trim();
 
-                /* Der Inhalt der Zeile wird auf die Variable nextline gespeichert, solange der Reader nicht den Wert
-                 * null zurückgibt
-                 * Der reader gibt den Wert null zurück wenn das Ende der Datei erreicht wurde. */
-                while ((nextLine = reader.readLine()) != null) {
-                    /* Die Leerzeichen aus der Variable nextline werden durch .trim() entfernt */
-                    nextLine = nextLine.trim();
+                // Das Array fields wird mithilfe der Methode splitline mit dem Inhalt der Zeile gefüllt
+                fields = splitLine(nextLine, delimiter);
 
-                    /* Das Array fields wird mithilfe der Methode splitline mit dem Inhalt der Zeile gefüllt */
-                    fields = splitLine(nextLine, delimiter);
+                // Wenn die Variable countfields noch auf dem initialen Wert -1 steht, dann wird der Variable die Länge
+                // der Variable fields zugewiesen. Dieser Schritte wird nur einmal pro CSV Datei gemacht, die zeilen
+                // werden mit der Feldgröße der ersten Zeile verglichen.
+                if (countFields == -1)
+                    countFields = fields.length;
 
-                    /* Wenn die Variable countfields noch auf dem initialen Wert -1 steht,
-                     * dann wird der Variable die Länge der Variable fields zugewiesen.
-                     * Dieser Schritte wird nur einmal pro CSV Datei gemacht, die zeilen werden mit der Feldgröße
-                     * der ersten Zeile verglichen. */
-                    if (countFields == -1)
-                        countFields = fields.length;
-
-                    /* Wenn die aktuelle Zeile nicht die selbe Feldgröße wie die erste Zeile der CSV aufweist,
-                     * dann wird diese zeile übersprungen. Das überspringen wird durch die durch die Anweisung continue
-                     * realisiert, das bewirkt ein zurück springen in die while Schleife. */
-                    if (countFields != fields.length) {
-                        continue;
-                    }
-
-                    if (!nextLine.equals("")) // Schleife beenden
-                        break;
+                // Wenn die aktuelle Zeile nicht die selbe Feldgröße wie die erste Zeile der CSV aufweist, dann wird
+                // diese zeile übersprungen. Das überspringen wird durch die durch die Anweisung continue realisiert,
+                // das bewirkt ein zurück springen in die while Schleife.
+                if (countFields != fields.length) {
+                    continue;
                 }
-            } catch (IOException e) {
+
+                if (!nextLine.equals("")) // Schleife beenden
+                    break;
             }
 
         if (nextLine != null)
@@ -123,11 +115,11 @@ public class CSVTokenizer {
      * * Liefert ein String-Array mit den Feldern der nächsten Zeile zurück
      * 
      * @return Array mit Inhalt der Zeile
+     * @throws IOException
      */
-    public String[] nextLine() throws ParseException {
+    public String[] nextLine() throws IOException {
 
         String[] fields = null;
-        String line;
 
         // Nächste Zeile in nextLine einlesen lassen
         if (!hasMoreLines())

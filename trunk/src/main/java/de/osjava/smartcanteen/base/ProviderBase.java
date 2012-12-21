@@ -5,6 +5,8 @@ import java.util.Set;
 
 import de.osjava.smartcanteen.data.AbstractProvider;
 import de.osjava.smartcanteen.data.Ingredient;
+import de.osjava.smartcanteen.data.item.PriceListItem;
+import de.osjava.smartcanteen.datatype.IngredientType;
 
 /**
  * Die Klasse {@link ProviderBase} ist eine Datenträgerklasse die in einem Set
@@ -57,6 +59,23 @@ public class ProviderBase {
      *            Der zu löschende Anbieter
      */
     public void removeProvider(AbstractProvider provider) {
+    }
+
+    /**
+     * Methode um den {@link IngredientType} auf Basis des übergebenen Namen zu finden.
+     * 
+     * @param name
+     * @return
+     */
+    public IngredientType findIngredientTypeByIngredientName(String name) {
+        for (AbstractProvider provider : providers) {
+            for (PriceListItem priceListItem : provider.getPriceList()) {
+                if (name.equals(priceListItem.getIngredient().getName())) {
+                    return priceListItem.getIngredient().getIngredientType();
+                }
+            }
+        }
+        return null;
     }
 
     /**

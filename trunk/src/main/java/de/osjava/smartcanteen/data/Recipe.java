@@ -22,7 +22,16 @@ public class Recipe {
     private int rank;
 
     /**
-     * Standardkonstruktor
+     * Konstruktor mit Name des Rezepts.
+     * 
+     * @param name Der Name des Rezepts
+     */
+    public Recipe(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Konstruktor mit Name und Rang des Gerichts
      * 
      * @param name Name des Gerichts
      * @param rank Rang des Gerichts

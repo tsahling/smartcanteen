@@ -6,8 +6,8 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import de.osjava.smartcanteen.base.BaseHelper;
 import de.osjava.smartcanteen.base.HitListBase;
-import de.osjava.smartcanteen.base.InputDataProcessing;
 import de.osjava.smartcanteen.base.ProviderBase;
 import de.osjava.smartcanteen.base.RecipeBase;
 import de.osjava.smartcanteen.builder.MenuPlanBuilder;
@@ -80,16 +80,12 @@ public class Application {
         String inputFiles = EMPTY;
 
         if (args.length == 0) {
-            inputFiles = JOptionPane.showInputDialog(null, PropertyHelper
-                    .getProperty("message.missingInputFiles.message"),
-                    PropertyHelper
-                            .getProperty("message.missingInputFiles.title"),
-                    JOptionPane.QUESTION_MESSAGE);
+            inputFiles = JOptionPane.showInputDialog(null,
+                    PropertyHelper.getProperty("message.missingInputFiles.message"),
+                    PropertyHelper.getProperty("message.missingInputFiles.title"), JOptionPane.QUESTION_MESSAGE);
         }
-        else if (args.length == 1
-                && args[0].equals(PropertyHelper.getProperty("param.help"))) {
-            System.out.println(PropertyHelper
-                    .getProperty("application.usageInfo"));
+        else if (args.length == 1 && args[0].equals(PropertyHelper.getProperty("param.help"))) {
+            System.out.println(PropertyHelper.getProperty("application.usageInfo"));
             return false;
         }
         else {
@@ -99,8 +95,7 @@ public class Application {
                     String[] argSplit = arg.split(ARG_SPLIT);
 
                     if (argSplit.length > 1) {
-                        inputFiles = inputFiles.concat(argSplit[1].trim())
-                                .concat(INPUT_FILE_SPLIT);
+                        inputFiles = inputFiles.concat(argSplit[1].trim()).concat(INPUT_FILE_SPLIT);
                     }
                 }
             }
@@ -113,27 +108,23 @@ public class Application {
 
             if (inputFileSplit.length > 0) {
 
-                InputDataProcessing inputDataProcessing = new InputDataProcessing();
-
                 for (String inputFile : inputFileSplit) {
 
-                    URL inputFileUrl = ClassLoader
-                            .getSystemResource(PropertyHelper
-                                    .getProperty("application.inputFilePath")
-                                    + inputFile);
+                    URL inputFileUrl = ClassLoader.getSystemResource(PropertyHelper
+                            .getProperty("application.inputFilePath") + inputFile);
 
                     if (inputFileUrl != null) {
 
                         String file = inputFileUrl.getFile();
 
                         if (file.contains(INPUT_FILENAME_HITLIST)) {
-                            hitListBase = inputDataProcessing.readHitlist(inputFileUrl);
+                            hitListBase = BaseHelper.readHitlist(inputFileUrl);
                         }
                         else if (file.contains(INPUT_FILENAME_PRICELIST)) {
-                            providerBase = inputDataProcessing.readPriceList(inputFileUrl, providerBase);
+                            providerBase = BaseHelper.readPriceList(inputFileUrl, providerBase);
                         }
                         else if (file.contains(INPUT_FILENAME_RECIPELIST)) {
-                            recipeBase = inputDataProcessing.readRecipeList(inputFileUrl);
+                            recipeBase = BaseHelper.readRecipeList(inputFileUrl);
                         }
                     }
                     else {
@@ -142,16 +133,27 @@ public class Application {
                     }
                 }
 
-                if (!wrongInputFile) {
-                    inputDataProcessing.addRankToRecipes(recipeBase, hitListBase);
+                if (!wrongInputFile && (validateHitListBase(hitListBase) && validateRecipeBase(recipeBase) && validateProviderBase(providerBase))) {
+                    BaseHelper.addRankToRecipes(recipeBase, hitListBase);
+                    BaseHelper.addIngredientTypeToIngredientsOfRecipes(recipeBase, providerBase);
                     return true;
                 }
             }
         }
 
-        throw new IllegalArgumentException(
-                PropertyHelper
-                        .getProperty("message.missingInputFiles.exception"));
+        throw new IllegalArgumentException(PropertyHelper.getProperty("message.wrongOrMissingInputFiles.exception"));
+    }
+
+    private boolean validateHitListBase(HitListBase hitListBase) {
+        return hitListBase != null && hitListBase.getHitListItems() != null && !hitListBase.getHitListItems().isEmpty();
+    }
+
+    private boolean validateRecipeBase(RecipeBase recipeBase) {
+        return recipeBase != null && recipeBase.getRecipes() != null && !recipeBase.getRecipes().isEmpty();
+    }
+
+    private boolean validateProviderBase(ProviderBase providerBase) {
+        return providerBase != null && providerBase.getProvider() != null && !providerBase.getProvider().isEmpty();
     }
 
     /**
@@ -159,11 +161,12 @@ public class Application {
      */
     private void startApplication() {
 
-        System.out.println(hitListBase.getHitListItems().size());
-
+        // Start der Applikationslogik für die Erstellung der Speisepläne für die beiden Kantinen
         MenuPlanBuilder mpb = new MenuPlanBuilder(providerBase, recipeBase);
+        Canteen[] canteens = mpb.buildMenuPlan();
 
-        outputApplicationResult(null, null);
+        // Übergabe der Ergebnisse der Applikationslogik an die ausgebende Methode
+        outputApplicationResult(null, canteens);
     }
 
     /**
