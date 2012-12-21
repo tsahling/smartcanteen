@@ -12,12 +12,12 @@ import de.osjava.smartcanteen.AbstractTest;
 
 public class InputDataProcessingTest extends AbstractTest {
 
-    private InputDataProcessing indp;
+    private BaseHelper indp;
 
     @Before
     public void setUp() {
 
-        indp = new InputDataProcessing();
+        indp = new BaseHelper();
 
     }
 

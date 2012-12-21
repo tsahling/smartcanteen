@@ -14,10 +14,19 @@ public class Ingredient {
     private IngredientType ingredientType;
 
     /**
-     * Standardkonstruktor
+     * Konstruktor mit Name der Zutat.
      * 
-     * @param name Name des Lebensmittels
-     * @param name Typ (Fisch, Gemüse, Fleisch) des Lebensmittels
+     * @param name Der Name der Zutat
+     */
+    public Ingredient(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Konstruktor mit Name und Typ der Zutat.
+     * 
+     * @param name Name der Zutat
+     * @param name Typ (Fisch, Gemüse, Fleisch) der Zutat
      */
     public Ingredient(String name, IngredientType ingredientType) {
         this.name = name;

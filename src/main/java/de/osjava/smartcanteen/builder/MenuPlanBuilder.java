@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 
 import de.osjava.smartcanteen.base.ProviderBase;
 import de.osjava.smartcanteen.base.RecipeBase;
@@ -21,8 +22,10 @@ import de.osjava.smartcanteen.builder.result.Meal;
 import de.osjava.smartcanteen.builder.result.MenuPlan;
 import de.osjava.smartcanteen.data.Canteen;
 import de.osjava.smartcanteen.data.Recipe;
+import de.osjava.smartcanteen.data.item.IngredientListItem;
 import de.osjava.smartcanteen.datatype.CanteenLocation;
 import de.osjava.smartcanteen.datatype.IngredientType;
+import de.osjava.smartcanteen.helper.LogHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 
 /**
@@ -35,6 +38,8 @@ import de.osjava.smartcanteen.helper.PropertyHelper;
  * @author Tim Sahling
  */
 public class MenuPlanBuilder {
+
+    private static final Logger LOG = LogHelper.getLogger(MenuPlanBuilder.class.getName());
 
     private static final String PROP_PLANINGPERIOD_PLANINGMODE = PropertyHelper
             .getProperty("planingPeriod.planingMode");
@@ -61,6 +66,8 @@ public class MenuPlanBuilder {
     private ProviderBase providerBase; // TODO(Tim Sahling) Berechnung auf Basis günstigster Gerichte
     private RecipeBase recipeBase;
     private Canteen[] canteens;
+
+    private int canteenRecipeCounter = 0;
 
     /**
      * Der Standardkonstruktor der {@link MenuPlanBuilder} initialisiert die
@@ -100,7 +107,16 @@ public class MenuPlanBuilder {
 
             // Fügt die Rezepte in die Struktur der Planungsperiode ein
             for (Recipe recipe : recipesSortedByRank) {
-                addRecipeToPlaningPeriod(recipe, planingPeriod);
+
+                // Überprüfung ob der Algorithmus vorzeitig beendet werden kann, wenn benötigte Rezepte komplett sind
+                if (canteenRecipeCounter == PROP_PLANINGPERIOD_TOTALMEALS) {
+                    break;
+                }
+
+                // Inititale Überprüfung ob ein Rezept valide ist
+                if (validateRecipe(recipe)) {
+                    addRecipeToPlaningPeriod(recipe, planingPeriod);
+                }
             }
 
             // Überprüft ob alle Regeln eingehalten wurden und die Speisepläne valide sind
@@ -128,6 +144,25 @@ public class MenuPlanBuilder {
     }
 
     /**
+     * Überprüft initial ob ein Rezept valide ist. Ein Rezept ist nicht valide wenn nicht alle Zutaten auch einen
+     * {@link IngredientType} haben. Ein fehlender {@link IngredientType} weist darauf hin, dass diese Zutat bei
+     * gegebenen Preislisten bzw. Anbietern nicht beschaffbar ist, da die Typen erst nach Einlesen der Anbieter gesetzt
+     * werden. Dies muss erfolgen, da in der Rezepte Eingangsdatei keine Typen definiert sind, sondern nur in den Listen
+     * der Anbieter.
+     * 
+     * @param recipe
+     * @return
+     */
+    private boolean validateRecipe(Recipe recipe) {
+        for (IngredientListItem ingredientListItem : recipe.getIngredientList()) {
+            if (ingredientListItem.getIngredient().getIngredientType() == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Leert die Ergebnisse einer Planungsperiode
      * 
      * @param planingPeriod Die Planungsperiode
@@ -139,6 +174,8 @@ public class MenuPlanBuilder {
                 entry.getValue().clear();
             }
         }
+
+        canteenRecipeCounter = 0;
     }
 
     /**
@@ -243,6 +280,7 @@ public class MenuPlanBuilder {
 
         if (!weekWorkDayRecipes.contains(recipe)) {
             weekWorkDayRecipes.add(recipe);
+            canteenRecipeCounter++;
         }
     }
 
@@ -466,7 +504,7 @@ public class MenuPlanBuilder {
         int totalMeals = 0;
 
         for (Set<Recipe> recipes : planingPeriod.values()) {
-            totalMeals = totalMeals + recipes.size();
+            totalMeals += recipes.size();
         }
 
         if (totalMeals != PROP_PLANINGPERIOD_TOTALMEALS) {
