@@ -25,9 +25,8 @@ public class HitListBase {
     /**
      * Methode um ein Datenobjekt {@link HitListItem} in die Liste hinzuzufügen.
      * 
-     * @param hitListItem
-     *            Das einzufügende Datenobjekt
-     * @return Das ggf. aktualisierte Datenobjekt wird zurückgegeben
+     * @param hitListItem Das einzufügende Datenobjekt
+     * @return Das aktualisierte Datenobjekt wird zurückgegeben
      */
     public HitListItem addHitListItem(HitListItem hitListItem) {
         if (hitListItems == null) {
@@ -49,8 +48,7 @@ public class HitListBase {
     /**
      * Methode um ein Datenobjekt aus der Liste zu löschen.
      * 
-     * @param hitListItem
-     *            Das zu löschende Datenobjekt
+     * @param hitListItem Das zu löschende Datenobjekt
      */
     public void removeHitListItem(HitListItem hitListItem) {
     }
@@ -58,8 +56,7 @@ public class HitListBase {
     /**
      * Methode um ein bestimmtes Datenobjekt in der Liste nach Namen zu suchen.
      * 
-     * @param name
-     *            Name des Datenobjekts
+     * @param name Name des Datenobjekts
      * @return Das gefundene Datenobjekt wird zurückgegeben
      */
     public HitListItem findHitListItemByName(String name) {
