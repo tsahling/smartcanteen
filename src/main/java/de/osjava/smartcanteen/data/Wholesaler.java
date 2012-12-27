@@ -56,6 +56,7 @@ public class Wholesaler extends AbstractProvider {
      *            Die zu setzende Versandkostenpauschale des Grosshändlers
      */
     public void setTransportFee(Amount transportFee) {
+        this.transportFee = transportFee;
     }
 
     /**
