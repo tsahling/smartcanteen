@@ -129,24 +129,24 @@ public class BaseHelper {
 
         /* Deklaration eines Lebensmittel */
 
-        /* Größe des Gebindes */
-        Integer sizeOfItemBundle = null;
+        /* Größe des Gebindes als BigDecimal */
+        BigDecimal sizeOfItemBundleBD = null;
+        /* Größe des Gebindes mit Einheit */
+        Amount size = null;
         /* Einheit des Gebindes (Gramm, Stück oder Liter) */
         String unitOfItemBundle = null;
         /* Name des Lebensmittel (Gramm, Stück oder Liter) */
         String nameOfIngredient = null;
         /* Typ des Lebensmittel als String */
         String typeOfIngredient = null;
-        /* Typ des Lebensmittel als IngredientType */
-        IngredientType typeOfIngredientIT = null;
         /* Preis des Lebensmittel als String */
         String priceOfIngredient = null;
         /* Preis des Lebensmittel als Big Dicimal */
         BigDecimal priceOfIngredientBD = null;
         /* Einheit des Preises */
-        Amount amountOfIngredientPrice;
+        Amount price = null;
         /* Vorhandene Menge des Lebensmittel */
-        Integer existingQuantityOfIngredient = null;
+        Integer availableQuantityOfIngredient = null;
 
         /* Instanz der Klasse Lebensmittel */
         Ingredient ingredient = null;
@@ -177,7 +177,7 @@ public class BaseHelper {
         for (int i = 1; i <= lines.size() - 1; i++) {
 
             /* Größe des Gebinde */
-            sizeOfItemBundle = Integer.valueOf(lines.get(i)[0]);
+            sizeOfItemBundleBD = new BigDecimal(lines.get(i)[0]);
             /* Art der Einheit */
             unitOfItemBundle = lines.get(i)[1];
             /* Name des Lebensmittel */
@@ -189,9 +189,9 @@ public class BaseHelper {
             /* Preis in Big Decimal Konvertieren */
             priceOfIngredientBD = new BigDecimal(priceOfIngredient);
             /* Vorhandene Menge */
-            existingQuantityOfIngredient = Integer.valueOf(lines.get(i)[5]);
+            availableQuantityOfIngredient = Integer.valueOf(lines.get(i)[5]);
 
-            amountOfIngredientPrice = new Amount(priceOfIngredientBD, UnitOfMeasurement.EUR);
+            price = new Amount(priceOfIngredientBD, UnitOfMeasurement.EUR);
 
             /* Abfrage um was für ein Lebensmittel es sich handelt um den dazugehörigen IngredientType zu setzen */
             /* Erzeugung eines Lebensmittel vom Typ Ingredient mit dem dazugehörigen IngredientType */
@@ -205,16 +205,14 @@ public class BaseHelper {
             /* Abfrage um was für eine Maßeinheit es sich handelt */
             /* Erzeugung einer Preislisten Position vom Typ PriceListItem */
 
-            UnitOfMeasurement uom = null;
+            UnitOfMeasurement uom = unitOfMeasurement(unitOfItemBundle);
 
-            uom = unitOfMeasurement(unitOfItemBundle);
+            size = new Amount(sizeOfItemBundleBD, uom);
 
-            priceListItem = new PriceListItem(ingredient, uom, amountOfIngredientPrice,
-                    existingQuantityOfIngredient);
+            priceListItem = new PriceListItem(size, ingredient, price, availableQuantityOfIngredient);
 
             /* Set mit Preislisten Positionen füllen */
             priceList.add(priceListItem);
-
         }
 
         /* Abfragen um was für einen Typ von Händler es sich handelt */

@@ -1,8 +1,11 @@
 package de.osjava.smartcanteen.data;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import de.osjava.smartcanteen.data.item.PriceListItem;
+import de.osjava.smartcanteen.datatype.Amount;
+import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
 
 /**
  * Die Klasse {@link AbstractProvider} ist eine der Fach- bzw.
@@ -22,6 +25,23 @@ public abstract class AbstractProvider {
     public AbstractProvider(String name, Set<PriceListItem> priceList) {
         this.name = name;
         this.priceList = priceList;
+    }
+
+    public Amount calculatePriceForIngredientAndQuantity(Ingredient ingredient, Amount quantity) {
+        BigDecimal value = new BigDecimal(0);
+        Amount result = new Amount(value, UnitOfMeasurement.EUR);
+
+        if (priceList != null && !priceList.isEmpty()) {
+
+            // TODO(Tim Sahling) mach dat hier richtig!
+            for (PriceListItem priceListItem : priceList) {
+
+            }
+
+        }
+
+        return result;
+
     }
 
     /**

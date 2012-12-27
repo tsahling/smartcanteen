@@ -67,7 +67,7 @@ public class MenuPlanBuilder {
     private RecipeBase recipeBase;
     private Canteen[] canteens;
 
-    private int canteenRecipeCounter = 0;
+    private CanteenContext canteenContext;
 
     /**
      * Der Standardkonstruktor der {@link MenuPlanBuilder} initialisiert die
@@ -105,11 +105,15 @@ public class MenuPlanBuilder {
         // Kantine durchlaufen.
         for (Canteen canteen : canteens) {
 
+            canteenContext = new CanteenContext();
+
             // Fügt die Rezepte in die Struktur der Planungsperiode ein
             for (Recipe recipe : recipesSortedByRank) {
 
+                canteenContext.setLastRecipe(recipe);
+
                 // Überprüfung ob der Algorithmus vorzeitig beendet werden kann, wenn benötigte Rezepte komplett sind
-                if (canteenRecipeCounter == PROP_PLANINGPERIOD_TOTALMEALS) {
+                if (canteenContext.getRecipes().size() == PROP_PLANINGPERIOD_TOTALMEALS) {
                     break;
                 }
 
@@ -144,21 +148,28 @@ public class MenuPlanBuilder {
     }
 
     /**
-     * Überprüft initial ob ein Rezept valide ist. Ein Rezept ist nicht valide wenn nicht alle Zutaten auch einen
-     * {@link IngredientType} haben. Ein fehlender {@link IngredientType} weist darauf hin, dass diese Zutat bei
-     * gegebenen Preislisten bzw. Anbietern nicht beschaffbar ist, da die Typen erst nach Einlesen der Anbieter gesetzt
-     * werden. Dies muss erfolgen, da in der Rezepte Eingangsdatei keine Typen definiert sind, sondern nur in den Listen
-     * der Anbieter.
+     * Überprüft initial ob ein Rezept valide ist. Ein Rezept ist nicht valide wenn es bereits ausgewählt wurde oder
+     * wenn nicht alle Zutaten auch einen {@link IngredientType} haben. Ein fehlender {@link IngredientType} weist
+     * darauf hin, dass diese Zutat bei gegebenen Preislisten bzw. Anbietern nicht beschaffbar ist, da die Typen erst
+     * nach Einlesen der Anbieter gesetzt werden. Dies muss erfolgen, da in der Rezepte Eingangsdatei keine Typen
+     * definiert sind, sondern nur in den Listen der Anbieter.
      * 
      * @param recipe
      * @return
      */
     private boolean validateRecipe(Recipe recipe) {
+        // Überprüfung ob ein Zutatentyp nicht gefüllt ist
         for (IngredientListItem ingredientListItem : recipe.getIngredientList()) {
             if (ingredientListItem.getIngredient().getIngredientType() == null) {
                 return false;
             }
         }
+
+        // Überprüfung ob ein Gericht bereits vorhanden ist
+        if (canteenContext.getRecipes().contains(recipe)) {
+            return false;
+        }
+
         return true;
     }
 
@@ -174,8 +185,6 @@ public class MenuPlanBuilder {
                 entry.getValue().clear();
             }
         }
-
-        canteenRecipeCounter = 0;
     }
 
     /**
@@ -280,7 +289,7 @@ public class MenuPlanBuilder {
 
         if (!weekWorkDayRecipes.contains(recipe)) {
             weekWorkDayRecipes.add(recipe);
-            canteenRecipeCounter++;
+            canteenContext.getRecipes().add(recipe);
         }
     }
 
@@ -490,7 +499,6 @@ public class MenuPlanBuilder {
                     result++;
                 }
             }
-
         }
 
         return result;
@@ -635,6 +643,29 @@ public class MenuPlanBuilder {
         }
 
         return result;
+    }
+
+    private static final class CanteenContext {
+        private Set<Recipe> recipes;
+        private Recipe lastRecipe;
+
+        public CanteenContext() {
+            this.recipes = new LinkedHashSet<Recipe>();
+            this.lastRecipe = null;
+        }
+
+        public Set<Recipe> getRecipes() {
+            return recipes;
+        }
+
+        public Recipe getLastRecipe() {
+            return lastRecipe;
+        }
+
+        public void setLastRecipe(Recipe lastRecipe) {
+            this.lastRecipe = lastRecipe;
+        }
+
     }
 
     /**

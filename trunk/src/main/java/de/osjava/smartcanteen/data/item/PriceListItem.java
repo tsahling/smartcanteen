@@ -2,7 +2,6 @@ package de.osjava.smartcanteen.data.item;
 
 import de.osjava.smartcanteen.data.Ingredient;
 import de.osjava.smartcanteen.datatype.Amount;
-import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
 
 /**
  * Die Klasse {@link PriceListItem} stellt eine Preislistenposition dar. Sie
@@ -13,104 +12,96 @@ import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
  */
 public class PriceListItem {
 
+    private Amount size;
     private Ingredient ingredient;
     private Amount price;
-    private UnitOfMeasurement unit;
-
-    private int quantityOfIngredient;
+    private int availableQuantityOfIngredient;
 
     /**
-     * Standardkonstruktor
+     * Standardkonstruktor mit verschiedenen Werten.
      * 
-     * @param ingredient
-     *            Lebensmittel
-     * @param price
-     *            Preis des Lebensmittels
-     * @param quantityOfIngredient
-     *            Menge des Lebensmittels
+     * @param size Größe und Einheit des Gebindes
+     * @param ingredient Name und Typ des Gebindes
+     * @param price Preis des Gebindes
+     * @param availableQuantityOfIngredient Anzahl vorhandener Gebinde
      */
-    public PriceListItem(Ingredient ingredient, UnitOfMeasurement unit, Amount price,
-            int quantityOfIngredient) {
+    public PriceListItem(Amount size, Ingredient ingredient, Amount price, int availableQuantityOfIngredient) {
+        this.size = size;
         this.ingredient = ingredient;
         this.price = price;
-        this.unit = unit;
-        this.quantityOfIngredient = quantityOfIngredient;
+        this.availableQuantityOfIngredient = availableQuantityOfIngredient;
     }
 
     /**
-     * Methode um ein Lebensmittel abzufragen.
+     * Methode um die Größe des Gebindes abzufragen.
      * 
-     * @return Lebenmittel
+     * @return Die Größe des Gebindes
+     */
+    public Amount getSize() {
+        return size;
+    }
+
+    /**
+     * Methode um die Größe des Gebindes zu setzen.
+     * 
+     * @param size Die zu setzende Größe des Gebindes
+     */
+    public void setSize(Amount size) {
+        this.size = size;
+    }
+
+    /**
+     * Methode das Gebinde abzufragen.
+     * 
+     * @return Das Gebinde
      */
     public Ingredient getIngredient() {
         return ingredient;
     }
 
     /**
-     * Methode um ein Lebensmittel dem Objekt hinzuzufügen
+     * Methode um ein Gebinde zu setzen.
      * 
-     * @param Lebensmittel
+     * @param Das zu setzende Gebinde
      */
     public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
     }
 
     /**
-     * Methode um Preis des Lebensmittels abzufragen
+     * Methode um den Preis des Gebindes abzufragen
      * 
-     * @return Preis des Lebensmittels
+     * @return Der Preis des Gebindes
      */
     public Amount getPrice() {
         return price;
     }
 
     /**
-     * Methode um den Preis eines Lebensmittels zu setzen
+     * Methode um den Preis eines Gebindest zu setzen
      * 
-     * @param price
-     *            Preis des Lebensmittels
+     * @param price Der zu setzende Preis des Gebindes
      */
     public void setPrice(Amount price) {
         this.price = price;
     }
 
     /**
-     * Methode um die Gewicht-Einheit des Lebensmittels abzufragen
+     * Mehtode um die verfügbare Menge des Gebindes abzufragen.
      * 
-     * @return Preis des Lebensmittels
+     * @return Die verfügbare Menge des Gebindes
      */
-    public UnitOfMeasurement getUnit() {
-        return unit;
+    public int getAvailableQuantityOfIngredient() {
+        return availableQuantityOfIngredient;
     }
 
     /**
-     * Methode um den Gewicht-Einheit eines Lebensmittels zu setzen
+     * Methode um die verfügbare Menge des Gebindes zu setzen
      * 
-     * @param price
-     *            Preis des Lebensmittels
+     * @param availableQuantityOfIngredient Die zu setzende verfügbare Menge des Gebindes
      */
-
-    public void setUnit(UnitOfMeasurement unit) {
-        this.unit = unit;
-    }
-
-    /**
-     * Methode um die Menge eines Lebensmittels abzufragen
-     * 
-     * @return Menge des Lebensmittels
-     */
-    public int getQuantityOfIngredient() {
-        return quantityOfIngredient;
-    }
-
-    /**
-     * Methode um die Menge eines Lebensmittels zu setzen
-     * 
-     * @param price
-     *            Menge des Lebensmittels
-     */
-    public void setQuantityOfIngredient(int quantityOfIngredient) {
-        this.quantityOfIngredient = quantityOfIngredient;
+    public void setAvailableQuantityOfIngredient(int availableQuantityOfIngredient) {
+        this.availableQuantityOfIngredient = availableQuantityOfIngredient;
     }
 
     /**
@@ -123,10 +114,10 @@ public class PriceListItem {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                + ((ingredient == null) ? 0 : ingredient.hashCode());
+        result = prime * result + availableQuantityOfIngredient;
+        result = prime * result + ((ingredient == null) ? 0 : ingredient.hashCode());
         result = prime * result + ((price == null) ? 0 : price.hashCode());
-        result = prime * result + quantityOfIngredient;
+        result = prime * result + ((size == null) ? 0 : size.hashCode());
         return result;
     }
 
@@ -145,6 +136,8 @@ public class PriceListItem {
         if (getClass() != obj.getClass())
             return false;
         PriceListItem other = (PriceListItem) obj;
+        if (availableQuantityOfIngredient != other.availableQuantityOfIngredient)
+            return false;
         if (ingredient == null) {
             if (other.ingredient != null)
                 return false;
@@ -157,7 +150,11 @@ public class PriceListItem {
         }
         else if (!price.equals(other.price))
             return false;
-        if (quantityOfIngredient != other.quantityOfIngredient)
+        if (size == null) {
+            if (other.size != null)
+                return false;
+        }
+        else if (!size.equals(other.size))
             return false;
         return true;
     }
@@ -169,8 +166,6 @@ public class PriceListItem {
      */
     @Override
     public String toString() {
-        return "PriceListItem [ingredient=" + ingredient + ", price=" + price
-                + ", quantityOfIngredient=" + quantityOfIngredient + "]";
+        return "PriceListItem [size=" + size + ", ingredient=" + ingredient + ", price=" + price + ", availableQuantityOfIngredient=" + availableQuantityOfIngredient + "]";
     }
-
 }

@@ -1,6 +1,11 @@
 package de.osjava.smartcanteen.builder.result;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,20 +30,47 @@ public class MenuPlan {
     }
 
     /**
-     * Sortierung der Speisenliste Datum
+     * Sortierung der Gerichte nach Datum
      * 
-     * @return Sortierte Liste nach Datum
+     * @return Sortierte Liste mit Gerichten nach Datum
      */
     public List<Meal> getMealsSortedByDate() {
-        return null;
+        if (meals != null && !meals.isEmpty()) {
+            Collections.sort(meals, new Comparator<Meal>() {
+
+                @Override
+                public int compare(Meal arg0, Meal arg1) {
+                    return arg0.getDate().compareTo(arg1.getDate());
+                }
+            });
+        }
+
+        return meals;
     }
 
     /**
+     * Gruppiert die Gerichte eines Speiseplans nach Datum
      * 
-     * @return
+     * @return Eine Zuordnung von Daten zu Gerichten, die an dem jeweiligen Datum gekocht werden sollen
      */
     public Map<Date, List<Meal>> getMealsGroupedByDate() {
-        return null;
+        Map<Date, List<Meal>> result = new HashMap<Date, List<Meal>>();
+
+        if (meals != null && !meals.isEmpty()) {
+
+            for (Meal meal : meals) {
+                Date date = meal.getDate();
+
+                if (result.containsKey(date)) {
+                    result.get(date).add(meal);
+                }
+                else {
+                    result.put(date, new LinkedList<Meal>(Arrays.asList(meal)));
+                }
+            }
+        }
+
+        return result;
     }
 
     /**

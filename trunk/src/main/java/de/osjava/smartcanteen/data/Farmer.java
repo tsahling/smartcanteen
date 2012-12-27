@@ -54,6 +54,7 @@ public class Farmer extends AbstractProvider {
      *            Die zu setzende Entfernung zur Zentrale der VAWi GmbH
      */
     public void setDistanceToCentral(Amount distanceToCentral) {
+        this.distanceToCentral = distanceToCentral;
     }
 
     /**

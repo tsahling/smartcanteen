@@ -11,6 +11,7 @@ import de.osjava.smartcanteen.base.HitListBase;
 import de.osjava.smartcanteen.base.ProviderBase;
 import de.osjava.smartcanteen.base.RecipeBase;
 import de.osjava.smartcanteen.builder.MenuPlanBuilder;
+import de.osjava.smartcanteen.builder.ShoppingListBuilder;
 import de.osjava.smartcanteen.builder.result.ShoppingList;
 import de.osjava.smartcanteen.data.Canteen;
 import de.osjava.smartcanteen.helper.LogHelper;
@@ -165,8 +166,12 @@ public class Application {
         MenuPlanBuilder mpb = new MenuPlanBuilder(providerBase, recipeBase);
         Canteen[] canteens = mpb.buildMenuPlan();
 
+        // Start der Applikationslogik für die Erstellung der Einkaufsliste
+        ShoppingListBuilder slb = new ShoppingListBuilder(providerBase, canteens);
+        ShoppingList shoppingList = slb.buildShoppingList();
+
         // Übergabe der Ergebnisse der Applikationslogik an die ausgebende Methode
-        outputApplicationResult(null, canteens);
+        outputApplicationResult(shoppingList, canteens);
     }
 
     /**
