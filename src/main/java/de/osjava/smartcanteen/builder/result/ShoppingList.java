@@ -1,16 +1,20 @@
 package de.osjava.smartcanteen.builder.result;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import de.osjava.smartcanteen.builder.ShoppingListBuilder;
+import de.osjava.smartcanteen.data.AbstractProvider;
 import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
 
 /**
  * Die Klasse {@link ShoppingList} ist das Ergebnis der Geschäftslogikklasse {@link ShoppingListBuilder} und stellt die
- * Einkaufsliste, mit den in ihr
- * enthaltenen Einkaufslistenpositionen, dar.
+ * Einkaufsliste, mit den in ihr enthaltenen Einkaufslistenpositionen, dar.
  * 
  * @author Tim Sahling
  */
@@ -36,6 +40,31 @@ public class ShoppingList {
 
             for (ShoppingListItem shoppingListItem : shoppingListItems) {
                 result.add(shoppingListItem.calculatePrice());
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Gruppiert die Einkaufslistenpositionen nach Anbieter
+     * 
+     * @return Eine Zuordnung von Anbietern zu Einkaufslistenpositionen
+     */
+    public Map<AbstractProvider, List<ShoppingListItem>> getShoppingListItemsGroupedByProvider() {
+        Map<AbstractProvider, List<ShoppingListItem>> result = new HashMap<AbstractProvider, List<ShoppingListItem>>();
+
+        if (shoppingListItems != null && !shoppingListItems.isEmpty()) {
+
+            for (ShoppingListItem shoppingListItem : shoppingListItems) {
+                AbstractProvider provider = shoppingListItem.getProvider();
+
+                if (result.containsKey(provider)) {
+                    result.get(provider).add(shoppingListItem);
+                }
+                else {
+                    result.put(provider, new LinkedList<ShoppingListItem>(Arrays.asList(shoppingListItem)));
+                }
             }
         }
 

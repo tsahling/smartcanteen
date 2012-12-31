@@ -2,6 +2,7 @@ package de.osjava.smartcanteen.builder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -72,20 +73,20 @@ public class ShoppingListBuilder {
 
         // Ermitteln bei welchem Anbieter, welche Konstellationen von Zutaten am günstigsten eingekauft werden können
         Map<AbstractProvider, Set<IngredientAmount>> test = bla(ingredientAmounts);
-        //
-        // // Erstellen der Einkaufslistenpositionen
-        // List<ShoppingListItem> shoppingListItems = new ArrayList<ShoppingListItem>();
-        //
-        // for (Entry<AbstractProvider, Set<IngredientAmount>> entry : test.entrySet()) {
-        //
-        // for (IngredientAmount ingredientAmount : entry.getValue()) {
-        // shoppingListItems.add(createShoppingListItem(entry.getKey(), ingredientAmount));
-        // }
-        // }
-        //
-        // if (!shoppingListItems.isEmpty()) {
-        // result.setShoppingListItems(shoppingListItems);
-        // }
+
+        // Erstellen der Einkaufslistenpositionen
+        List<ShoppingListItem> shoppingListItems = new ArrayList<ShoppingListItem>();
+
+        for (Entry<AbstractProvider, Set<IngredientAmount>> entry : test.entrySet()) {
+
+            for (IngredientAmount ingredientAmount : entry.getValue()) {
+                shoppingListItems.add(createShoppingListItem(entry.getKey(), ingredientAmount));
+            }
+        }
+
+        if (!shoppingListItems.isEmpty()) {
+            result.setShoppingListItems(shoppingListItems);
+        }
 
         return result;
     }
@@ -116,6 +117,21 @@ public class ShoppingListBuilder {
         Map<AbstractProvider, Set<IngredientAmount>> result = new HashMap<AbstractProvider, Set<IngredientAmount>>();
 
         for (Entry<Ingredient, Amount> entry : ingredientAmounts.entrySet()) {
+            Set<AbstractProvider> providers = providerBase.findProviderByIngredientAndQuantity(entry.getKey(), entry
+                    .getValue().getValue().intValue());
+
+            if (providers != null && !providers.isEmpty()) {
+
+                if (providers.size() == 1) {
+
+                }
+                else {
+
+                }
+            }
+            else {
+
+            }
 
         }
 
