@@ -68,13 +68,19 @@ public class ProviderBase {
      * @return
      */
     public IngredientType findIngredientTypeByIngredientName(String name) {
-        for (AbstractProvider provider : providers) {
-            for (PriceListItem priceListItem : provider.getPriceList()) {
-                if (name.equals(priceListItem.getIngredient().getName())) {
-                    return priceListItem.getIngredient().getIngredientType();
+        if (providers != null && !providers.isEmpty()) {
+
+            for (AbstractProvider provider : providers) {
+
+                for (PriceListItem priceListItem : provider.getPriceList()) {
+
+                    if (name.equals(priceListItem.getIngredient().getName())) {
+                        return priceListItem.getIngredient().getIngredientType();
+                    }
                 }
             }
         }
+
         return null;
     }
 
@@ -104,20 +110,37 @@ public class ProviderBase {
     }
 
     /**
-     * Methode um einen Lebensmittelanbieter {@link AbstractProvider} anhand von
-     * einem Lebensmittel {@link Ingredient} und einer bestimmten Menge zu
-     * ermitteln.
+     * Methode um einen Lebensmittelanbieter {@link AbstractProvider} anhand von einem Lebensmittel {@link Ingredient}
+     * und einer bestimmten Menge zu ermitteln.
      * 
-     * @param ingredient
-     *            Name des Lebensmittels
-     * @param quantity
-     *            Menge des Lebensmittels
-     * @return Der Lebensmittelanbieter {@link AbstractProvider} der das
-     *         Lebensmittel in der Menge anbietet
+     * @param ingredient Lebensmittel
+     * @param quantity Menge
+     * @return Die Lebensmittelanbieter {@link AbstractProvider}, die das Lebensmittel in der Menge anbieten
      */
-    public AbstractProvider findProviderByIngredientAndQuantity(
+    public Set<AbstractProvider> findProviderByIngredientAndQuantity(
             Ingredient ingredient, int quantity) {
-        return null;
+        Set<AbstractProvider> result = new HashSet<AbstractProvider>();
+
+        if (providers != null && !providers.isEmpty()) {
+
+            for (AbstractProvider provider : providers) {
+
+                Set<PriceListItem> priceList = provider.getPriceList();
+
+                if (priceList != null && !priceList.isEmpty()) {
+
+                    for (PriceListItem priceListItem : priceList) {
+
+                        if (ingredient.equals(priceListItem.getIngredient()) && priceListItem
+                                .getAvailableQuantityOfIngredient() >= quantity) {
+                            result.add(provider);
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     /**
