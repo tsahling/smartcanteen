@@ -1,9 +1,12 @@
 package de.osjava.smartcanteen.data;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import de.osjava.smartcanteen.data.item.PriceListItem;
 import de.osjava.smartcanteen.datatype.Amount;
+import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
+import de.osjava.smartcanteen.helper.NumberHelper;
 
 /**
  * Die Klasse {@link Wholesaler} ist eine Spezialisierung der Fach- bzw.
@@ -23,21 +26,17 @@ public class Wholesaler extends AbstractProvider {
         this.transportFee = transportFee;
     }
 
-    @Override
-    protected AbstractProvider createProvider(AbstractProvider provider) {
-
-        return null;
-    }
-
-    @Override
-    protected AbstractProvider updateProvider(AbstractProvider provider) {
-
-        return null;
-    }
-
-    @Override
-    protected void deleteProvider(AbstractProvider provider) {
-
+    /**
+     * Kalkuliert die Transportkosten für einen {@link Wholesaler}. Der {@link Wholesaler} hat einen Lieferkostensatz,
+     * der mit der Anzahl Artikel, die bei ihm bestellt werden sollen, multipliziert wird. Dieses Berechnungsverfahren
+     * gilt für alle {@link Wholesaler}.
+     * 
+     * @param numberOfItemsToOrder Artikel die bei dem {@link Wholesaler} bestellt werden
+     * @return Die Transportkosten für einen {@link Wholesaler}
+     */
+    public Amount calculateTransportCosts(int numberOfItemsToOrder) {
+        return new Amount(NumberHelper.multiply(this.transportFee.getValue(), new BigDecimal(numberOfItemsToOrder)),
+                UnitOfMeasurement.EUR);
     }
 
     /**
@@ -107,5 +106,4 @@ public class Wholesaler extends AbstractProvider {
     public String toString() {
         return "Wholesaler [transportFee=" + transportFee + "]";
     }
-
 }

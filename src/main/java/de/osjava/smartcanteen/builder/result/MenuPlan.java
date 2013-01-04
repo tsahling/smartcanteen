@@ -65,6 +65,7 @@ public class MenuPlan {
                     result.get(date).add(meal);
                 }
                 else {
+                    // Hier muss eine {@link LinkedList} verwendet werden, da die Reihenfolge der Rezepte wichtig ist
                     result.put(date, new LinkedList<Meal>(Arrays.asList(meal)));
                 }
             }

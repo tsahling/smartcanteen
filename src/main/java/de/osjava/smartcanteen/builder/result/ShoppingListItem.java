@@ -8,14 +8,11 @@ import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
 
 /**
- * Die Klasse {@link ShoppingListItem} stellt eine Einkaufslistenposition dar.
- * Sie enthält einen Verweis auf die jeweilige zu bestellende Zutat ( {@link Ingredient}), eine Menge ({@link Amount}),
- * wieviel von der Zutat
- * bestellt werden soll, und einen Verweis auf den Anbieter ( {@link AbstractProvider}) von dem die Ware bezogen werden
- * soll. Über den
- * Verweis auf den Anbieter und die Menge kann der Preis für ein {@link ShoppingListItem} berechnet werden und muss
- * nicht als extra Attribut
- * enthalten sein.
+ * Die Klasse {@link ShoppingListItem} stellt eine Einkaufslistenposition dar. Sie enthält einen Verweis auf die
+ * jeweilige zu bestellende Zutat ( {@link Ingredient}), eine Menge ({@link Amount}), wieviel von der Zutat bestellt
+ * werden soll, und einen Verweis auf den Anbieter ( {@link AbstractProvider}) von dem die Ware bezogen werden soll.
+ * Über den Verweis auf den Anbieter und die Menge kann der Preis für ein {@link ShoppingListItem} berechnet werden und
+ * muss nicht als extra Attribut enthalten sein.
  * 
  * @author Tim Sahling
  */

@@ -1,4 +1,4 @@
-package de.osjava.smartcanteen.base;
+package de.osjava.smartcanteen.helper;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -13,6 +13,9 @@ import java.util.Set;
 import java.util.Vector;
 
 import de.osjava.smartcanteen.application.CSVTokenizer;
+import de.osjava.smartcanteen.base.HitListBase;
+import de.osjava.smartcanteen.base.ProviderBase;
+import de.osjava.smartcanteen.base.RecipeBase;
 import de.osjava.smartcanteen.data.Farmer;
 import de.osjava.smartcanteen.data.Ingredient;
 import de.osjava.smartcanteen.data.Recipe;
@@ -23,7 +26,6 @@ import de.osjava.smartcanteen.data.item.PriceListItem;
 import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.datatype.IngredientType;
 import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
-import de.osjava.smartcanteen.helper.PropertyHelper;
 
 /**
  * 
@@ -146,7 +148,7 @@ public class BaseHelper {
         /* Einheit des Preises */
         Amount price = null;
         /* Vorhandene Menge des Lebensmittel */
-        Integer availableQuantityOfIngredient = null;
+        BigDecimal availableQuantityOfIngredient = null;
 
         /* Instanz der Klasse Lebensmittel */
         Ingredient ingredient = null;
@@ -189,7 +191,7 @@ public class BaseHelper {
             /* Preis in Big Decimal Konvertieren */
             priceOfIngredientBD = new BigDecimal(priceOfIngredient);
             /* Vorhandene Menge */
-            availableQuantityOfIngredient = Integer.valueOf(lines.get(i)[5]);
+            availableQuantityOfIngredient = new BigDecimal(lines.get(i)[5]);
 
             price = new Amount(priceOfIngredientBD, UnitOfMeasurement.EUR);
 

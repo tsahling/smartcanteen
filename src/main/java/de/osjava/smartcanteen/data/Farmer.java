@@ -1,14 +1,17 @@
 package de.osjava.smartcanteen.data;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import de.osjava.smartcanteen.data.item.PriceListItem;
 import de.osjava.smartcanteen.datatype.Amount;
+import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
+import de.osjava.smartcanteen.helper.NumberHelper;
+import de.osjava.smartcanteen.helper.PropertyHelper;
 
 /**
- * Die Klasse {@link Farmer} ist eine Spezialisierung der Fach- bzw.
- * Datenträgerklasse {@link AbstractProvider} und stellt einen örtlichen
- * Bauernhof dar.
+ * Die Klasse {@link Farmer} ist eine Spezialisierung der Fach- bzw. Datenträgerklasse {@link AbstractProvider} und
+ * stellt einen örtlichen Bauernhof dar.
  * 
  * @author Tim Sahling
  */
@@ -24,18 +27,16 @@ public class Farmer extends AbstractProvider {
         this.distanceToCentral = distanceToCentral;
     }
 
-    @Override
-    protected Farmer createProvider(AbstractProvider provider) {
-        return null;
-    }
-
-    @Override
-    protected Farmer updateProvider(AbstractProvider provider) {
-        return null;
-    }
-
-    @Override
-    protected void deleteProvider(AbstractProvider provider) {
+    /**
+     * Kalkuliert die Transportkosten für einen {@link Farmer}. Vom {@link Farmer} wird per Kurier geliefert, hier fällt
+     * eine Pauschale an, die von der Entfernung abhängt. Die Pauschale pro km ist in einer Property hinterlegt.
+     * 
+     * @return Die Transportkosten für einen {@link Farmer}
+     */
+    public Amount calculateTransportCosts() {
+        return new Amount(NumberHelper.multiply(this.distanceToCentral.getValue(),
+                new BigDecimal(PropertyHelper.getProperty("provider.farmer.transportFlatRatePerKm"))),
+                UnitOfMeasurement.EUR);
     }
 
     /**

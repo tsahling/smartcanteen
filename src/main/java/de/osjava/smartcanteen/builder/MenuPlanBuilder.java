@@ -1,5 +1,6 @@
 package de.osjava.smartcanteen.builder;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -14,18 +15,20 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.logging.Logger;
 
 import de.osjava.smartcanteen.base.ProviderBase;
 import de.osjava.smartcanteen.base.RecipeBase;
 import de.osjava.smartcanteen.builder.result.Meal;
 import de.osjava.smartcanteen.builder.result.MenuPlan;
 import de.osjava.smartcanteen.data.Canteen;
+import de.osjava.smartcanteen.data.Ingredient;
 import de.osjava.smartcanteen.data.Recipe;
 import de.osjava.smartcanteen.data.item.IngredientListItem;
+import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.datatype.CanteenLocation;
 import de.osjava.smartcanteen.datatype.IngredientType;
-import de.osjava.smartcanteen.helper.LogHelper;
+import de.osjava.smartcanteen.helper.BuilderHelper;
+import de.osjava.smartcanteen.helper.NumberHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 
 /**
@@ -38,8 +41,6 @@ import de.osjava.smartcanteen.helper.PropertyHelper;
  * @author Tim Sahling
  */
 public class MenuPlanBuilder {
-
-    private static final Logger LOG = LogHelper.getLogger(MenuPlanBuilder.class.getName());
 
     private static final String PROP_PLANINGPERIOD_PLANINGMODE = PropertyHelper
             .getProperty("planingPeriod.planingMode");
@@ -63,11 +64,12 @@ public class MenuPlanBuilder {
     private static final String PLANING_MODE_SEQUENTIAL = "sequential";
     private static final String PLANING_MODE_RANDOM = "random";
 
-    private ProviderBase providerBase; // TODO(Tim Sahling) Berechnung auf Basis günstigster Gerichte
+    private ProviderBase providerBase;
     private RecipeBase recipeBase;
     private Canteen[] canteens;
 
     private CanteenContext canteenContext;
+    private Map<Ingredient, Amount> providerIngredientQuantities;
 
     /**
      * Der Standardkonstruktor der {@link MenuPlanBuilder} initialisiert die
@@ -95,17 +97,22 @@ public class MenuPlanBuilder {
      */
     public Canteen[] buildMenuPlan() {
 
+        // Summiert alle Mengen einer Zutat von allen Anbietern um später überprüfen zu können ob ein Rezept in der
+        // jeweils benötigten Menge beschaffbar ist
+        providerIngredientQuantities = providerBase.sumIngredientQuantities();
+
         // Initalisiert die Planungsperiode
         Map<WeekWorkday, Set<Recipe>> planingPeriod = initPlaningPeriod();
 
-        // Holt die Rezepte, sortiert nach Rang um die Zufriedenheit und Leistungsfähigkeit der Mitarbeiter zu steigern
+        // Ermittelt die Rezepte, sortiert nach Rang, um die Zufriedenheit und Leistungsfähigkeit der Mitarbeiter zu
+        // steigern
         Set<Recipe> recipesSortedByRank = recipeBase.getRecipesSortedByRank();
 
         // Um den Kantinen einen größere Individualität zu geben wird der Algorithmus für den optimalen Speiseplan pro
         // Kantine durchlaufen.
         for (Canteen canteen : canteens) {
 
-            canteenContext = new CanteenContext();
+            canteenContext = new CanteenContext(canteen);
 
             // Fügt die Rezepte in die Struktur der Planungsperiode ein
             for (Recipe recipe : recipesSortedByRank) {
@@ -267,8 +274,10 @@ public class MenuPlanBuilder {
             }
             else {
                 if (validateRecipeBeforeInsertIntoWeekWorkday(planingPeriod, weekAndWorkday, recipe)) {
-                    addRecipeToPlaningPeriod(planingPeriod, weekAndWorkday, recipe);
-                    break;
+
+                    if (addRecipeToPlaningPeriod(planingPeriod, weekAndWorkday, recipe)) {
+                        break;
+                    }
                 }
 
                 tempWeekWorkdays.add(weekAndWorkday);
@@ -277,20 +286,101 @@ public class MenuPlanBuilder {
     }
 
     /**
-     * Fügt ein Rezept der Planungsperiode hinzu.
+     * Fügt der Planungsperiode ein {@link Recipe} hinzu.
      * 
      * @param planingPeriod
      * @param weekAndWorkday
      * @param recipe
      */
-    private void addRecipeToPlaningPeriod(Map<WeekWorkday, Set<Recipe>> planingPeriod, WeekWorkday weekAndWorkday,
+    private boolean addRecipeToPlaningPeriod(Map<WeekWorkday, Set<Recipe>> planingPeriod, WeekWorkday weekAndWorkday,
             Recipe recipe) {
         Set<Recipe> weekWorkDayRecipes = planingPeriod.get(weekAndWorkday);
 
         if (!weekWorkDayRecipes.contains(recipe)) {
             weekWorkDayRecipes.add(recipe);
-            canteenContext.getRecipes().add(recipe);
+
+            // Wenn Rezept beschaffbar ist wird es hinzugefügt
+            if (isRecipeObtainable(weekWorkDayRecipes, recipe)) {
+                canteenContext.getRecipes().add(recipe);
+            }
+            // Wenn ein Rezept nicht beschaffbar ist, wird es wieder aus dem Wochentag entfernt
+            else {
+                weekWorkDayRecipes.remove(recipe);
+                return false;
+            }
         }
+
+        return true;
+    }
+
+    /**
+     * Überprüft ob ein {@link Recipe} bei den Anbietern beschaffbar ist.
+     * 
+     * @return
+     */
+    private boolean isRecipeObtainable(Set<Recipe> weekWorkDayRecipes, Recipe recipe) {
+        boolean result = true;
+
+        Integer weekWorkDayPositionOfRecipe = getWeekWorkDayPositionOfRecipe(weekWorkDayRecipes, recipe);
+
+        if (weekWorkDayPositionOfRecipe != null) {
+            BigDecimal mealMultiplyFactor = BuilderHelper.calculateMealMultiplyFactor(weekWorkDayPositionOfRecipe,
+                    canteenContext.getTotalMealsForCanteen());
+
+            for (IngredientListItem ingredientListItem : recipe.getIngredientList()) {
+
+                if (providerIngredientQuantities.containsKey(ingredientListItem.getIngredient())) {
+
+                    Amount providerIngredientQuantity = providerIngredientQuantities.get(ingredientListItem
+                            .getIngredient());
+
+                    BigDecimal quantityForIngredient = NumberHelper.multiply(ingredientListItem.getQuantity()
+                            .getValue(), mealMultiplyFactor);
+
+                    // Wenn die vorhandene Menge der Zutat größer oder gleich der benötigten Menge ist, muss diese von
+                    // der Gesamtmenge abgezogen werden
+                    if (NumberHelper
+                            .compareGreaterOrEqual(providerIngredientQuantity.getValue(), quantityForIngredient)) {
+                        providerIngredientQuantity.setValue(NumberHelper.subtract(
+                                providerIngredientQuantity.getValue(), quantityForIngredient));
+                    }
+                    else {
+                        result = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return result;
+
+    }
+
+    /**
+     * Ermittelt die Position des {@link Recipe} innerhalb eines {@link WeekWorkday}. Die Position stellt gleichzeitig
+     * die Priorität des {@link Recipe} dar, weil das übergebene Set nach dem Rang des {@link Recipe} sortiert ist.
+     * 
+     * @param weekWorkDayRecipes
+     * @param recipe
+     * @return Die Position des {@link Recipe} innerhalb eines {@link WeekWorkday}
+     */
+    private Integer getWeekWorkDayPositionOfRecipe(Set<Recipe> weekWorkDayRecipes, Recipe recipe) {
+        Integer result = null;
+
+        Iterator<Recipe> iterator = weekWorkDayRecipes.iterator();
+        int index = 0;
+
+        while (iterator.hasNext()) {
+
+            if (iterator.next().equals(recipe)) {
+                result = Integer.valueOf(index);
+                break;
+            }
+
+            index++;
+        }
+
+        return result;
     }
 
     /**
@@ -645,13 +735,22 @@ public class MenuPlanBuilder {
         return result;
     }
 
+    /**
+     * Repräsentiert eine temporäre kantinenspezifische Contextklasse, die bestimmte Werte innerhalb der
+     * Algorithmusverarbeitung aufnehmen kann.
+     * 
+     */
     private static final class CanteenContext {
+        private Canteen canteen;
         private Set<Recipe> recipes;
         private Recipe lastRecipe;
+        private BigDecimal totalMealsForCanteen;
 
-        public CanteenContext() {
+        public CanteenContext(Canteen canteen) {
+            this.canteen = canteen;
             this.recipes = new LinkedHashSet<Recipe>();
             this.lastRecipe = null;
+            this.totalMealsForCanteen = BuilderHelper.calculateTotalMealsForCanteen(canteen);
         }
 
         public Set<Recipe> getRecipes() {
@@ -666,12 +765,15 @@ public class MenuPlanBuilder {
             this.lastRecipe = lastRecipe;
         }
 
+        public BigDecimal getTotalMealsForCanteen() {
+            return totalMealsForCanteen;
+        }
+
     }
 
     /**
      * Repräsentiert eine temporäre Datenhaltungsklasse, die eine Woche und einen Wochentag als Integer aufnehmen kann.
      * 
-     * @author Tim Sahling
      */
     private static final class WeekWorkday {
         private Integer week;

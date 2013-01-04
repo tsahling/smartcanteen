@@ -1,10 +1,12 @@
 package de.osjava.smartcanteen.builder;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,7 +23,8 @@ import de.osjava.smartcanteen.data.Ingredient;
 import de.osjava.smartcanteen.data.Recipe;
 import de.osjava.smartcanteen.data.item.IngredientListItem;
 import de.osjava.smartcanteen.datatype.Amount;
-import de.osjava.smartcanteen.helper.PropertyHelper;
+import de.osjava.smartcanteen.helper.BuilderHelper;
+import de.osjava.smartcanteen.helper.NumberHelper;
 
 /**
  * Die Klasse {@link ShoppingListBuilder} ist eine der Geschäftslogikklassen und
@@ -33,14 +36,6 @@ import de.osjava.smartcanteen.helper.PropertyHelper;
  * @author Tim Sahling
  */
 public class ShoppingListBuilder {
-
-    private static final BigDecimal PROP_CANTEEN_MOREMEALSTHANEMPLOYEESFACTOR = new BigDecimal(
-            PropertyHelper.getProperty("canteen.moreMealsThanEmployeesFactor"));
-    private static final Integer PROP_PLANINGPERIOD_MEALSPERDAY = Integer.valueOf(PropertyHelper
-            .getProperty("planingPeriod.mealsPerDay"));
-
-    private static final BigDecimal PROP_CANTEEN_FAVMEALMULTIPLYFACTOR = new BigDecimal(
-            PropertyHelper.getProperty("canteen.favMealMultiplyFactor"));
 
     private ProviderBase providerBase;
     private Canteen[] canteens;
@@ -68,19 +63,19 @@ public class ShoppingListBuilder {
     public ShoppingList buildShoppingList() {
         ShoppingList result = new ShoppingList();
 
-        // Summieren der Mengen aller für den Speiseplan benötigten Zutaten
-        Map<Ingredient, Amount> ingredientAmounts = sumIngredientAmounts();
+        // Summieren der Mengen aller für die Speisepläne benötigten Zutaten
+        Map<Ingredient, Amount> ingredientQuantities = sumMenuPlanIngredientQuantities();
 
         // Ermitteln bei welchem Anbieter, welche Konstellationen von Zutaten am günstigsten eingekauft werden können
-        Map<AbstractProvider, Set<IngredientAmount>> test = bla(ingredientAmounts);
+        Map<AbstractProvider, Set<IngredientQuantity>> bestPriceProviders = determineBestPriceProviders(ingredientQuantities);
 
         // Erstellen der Einkaufslistenpositionen
         List<ShoppingListItem> shoppingListItems = new ArrayList<ShoppingListItem>();
 
-        for (Entry<AbstractProvider, Set<IngredientAmount>> entry : test.entrySet()) {
+        for (Entry<AbstractProvider, Set<IngredientQuantity>> entry : bestPriceProviders.entrySet()) {
 
-            for (IngredientAmount ingredientAmount : entry.getValue()) {
-                shoppingListItems.add(createShoppingListItem(entry.getKey(), ingredientAmount));
+            for (IngredientQuantity ingredientQuantity : entry.getValue()) {
+                shoppingListItems.add(createShoppingListItem(entry.getKey(), ingredientQuantity));
             }
         }
 
@@ -91,51 +86,70 @@ public class ShoppingListBuilder {
         return result;
     }
 
-    private ShoppingListItem createShoppingListItem(AbstractProvider provider, IngredientAmount ingredientAmount) {
-        ShoppingListItem result = new ShoppingListItem();
-        result.setProvider(provider);
-        result.setIngredient(ingredientAmount.getIngredient());
-        result.setQuantity(ingredientAmount.getAmount());
+    private Map<AbstractProvider, Set<IngredientQuantity>> determineBestPriceProviders(
+            Map<Ingredient, Amount> ingredientQuantities) {
+        Map<AbstractProvider, Set<IngredientQuantity>> result = new HashMap<AbstractProvider, Set<IngredientQuantity>>();
+
+        for (Entry<Ingredient, Amount> entry : ingredientQuantities.entrySet()) {
+
+            // Sucht alle Anbieter, die die Zutat vorrätig haben
+            Set<AbstractProvider> providersWithIngredient = providerBase.findProvidersByIngredient(entry.getKey());
+
+            // Ein Anbieter hat die Zutat vorrätig
+            if (providersWithIngredient.size() == 1) {
+
+                AbstractProvider provider = providersWithIngredient.iterator().next();
+
+                // Überprüfen ob Anbieter die Zutat in gewünschter Menge hat
+                if (provider.hasIngredientWithQuantity(entry.getKey(), entry.getValue())) {
+                    // Wenn Anbieter die Zutat in gewünschter Menge vorrätig hat, muss diese unabhängig vom Preis bei
+                    // ihm gekauft werden, da er der einzige Anbieter der Zutat ist
+                    addIngredientAndQuantity(result, provider, entry.getKey(), entry.getValue());
+                }
+            }
+            // Mehrere Anbieter haben die Zutat vorrätig
+            else if (providersWithIngredient.size() > 1) {
+                boolean test = false;
+            }
+        }
+
         return result;
     }
 
-    private static final class IngredientAmount {
-        private Ingredient ingredient;
-        private Amount amount;
+    /**
+     * 
+     * @param result
+     * @param provider
+     * @param ingredient
+     * @param quantity
+     */
+    private void addIngredientAndQuantity(Map<AbstractProvider, Set<IngredientQuantity>> result,
+            AbstractProvider provider, Ingredient ingredient, Amount quantity) {
 
-        public Ingredient getIngredient() {
-            return ingredient;
+        IngredientQuantity ingredientQuantity = new IngredientQuantity(ingredient, quantity);
+
+        if (result.containsKey(provider)) {
+            result.get(provider).add(ingredientQuantity);
+        }
+        else {
+            result.put(provider, new HashSet<IngredientQuantity>(Arrays.asList(ingredientQuantity)));
         }
 
-        public Amount getAmount() {
-            return amount;
-        }
-
+        provider.subtractQuantityFromIngredient(ingredient, quantity);
     }
 
-    private Map<AbstractProvider, Set<IngredientAmount>> bla(Map<Ingredient, Amount> ingredientAmounts) {
-        Map<AbstractProvider, Set<IngredientAmount>> result = new HashMap<AbstractProvider, Set<IngredientAmount>>();
-
-        for (Entry<Ingredient, Amount> entry : ingredientAmounts.entrySet()) {
-            Set<AbstractProvider> providers = providerBase.findProviderByIngredientAndQuantity(entry.getKey(), entry
-                    .getValue().getValue().intValue());
-
-            if (providers != null && !providers.isEmpty()) {
-
-                if (providers.size() == 1) {
-
-                }
-                else {
-
-                }
-            }
-            else {
-
-            }
-
-        }
-
-        // TODO(tsahling) provide sensible implementation
+    /**
+     * Erstellt eine Einkaufslistenposition.
+     * 
+     * @param provider
+     * @param ingredientQuantity
+     * @return
+     */
+    private ShoppingListItem createShoppingListItem(AbstractProvider provider, IngredientQuantity ingredientQuantity) {
+        ShoppingListItem result = new ShoppingListItem();
+        result.setProvider(provider);
+        result.setIngredient(ingredientQuantity.getIngredient());
+        result.setQuantity(ingredientQuantity.getQuantity());
         return result;
     }
 
@@ -144,7 +158,7 @@ public class ShoppingListBuilder {
      * 
      * @return
      */
-    private Map<Ingredient, Amount> sumIngredientAmounts() {
+    private Map<Ingredient, Amount> sumMenuPlanIngredientQuantities() {
         Map<Ingredient, Amount> result = new HashMap<Ingredient, Amount>();
 
         if (canteens != null) {
@@ -152,23 +166,28 @@ public class ShoppingListBuilder {
             for (Canteen canteen : canteens) {
                 MenuPlan menuPlan = canteen.getMenuPlan();
 
-                if (menuPlan != null) {
+                if (menuPlan != null && menuPlan.getMeals() != null && !menuPlan.getMeals().isEmpty()) {
 
-                    if (menuPlan.getMeals() != null && !menuPlan.getMeals().isEmpty()) {
+                    // Kalkuliert wieviele Gerichte pro Kantine gekocht werden müssen
+                    BigDecimal totalMealsForCanteen = BuilderHelper.calculateTotalMealsForCanteen(canteen);
 
-                        // Kalkuliert wieviele Gerichte pro Kantine gekocht werden müssen
-                        BigDecimal totalMealsForCanteen = calculateTotalMealsForCanteen(canteen);
+                    // Gruppiert die Gerichte eines Speiseplans nach Datum
+                    Map<Date, List<Meal>> mealsGroupedByDate = menuPlan.getMealsGroupedByDate();
 
-                        // Gruppiert die Gerichte eines Speiseplans nach Datum
-                        Map<Date, List<Meal>> mealsGroupedByDate = menuPlan.getMealsGroupedByDate();
+                    if (mealsGroupedByDate != null && !mealsGroupedByDate.isEmpty()) {
 
                         for (Entry<Date, List<Meal>> entry : mealsGroupedByDate.entrySet()) {
 
-                            for (int i = 0; i < entry.getValue().size(); i++) {
+                            Iterator<Meal> iterator = entry.getValue().iterator();
 
-                                Recipe recipe = entry.getValue().get(i).getRecipe();
+                            int index = 0;
 
-                                BigDecimal mealMultiplyFactor = calculateMealMultiplyFactor(i, totalMealsForCanteen);
+                            while (iterator.hasNext()) {
+
+                                Recipe recipe = iterator.next().getRecipe();
+
+                                BigDecimal mealMultiplyFactor = BuilderHelper.calculateMealMultiplyFactor(index,
+                                        totalMealsForCanteen);
 
                                 if (recipe != null && recipe.getIngredientList() != null && !recipe.getIngredientList()
                                         .isEmpty()) {
@@ -181,18 +200,24 @@ public class ShoppingListBuilder {
                                         if (ingredient != null && quantity != null) {
 
                                             if (mealMultiplyFactor != null) {
-                                                quantity.setValue(quantity.getValue().multiply(mealMultiplyFactor));
-                                            }
 
-                                            if (result.containsKey(ingredient)) {
-                                                result.get(ingredient).add(quantity);
-                                            }
-                                            else {
-                                                result.put(ingredient, quantity);
+                                                BigDecimal ingredientQuantity = NumberHelper.multiply(
+                                                        quantity.getValue(), mealMultiplyFactor);
+
+                                                if (result.containsKey(ingredient)) {
+                                                    result.get(ingredient).add(
+                                                            new Amount(ingredientQuantity, quantity.getUnit()));
+                                                }
+                                                else {
+                                                    result.put(ingredient,
+                                                            new Amount(ingredientQuantity, quantity.getUnit()));
+                                                }
                                             }
                                         }
                                     }
                                 }
+
+                                index++;
                             }
                         }
                     }
@@ -204,36 +229,62 @@ public class ShoppingListBuilder {
     }
 
     /**
-     * Kalkuliert die Gesamtmenge an Gerichten die für eine Kantine gekocht werden müssen, ausgehend von der
-     * Anforderung, dass eine gewisse Anzahl bzw. ein gewisser Faktor an Gerichten pro Kantine mehr vorgehalten werden.
+     * Repräsentiert eine temporäre Datenhaltungsklasse, die eine Zutat und eine Menge aufnehmen kann.
      * 
-     * @param canteen
-     * @return
      */
-    private BigDecimal calculateTotalMealsForCanteen(Canteen canteen) {
-        return new BigDecimal(canteen.getNumberOfEmployees()).multiply(PROP_CANTEEN_MOREMEALSTHANEMPLOYEESFACTOR);
-    }
+    private static final class IngredientQuantity {
+        private Ingredient ingredient;
+        private Amount quantity;
 
-    /**
-     * Kalkuliert die Gesamtmenge an Gerichten die, je nach Priorität des Gerichts, gekocht werden müssen, ausgehend von
-     * der Anforderung, dass das beliebtestete Gericht auf Basis eines Faktors öfter gekocht wird als die anderen beiden
-     * Gerichte.
-     * 
-     * @param priority
-     * @param totalMeals
-     * @return
-     */
-    private BigDecimal calculateMealMultiplyFactor(int priority, BigDecimal totalMeals) {
-        BigDecimal result = null;
-
-        if (priority == 0) {
-            result = totalMeals.multiply(PROP_CANTEEN_FAVMEALMULTIPLYFACTOR);
-        }
-        else {
-            result = totalMeals.multiply(PROP_CANTEEN_FAVMEALMULTIPLYFACTOR)
-                    .divide(BigDecimal.valueOf(PROP_PLANINGPERIOD_MEALSPERDAY - 1)).setScale(0, RoundingMode.HALF_UP);
+        public IngredientQuantity(Ingredient ingredient, Amount quantity) {
+            this.ingredient = ingredient;
+            this.quantity = quantity;
         }
 
-        return result;
+        public Ingredient getIngredient() {
+            return ingredient;
+        }
+
+        public Amount getQuantity() {
+            return quantity;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((ingredient == null) ? 0 : ingredient.hashCode());
+            result = prime * result + ((quantity == null) ? 0 : quantity.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            IngredientQuantity other = (IngredientQuantity) obj;
+            if (ingredient == null) {
+                if (other.ingredient != null)
+                    return false;
+            }
+            else if (!ingredient.equals(other.ingredient))
+                return false;
+            if (quantity == null) {
+                if (other.quantity != null)
+                    return false;
+            }
+            else if (!quantity.equals(other.quantity))
+                return false;
+            return true;
+        }
+
+        @Override
+        public String toString() {
+            return "IngredientQuantity [ingredient=" + ingredient + ", quantity=" + quantity + "]";
+        }
     }
 }
