@@ -5,16 +5,12 @@ import java.math.BigDecimal;
 import de.osjava.smartcanteen.data.item.IngredientListItem;
 
 /**
- * Die Klasse {@link Amount} stellt ein Datenobjekt dar, mit dem Einheiten von
- * irgendetwas beschrieben werden können, die bei ihrer Generierung noch nicht
- * genau definiert sind. So zum Beispiel nutzt {@link IngredientListItem} eine
- * Menge um eine Quantität eines Guts festzulegen. Dabei ist zur Kompilierung
- * des Quellcodes noch nicht definiert in welcher Menge gezählt wird - ob KG,
- * Eier, Liter. Die Menge wird dabei als {@link BigDecimal} gespeichert und die
+ * Die Klasse {@link Amount} stellt ein Datenobjekt dar, mit dem Einheiten von irgendetwas beschrieben werden können,
+ * die bei ihrer Generierung noch nicht genau definiert sind. So zum Beispiel nutzt {@link IngredientListItem} eine
+ * Menge um eine Quantität eines Guts festzulegen. Dabei ist zur Kompilierung des Quellcodes noch nicht definiert in
+ * welcher Menge gezählt wird - ob KG, Eier, Liter. Die Menge wird dabei als {@link BigDecimal} gespeichert und die
  * Einheitsbeschreibung als {@link UnitOfMeasurement}. Der Enum {@link UnitOfMeasurement} unterstützt dieses Szenario
- * indem dieser
- * verschiedene Werte anbietet wie z.B. eine Währung für Preise oder eine
- * Mengeneinheit für Rezepte.
+ * indem dieser verschiedene Werte anbietet wie z.B. eine Währung für Preise oder eine Mengeneinheit für Rezepte.
  * 
  * @author Marcel Baxmann
  */

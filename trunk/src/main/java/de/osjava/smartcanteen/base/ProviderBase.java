@@ -1,11 +1,14 @@
 package de.osjava.smartcanteen.base;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import de.osjava.smartcanteen.data.AbstractProvider;
 import de.osjava.smartcanteen.data.Ingredient;
 import de.osjava.smartcanteen.data.item.PriceListItem;
+import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.datatype.IngredientType;
 
 /**
@@ -97,28 +100,95 @@ public class ProviderBase {
     }
 
     /**
-     * Methode um den besten (günstigsten) Lebensmittelanbieter {@link AbstractProvider} für ein Lebensmittel in dem Set
-     * zu ermitteln.
+     * Summiert für alle Anbieter die Mengen der Zutaten.
      * 
-     * @param ingredient
-     *            Name des Lebensmittels
-     * @return Der beste (günstigste) Lebensmittelanbieter
+     * @return
      */
-    public AbstractProvider findBestPriceProviderByIngredient(
-            Ingredient ingredient) {
+    public Map<Ingredient, Amount> sumIngredientQuantities() {
+        Map<Ingredient, Amount> result = new HashMap<Ingredient, Amount>();
+
+        if (providers != null && !providers.isEmpty()) {
+
+            for (AbstractProvider provider : providers) {
+
+                for (PriceListItem priceListItem : provider.getPriceList()) {
+
+                    Amount quantity = priceListItem.multiplyAvailableQuantityWithSize();
+
+                    if (result.containsKey(priceListItem.getIngredient())) {
+                        result.get(priceListItem.getIngredient()).add(quantity);
+                    }
+                    else {
+                        result.put(priceListItem.getIngredient(), quantity);
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Methode um die Lebensmittelanbieter {@link AbstractProvider} zu finden, die ein Lebensmittel in einer gewünschten
+     * Menge vorrätig haben. Die Ausgabe wird nach dem Preis sortiert.
+     * 
+     * @param ingredient Lebensmittel
+     * @param quantity Menge
+     * @return Eine nach dem Preis sortierte ZUordnung von Preis zu Anbieter
+     */
+    public Map<Amount, AbstractProvider> findProvidersByIngredientAndQuantitySortedByPrice(Ingredient ingredient,
+            Amount quantity) {
+        // Map<Amount, AbstractProvider> providerPrices = new TreeMap<Amount, AbstractProvider>(new Comparator<Amount>()
+        // {
+        //
+        // @Override
+        // public int compare(Amount o1, Amount o2) {
+        // return o1.getValue().compareTo(o2.getValue());
+        // }
+        // });
+        //
+        // if (providers != null && !providers.isEmpty()) {
+        //
+        // for (AbstractProvider provider : providers) {
+        //
+        // Set<PriceListItem> priceList = provider.getPriceList();
+        //
+        // if (priceList != null && !priceList.isEmpty()) {
+        //
+        // for (PriceListItem priceListItem : priceList) {
+        //
+        // int availableQuantityOfIngredient = priceListItem.getAvailableQuantityOfIngredient();
+        //
+        // if (priceListItem.getIngredient().equals(ingredient) && availableQuantityOfIngredient >= quantity
+        // .getValue().intValue()) {
+        //
+        // Amount price = provider.calculatePriceForIngredientAndQuantity(ingredient, quantity);
+        //
+        // if (price != null) {
+        // providerPrices.put(price, provider);
+        // }
+        //
+        // // Verfügbare Menge des Gebindes muss um die angefragte Menge reduziert werden
+        // priceListItem.setAvailableQuantityOfIngredient(availableQuantityOfIngredient - quantity
+        // .getValue().intValue());
+        // }
+        // }
+        // }
+        // }
+        // }
+
+        // return providerPrices;
+
         return null;
     }
 
     /**
-     * Methode um einen Lebensmittelanbieter {@link AbstractProvider} anhand von einem Lebensmittel {@link Ingredient}
-     * und einer bestimmten Menge zu ermitteln.
+     * Methode um die Anbieter zu ermitteln, die eine bestimmte Zutat vorrätig haben.
      * 
-     * @param ingredient Lebensmittel
-     * @param quantity Menge
-     * @return Die Lebensmittelanbieter {@link AbstractProvider}, die das Lebensmittel in der Menge anbieten
+     * @param ingredient
+     * @return
      */
-    public Set<AbstractProvider> findProviderByIngredientAndQuantity(
-            Ingredient ingredient, int quantity) {
+    public Set<AbstractProvider> findProvidersByIngredient(Ingredient ingredient) {
         Set<AbstractProvider> result = new HashSet<AbstractProvider>();
 
         if (providers != null && !providers.isEmpty()) {
@@ -131,14 +201,47 @@ public class ProviderBase {
 
                     for (PriceListItem priceListItem : priceList) {
 
-                        if (ingredient.equals(priceListItem.getIngredient()) && priceListItem
-                                .getAvailableQuantityOfIngredient() >= quantity) {
+                        if (ingredient.equals(priceListItem.getIngredient())) {
                             result.add(provider);
+                            break;
                         }
                     }
                 }
             }
         }
+
+        return result;
+    }
+
+    /**
+     * Methode um einen Lebensmittelanbieter {@link AbstractProvider} anhand von einem Lebensmittel {@link Ingredient}
+     * und einer bestimmten Menge zu ermitteln.
+     * 
+     * @param ingredient Lebensmittel
+     * @param quantity Menge
+     * @return Die Lebensmittelanbieter {@link AbstractProvider}, die das Lebensmittel in der Menge anbieten
+     */
+    public Set<AbstractProvider> findProvidersByIngredientAndQuantity(Ingredient ingredient, int quantity) {
+        Set<AbstractProvider> result = new HashSet<AbstractProvider>();
+
+        // if (providers != null && !providers.isEmpty()) {
+        //
+        // for (AbstractProvider provider : providers) {
+        //
+        // Set<PriceListItem> priceList = provider.getPriceList();
+        //
+        // if (priceList != null && !priceList.isEmpty()) {
+        //
+        // for (PriceListItem priceListItem : priceList) {
+        //
+        // if (ingredient.equals(priceListItem.getIngredient()) && priceListItem
+        // .getAvailableQuantityOfIngredient() >= quantity) {
+        // result.add(provider);
+        // }
+        // }
+        // }
+        // }
+        // }
 
         return result;
     }

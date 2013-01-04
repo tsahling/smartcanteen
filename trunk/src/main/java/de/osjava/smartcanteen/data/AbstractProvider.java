@@ -6,6 +6,7 @@ import java.util.Set;
 import de.osjava.smartcanteen.data.item.PriceListItem;
 import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
+import de.osjava.smartcanteen.helper.NumberHelper;
 
 /**
  * Die Klasse {@link AbstractProvider} ist eine der Fach- bzw.
@@ -27,48 +28,92 @@ public abstract class AbstractProvider {
         this.priceList = priceList;
     }
 
-    public Amount calculatePriceForIngredientAndQuantity(Ingredient ingredient, Amount quantity) {
-        BigDecimal value = new BigDecimal(0);
-        Amount result = new Amount(value, UnitOfMeasurement.EUR);
+    /**
+     * Überprüft ob ein Anbieter eine Zutat in einer bestimmten Menge vorrätig hat
+     * 
+     * @param ingredient
+     * @param quantity
+     * @return
+     */
+    public boolean hasIngredientWithQuantity(Ingredient ingredient, Amount quantity) {
+        boolean result = false;
 
         if (priceList != null && !priceList.isEmpty()) {
 
-            // TODO(Tim Sahling) mach dat hier richtig!
             for (PriceListItem priceListItem : priceList) {
 
-            }
+                if (priceListItem.getIngredient().equals(ingredient)) {
 
+                    BigDecimal quantityOfIngredient = priceListItem.divideQuantityOfIngredientWithSize(quantity);
+
+                    if (NumberHelper.compareGreaterOrEqual(priceListItem.getAvailableQuantityOfIngredient(),
+                            quantityOfIngredient)) {
+                        result = true;
+                    }
+
+                    break;
+                }
+            }
         }
 
         return result;
-
     }
 
     /**
-     * Erstellt einen Anbieter.
+     * Subtrahiert eine Menge von einer Zutat.
      * 
-     * @param provider
-     *            Der zu erstellende Anbieter
-     * @return Der erstellte Anbieter
+     * @param ingredient
+     * @param quantity
      */
-    protected abstract AbstractProvider createProvider(AbstractProvider provider);
+    public void subtractQuantityFromIngredient(Ingredient ingredient, Amount quantity) {
+        if (priceList != null && !priceList.isEmpty()) {
+
+            for (PriceListItem priceListItem : priceList) {
+
+                if (priceListItem.getIngredient().equals(ingredient)) {
+
+                    BigDecimal quantityOfIngredient = priceListItem.divideQuantityOfIngredientWithSize(quantity);
+
+                    if (quantityOfIngredient != null) {
+                        priceListItem.setAvailableQuantityOfIngredient(NumberHelper.subtract(
+                                priceListItem.getAvailableQuantityOfIngredient(), quantityOfIngredient));
+                    }
+
+                    break;
+                }
+            }
+        }
+    }
 
     /**
-     * Bearbeitet einen Anbieter.
+     * Kalkuliert einen Preis für eine Zutat und eine Menge bei einem Anbieter. Transportkosten der Anbieter werden an
+     * dieser Stelle nicht berücksichtigt, sondern nur beim Berechnen der gesamten Einkaufsliste.
      * 
-     * @param provider
-     *            Der zu bearbeitende Anbieter
-     * @return Der bearbeitete Anbieter
+     * @param ingredient
+     * @param quantity
+     * @return
      */
-    protected abstract AbstractProvider updateProvider(AbstractProvider provider);
+    public Amount calculatePriceForIngredientAndQuantity(Ingredient ingredient, Amount quantity) {
+        Amount result = new Amount(BigDecimal.valueOf(0), UnitOfMeasurement.EUR);
 
-    /**
-     * Löscht einen Anbieter.
-     * 
-     * @param provider
-     *            Der zu löschende Anbieter
-     */
-    protected abstract void deleteProvider(AbstractProvider provider);
+        if (priceList != null && !priceList.isEmpty()) {
+
+            for (PriceListItem priceListItem : priceList) {
+
+                if (priceListItem.getIngredient().equals(ingredient)) {
+
+                    BigDecimal quantityOfIngredient = priceListItem.divideQuantityOfIngredientWithSize(quantity);
+
+                    result.add(new Amount(NumberHelper.multiply(quantityOfIngredient, priceListItem.getPrice()
+                            .getValue()), UnitOfMeasurement.EUR));
+
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
 
     /**
      * Liefert den Namen des Anbieters

@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.osjava.smartcanteen.AbstractTest;
+import de.osjava.smartcanteen.helper.BaseHelper;
 
 public class BaseHelperTest extends AbstractTest {
 

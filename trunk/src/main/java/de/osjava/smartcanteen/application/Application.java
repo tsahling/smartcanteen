@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
-import de.osjava.smartcanteen.base.BaseHelper;
 import de.osjava.smartcanteen.base.HitListBase;
 import de.osjava.smartcanteen.base.ProviderBase;
 import de.osjava.smartcanteen.base.RecipeBase;
@@ -14,6 +13,7 @@ import de.osjava.smartcanteen.builder.MenuPlanBuilder;
 import de.osjava.smartcanteen.builder.ShoppingListBuilder;
 import de.osjava.smartcanteen.builder.result.ShoppingList;
 import de.osjava.smartcanteen.data.Canteen;
+import de.osjava.smartcanteen.helper.BaseHelper;
 import de.osjava.smartcanteen.helper.LogHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 

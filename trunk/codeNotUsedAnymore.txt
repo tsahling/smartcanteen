@@ -1,0 +1,25 @@
+    /**
+     * Erstellt einen Anbieter.
+     * 
+     * @param provider
+     *            Der zu erstellende Anbieter
+     * @return Der erstellte Anbieter
+     */
+    protected abstract AbstractProvider createProvider(AbstractProvider provider);
+
+    /**
+     * Bearbeitet einen Anbieter.
+     * 
+     * @param provider
+     *            Der zu bearbeitende Anbieter
+     * @return Der bearbeitete Anbieter
+     */
+    protected abstract AbstractProvider updateProvider(AbstractProvider provider);
+
+    /**
+     * Löscht einen Anbieter.
+     * 
+     * @param provider
+     *            Der zu löschende Anbieter
+     */
+    protected abstract void deleteProvider(AbstractProvider provider);

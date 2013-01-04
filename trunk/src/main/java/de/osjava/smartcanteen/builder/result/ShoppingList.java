@@ -1,14 +1,17 @@
 package de.osjava.smartcanteen.builder.result;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import de.osjava.smartcanteen.builder.ShoppingListBuilder;
 import de.osjava.smartcanteen.data.AbstractProvider;
+import de.osjava.smartcanteen.data.Farmer;
+import de.osjava.smartcanteen.data.Wholesaler;
 import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
 
@@ -36,10 +39,33 @@ public class ShoppingList {
     public Amount calculateTotalPrice() {
         Amount result = new Amount(BigDecimal.valueOf(0), UnitOfMeasurement.EUR);
 
-        if (shoppingListItems != null && !shoppingListItems.isEmpty()) {
+        Map<AbstractProvider, List<ShoppingListItem>> providers = getShoppingListItemsGroupedByProvider();
 
-            for (ShoppingListItem shoppingListItem : shoppingListItems) {
-                result.add(shoppingListItem.calculatePrice());
+        if (providers != null && !providers.isEmpty()) {
+
+            for (Entry<AbstractProvider, List<ShoppingListItem>> entry : providers.entrySet()) {
+
+                Amount transportCosts = null;
+
+                if (entry.getKey() instanceof Farmer) {
+                    Farmer farmer = (Farmer) entry.getKey();
+                    transportCosts = farmer.calculateTransportCosts();
+                }
+                else if (entry.getKey() instanceof Wholesaler) {
+                    Wholesaler wholesaler = (Wholesaler) entry.getKey();
+                    transportCosts = wholesaler.calculateTransportCosts(entry.getValue().size());
+                }
+
+                List<ShoppingListItem> shoppingListItems = entry.getValue();
+
+                if (shoppingListItems != null && !shoppingListItems.isEmpty()) {
+
+                    for (ShoppingListItem shoppingListItem : shoppingListItems) {
+                        result.add(shoppingListItem.calculatePrice());
+                    }
+                }
+
+                result.add(transportCosts);
             }
         }
 
@@ -63,7 +89,7 @@ public class ShoppingList {
                     result.get(provider).add(shoppingListItem);
                 }
                 else {
-                    result.put(provider, new LinkedList<ShoppingListItem>(Arrays.asList(shoppingListItem)));
+                    result.put(provider, new ArrayList<ShoppingListItem>(Arrays.asList(shoppingListItem)));
                 }
             }
         }
