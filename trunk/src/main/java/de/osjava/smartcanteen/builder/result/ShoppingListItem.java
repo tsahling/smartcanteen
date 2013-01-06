@@ -24,9 +24,15 @@ public class ShoppingListItem {
 
     /**
      * Standardkonstruktor
+     * 
+     * @param ingredient Zutat
+     * @param quantity Menge
+     * @param provider Anbieter
      */
-    public ShoppingListItem() {
-
+    public ShoppingListItem(Ingredient ingredient, Amount quantity, AbstractProvider provider) {
+        this.ingredient = ingredient;
+        this.quantity = quantity;
+        this.provider = provider;
     }
 
     /**

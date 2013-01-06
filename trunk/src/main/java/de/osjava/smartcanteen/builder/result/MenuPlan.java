@@ -25,8 +25,8 @@ public class MenuPlan {
     /**
      * Standardkonstruktor
      */
-    public MenuPlan() {
-
+    public MenuPlan(List<Meal> meals) {
+        this.meals = meals;
     }
 
     /**
@@ -36,11 +36,12 @@ public class MenuPlan {
      */
     public List<Meal> getMealsSortedByDate() {
         if (meals != null && !meals.isEmpty()) {
+
             Collections.sort(meals, new Comparator<Meal>() {
 
                 @Override
-                public int compare(Meal arg0, Meal arg1) {
-                    return arg0.getDate().compareTo(arg1.getDate());
+                public int compare(Meal meal1, Meal meal2) {
+                    return meal1.getDate().compareTo(meal2.getDate());
                 }
             });
         }
@@ -65,7 +66,7 @@ public class MenuPlan {
                     result.get(date).add(meal);
                 }
                 else {
-                    // Hier muss eine {@link LinkedList} verwendet werden, da die Reihenfolge der Rezepte wichtig ist
+                    // Hier muss eine LinkedList verwendet werden, da die Reihenfolge der Rezepte wichtig ist
                     result.put(date, new LinkedList<Meal>(Arrays.asList(meal)));
                 }
             }

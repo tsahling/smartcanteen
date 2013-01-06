@@ -86,31 +86,19 @@ public class ShoppingListBuilder {
         return result;
     }
 
+    /**
+     * 
+     * @param ingredientQuantities
+     * @return
+     */
     private Map<AbstractProvider, Set<IngredientQuantity>> determineBestPriceProviders(
             Map<Ingredient, Amount> ingredientQuantities) {
         Map<AbstractProvider, Set<IngredientQuantity>> result = new HashMap<AbstractProvider, Set<IngredientQuantity>>();
 
+        // TODO (Tim Sahling) Hier den neuen Algorithmus aus Scan umsetzen
+
         for (Entry<Ingredient, Amount> entry : ingredientQuantities.entrySet()) {
 
-            // Sucht alle Anbieter, die die Zutat vorrätig haben
-            Set<AbstractProvider> providersWithIngredient = providerBase.findProvidersByIngredient(entry.getKey());
-
-            // Ein Anbieter hat die Zutat vorrätig
-            if (providersWithIngredient.size() == 1) {
-
-                AbstractProvider provider = providersWithIngredient.iterator().next();
-
-                // Überprüfen ob Anbieter die Zutat in gewünschter Menge hat
-                if (provider.hasIngredientWithQuantity(entry.getKey(), entry.getValue())) {
-                    // Wenn Anbieter die Zutat in gewünschter Menge vorrätig hat, muss diese unabhängig vom Preis bei
-                    // ihm gekauft werden, da er der einzige Anbieter der Zutat ist
-                    addIngredientAndQuantity(result, provider, entry.getKey(), entry.getValue());
-                }
-            }
-            // Mehrere Anbieter haben die Zutat vorrätig
-            else if (providersWithIngredient.size() > 1) {
-                boolean test = false;
-            }
         }
 
         return result;
@@ -146,11 +134,7 @@ public class ShoppingListBuilder {
      * @return
      */
     private ShoppingListItem createShoppingListItem(AbstractProvider provider, IngredientQuantity ingredientQuantity) {
-        ShoppingListItem result = new ShoppingListItem();
-        result.setProvider(provider);
-        result.setIngredient(ingredientQuantity.getIngredient());
-        result.setQuantity(ingredientQuantity.getQuantity());
-        return result;
+        return new ShoppingListItem(ingredientQuantity.getIngredient(), ingredientQuantity.getQuantity(), provider);
     }
 
     /**

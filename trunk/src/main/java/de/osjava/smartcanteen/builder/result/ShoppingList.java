@@ -1,6 +1,7 @@
 package de.osjava.smartcanteen.builder.result;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,11 +40,11 @@ public class ShoppingList {
     public Amount calculateTotalPrice() {
         Amount result = new Amount(BigDecimal.valueOf(0), UnitOfMeasurement.EUR);
 
-        Map<AbstractProvider, List<ShoppingListItem>> providers = getShoppingListItemsGroupedByProvider();
+        Map<AbstractProvider, List<ShoppingListItem>> providerShoppingListItems = getShoppingListItemsGroupedByProvider();
 
-        if (providers != null && !providers.isEmpty()) {
+        if (providerShoppingListItems != null && !providerShoppingListItems.isEmpty()) {
 
-            for (Entry<AbstractProvider, List<ShoppingListItem>> entry : providers.entrySet()) {
+            for (Entry<AbstractProvider, List<ShoppingListItem>> entry : providerShoppingListItems.entrySet()) {
 
                 Amount transportCosts = null;
 
@@ -67,6 +68,9 @@ public class ShoppingList {
 
                 result.add(transportCosts);
             }
+
+            // Kaufmännisches Runden auf zwei Nachkommastellen
+            result.getValue().setScale(2, RoundingMode.HALF_UP);
         }
 
         return result;

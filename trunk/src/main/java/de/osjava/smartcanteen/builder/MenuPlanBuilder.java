@@ -200,9 +200,7 @@ public class MenuPlanBuilder {
      * @return
      */
     private MenuPlan createMenuPlan() {
-        MenuPlan result = new MenuPlan();
-        result.setMeals(new ArrayList<Meal>(PROP_PLANINGPERIOD_TOTALMEALS));
-        return result;
+        return new MenuPlan(new ArrayList<Meal>(PROP_PLANINGPERIOD_TOTALMEALS));
     }
 
     /**
@@ -213,10 +211,7 @@ public class MenuPlanBuilder {
      * @return
      */
     private Meal createMeal(Date date, Recipe recipe) {
-        Meal result = new Meal();
-        result.setDate(date);
-        result.setRecipe(recipe);
-        return result;
+        return new Meal(recipe, date);
     }
 
     /**

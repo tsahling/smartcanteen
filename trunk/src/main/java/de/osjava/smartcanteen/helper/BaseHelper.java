@@ -221,13 +221,13 @@ public class BaseHelper {
         /* Wenn es ein Grosshändler ist wird ein Wholesaler erzeugt */
         if (typeOfTrader.equals(INPUT_DATA_TYPE_OF_TRADER_WHOLESALER)) {
             Amount transportFee = new Amount(transportCostBD, UnitOfMeasurement.EUR);
-            Wholesaler wholesaler = new Wholesaler(nameOfTrader, transportFee, priceList);
+            Wholesaler wholesaler = new Wholesaler(nameOfTrader, priceList, transportFee);
             providerBase.addProvider(wholesaler);
         }
         /* Wenn es ein Bauer ist wird ein Farmer erzeugt */
         else if (typeOfTrader.equals(INPUT_DATA_TYPE_OF_TRADER_FARMER)) {
             Amount totalDistance = new Amount(transportCostBD, UnitOfMeasurement.KMR);
-            Farmer farmer = new Farmer(nameOfTrader, totalDistance, priceList);
+            Farmer farmer = new Farmer(nameOfTrader, priceList, totalDistance);
             providerBase.addProvider(farmer);
         }
 
