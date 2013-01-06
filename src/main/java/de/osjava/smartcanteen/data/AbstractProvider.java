@@ -23,6 +23,12 @@ public abstract class AbstractProvider {
     private String name;
     private Set<PriceListItem> priceList;
 
+    /**
+     * Standardkonstruktor
+     * 
+     * @param name Name des Anbieters
+     * @param priceList Preisliste des Anbieters
+     */
     public AbstractProvider(String name, Set<PriceListItem> priceList) {
         this.name = name;
         this.priceList = priceList;
@@ -107,6 +113,28 @@ public abstract class AbstractProvider {
                     result.add(new Amount(NumberHelper.multiply(quantityOfIngredient, priceListItem.getPrice()
                             .getValue()), UnitOfMeasurement.EUR));
 
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 
+     * @param ingredient
+     * @return
+     */
+    public Amount findPriceForIngredient(Ingredient ingredient) {
+        Amount result = new Amount(BigDecimal.valueOf(0), UnitOfMeasurement.EUR);
+
+        if (priceList != null && !priceList.isEmpty()) {
+
+            for (PriceListItem priceListItem : priceList) {
+
+                if (priceListItem.getIngredient().equals(ingredient)) {
+                    result.add(priceListItem.getPrice());
                     break;
                 }
             }

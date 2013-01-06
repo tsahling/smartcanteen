@@ -20,9 +20,13 @@ public class Farmer extends AbstractProvider {
     private Amount distanceToCentral;
 
     /**
-     * Standardkonstruktor
+     * Standardkonstruktor mit Parametern.
+     * 
+     * @param name
+     * @param priceList
+     * @param distanceToCentral
      */
-    public Farmer(String name, Amount distanceToCentral, Set<PriceListItem> priceList) {
+    public Farmer(String name, Set<PriceListItem> priceList, Amount distanceToCentral) {
         super(name, priceList);
         this.distanceToCentral = distanceToCentral;
     }

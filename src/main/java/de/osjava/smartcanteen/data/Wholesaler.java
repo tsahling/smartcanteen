@@ -20,8 +20,12 @@ public class Wholesaler extends AbstractProvider {
 
     /**
      * Standardkonstruktor
+     * 
+     * @param name
+     * @param priceList
+     * @param transportFee
      */
-    public Wholesaler(String name, Amount transportFee, Set<PriceListItem> priceList) {
+    public Wholesaler(String name, Set<PriceListItem> priceList, Amount transportFee) {
         super(name, priceList);
         this.transportFee = transportFee;
     }

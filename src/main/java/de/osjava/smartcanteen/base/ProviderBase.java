@@ -1,7 +1,11 @@
 package de.osjava.smartcanteen.base;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -88,18 +92,6 @@ public class ProviderBase {
     }
 
     /**
-     * Methode um einen Lebensmittelanbieter {@link AbstractProvider} anhand
-     * seines Namens in dem Set zu finden
-     * 
-     * @param name
-     *            Name des Lebensmittelanbieters {@link AbstractProvider}
-     * @return Der Lebensmittelanbieter {@link AbstractProvider}
-     */
-    public AbstractProvider findProviderByName(String name) {
-        return null;
-    }
-
-    /**
      * Summiert für alle Anbieter die Mengen der Zutaten.
      * 
      * @return
@@ -126,6 +118,71 @@ public class ProviderBase {
         }
 
         return result;
+    }
+
+    /**
+     * Methode um die Anbieter zu ermitteln, die eine bestimmte Zutat vorrätig haben.
+     * 
+     * @param ingredient
+     * @return
+     */
+    public Set<AbstractProvider> findProvidersByIngredient(Ingredient ingredient) {
+        Set<AbstractProvider> result = new HashSet<AbstractProvider>();
+
+        if (providers != null && !providers.isEmpty()) {
+
+            for (AbstractProvider provider : providers) {
+
+                Set<PriceListItem> priceList = provider.getPriceList();
+
+                if (priceList != null && !priceList.isEmpty()) {
+
+                    for (PriceListItem priceListItem : priceList) {
+
+                        if (ingredient.equals(priceListItem.getIngredient())) {
+                            result.add(provider);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 
+     * @param providersWithIngredient
+     * @param ingredient
+     * @return
+     */
+    public List<AbstractProvider> findBestPriceProvidersByIngredient(
+            final Set<AbstractProvider> providersWithIngredient, final Ingredient ingredient) {
+        List<AbstractProvider> result = new ArrayList<AbstractProvider>(providersWithIngredient);
+
+        Collections.sort(result, new Comparator<AbstractProvider>() {
+
+            @Override
+            public int compare(AbstractProvider o1, AbstractProvider o2) {
+                return o1.findPriceForIngredient(ingredient).getValue()
+                        .compareTo(o2.findPriceForIngredient(ingredient).getValue());
+            }
+        });
+
+        return result;
+    }
+
+    /**
+     * Methode um einen Lebensmittelanbieter {@link AbstractProvider} anhand
+     * seines Namens in dem Set zu finden
+     * 
+     * @param name
+     *            Name des Lebensmittelanbieters {@link AbstractProvider}
+     * @return Der Lebensmittelanbieter {@link AbstractProvider}
+     */
+    public AbstractProvider findProviderByName(String name) {
+        return null;
     }
 
     /**
@@ -180,37 +237,6 @@ public class ProviderBase {
         // return providerPrices;
 
         return null;
-    }
-
-    /**
-     * Methode um die Anbieter zu ermitteln, die eine bestimmte Zutat vorrätig haben.
-     * 
-     * @param ingredient
-     * @return
-     */
-    public Set<AbstractProvider> findProvidersByIngredient(Ingredient ingredient) {
-        Set<AbstractProvider> result = new HashSet<AbstractProvider>();
-
-        if (providers != null && !providers.isEmpty()) {
-
-            for (AbstractProvider provider : providers) {
-
-                Set<PriceListItem> priceList = provider.getPriceList();
-
-                if (priceList != null && !priceList.isEmpty()) {
-
-                    for (PriceListItem priceListItem : priceList) {
-
-                        if (ingredient.equals(priceListItem.getIngredient())) {
-                            result.add(provider);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        return result;
     }
 
     /**
