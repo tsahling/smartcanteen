@@ -1,5 +1,6 @@
 package de.osjava.smartcanteen.base;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,6 +15,7 @@ import de.osjava.smartcanteen.data.Ingredient;
 import de.osjava.smartcanteen.data.item.PriceListItem;
 import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.datatype.IngredientType;
+import de.osjava.smartcanteen.helper.NumberHelper;
 
 /**
  * Die Klasse {@link ProviderBase} ist eine Datenträgerklasse die in einem Set
@@ -121,6 +123,69 @@ public class ProviderBase {
     }
 
     /**
+     * Methode um die {@link AbstractProvider} zu ermitteln, die für eine {@link Ingredient} den besten Preis bieten.
+     * Die Auswahl beschränkt sich dabei auf {@link AbstractProvider}, welche die Zutat auch vorrätig haben.
+     * 
+     * @param providersWithIngredient
+     * @param ingredient
+     * @return
+     */
+    public List<AbstractProvider> findBestPriceProvidersByIngredient(
+            final Set<AbstractProvider> providersWithIngredient, final Ingredient ingredient) {
+        List<AbstractProvider> result = new ArrayList<AbstractProvider>();
+
+        if (providersWithIngredient != null && !providersWithIngredient.isEmpty()) {
+
+            result.addAll(providersWithIngredient);
+
+            Collections.sort(result, new Comparator<AbstractProvider>() {
+
+                @Override
+                public int compare(AbstractProvider p1, AbstractProvider p2) {
+                    PriceListItem pli1 = p1.findPriceListItemByIngredient(ingredient);
+                    PriceListItem pli2 = p2.findPriceListItemByIngredient(ingredient);
+                    return comparePriceOfPriceListItems(pli1, pli2);
+                }
+            });
+        }
+
+        return result;
+    }
+
+    /**
+     * Methode um die {@link AbstractProvider} zu ermitteln, die für eine {@link Ingredient} und eine {@link Amount} den
+     * besten Preis bieten. Die Auswahl beschränkt sich dabei auf {@link AbstractProvider}, welche die Zutat auch
+     * vorrätig haben.
+     * 
+     * @param providersWithIngredientAndQuantity
+     * @param ingredient
+     * @param ingredientQuantity
+     * @return
+     */
+    public List<AbstractProvider> findBestPriceProvidersByIngredientAndQuantity(
+            final Set<AbstractProvider> providersWithIngredientAndQuantity, final Ingredient ingredient,
+            final Amount ingredientQuantity) {
+        List<AbstractProvider> result = new ArrayList<AbstractProvider>();
+
+        if (providersWithIngredientAndQuantity != null && !providersWithIngredientAndQuantity.isEmpty()) {
+
+            result.addAll(providersWithIngredientAndQuantity);
+
+            Collections.sort(result, new Comparator<AbstractProvider>() {
+
+                @Override
+                public int compare(AbstractProvider p1, AbstractProvider p2) {
+                    PriceListItem pli1 = p1.findPriceListItemByIngredient(ingredient);
+                    PriceListItem pli2 = p2.findPriceListItemByIngredient(ingredient);
+                    return comparePriceOfPriceListItemsWithQuantity(pli1, pli2, ingredientQuantity);
+                }
+            });
+        }
+
+        return result;
+    }
+
+    /**
      * Methode um die Anbieter zu ermitteln, die eine bestimmte Zutat vorrätig haben.
      * 
      * @param ingredient
@@ -152,25 +217,104 @@ public class ProviderBase {
     }
 
     /**
+     * Methode um die {@link AbstractProvider} zu ermitteln, die eine bestimmte Zutat in einer bestimmten Menge vorrätig
+     * haben. Die Auswahl beschränkt sich dabei auf {@link AbstractProvider}, welche die Zutat auch vorrätig haben.
      * 
      * @param providersWithIngredient
      * @param ingredient
+     * @param quantity
      * @return
      */
-    public List<AbstractProvider> findBestPriceProvidersByIngredient(
-            final Set<AbstractProvider> providersWithIngredient, final Ingredient ingredient) {
-        List<AbstractProvider> result = new ArrayList<AbstractProvider>(providersWithIngredient);
+    public Set<AbstractProvider> findProvidersByIngredientAndQuantity(Set<AbstractProvider> providersWithIngredient,
+            Ingredient ingredient, Amount quantity) {
+        Set<AbstractProvider> result = new HashSet<AbstractProvider>();
 
-        Collections.sort(result, new Comparator<AbstractProvider>() {
+        if (providersWithIngredient != null && !providersWithIngredient.isEmpty()) {
 
-            @Override
-            public int compare(AbstractProvider o1, AbstractProvider o2) {
-                return o1.findPriceForIngredient(ingredient).getValue()
-                        .compareTo(o2.findPriceForIngredient(ingredient).getValue());
+            for (AbstractProvider provider : providersWithIngredient) {
+
+                if (provider.hasIngredientWithQuantity(ingredient, quantity)) {
+                    result.add(provider);
+                }
             }
-        });
+        }
 
         return result;
+    }
+
+    /**
+     * Vergleicht die Preise von zwei {@link PriceListItem}s miteinander.
+     * 
+     * @param pli1
+     * @param pli2
+     * @return
+     */
+    private int comparePriceOfPriceListItems(PriceListItem pli1, PriceListItem pli2) {
+        // Wenn eine Preislistenposition nicht gesetzt ist, wird von Gleichheit ausgegangen. Dieser Fall dürfte aber
+        // normalerweise nicht eintreten.
+        if (pli1 == null || pli2 == null) {
+            return 0;
+        }
+
+        // Wenn die Größe und Einheit der Gebinde identisch sind, wird der Preis der beiden Positionen verglichen
+        if (pli1.getSize().equals(pli2.getSize())) {
+            return pli1.getPrice().getValue().compareTo(pli2.getPrice().getValue());
+        }
+
+        // Wenn die Größe des Gebindes von Position 1 kleiner ist als die Größe des Gebindes von Position 2, müssen
+        // diese Werte auf die gleiche Größe gebracht werden, um die Preise vergleichen zu können.
+        if (pli1.getSize().getValue().compareTo(pli2.getSize().getValue()) == -1) {
+            BigDecimal dividedSize = NumberHelper.divide(pli2.getSize().getValue(), pli1.getSize()
+                    .getValue());
+
+            int compare = NumberHelper.divide(pli2.getPrice().getValue(), dividedSize).compareTo(
+                    pli1.getPrice().getValue());
+
+            // Invertieren des Ergebnisses, da eigentlich Position 1 mit Position 2 verglichen wird.
+            if (compare == -1) {
+                return 1;
+            }
+            else if (compare == 1) {
+                return -1;
+            }
+            else {
+                return compare;
+            }
+        }
+        // Wenn die Größe des Gebindes von Position 1 größer ist als die Größe des Gebindes von Position 2, müssen
+        // diese Werte auf die gleiche Größe gebracht werden, um die Preise vergleichen zu können.
+        else if (pli1.getSize().getValue().compareTo(pli2.getSize().getValue()) == 1) {
+            BigDecimal dividedSize = NumberHelper.divide(pli1.getSize().getValue(), pli2.getSize().getValue());
+
+            return NumberHelper.divide(pli1.getPrice().getValue(), dividedSize).compareTo(pli2.getPrice().getValue());
+        }
+
+        return 0;
+    }
+
+    /**
+     * Vergleicht die Preise von zwei {@link PriceListItem}s miteinander auf Basis einer übergebenen Menge.
+     * 
+     * @param pli1
+     * @param pli2
+     * @param quantity
+     * @return
+     */
+    private int comparePriceOfPriceListItemsWithQuantity(PriceListItem pli1, PriceListItem pli2, Amount quantity) {
+        // Wenn eine Preislistenposition oder die Menge nicht gesetzt ist, wird von Gleichheit ausgegangen. Dieser Fall
+        // dürfte aber normalerweise nicht eintreten.
+        if (pli1 == null || pli2 == null || quantity == null) {
+            return 0;
+        }
+
+        BigDecimal pli1PriceForQuantity = pli1.calculatePriceForQuantity(quantity);
+        BigDecimal pli2PriceForQuantity = pli2.calculatePriceForQuantity(quantity);
+
+        if (pli1PriceForQuantity != null && pli2PriceForQuantity != null) {
+            return pli1PriceForQuantity.compareTo(pli2PriceForQuantity);
+        }
+
+        return 0;
     }
 
     /**
@@ -183,93 +327,6 @@ public class ProviderBase {
      */
     public AbstractProvider findProviderByName(String name) {
         return null;
-    }
-
-    /**
-     * Methode um die Lebensmittelanbieter {@link AbstractProvider} zu finden, die ein Lebensmittel in einer gewünschten
-     * Menge vorrätig haben. Die Ausgabe wird nach dem Preis sortiert.
-     * 
-     * @param ingredient Lebensmittel
-     * @param quantity Menge
-     * @return Eine nach dem Preis sortierte ZUordnung von Preis zu Anbieter
-     */
-    public Map<Amount, AbstractProvider> findProvidersByIngredientAndQuantitySortedByPrice(Ingredient ingredient,
-            Amount quantity) {
-        // Map<Amount, AbstractProvider> providerPrices = new TreeMap<Amount, AbstractProvider>(new Comparator<Amount>()
-        // {
-        //
-        // @Override
-        // public int compare(Amount o1, Amount o2) {
-        // return o1.getValue().compareTo(o2.getValue());
-        // }
-        // });
-        //
-        // if (providers != null && !providers.isEmpty()) {
-        //
-        // for (AbstractProvider provider : providers) {
-        //
-        // Set<PriceListItem> priceList = provider.getPriceList();
-        //
-        // if (priceList != null && !priceList.isEmpty()) {
-        //
-        // for (PriceListItem priceListItem : priceList) {
-        //
-        // int availableQuantityOfIngredient = priceListItem.getAvailableQuantityOfIngredient();
-        //
-        // if (priceListItem.getIngredient().equals(ingredient) && availableQuantityOfIngredient >= quantity
-        // .getValue().intValue()) {
-        //
-        // Amount price = provider.calculatePriceForIngredientAndQuantity(ingredient, quantity);
-        //
-        // if (price != null) {
-        // providerPrices.put(price, provider);
-        // }
-        //
-        // // Verfügbare Menge des Gebindes muss um die angefragte Menge reduziert werden
-        // priceListItem.setAvailableQuantityOfIngredient(availableQuantityOfIngredient - quantity
-        // .getValue().intValue());
-        // }
-        // }
-        // }
-        // }
-        // }
-
-        // return providerPrices;
-
-        return null;
-    }
-
-    /**
-     * Methode um einen Lebensmittelanbieter {@link AbstractProvider} anhand von einem Lebensmittel {@link Ingredient}
-     * und einer bestimmten Menge zu ermitteln.
-     * 
-     * @param ingredient Lebensmittel
-     * @param quantity Menge
-     * @return Die Lebensmittelanbieter {@link AbstractProvider}, die das Lebensmittel in der Menge anbieten
-     */
-    public Set<AbstractProvider> findProvidersByIngredientAndQuantity(Ingredient ingredient, int quantity) {
-        Set<AbstractProvider> result = new HashSet<AbstractProvider>();
-
-        // if (providers != null && !providers.isEmpty()) {
-        //
-        // for (AbstractProvider provider : providers) {
-        //
-        // Set<PriceListItem> priceList = provider.getPriceList();
-        //
-        // if (priceList != null && !priceList.isEmpty()) {
-        //
-        // for (PriceListItem priceListItem : priceList) {
-        //
-        // if (ingredient.equals(priceListItem.getIngredient()) && priceListItem
-        // .getAvailableQuantityOfIngredient() >= quantity) {
-        // result.add(provider);
-        // }
-        // }
-        // }
-        // }
-        // }
-
-        return result;
     }
 
     /**
@@ -300,5 +357,4 @@ public class ProviderBase {
     public String toString() {
         return "ProviderBase [provider=" + providers + "]";
     }
-
 }

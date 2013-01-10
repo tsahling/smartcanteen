@@ -57,6 +57,30 @@ public class Amount {
     }
 
     /**
+     * Substrahiert von der bestehenden Menge, sofern diese die gleiche Einheit haben, eine weitere Menge und gibt den
+     * aktualisierten Wert zurück.
+     * 
+     * @param amount
+     * @return
+     */
+    public Amount subtract(Amount amount) {
+        if (this.unit.equals(amount.getUnit())) {
+            setValue(subtractValue(amount.getValue()));
+        }
+        return this;
+    }
+
+    /**
+     * Subtrahiert von der bestehenden Menge eine weitere Menge.
+     * 
+     * @param value
+     * @return
+     */
+    private BigDecimal subtractValue(BigDecimal value) {
+        return this.value.subtract(value);
+    }
+
+    /**
      * Methode zum Abfragen des Werts / Menge
      * 
      * @return Den Wert

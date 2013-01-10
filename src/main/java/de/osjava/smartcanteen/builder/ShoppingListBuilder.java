@@ -87,6 +87,8 @@ public class ShoppingListBuilder {
     }
 
     /**
+     * Ermittelt bei welchem {@link AbstractProvider}, welche Konstellationen von Zutaten am günstigsten eingekauft
+     * werden können.
      * 
      * @param ingredientQuantities
      * @return
@@ -95,13 +97,181 @@ public class ShoppingListBuilder {
             Map<Ingredient, Amount> ingredientQuantities) {
         Map<AbstractProvider, Set<IngredientQuantity>> result = new HashMap<AbstractProvider, Set<IngredientQuantity>>();
 
-        // TODO (Tim Sahling) Hier den neuen Algorithmus aus Scan umsetzen
-
         for (Entry<Ingredient, Amount> entry : ingredientQuantities.entrySet()) {
 
+            Ingredient ingredient = entry.getKey();
+            Amount ingredientQuantity = entry.getValue();
+
+            // Sucht alle Anbieter, die die Zutat vorrätig haben
+            Set<AbstractProvider> providersWithIngredient = providerBase.findProvidersByIngredient(ingredient);
+
+            // Ein Anbieter hat die Zutat vorrätig
+            if (providersWithIngredient.size() == 1) {
+                computeOneProviderWithIngredient(result, providersWithIngredient.iterator().next(), ingredient,
+                        ingredientQuantity);
+            }
+            // Mehrere Anbieter haben die Zutat vorrätig
+            else if (providersWithIngredient.size() > 1) {
+                computeMoreProvidersWithIngredient(result, providersWithIngredient, ingredient, ingredientQuantity);
+            }
         }
 
         return result;
+    }
+
+    /**
+     * Berechnet den Fall, dass nur ein einzelner {@link AbstractProvider} die {@link Ingredient} vorrätig hat.
+     * 
+     * @param result
+     * @param provider
+     * @param ingredient
+     * @param ingredientQuantity
+     */
+    private void computeOneProviderWithIngredient(Map<AbstractProvider, Set<IngredientQuantity>> result,
+            AbstractProvider provider, Ingredient ingredient, Amount ingredientQuantity) {
+
+        // Überprüfen ob Anbieter die Zutat in gewünschter Menge hat. Diese Abfrage ist allerdings nur aus
+        // Sicherheitsgründen implementiert, da die Abfrage ob ein Gericht beschaffbar ist, bereits bei der
+        // Speiseplangenerierung erfolgt.
+        if (provider.hasIngredientWithQuantity(ingredient, ingredientQuantity)) {
+            // Wenn Anbieter die Zutat in gewünschter Menge vorrätig hat, muss diese unabhängig vom Preis bei
+            // ihm gekauft werden, da er der einzige Anbieter der Zutat ist
+            addAndSubtractIngredientAndQuantity(result, provider, ingredient, ingredientQuantity, ingredientQuantity);
+        }
+    }
+
+    /**
+     * Berechnet den Fall, dass mehrere {@link AbstractProvider} die {@link Ingredient} vorrätig haben.
+     * 
+     * @param result
+     * @param providers
+     * @param ingredient
+     * @param ingredientQuantity
+     */
+    private void computeMoreProvidersWithIngredient(Map<AbstractProvider, Set<IngredientQuantity>> result,
+            Set<AbstractProvider> providers, Ingredient ingredient, Amount ingredientQuantity) {
+
+        Set<AbstractProvider> providersWithIngredientAndQuantity = providerBase.findProvidersByIngredientAndQuantity(
+                providers, ingredient, ingredientQuantity);
+
+        // Wenn kein Anbieter die Zutat in der benötigten Menge vorrätig hat, muss die Bestellung auf mehrere
+        // Anbieter aufgeteilt werden.
+        if (providersWithIngredientAndQuantity.size() == 0) {
+            computeNoProviderWithIngredientAndQuantity(result, providers, ingredient, ingredientQuantity);
+        }
+        // Wenn ein Anbieter die Zutat und die benötigte Menge vorrätig hat, bestellen wir bei ihm, da eine
+        // Bestellung bei nur einem Anbieter Transportkosten spart.
+        else if (providersWithIngredientAndQuantity.size() == 1) {
+            computeOneProviderWithIngredientAndQuantity(result, providersWithIngredientAndQuantity.iterator().next(),
+                    ingredient, ingredientQuantity);
+        }
+        // Wenn mehrere Anbieter die Zutat und die benötigte Menge vorrätig haben, muss bei dem Anbieter bestellt
+        // werden, der die benötigte Menge am günstigsten anbietet
+        else {
+            computeMoreProvidersWithIngredientAndQuantity(result, providersWithIngredientAndQuantity, ingredient,
+                    ingredientQuantity);
+        }
+    }
+
+    /**
+     * Berechnet den Fall, dass kein {@link AbstractProvider} die {@link Ingredient} in der benötigten {@link Amount}
+     * vorrätig hat.
+     * 
+     * @param result
+     * @param providers
+     * @param ingredient
+     * @param ingredientQuantity
+     */
+    private void computeNoProviderWithIngredientAndQuantity(Map<AbstractProvider, Set<IngredientQuantity>> result,
+            Set<AbstractProvider> providers, Ingredient ingredient, Amount ingredientQuantity) {
+
+        // Ermitteln der preisgünstigsten Anbieter pro Zutat
+        List<AbstractProvider> bestPriceProviders = providerBase.findBestPriceProvidersByIngredient(
+                providers, ingredient);
+
+        for (AbstractProvider bestPriceProvider : bestPriceProviders) {
+
+            // Suchen der Menge einer Zutat von einem Anbieter
+            Amount ingredientQuantityOfProvider = bestPriceProvider.findQuantityByIngredient(ingredient);
+
+            if (ingredientQuantityOfProvider != null) {
+
+                // Subtrahiert von der insgesamt benötigten Menge, die Menge des jeweiligen Anbieters
+                BigDecimal subtract = NumberHelper.subtract(ingredientQuantity.getValue(),
+                        ingredientQuantityOfProvider.getValue());
+
+                // Wenn das Ergebnis der Subtraktion größer oder gleich 0 ist, wird die komplette Menge des
+                // Anbieters bestellt und die insgesamt benötigte Menge der Zutat entsprechend angepasst
+                if (NumberHelper.compareGreaterOrEqual(subtract, BigDecimal.ZERO)) {
+                    addAndSubtractIngredientAndQuantity(result, bestPriceProvider, ingredient,
+                            ingredientQuantityOfProvider, ingredientQuantity);
+                }
+                // Wenn das Ergebnis der Subtraktion kleiner 0 ist, ist die restliche Menge beim Anbieter
+                // bestellbar
+                else {
+                    addAndSubtractIngredientAndQuantity(result, bestPriceProvider, ingredient,
+                            ingredientQuantity, ingredientQuantity);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Berechnet den Fall, dass ein {@link AbstractProvider} die {@link Ingredient} in der benötigten {@link Amount}
+     * vorrätig hat.
+     * 
+     * @param result
+     * @param provider
+     * @param ingredient
+     * @param ingredientQuantity
+     */
+    private void computeOneProviderWithIngredientAndQuantity(Map<AbstractProvider, Set<IngredientQuantity>> result,
+            AbstractProvider provider, Ingredient ingredient, Amount ingredientQuantity) {
+        addAndSubtractIngredientAndQuantity(result, provider, ingredient, ingredientQuantity, ingredientQuantity);
+    }
+
+    /**
+     * Berechnet den Fall, dass mehrere {@link AbstractProvider} die {@link Ingredient} in der benötigten {@link Amount}
+     * vorrätig haben.
+     * 
+     * @param result
+     * @param providers
+     * @param ingredient
+     * @param ingredientQuantity
+     */
+    private void computeMoreProvidersWithIngredientAndQuantity(Map<AbstractProvider, Set<IngredientQuantity>> result,
+            Set<AbstractProvider> providers, Ingredient ingredient, Amount ingredientQuantity) {
+
+        // Ermitteln der preisgünstigsten Anbieter pro Zutat und Menge
+        List<AbstractProvider> bestPriceProviders = providerBase.findBestPriceProvidersByIngredientAndQuantity(
+                providers, ingredient, ingredientQuantity);
+
+        if (bestPriceProviders != null && !bestPriceProviders.isEmpty()) {
+
+            AbstractProvider bestPriceProvider = bestPriceProviders.iterator().next();
+
+            addAndSubtractIngredientAndQuantity(result, bestPriceProvider, ingredient,
+                    ingredientQuantity, ingredientQuantity);
+        }
+    }
+
+    /**
+     * 
+     * @param result
+     * @param provider
+     * @param ingredient
+     * @param ingredientQuantity
+     * @param quantityToSubtractFrom
+     */
+    private void addAndSubtractIngredientAndQuantity(Map<AbstractProvider, Set<IngredientQuantity>> result,
+            AbstractProvider provider, Ingredient ingredient, Amount ingredientQuantity, Amount quantityToSubtractFrom) {
+        // Hinzufügen der Zutat und der Menge zum Ergebnis
+        addIngredientAndQuantity(result, provider, ingredient, ingredientQuantity);
+        // Subtraktion der Menge einer Zutat vom Anbieter
+        provider.subtractQuantityFromIngredient(ingredient, ingredientQuantity);
+        // Subtraktion der Menge einer Zutat von der Gesamtmenge der Zutat
+        quantityToSubtractFrom.subtract(ingredientQuantity);
     }
 
     /**
@@ -114,7 +284,8 @@ public class ShoppingListBuilder {
     private void addIngredientAndQuantity(Map<AbstractProvider, Set<IngredientQuantity>> result,
             AbstractProvider provider, Ingredient ingredient, Amount quantity) {
 
-        IngredientQuantity ingredientQuantity = new IngredientQuantity(ingredient, quantity);
+        IngredientQuantity ingredientQuantity = new IngredientQuantity(new Ingredient(ingredient.getName(),
+                ingredient.getIngredientType()), new Amount(quantity.getValue(), quantity.getUnit()));
 
         if (result.containsKey(provider)) {
             result.get(provider).add(ingredientQuantity);
@@ -122,8 +293,6 @@ public class ShoppingListBuilder {
         else {
             result.put(provider, new HashSet<IngredientQuantity>(Arrays.asList(ingredientQuantity)));
         }
-
-        provider.subtractQuantityFromIngredient(ingredient, quantity);
     }
 
     /**
