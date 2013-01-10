@@ -50,18 +50,53 @@ public class PriceListItem {
      * @param quantity
      * @return
      */
-    public BigDecimal divideQuantityOfIngredientWithSize(Amount quantity) {
+    public BigDecimal calculatePriceForQuantity(Amount quantity) {
         BigDecimal result = null;
 
-        if (size != null && size.getUnit() != null && size.getValue() != null && quantity != null && quantity.getUnit() != null && quantity
-                .getValue() != null) {
+        if (validateSizeAndQuantity(quantity)) {
 
-            if (size.getUnit().equals(quantity.getUnit())) {
-                result = NumberHelper.divide(quantity.getValue(), size.getValue());
+            if (this.size.getUnit().equals(quantity.getUnit())) {
+                result = NumberHelper.multiply(calculatePriceForOneUnitOfSize(), quantity.getValue());
             }
         }
 
         return result;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    private BigDecimal calculatePriceForOneUnitOfSize() {
+        return NumberHelper.divide(this.price.getValue(), this.size.getValue());
+    }
+
+    /**
+     * 
+     * @param quantity
+     * @return
+     */
+    public BigDecimal divideQuantityWithSize(Amount quantity) {
+        BigDecimal result = null;
+
+        if (validateSizeAndQuantity(quantity)) {
+
+            if (this.size.getUnit().equals(quantity.getUnit())) {
+                result = NumberHelper.divide(quantity.getValue(), this.size.getValue());
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 
+     * @param quantity
+     * @return
+     */
+    private boolean validateSizeAndQuantity(Amount quantity) {
+        return this.size != null && this.size.getUnit() != null && this.size.getValue() != null && quantity != null && quantity
+                .getUnit() != null && quantity.getValue() != null;
     }
 
     /**

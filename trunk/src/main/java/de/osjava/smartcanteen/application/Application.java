@@ -2,6 +2,7 @@ package de.osjava.smartcanteen.application;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
@@ -170,6 +171,9 @@ public class Application {
         ShoppingListBuilder slb = new ShoppingListBuilder(providerBase, canteens);
         ShoppingList shoppingList = slb.buildShoppingList();
 
+        // TODO (Tim Sahling) Remove me, just for debug
+        LOG.log(Level.INFO, shoppingList.calculateTotalPrice().toString());
+
         // Übergabe der Ergebnisse der Applikationslogik an die ausgebende Methode
         outputApplicationResult(shoppingList, canteens);
     }
@@ -181,6 +185,7 @@ public class Application {
      */
     private void outputApplicationResult(ShoppingList shoppingList,
             Canteen... canteens) {
+
         // TODO(Marcel Baxmann) Ergebnisse der Applikationslogik mit
         // Output-Klassen verarbeiten
     }

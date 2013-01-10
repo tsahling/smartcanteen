@@ -1,3 +1,187 @@
+            // for (Entry<Ingredient, Amount> entry : ingredientQuantities.entrySet()) {
+        //
+        // // Sucht alle Anbieter, die die Zutat vorrätig haben
+        // Set<AbstractProvider> providersWithIngredient = providerBase.findProvidersByIngredient(entry.getKey());
+        //
+        // // Ein Anbieter hat die Zutat vorrätig
+        // if (providersWithIngredient.size() == 1) {
+        //
+        // AbstractProvider provider = providersWithIngredient.iterator().next();
+        //
+        // // Überprüfen ob Anbieter die Zutat in gewünschter Menge hat
+        // if (provider.hasIngredientWithQuantity(entry.getKey(), entry.getValue())) {
+        // // Wenn Anbieter die Zutat in gewünschter Menge vorrätig hat, muss diese unabhängig vom Preis bei
+        // // ihm gekauft werden, da er der einzige Anbieter der Zutat ist
+        // addIngredientAndQuantity(result, provider, entry.getKey(), entry.getValue());
+        // }
+        // }
+        // // Mehrere Anbieter haben die Zutat vorrätig
+        // else if (providersWithIngredient.size() > 1) {
+        //
+        // for (AbstractProvider provider : providersWithIngredient) {
+        // PriceListItem priceListItem = provider.findPriceListItemForIngredient(entry.getKey());
+        //
+        // IngredientQuantity ingredientQuantity = new IngredientQuantity(priceListItem.getIngredient(),
+        // priceListItem.getSize());
+        //
+        // if (test.containsKey(provider)) {
+        // test.get(provider).add(ingredientQuantity);
+        // }
+        // else {
+        // test.put(provider, new HashSet<IngredientQuantity>(Arrays.asList(ingredientQuantity)));
+        // }
+        // }
+        //
+        // }
+        // }
+        //
+        // System.out.println(ingredientQuantities.size());
+        //
+        // if (test != null && !test.isEmpty()) {
+        // boolean foo = true;
+        //
+        // }
+
+        // int size = ingredientQuantities.size();
+        //
+        //
+        //
+        // Map<Ingredient, Map<AbstractProvider, PriceListItem>> test = new HashMap<Ingredient, Map<AbstractProvider,
+        // PriceListItem>>();
+        //
+        // for (Ingredient ingredient : ingredientQuantities.keySet()) {
+        //
+        // if(!test.containsKey(ingredient)) {
+        // test.put(ingredient, new HashMap<AbstractProvider, PriceListItem>());
+        // }
+        //
+        // Set<AbstractProvider> providers = providerBase.findProvidersByIngredient(ingredient);
+        //
+        //
+        // for(AbstractProvider provider : providers) {
+        //
+        //
+        //
+        // if(test.get(ingredient).containsKey(provider)) {
+        //
+        // } else {
+        //
+        // provider.getIngredientWithQuantity()
+        //
+        // test.get(ingredient).put(provider, )
+        // }
+        // }
+        // }
+        //
+        // for (Entry<Ingredient, Amount> entry : ingredientQuantities.entrySet()) {
+        //
+        // AbstractProvider provider = providerBase.findBestPriceProviderByIngredient(entry.getKey());
+        //
+        // }
+        //
+        // // TODO (Tim Sahling) Hier den neuen Algorithmus aus Scan umsetzen
+        // List<BestPriceProvider> bestPriceProviders = new ArrayList<BestPriceProvider>();
+        //
+        // for (Ingredient ingredient : ingredientQuantities.keySet()) {
+        // AbstractProvider provider = providerBase.findBestPriceProviderByIngredient(ingredient);
+        //
+        // BestPriceProvider bestPriceProvider = new BestPriceProvider(provider);
+        //
+        // if (bestPriceProviders.contains(bestPriceProvider)) {
+        // increaseBestPriceCounter(bestPriceProviders, bestPriceProvider);
+        // }
+        // else {
+        // bestPriceProviders.add(bestPriceProvider);
+        // }
+        // }
+        //
+        // Collections.sort(bestPriceProviders, bestPriceProviderSorter);
+        //
+    
+    
+        private static final class QuantityPrice {
+        private Amount quantity;
+        private Amount price;
+
+    }
+
+    private BestPriceProviderSorter bestPriceProviderSorter = new BestPriceProviderSorter();
+
+
+    private static final class BestPriceProvider {
+        private AbstractProvider provider;
+        private Integer bestPriceCounter;
+
+        public BestPriceProvider(AbstractProvider provider) {
+            this.provider = provider;
+            this.bestPriceCounter = Integer.valueOf(1);
+        }
+
+        public AbstractProvider getProvider() {
+            return provider;
+        }
+
+        public void setProvider(AbstractProvider provider) {
+            this.provider = provider;
+        }
+
+        public Integer getBestPriceCounter() {
+            return bestPriceCounter;
+        }
+
+        public void setBestPriceCounter(Integer bestPriceCounter) {
+            this.bestPriceCounter = bestPriceCounter;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((provider == null) ? 0 : provider.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            BestPriceProvider other = (BestPriceProvider) obj;
+            if (provider == null) {
+                if (other.provider != null)
+                    return false;
+            }
+            else if (!provider.equals(other.provider))
+                return false;
+            return true;
+        }
+
+        @Override
+        public String toString() {
+            return "BestPriceProvider [provider=" + provider + ", bestPriceCounter=" + bestPriceCounter + "]";
+        }
+    }
+    
+    private static final class BestPriceProviderSorter implements Comparator<BestPriceProvider> {
+
+        @Override
+        public int compare(BestPriceProvider arg0, BestPriceProvider arg1) {
+            return arg1.getBestPriceCounter().compareTo(arg0.getBestPriceCounter());
+        }
+
+    }
+
+    private void increaseBestPriceCounter(List<BestPriceProvider> bestPriceProviders, BestPriceProvider provider) {
+        for (BestPriceProvider bestPriceProvider : bestPriceProviders) {
+            if (bestPriceProvider.equals(provider)) {
+                bestPriceProvider.setBestPriceCounter(bestPriceProvider.getBestPriceCounter() + 1);
+            }
+        }
+    }
+    
     /**
      * Erstellt einen Anbieter.
      * 

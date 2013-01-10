@@ -70,7 +70,7 @@ public class ShoppingList {
             }
 
             // Kaufmännisches Runden auf zwei Nachkommastellen
-            result.getValue().setScale(2, RoundingMode.HALF_UP);
+            result.setValue(result.getValue().setScale(2, RoundingMode.HALF_UP));
         }
 
         return result;

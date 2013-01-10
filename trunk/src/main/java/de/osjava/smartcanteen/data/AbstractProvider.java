@@ -50,7 +50,7 @@ public abstract class AbstractProvider {
 
                 if (priceListItem.getIngredient().equals(ingredient)) {
 
-                    BigDecimal quantityOfIngredient = priceListItem.divideQuantityOfIngredientWithSize(quantity);
+                    BigDecimal quantityOfIngredient = priceListItem.divideQuantityWithSize(quantity);
 
                     if (NumberHelper.compareGreaterOrEqual(priceListItem.getAvailableQuantityOfIngredient(),
                             quantityOfIngredient)) {
@@ -78,7 +78,7 @@ public abstract class AbstractProvider {
 
                 if (priceListItem.getIngredient().equals(ingredient)) {
 
-                    BigDecimal quantityOfIngredient = priceListItem.divideQuantityOfIngredientWithSize(quantity);
+                    BigDecimal quantityOfIngredient = priceListItem.divideQuantityWithSize(quantity);
 
                     if (quantityOfIngredient != null) {
                         priceListItem.setAvailableQuantityOfIngredient(NumberHelper.subtract(
@@ -108,7 +108,7 @@ public abstract class AbstractProvider {
 
                 if (priceListItem.getIngredient().equals(ingredient)) {
 
-                    BigDecimal quantityOfIngredient = priceListItem.divideQuantityOfIngredientWithSize(quantity);
+                    BigDecimal quantityOfIngredient = priceListItem.divideQuantityWithSize(quantity);
 
                     result.add(new Amount(NumberHelper.multiply(quantityOfIngredient, priceListItem.getPrice()
                             .getValue()), UnitOfMeasurement.EUR));
@@ -126,15 +126,32 @@ public abstract class AbstractProvider {
      * @param ingredient
      * @return
      */
-    public Amount findPriceForIngredient(Ingredient ingredient) {
-        Amount result = new Amount(BigDecimal.valueOf(0), UnitOfMeasurement.EUR);
+    public Amount findQuantityByIngredient(Ingredient ingredient) {
+        Amount result = null;
+
+        PriceListItem priceListItem = findPriceListItemByIngredient(ingredient);
+
+        if (priceListItem != null) {
+            result = priceListItem.multiplyAvailableQuantityWithSize();
+        }
+
+        return result;
+    }
+
+    /**
+     * 
+     * @param ingredient
+     * @return
+     */
+    public PriceListItem findPriceListItemByIngredient(Ingredient ingredient) {
+        PriceListItem result = null;
 
         if (priceList != null && !priceList.isEmpty()) {
 
             for (PriceListItem priceListItem : priceList) {
 
                 if (priceListItem.getIngredient().equals(ingredient)) {
-                    result.add(priceListItem.getPrice());
+                    result = priceListItem;
                     break;
                 }
             }

@@ -5,10 +5,12 @@ import java.math.BigDecimal;
 public class NumberHelper {
 
     /**
+     * Vergleicht ob der erste übergebene Parameter größer oder gleich dem zweiten übergebenen Parameter ist.
      * 
-     * @param value1
-     * @param value2
-     * @return
+     * @param value1 Parameter 1
+     * @param value2 Parameter 2
+     * @return WAHR/FALSCH, je nachdem ob der erste übergebene Parameter größer oder gleich dem zweiten übergebenen
+     *         Parameter ist
      */
     public static boolean compareGreaterOrEqual(BigDecimal value1, BigDecimal value2) {
 
