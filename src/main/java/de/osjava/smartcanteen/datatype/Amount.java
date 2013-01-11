@@ -14,7 +14,7 @@ import de.osjava.smartcanteen.data.item.IngredientListItem;
  * 
  * @author Marcel Baxmann
  */
-public class Amount {
+public class Amount implements Comparable<Amount> {
 
     private BigDecimal value;
     private UnitOfMeasurement unit;
@@ -30,6 +30,16 @@ public class Amount {
     public Amount(BigDecimal value, UnitOfMeasurement unit) {
         this.value = value;
         this.unit = unit;
+    }
+
+    /**
+     * Der Kopier-Konstruktor erzeugt eine tiefe Kopie eines bereits existierenden Objekts
+     * 
+     * @param amount Das zu kopierende Objekt
+     */
+    public Amount(Amount amount) {
+        this.value = amount.getValue();
+        this.unit = amount.getUnit();
     }
 
     /**
@@ -118,6 +128,16 @@ public class Amount {
         this.unit = unit;
     }
 
+    @Override
+    public int compareTo(Amount a1) {
+
+        if (this.unit.equals(a1.unit)) {
+            return this.value.compareTo(a1.getValue());
+        }
+
+        return 0;
+    }
+
     /**
      * Diese Methode gibt den HashCode-Wert für das Objekt zurück, von dem die
      * Methode aufgerufen wurde.
@@ -168,5 +188,4 @@ public class Amount {
     public String toString() {
         return "Amount [value=" + value + ", unit=" + unit + "]";
     }
-
 }

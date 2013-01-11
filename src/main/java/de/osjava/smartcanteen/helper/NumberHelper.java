@@ -5,6 +5,32 @@ import java.math.BigDecimal;
 public class NumberHelper {
 
     /**
+     * Vergleicht ob der erste übergebene Parameter größer als der zweite übergebene Parameter ist.
+     * 
+     * @param value1 Parameter 1
+     * @param value2 Parameter 2
+     * @return WAHR/FALSCH, je nachdem ob der erste übergebene Parameter größer als der zweite übergebene Parameter ist
+     */
+    public static boolean compareGreater(BigDecimal value1, BigDecimal value2) {
+
+        if (value1 == null || value2 == null) {
+            return false;
+        }
+
+        int compare = value1.compareTo(value2);
+
+        if (compare == -1) {
+            return false;
+        }
+        else if (compare == 0) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    /**
      * Vergleicht ob der erste übergebene Parameter größer oder gleich dem zweiten übergebenen Parameter ist.
      * 
      * @param value1 Parameter 1

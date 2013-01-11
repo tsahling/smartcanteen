@@ -122,9 +122,10 @@ public abstract class AbstractProvider {
     }
 
     /**
+     * Methode um den {@link Amount} einer {@link Ingredient} zu ermitteln.
      * 
-     * @param ingredient
-     * @return
+     * @param ingredient Die zu suchende {@link Ingredient}
+     * @return Den {@link Amount} der {@link Ingredient}
      */
     public Amount findQuantityByIngredient(Ingredient ingredient) {
         Amount result = null;
