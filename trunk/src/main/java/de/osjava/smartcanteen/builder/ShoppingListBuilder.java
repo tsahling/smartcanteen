@@ -3,6 +3,8 @@ package de.osjava.smartcanteen.builder;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -97,10 +99,21 @@ public class ShoppingListBuilder {
             Map<Ingredient, Amount> ingredientQuantities) {
         Map<AbstractProvider, Set<IngredientQuantity>> result = new HashMap<AbstractProvider, Set<IngredientQuantity>>();
 
+        Map<IngredientQuantity, Map<AbstractProvider, List<Amount>>> tempMap = new HashMap<IngredientQuantity, Map<AbstractProvider, List<Amount>>>();
+
         for (Entry<Ingredient, Amount> entry : ingredientQuantities.entrySet()) {
 
             Ingredient ingredient = entry.getKey();
             Amount ingredientQuantity = entry.getValue();
+
+            // IngredientQuantity ingredientQuantity = new IngredientQuantity(ingredient, quantity);
+            //
+            // Map<AbstractProvider, List<Amount>> distributedIngredientQuantityOfProviders = providerBase
+            // .distributeQuantityOfIngredientToProviders(ingredient, quantity);
+            //
+            // if (!tempMap.containsKey(ingredientQuantity)) {
+            // tempMap.put(ingredientQuantity, distributedIngredientQuantityOfProviders);
+            // }
 
             // Sucht alle Anbieter, die die Zutat vorrätig haben
             Set<AbstractProvider> providersWithIngredient = providerBase.findProvidersByIngredient(ingredient);
@@ -115,6 +128,30 @@ public class ShoppingListBuilder {
                 computeMoreProvidersWithIngredient(result, providersWithIngredient, ingredient, ingredientQuantity);
             }
         }
+
+        List<ShoppingList> shoppingLists = new ArrayList<ShoppingList>();
+        //
+        // for (Entry<IngredientQuantity, Map<AbstractProvider, List<Amount>>> entry : tempMap.entrySet()) {
+        //
+        // System.out.println(entry.getKey());
+        //
+        // for (Entry<AbstractProvider, List<Amount>> innerEntry : entry.getValue().entrySet()) {
+        // System.out.println(innerEntry.getKey());
+        //
+        // for (Amount quantity : innerEntry.getValue()) {
+        // System.out.println(quantity);
+        // }
+        // }
+        // }
+
+        // Sortierung der temporären Einkaufslisten nach dem besten (günstigsten) Preis
+        Collections.sort(shoppingLists, new Comparator<ShoppingList>() {
+
+            @Override
+            public int compare(ShoppingList sl1, ShoppingList sl2) {
+                return sl1.calculateTotalPrice().compareTo(sl2.calculateTotalPrice());
+            }
+        });
 
         return result;
     }

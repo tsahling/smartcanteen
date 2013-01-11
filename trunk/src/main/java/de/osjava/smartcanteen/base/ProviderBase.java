@@ -2,12 +2,15 @@ package de.osjava.smartcanteen.base;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import de.osjava.smartcanteen.data.AbstractProvider;
@@ -68,6 +71,141 @@ public class ProviderBase {
      *            Der zu löschende Anbieter
      */
     public void removeProvider(AbstractProvider provider) {
+    }
+
+    /**
+     * 
+     * @param ingredient
+     * @param quantity
+     * @return
+     */
+    public Map<AbstractProvider, List<Amount>> distributeQuantityOfIngredientToProviders(Ingredient ingredient,
+            Amount quantity) {
+
+        Map<AbstractProvider, List<Amount>> result = new HashMap<AbstractProvider, List<Amount>>();
+        Map<AbstractProvider, Set<AbstractProvider>> providerGraph = createIngredientProviderGraph(ingredient);
+
+        if (providerGraph != null && !providerGraph.isEmpty()) {
+
+            for (Entry<AbstractProvider, Set<AbstractProvider>> entry : providerGraph.entrySet()) {
+
+                AbstractProvider provider = entry.getKey();
+                Set<AbstractProvider> otherProviders = entry.getValue();
+
+                Amount providerIngredientQuantity = provider.findQuantityByIngredient(ingredient);
+
+                // Zutat ist nur bei einem Anbieter vorrätig, dementsprechend wird die verfügbare oder benötigte Menge
+                // ins Ergebnis übernommen
+                if (otherProviders.isEmpty()) {
+
+                    Amount orderableQuantity = null;
+
+                    if (provider.hasIngredientWithQuantity(ingredient, quantity)) {
+                        orderableQuantity = quantity;
+                    }
+                    else {
+                        orderableQuantity = providerIngredientQuantity;
+                    }
+
+                    putToResultMap(result, provider, orderableQuantity);
+                }
+                // Zutat ist bei mehreren Anbietern vorrätig, dementsprechend wird die benötigte Menge in allen
+                // Kombinationen auf die Anbieter verteilt
+                else {
+
+                    Amount quantityMinusProviderQuantity = new Amount(quantity).subtract(providerIngredientQuantity);
+                    Amount quantityToDistribute;
+
+                    // Zutat ist bei Anbieter vollständig bestellbar
+                    if (!NumberHelper.compareGreaterOrEqual(quantityMinusProviderQuantity.getValue(), BigDecimal.ZERO)) {
+                        quantityToDistribute = new Amount(quantity);
+                        putToResultMap(result, provider, quantity);
+                    }
+                    else {
+                        quantityToDistribute = new Amount(quantityMinusProviderQuantity);
+                        putToResultMap(result, provider, providerIngredientQuantity);
+                    }
+
+                    for (AbstractProvider otherProvider : otherProviders) {
+
+                        Amount otherProviderIngredientQuantity = otherProvider.findQuantityByIngredient(ingredient);
+
+                        Amount quantityToDistributeMinusOtherProviderQuantity = new Amount(quantityToDistribute)
+                                .subtract(otherProviderIngredientQuantity);
+
+                        // Zutat ist bei Anbieter vollständig bestellbar
+                        if (!NumberHelper.compareGreaterOrEqual(
+                                quantityToDistributeMinusOtherProviderQuantity.getValue(), BigDecimal.ZERO)) {
+                            putToResultMap(result, otherProvider, quantityToDistribute);
+                            quantityToDistribute.subtract(quantityToDistribute);
+                        }
+                        else {
+                            putToResultMap(result, otherProvider, otherProviderIngredientQuantity);
+                            quantityToDistribute.subtract(otherProviderIngredientQuantity);
+                        }
+
+                        // if (!NumberHelper.compareGreater(quantityToDistribute.getValue(), BigDecimal.ZERO)) {
+                        // break;
+                        // }
+
+                        // while (NumberHelper.compareGreater(quantityToDistribute.getValue(), BigDecimal.ZERO)) {
+                        //
+                        //
+                        //
+                        // Amount test = quantityToDistribute.subtract(otherProviderIngredientQuantity);
+                        //
+                        // }
+
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private void putToResultMap(Map<AbstractProvider, List<Amount>> result, AbstractProvider key, Amount value) {
+        if (result.containsKey(key)) {
+            result.get(key).add(new Amount(value));
+        }
+        else {
+            result.put(key, new LinkedList<Amount>(Arrays.asList(new Amount(value))));
+        }
+    }
+
+    private Map<AbstractProvider, Set<AbstractProvider>> createIngredientProviderGraph(Ingredient ingredient) {
+        Map<AbstractProvider, Set<AbstractProvider>> result = new HashMap<AbstractProvider, Set<AbstractProvider>>();
+
+        Set<AbstractProvider> ingredientProviders = findProvidersByIngredient(ingredient);
+
+        if (ingredientProviders != null && !ingredientProviders.isEmpty()) {
+
+            for (AbstractProvider ingredientProvider : ingredientProviders) {
+
+                Set<AbstractProvider> otherIngredientProviders = new HashSet<AbstractProvider>(ingredientProviders);
+
+                otherIngredientProviders.removeAll(Arrays.asList(ingredientProvider));
+
+                if (!otherIngredientProviders.isEmpty()) {
+
+                    for (AbstractProvider otherIngredientProvider : otherIngredientProviders) {
+
+                        if (result.containsKey(ingredientProvider)) {
+                            result.get(ingredientProvider).add(otherIngredientProvider);
+                        }
+                        else {
+                            result.put(ingredientProvider,
+                                    new HashSet<AbstractProvider>(Arrays.asList(otherIngredientProvider)));
+                        }
+                    }
+                }
+                else {
+                    result.put(ingredientProvider, new HashSet<AbstractProvider>());
+                }
+            }
+        }
+
+        return result;
     }
 
     /**
