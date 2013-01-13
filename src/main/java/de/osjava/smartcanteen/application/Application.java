@@ -17,6 +17,7 @@ import de.osjava.smartcanteen.data.Canteen;
 import de.osjava.smartcanteen.helper.BaseHelper;
 import de.osjava.smartcanteen.helper.LogHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
+import de.osjava.smartcanteen.output.FileOutput;
 
 /**
  * Die Klasse {@link Application} versetzt das Programm anhand der übergebenen
@@ -176,6 +177,7 @@ public class Application {
 
         // Übergabe der Ergebnisse der Applikationslogik an die ausgebende Methode
         outputApplicationResult(shoppingList, canteens);
+
     }
 
     /**
@@ -185,8 +187,13 @@ public class Application {
      */
     private void outputApplicationResult(ShoppingList shoppingList,
             Canteen... canteens) {
+        System.out.println("Beginne Aufbereitung Datenausgabe");
 
         // TODO(Marcel Baxmann) Ergebnisse der Applikationslogik mit
         // Output-Klassen verarbeiten
+
+        // Erstellung Ausgabe-Objekts und Überagbe des Arrays der existenten Kantinen
+        FileOutput oput = new FileOutput(canteens);
+
     }
 }
