@@ -462,7 +462,8 @@ public class MenuPlanBuilder {
         }
         else if (recipe.isFishRecipe()) {
 
-            // Fischgericht darf nur eingefügt werden, wenn ein Fleischgericht und ein Fischgericht vorhanden sind
+            // Fischgericht darf nur eingefügt werden, wenn ein Fleischgericht und ein vegetarisches Gericht vorhanden
+            // sind
             if (countRecipesForWeekWorkdayAndIngredientType(planingPeriod, weekAndWorkday, IngredientType.MEAT) == PROP_PLANINGPERIOD_MEATMEALSPERDAY_MIN && countRecipesForWeekWorkdayAndIngredientType(
                     planingPeriod, weekAndWorkday, IngredientType.VEGETABLE) == PROP_PLANINGPERIOD_VEGETABLEMEALSPERDAY_MIN) {
                 return validateMaxRecipesForWeekWorkday(planingPeriod, weekAndWorkday);

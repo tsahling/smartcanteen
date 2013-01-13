@@ -195,5 +195,10 @@ public class Application {
         // Erstellung Ausgabe-Objekts und Überagbe des Arrays der existenten Kantinen
         FileOutput oput = new FileOutput(canteens);
 
+        for (Canteen canteen : canteens) {
+
+            oput.outputMenuPlan(canteen);
+        }
+
     }
 }

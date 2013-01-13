@@ -13,36 +13,36 @@ import de.osjava.smartcanteen.data.Canteen;
  */
 public interface IOutput {
 
-	/**
-	 * Diese Methode stellt die Möglichkeit bereit einn Speiseplan als noch
-	 * nicht weitergehend definierte Ausgabe bereitzustellen. Die Ausgabe wird
-	 * auf Basis der Daten eines Objekts {@link Canteen} gestaltet. Dieses
-	 * Objekt muss der Methode beim Aufruf übergeben werden.
-	 * 
-	 * @param canteen
-	 *            Kantinen-Objekt wird übergeben
-	 */
-	void outputMenuPlan(Canteen canteen);
+    /**
+     * Diese Methode stellt die Möglichkeit bereit einn Speiseplan als noch
+     * nicht weitergehend definierte Ausgabe bereitzustellen. Die Ausgabe wird
+     * auf Basis der Daten eines Objekts {@link Canteen} gestaltet. Dieses
+     * Objekt muss der Methode beim Aufruf übergeben werden.
+     * 
+     * @param canteen
+     *            Kantinen-Objekt wird übergeben
+     */
+    void outputMenuPlan(Canteen canteen);
 
-	/**
-	 * Diese Methode stellt die Möglichkeit bereit eine Einkaufsliste als noch
-	 * nicht weitergehend definierte Ausgabe bereitzustellen. Die Ausgabe wird
-	 * auf Basis der Daten eines Objekts {@link ShoppingList} gestaltet. Dieses
-	 * Objekt muss der Methode beim Aufruf übergeben werden.
-	 * 
-	 * @param shoppingList
-	 *            Einkaufslisten-Objekt wird übergeben
-	 */
-	void outputShoppingList(ShoppingList shoppingList);
+    /**
+     * Diese Methode stellt die Möglichkeit bereit eine Einkaufsliste als noch
+     * nicht weitergehend definierte Ausgabe bereitzustellen. Die Ausgabe wird
+     * auf Basis der Daten eines Objekts {@link ShoppingList} gestaltet. Dieses
+     * Objekt muss der Methode beim Aufruf übergeben werden.
+     * 
+     * @param shoppingList
+     *            Einkaufslisten-Objekt wird übergeben
+     */
+    void outputShoppingList(ShoppingList shoppingList);
 
-	/**
-	 * Diese Methode stellt die Möglichkeit bereit eine Kostenübersicht als noch
-	 * nicht weitergehend definierte Ausgabe bereitzustellen. Die Ausgabe wird
-	 * auf Basis der Daten eines Objekts {@link ShoppingList} gestaltet. Dieses
-	 * Objekt muss der Methode beim Aufruf übergeben werden.
-	 * 
-	 * @param shoppingList
-	 *            Einkaufslisten-Objekt wird übergeben
-	 */
-	void outputTotalCosts(ShoppingList shoppingList);
+    /**
+     * Diese Methode stellt die Möglichkeit bereit eine Kostenübersicht als noch
+     * nicht weitergehend definierte Ausgabe bereitzustellen. Die Ausgabe wird
+     * auf Basis der Daten eines Objekts {@link ShoppingList} gestaltet. Dieses
+     * Objekt muss der Methode beim Aufruf übergeben werden.
+     * 
+     * @param shoppingList
+     *            Einkaufslisten-Objekt wird übergeben
+     */
+    void outputTotalCosts(ShoppingList shoppingList);
 }

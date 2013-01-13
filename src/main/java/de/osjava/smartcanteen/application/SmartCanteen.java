@@ -13,22 +13,22 @@ import de.osjava.smartcanteen.helper.LogHelper;
  */
 public class SmartCanteen {
 
-	private static final Logger LOG = LogHelper.getLogger(SmartCanteen.class
-			.getName());
+    private static final Logger LOG = LogHelper.getLogger(SmartCanteen.class
+            .getName());
 
-	/**
-	 * Die Methode wird zum Starten der Applikation benötigt und behandelt ggf.
-	 * auftretende Fehler in der Applikation, die in letzter Instanz mitgeloggt
-	 * ({@link LogHelper}) werden.
-	 * 
-	 * @param args
-	 *            Aufparameter der Applikation
-	 */
-	public static void main(final String[] args) {
-		try {
-			new Application().bootstrap(args);
-		} catch (Exception e) {
-			LOG.log(Level.SEVERE, e.getMessage(), e);
-		}
-	}
+    /**
+     * Die Methode wird zum Starten der Applikation benötigt und behandelt ggf.
+     * auftretende Fehler in der Applikation, die in letzter Instanz mitgeloggt
+     * ({@link LogHelper}) werden.
+     * 
+     * @param args
+     *            Aufparameter der Applikation
+     */
+    public static void main(final String[] args) {
+        try {
+            new Application().bootstrap(args);
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, e.getMessage(), e);
+        }
+    }
 }
