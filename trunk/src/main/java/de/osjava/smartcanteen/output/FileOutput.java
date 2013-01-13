@@ -1,5 +1,9 @@
 package de.osjava.smartcanteen.output;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import de.osjava.smartcanteen.builder.result.ShoppingList;
 import de.osjava.smartcanteen.data.Canteen;
 
@@ -11,6 +15,11 @@ import de.osjava.smartcanteen.data.Canteen;
  * @author Marcel Baxmann
  */
 public class FileOutput implements IOutput {
+
+    // Ablageort für die Ausagbedatei
+    public String speicherort = "D:/";
+    // Dateiname für die Ausagbedatei
+    public String dateiname = "MenuePlan.txt";
 
     /**
      * Standardkonstruktor
@@ -30,7 +39,13 @@ public class FileOutput implements IOutput {
 
     @Override
     public void outputMenuPlan(Canteen canteen) {
-        System.out.println(canteen.getMenuPlan().getMeals());
+        System.out.println(canteen.getMenuPlan().getMealsGroupedByDate());
+        try {
+            ausgebenInDatei("Die Daten die in die Datei geschrieben werden sollen als Objekt");
+        } catch (IOException e) {
+            // TODO(Marcel) handle this exception properly
+            e.printStackTrace();
+        }
 
     }
 
@@ -41,4 +56,19 @@ public class FileOutput implements IOutput {
     @Override
     public void outputTotalCosts(ShoppingList shoppingList) {
     }
+
+    /**
+     * Schreiben der übergebenen Daten in Datei
+     * 
+     * @param String wird übergeben
+     * @throws IOException
+     */
+    public void ausgebenInDatei(String ausgabeDaten) throws IOException {
+        File file = new File(speicherort + dateiname);
+        FileWriter writer = new FileWriter(file, true);
+        writer.write(ausgabeDaten);
+        writer.flush();
+        writer.close();
+    }
+
 }
