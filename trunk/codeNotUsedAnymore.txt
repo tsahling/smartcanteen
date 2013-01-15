@@ -1,3 +1,101 @@
+
+        // if (providerGraph != null && !providerGraph.isEmpty()) {
+        //
+        // for (Entry<AbstractProvider, Set<Set<AbstractProvider>>> entry : providerGraph.entrySet()) {
+        //
+        // AbstractProvider provider = entry.getKey();
+        // Set<Set<AbstractProvider>> otherProviders = entry.getValue();
+        //
+        // Amount providerIngredientQuantity = provider.findQuantityByIngredient(ingredient);
+        //
+        // // Zutat ist nur bei einem Anbieter vorrätig, dementsprechend wird die verfügbare oder benötigte Menge
+        // // ins Ergebnis übernommen
+        // if (otherProviders.isEmpty()) {
+        //
+        // Amount orderableQuantity = null;
+        //
+        // if (provider.hasIngredientWithQuantity(ingredient, quantity)) {
+        // orderableQuantity = quantity;
+        // }
+        // else {
+        // orderableQuantity = providerIngredientQuantity;
+        // }
+        //
+        // putToResultMap(result, provider, orderableQuantity);
+        // }
+        // // Zutat ist bei mehreren Anbietern vorrätig, dementsprechend wird die benötigte Menge in allen
+        // // Kombinationen auf die Anbieter verteilt
+        // else {
+        //
+        // Amount quantityMinusProviderQuantity = new Amount(quantity).subtract(providerIngredientQuantity);
+        // Amount quantityToDistribute;
+        //
+        // // Zutat ist bei Anbieter vollständig bestellbar
+        // if (!NumberHelper.compareGreaterOrEqual(quantityMinusProviderQuantity.getValue(), BigDecimal.ZERO)) {
+        // quantityToDistribute = new Amount(quantity).subtract(quantity);
+        // putToResultMap(result, provider, quantity);
+        // }
+        // else {
+        // quantityToDistribute = new Amount(quantityMinusProviderQuantity);
+        // putToResultMap(result, provider, providerIngredientQuantity);
+        // }
+        //
+        // for (Set<AbstractProvider> outerOtherProviders : otherProviders) {
+        //
+        // for (AbstractProvider otherProvider : outerOtherProviders) {
+        //
+        // Amount otherProviderIngredientQuantity = otherProvider.findQuantityByIngredient(ingredient);
+        //
+        // Amount quantityToDistributeMinusOtherProviderQuantity = new Amount(quantityToDistribute)
+        // .subtract(otherProviderIngredientQuantity);
+        //
+        // // Zutat ist bei Anbieter vollständig bestellbar
+        // if (!NumberHelper.compareGreaterOrEqual(
+        // quantityToDistributeMinusOtherProviderQuantity.getValue(), BigDecimal.ZERO)) {
+        // putToResultMap(result, otherProvider, quantityToDistribute);
+        // quantityToDistribute.subtract(quantityToDistribute);
+        // }
+        // else {
+        // putToResultMap(result, otherProvider, otherProviderIngredientQuantity);
+        // quantityToDistribute.subtract(otherProviderIngredientQuantity);
+        // }
+        //
+        // // if (!NumberHelper.compareGreater(quantityToDistribute.getValue(), BigDecimal.ZERO)) {
+        // // break;
+        // // }
+        // }
+        // }
+        //
+        // //
+        // // // while (NumberHelper.compareGreater(quantityToDistribute.getValue(), BigDecimal.ZERO)) {
+        // // //
+        // // //
+        // // //
+        // // // Amount test = quantityToDistribute.subtract(otherProviderIngredientQuantity);
+        // // //
+        // // // }
+        // //
+        // // }
+        // }
+        // }
+        // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             // for (Entry<Ingredient, Amount> entry : ingredientQuantities.entrySet()) {
         //
         // // Sucht alle Anbieter, die die Zutat vorrätig haben

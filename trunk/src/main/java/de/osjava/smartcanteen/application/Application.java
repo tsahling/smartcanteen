@@ -2,7 +2,6 @@ package de.osjava.smartcanteen.application;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
@@ -38,7 +37,7 @@ public class Application {
             .getName());
 
     private static final String ARG_SPLIT = "=";
-    private static final String INPUT_FILE_SPLIT = ";";
+    private static final String VALUE_SPLIT = ";";
     private static final String EMPTY = "";
 
     private static final String INPUT_FILENAME_HITLIST = PropertyHelper.getProperty("inputFile.name.hitList");
@@ -84,8 +83,8 @@ public class Application {
 
         if (args.length == 0) {
             inputFiles = JOptionPane.showInputDialog(null,
-                    PropertyHelper.getProperty("message.missingInputFiles.message"),
-                    PropertyHelper.getProperty("message.missingInputFiles.title"), JOptionPane.QUESTION_MESSAGE);
+                    PropertyHelper.getProperty("message.wrongOrMissingInputFiles.message"),
+                    PropertyHelper.getProperty("message.wrongOrMissingInputFiles.title"), JOptionPane.QUESTION_MESSAGE);
         }
         else if (args.length == 1 && args[0].equals(PropertyHelper.getProperty("param.help"))) {
             System.out.println(PropertyHelper.getProperty("application.usageInfo"));
@@ -95,11 +94,11 @@ public class Application {
             for (String arg : args) {
 
                 if (arg.contains(PropertyHelper.getProperty("param.inputFiles"))) {
-                    String[] argSplit = arg.split(ARG_SPLIT);
-
-                    if (argSplit.length > 1) {
-                        inputFiles = inputFiles.concat(argSplit[1].trim()).concat(INPUT_FILE_SPLIT);
-                    }
+                    inputFiles = setApplicationInputFilesFromArgs(arg.split(ARG_SPLIT));
+                }
+                else if (arg.contains(PropertyHelper.getProperty("param.properties"))) {
+                    setApplicationParamsFromArgs(arg
+                            .substring(PropertyHelper.getProperty("param.properties").length() + 1));
                 }
             }
         }
@@ -107,7 +106,7 @@ public class Application {
         boolean wrongInputFile = false;
 
         if (inputFiles != null && !inputFiles.equals(EMPTY)) {
-            String[] inputFileSplit = inputFiles.split(INPUT_FILE_SPLIT);
+            String[] inputFileSplit = inputFiles.split(VALUE_SPLIT);
 
             if (inputFileSplit.length > 0) {
 
@@ -161,6 +160,48 @@ public class Application {
 
     /**
      * 
+     * @param args
+     * @param result
+     */
+    private String setApplicationInputFilesFromArgs(String[] args) {
+        String result = null;
+
+        if (args != null && args.length > 0) {
+
+            if (args.length > 1) {
+                result = args[1].trim().concat(VALUE_SPLIT);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 
+     * @param args
+     */
+    private void setApplicationParamsFromArgs(String arg) {
+
+        if (arg != null && arg.length() > 0) {
+
+            String[] propertyArgs = arg.split(VALUE_SPLIT);
+
+            if (propertyArgs != null && propertyArgs.length > 0) {
+
+                for (String propertyArg : propertyArgs) {
+
+                    String[] propertyArgSplit = propertyArg.split(ARG_SPLIT);
+
+                    if (propertyArgSplit.length > 1) {
+                        PropertyHelper.setProperty(propertyArgSplit[0], propertyArgSplit[1]);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 
      */
     private void startApplication() {
 
@@ -172,12 +213,8 @@ public class Application {
         ShoppingListBuilder slb = new ShoppingListBuilder(providerBase, canteens);
         ShoppingList shoppingList = slb.buildShoppingList();
 
-        // TODO (Tim Sahling) Remove me, just for debug
-        LOG.log(Level.INFO, shoppingList.calculateTotalPrice().toString());
-
         // Übergabe der Ergebnisse der Applikationslogik an die ausgebende Methode
         outputApplicationResult(shoppingList, canteens);
-
     }
 
     /**

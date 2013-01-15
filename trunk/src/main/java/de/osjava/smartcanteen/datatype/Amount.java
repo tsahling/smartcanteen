@@ -128,11 +128,16 @@ public class Amount implements Comparable<Amount> {
         this.unit = unit;
     }
 
+    /**
+     * Diese Methode vergleicht zwei {@link Amount} auf Basis ihres Werts, sofern die Einheit gleich ist.
+     * 
+     * @param a Der {@link Amount} der verglichen werden soll
+     */
     @Override
-    public int compareTo(Amount a1) {
+    public int compareTo(Amount a) {
 
-        if (this.unit.equals(a1.unit)) {
-            return this.value.compareTo(a1.getValue());
+        if (this.unit.equals(a.unit)) {
+            return this.value.compareTo(a.getValue());
         }
 
         return 0;
