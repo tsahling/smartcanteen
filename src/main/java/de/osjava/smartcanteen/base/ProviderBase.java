@@ -3,6 +3,7 @@ package de.osjava.smartcanteen.base;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -12,6 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import de.osjava.smartcanteen.data.AbstractProvider;
 import de.osjava.smartcanteen.data.Ingredient;
@@ -74,6 +79,8 @@ public class ProviderBase {
     }
 
     /**
+     * Methode um die benötigte {@link Amount} einer {@link Ingredient} in allen Konstellationen auf die
+     * {@link AbstractProvider} zu verteilen, bei denen die {@link Ingredient} beschaffbar ist.
      * 
      * @param ingredient
      * @param quantity
@@ -83,79 +90,75 @@ public class ProviderBase {
             Amount quantity) {
 
         Map<AbstractProvider, List<Amount>> result = new HashMap<AbstractProvider, List<Amount>>();
-        Map<AbstractProvider, Set<AbstractProvider>> providerGraph = createIngredientProviderGraph(ingredient);
 
-        if (providerGraph != null && !providerGraph.isEmpty()) {
+        // Sucht alle Anbieter bei denen die Zutat beschaffbar ist
+        Set<AbstractProvider> ingredientProviders = findProvidersByIngredient(ingredient);
 
-            for (Entry<AbstractProvider, Set<AbstractProvider>> entry : providerGraph.entrySet()) {
+        // Erstellt alle möglichen Anbieterkombinationen
+        List<List<AbstractProvider>> ingredientProviderCombinations = createIngredientProviderCombinations(ingredientProviders);
 
-                AbstractProvider provider = entry.getKey();
-                Set<AbstractProvider> otherProviders = entry.getValue();
+        if (ingredientProviderCombinations != null && !ingredientProviderCombinations.isEmpty()) {
 
-                Amount providerIngredientQuantity = provider.findQuantityByIngredient(ingredient);
+            for (List<AbstractProvider> ingredientProviderCombination : ingredientProviderCombinations) {
 
-                // Zutat ist nur bei einem Anbieter vorrätig, dementsprechend wird die verfügbare oder benötigte Menge
-                // ins Ergebnis übernommen
-                if (otherProviders.isEmpty()) {
+                // Erstellen eines temporären Sets für Anbieter damit das Ausgangsset im weiteren Ablauf nicht verändert
+                // wird
+                Set<AbstractProvider> tempIngredientProviders = Sets.newHashSet(ingredientProviders);
 
-                    Amount orderableQuantity = null;
+                if (ingredientProviderCombination.size() == 1) {
 
+                    AbstractProvider provider = ingredientProviderCombination.iterator().next();
+
+                    // Nur wenn bei einem einzelnen Anbieter die Zutat vollständig beschaffbar ist, kommt dieser in das
+                    // Ergebnis. Die anderen Anbieter werden mit der Menge 0 ins Ergebnis übernommen.
                     if (provider.hasIngredientWithQuantity(ingredient, quantity)) {
-                        orderableQuantity = quantity;
-                    }
-                    else {
-                        orderableQuantity = providerIngredientQuantity;
-                    }
-
-                    putToResultMap(result, provider, orderableQuantity);
-                }
-                // Zutat ist bei mehreren Anbietern vorrätig, dementsprechend wird die benötigte Menge in allen
-                // Kombinationen auf die Anbieter verteilt
-                else {
-
-                    Amount quantityMinusProviderQuantity = new Amount(quantity).subtract(providerIngredientQuantity);
-                    Amount quantityToDistribute;
-
-                    // Zutat ist bei Anbieter vollständig bestellbar
-                    if (!NumberHelper.compareGreaterOrEqual(quantityMinusProviderQuantity.getValue(), BigDecimal.ZERO)) {
-                        quantityToDistribute = new Amount(quantity);
                         putToResultMap(result, provider, quantity);
+                        tempIngredientProviders.remove(provider);
+                        putProvidersWithQuantityToResultMap(result, tempIngredientProviders,
+                                new Amount(quantity).subtract(quantity));
                     }
-                    else {
-                        quantityToDistribute = new Amount(quantityMinusProviderQuantity);
-                        putToResultMap(result, provider, providerIngredientQuantity);
-                    }
+                }
+                else {
+                    Amount quantityToDistribute = new Amount(quantity);
 
-                    for (AbstractProvider otherProvider : otherProviders) {
+                    for (AbstractProvider provider : ingredientProviderCombination) {
 
-                        Amount otherProviderIngredientQuantity = otherProvider.findQuantityByIngredient(ingredient);
+                        // Sucht die Menge einer Zutat von einem Anbieter
+                        Amount providerIngredientQuantity = provider.findQuantityByIngredient(ingredient);
 
-                        Amount quantityToDistributeMinusOtherProviderQuantity = new Amount(quantityToDistribute)
-                                .subtract(otherProviderIngredientQuantity);
+                        // Subtrahiert von der zu verteilenden Menge die Menge des Anbieters
+                        Amount quantityToDistributeMinusProviderQuantity = new Amount(quantityToDistribute)
+                                .subtract(providerIngredientQuantity);
 
                         // Zutat ist bei Anbieter vollständig bestellbar
-                        if (!NumberHelper.compareGreaterOrEqual(
-                                quantityToDistributeMinusOtherProviderQuantity.getValue(), BigDecimal.ZERO)) {
-                            putToResultMap(result, otherProvider, quantityToDistribute);
-                            quantityToDistribute.subtract(quantityToDistribute);
+                        if (!NumberHelper.compareGreaterOrEqual(quantityToDistributeMinusProviderQuantity.getValue(),
+                                BigDecimal.ZERO)) {
+                            // Komplett benötigte Menge des Anbieters wird ins Ergebnis übernommen
+                            putToResultMap(result, provider, quantityToDistribute);
+                            // Zu verteilende Menge wird um komplett benötigte Menge reduziert
+                            quantityToDistribute = new Amount(quantityToDistribute).subtract(quantityToDistribute);
                         }
+                        // Zutat ist bei Anbieter nicht vollständig beschaffbar
                         else {
-                            putToResultMap(result, otherProvider, otherProviderIngredientQuantity);
-                            quantityToDistribute.subtract(otherProviderIngredientQuantity);
+                            // Beschaffbare Menge des Anbieters wird ins Ergebnis übernommen
+                            putToResultMap(result, provider, providerIngredientQuantity);
+                            // Zu verteilende Menge wird um Menge des Anbieters reduziert
+                            quantityToDistribute = new Amount(quantityToDistribute)
+                                    .subtract(providerIngredientQuantity);
                         }
+                    }
 
-                        // if (!NumberHelper.compareGreater(quantityToDistribute.getValue(), BigDecimal.ZERO)) {
-                        // break;
-                        // }
+                    // Alle Anbieter die nicht durchlaufen werden müssen mit der Menge 0 ins Ergebnis übernommen werden
+                    // um die Datenzuordnung konsistent zu halten
+                    tempIngredientProviders.removeAll(ingredientProviderCombination);
 
-                        // while (NumberHelper.compareGreater(quantityToDistribute.getValue(), BigDecimal.ZERO)) {
-                        //
-                        //
-                        //
-                        // Amount test = quantityToDistribute.subtract(otherProviderIngredientQuantity);
-                        //
-                        // }
+                    putProvidersWithQuantityToResultMap(result, tempIngredientProviders,
+                            new Amount(quantity).subtract(quantity));
 
+                    // Wenn die zu verteilende Menge nicht auf alle Anbieter verteilt werden konnte, werden die Einträge
+                    // wieder gelöscht, da die Zutat dann in der Anbieterkombination nicht beschaffbar ist
+                    if (NumberHelper.compareGreater(quantityToDistribute.getValue(), BigDecimal.ZERO)) {
+                        removeLastQuantityFromResultMap(result, ingredientProviderCombination);
                     }
                 }
             }
@@ -164,43 +167,104 @@ public class ProviderBase {
         return result;
     }
 
+    /**
+     * Methode um einen {@link AbstractProvider} und einen {@link Amount} ins Ergebnis zu übernehmen.
+     * 
+     * @param result
+     * @param key
+     * @param value
+     */
     private void putToResultMap(Map<AbstractProvider, List<Amount>> result, AbstractProvider key, Amount value) {
         if (result.containsKey(key)) {
             result.get(key).add(new Amount(value));
         }
         else {
-            result.put(key, new LinkedList<Amount>(Arrays.asList(new Amount(value))));
+            result.put(key, Lists.newLinkedList(Arrays.asList(new Amount(value))));
         }
     }
 
-    private Map<AbstractProvider, Set<AbstractProvider>> createIngredientProviderGraph(Ingredient ingredient) {
-        Map<AbstractProvider, Set<AbstractProvider>> result = new HashMap<AbstractProvider, Set<AbstractProvider>>();
+    /**
+     * Methode um mehrere {@link AbstractProvider} mit einer {@link Amount} ins Ergebnis zu übernehmen.
+     * 
+     * @param result
+     * @param providers
+     * @param quantity
+     */
+    private void putProvidersWithQuantityToResultMap(Map<AbstractProvider, List<Amount>> result,
+            Set<AbstractProvider> providers, Amount quantity) {
 
-        Set<AbstractProvider> ingredientProviders = findProvidersByIngredient(ingredient);
+        if (providers != null && !providers.isEmpty()) {
+
+            for (AbstractProvider provider : providers) {
+                putToResultMap(result, provider, quantity);
+            }
+        }
+    }
+
+    /**
+     * Methode um die letzte {@link Amount} der übergebenen {@link AbstractProvider} zu entfernen.
+     * 
+     * @param result
+     * @param providers
+     */
+    private void removeLastQuantityFromResultMap(Map<AbstractProvider, List<Amount>> result,
+            List<AbstractProvider> providers) {
+
+        if (result != null && !result.isEmpty() && providers != null && !providers.isEmpty()) {
+
+            for (Entry<AbstractProvider, List<Amount>> entry : result.entrySet()) {
+
+                if (providers.contains(entry.getKey())) {
+                    Amount lastQuantity = (Amount) ((LinkedList<Amount>) entry.getValue()).getLast();
+                    entry.getValue().remove(lastQuantity);
+                }
+            }
+        }
+    }
+
+    /**
+     * Methode zum Erstellen aller möglichen Anbieterkombinationen auf Basis der übergebenen {@link AbstractProvider}.
+     * 
+     * Als erstes wird mit Hilfe der Google Guava Library ein PowerSet erstellt, welches alle möglichen Kombinationen
+     * der
+     * übergebenen {@link AbstractProvider} enthält.
+     * 
+     * Beispiel: ImmutableSet.of(1, 2) => {{}, {1}, {2}, {1, 2}}
+     * 
+     * Danach wird der leere Eintrag aus dem PowerSet entfernt, da dieser später nicht mehr benötigt wird.
+     * 
+     * Enthält ein Subset des PowerSet mehr als einen Eintrag, müssen alle Permutationen des Subsets zusätzlich mit
+     * Hilfe Google Guava Library erstellt werden und im Ergebnis gespeichert werden. Die Aufteilung einer
+     * {@link Ingredient} müssen passieren, da diese abhängig ist von der Reihenfolge der {@link AbstractProvider} und
+     * der Verfügbarkeit der {@link Ingredient}.
+     * 
+     * @param ingredientProviders Das Set mit übergebenen {@link AbstractProvider}
+     * @return Eine Liste von Listen mit allen Kombinationen von {@link AbstractProvider}
+     */
+    private List<List<AbstractProvider>> createIngredientProviderCombinations(Set<AbstractProvider> ingredientProviders) {
+        List<List<AbstractProvider>> result = new LinkedList<List<AbstractProvider>>();
 
         if (ingredientProviders != null && !ingredientProviders.isEmpty()) {
+            // Erstellung des PowerSet mit allen Anbieterkombinationen
+            Set<Set<AbstractProvider>> powerSet = Sets.powerSet(ingredientProviders);
 
-            for (AbstractProvider ingredientProvider : ingredientProviders) {
+            for (Set<AbstractProvider> providers : powerSet) {
 
-                Set<AbstractProvider> otherIngredientProviders = new HashSet<AbstractProvider>(ingredientProviders);
+                if (!providers.isEmpty()) {
 
-                otherIngredientProviders.removeAll(Arrays.asList(ingredientProvider));
+                    if (providers.size() == 1) {
+                        result.add(Lists.newLinkedList(providers));
+                    }
+                    else {
+                        // Erstellen aller Permutationen (Anordnungsmöglichkeiten) der Anbieter
+                        Collection<List<AbstractProvider>> permutations = Collections2.permutations(providers);
 
-                if (!otherIngredientProviders.isEmpty()) {
-
-                    for (AbstractProvider otherIngredientProvider : otherIngredientProviders) {
-
-                        if (result.containsKey(ingredientProvider)) {
-                            result.get(ingredientProvider).add(otherIngredientProvider);
-                        }
-                        else {
-                            result.put(ingredientProvider,
-                                    new HashSet<AbstractProvider>(Arrays.asList(otherIngredientProvider)));
+                        for (List<AbstractProvider> perm : permutations) {
+                            if (!perm.isEmpty()) {
+                                result.add(Lists.newLinkedList(perm));
+                            }
                         }
                     }
-                }
-                else {
-                    result.put(ingredientProvider, new HashSet<AbstractProvider>());
                 }
             }
         }
