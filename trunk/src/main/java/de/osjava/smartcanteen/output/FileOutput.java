@@ -1,7 +1,5 @@
 package de.osjava.smartcanteen.output;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
@@ -11,6 +9,7 @@ import de.osjava.smartcanteen.builder.result.Meal;
 import de.osjava.smartcanteen.builder.result.ShoppingList;
 import de.osjava.smartcanteen.builder.result.ShoppingListItem;
 import de.osjava.smartcanteen.data.Canteen;
+import de.osjava.smartcanteen.helper.FileHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 
 /**
@@ -101,12 +100,10 @@ public class FileOutput implements IOutput {
                     }
                 }
             }
-
         }
 
-        String filename = generateFilename("Menueplan ab " + startDate + " - " + canteenName);
-
-        ausgebenInDatei(ausgabeDaten.toString(), filename, true);
+        String filename = FileHelper.generateFilename("Menueplan ab " + startDate + " - " + canteenName, fileExt);
+        FileHelper.ausgebenInDatei(ausgabeDaten.toString(), filename, true);
     }
 
     /**
@@ -131,64 +128,6 @@ public class FileOutput implements IOutput {
 
     @Override
     public void outputTotalCosts(ShoppingList shoppingList) {
-    }
-
-    /**
-     * Es wird der Dateiname generiert, hierbei wird geprüft, ob bereits eine Datei mit dem Dateinamen
-     * existiert. Ist dies der Fall wird solanger der Dateiname hochgezählt,
-     * bis die Datei unter einem neuen Dateinamen gespeichert werden kann *
-     * 
-     * @return
-     */
-    public String generateFilename(String customName) {
-        // TODO(Marcel Baxmann) Prüfung vornehmen
-        // auslesen der Pfadangabe
-        String path = PropertyHelper.getProperty("outputData.saveTo");
-        // setzen der übergebenen Parameter für den Filenamen
-        String dateiname = path + customName + fileExt;
-
-        // Anlage eines Objekts der Klasse File mit dem generierten Dateinamen
-        File file = new File(dateiname);
-
-        // Damit die bereits erstellten Ausgabeergebnisse nicht ueberschrieben werden
-        // erfolgt ein Test, ob bereits eine Datei mit dem Dateinamen exisitert.
-        // Ist dies der Fall wird solange der Dateiname hochgezählt,
-        // bis die Datei unter einem neuen Dateinamen gespeichert werden kann
-
-        // solange File Exisitert wird die For-Schleife ausgeführt
-        for (int i = 1; file.exists(); i++) {
-            dateiname = path + customName + " (" + i + ")" + fileExt;
-            file = new File(dateiname);
-            // nach 100 versuchen wird abgebrochen und die Datei mit dem Zusatz (101) überschrieben
-            if (i == 100) {
-                System.out
-                        .println("Abbruch: Sie haben mehr als " + i + " mal die Datei abgelegt. Bitte leeren Sie ihren Ausgabeordner");
-                break;
-            }
-        }
-        System.out.println("Datei exisitiert bereits, Name wird angepasst auf: " + file.getAbsolutePath());
-        return dateiname;
-    }
-
-    /**
-     * Schreiben der übergebenen Daten in Datei
-     * 
-     * @param String wird übergeben
-     * @throws IOException
-     */
-    public void ausgebenInDatei(String ausgabeDaten, String dateiname, boolean anhaengen) throws IOException {
-        // TODO (Marcel Baxmann) kommentieren und auf Fehler prüfen
-        File file = new File(dateiname);
-        FileWriter writer = new FileWriter(file, anhaengen);
-
-        // übergebener String wird in Datei geschrieben
-        writer.write(ausgabeDaten);
-
-        // schreiben der Daten in Stream in die Datei
-        writer.flush();
-
-        // schließen des Stream
-        writer.close();
     }
 
 }
