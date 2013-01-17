@@ -17,13 +17,16 @@ public class FileHelper {
     /**
      * Schreiben der übergebenen Daten in Datei
      * 
-     * @param String für auszugebenen Daten für den Datenamen sowie Boolean Wert
-     *            ob die Datei überschrieben werden soll oder angehangen wird
+     * @param String für auszugebene Daten
+     * @param String für die Bezeichnung des Dateinamens
+     * @param Boolean Wert ob die Datei überschrieben werden soll oder angehangen wird
+     * @return liefert Wahrheitswert zurück wenn abgeschlossen
      * @throws IOException
      * @author Marcel Baxmann
      */
     public static boolean ausgebenInDatei(String ausgabeDaten, String dateiname, boolean anhaengen) throws IOException {
         // TODO (Marcel Baxmann) kommentieren und auf Fehler prüfen
+        // neue
         File file = new File(dateiname);
         FileWriter writer = new FileWriter(file, anhaengen);
 
@@ -41,7 +44,7 @@ public class FileHelper {
     /**
      * Es wird der Dateiname generiert, hierbei wird geprüft, ob bereits eine Datei mit dem Dateinamen
      * existiert. Ist dies der Fall wird solanger der Dateiname hochgezählt,
-     * bis die Datei unter einem neuen Dateinamen gespeichert werden kann *
+     * bis die Datei unter einem neuen Dateinamen gespeichert werden kann
      * 
      * @return
      */

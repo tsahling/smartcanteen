@@ -226,12 +226,14 @@ public class Application {
      * @param shoppingList
      * @param canteens
      * @throws IOException
+     * @author Marcel
      */
     private void outputApplicationResult(ShoppingList shoppingList,
             Canteen... canteens) throws IOException {
-        // Setze Werte ob Fileformat erzeugt werden soll
-        boolean generateCSV = Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateCSV"));
-        boolean generateHTML = Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateHTML"));
+        // Setze Werte ob beschriebenes Fileformat erzeugt werden soll
+        // Auslesen der Werte aus externer Properties Datei und casten auf Wahrheitswert
+        final boolean generateCSV = Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateCSV"));
+        final boolean generateHTML = Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateHTML"));
 
         // Konsoleninfo
         System.out.println("Beginne Aufbereitung Datenausgabe");
