@@ -17,6 +17,7 @@ import de.osjava.smartcanteen.helper.BaseHelper;
 import de.osjava.smartcanteen.helper.LogHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 import de.osjava.smartcanteen.output.FileOutput;
+import de.osjava.smartcanteen.output.HTMLOutput;
 
 /**
  * Die Klasse {@link Application} versetzt das Programm anhand der übergebenen
@@ -228,22 +229,59 @@ public class Application {
      */
     private void outputApplicationResult(ShoppingList shoppingList,
             Canteen... canteens) throws IOException {
-        System.out.println("Beginne Aufbereitung Datenausgabe");
+        // Setze Werte ob Fileformat erzeugt werden soll
+        boolean generateCSV = Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateCSV"));
+        boolean generateHTML = Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateHTML"));
 
-        // TODO(Marcel Baxmann) Ergebnisse der Applikationslogik mit
-        // Output-Klassen verarbeiten
+        System.out.println(generateCSV);
+        // Konsoleninfo
+        System.out.println("Beginne Aufbereitung Datenausgabe");
 
         // Erstellung Ausgabe-Objekt für CSV-Ausgabe
         FileOutput fileOutput = new FileOutput();
+        // Erstellung Ausgabe-Objekt für HTML-Ausgabe
+        HTMLOutput htmlOutput = new HTMLOutput();
 
-        // Aufruf der Methode zum erzeugen eines Menueplans als CSV je existierender Kantine
-        int x = 1;
-        for (Canteen canteen : canteens) {
-            System.out.println("Übergabe Kantine: " + x);
-            fileOutput.outputMenuPlan(canteen);
-            x++;
-            // temporärer Ausstieg, damit nur ein Menüplan ausgegeben wird zum testen
-            // break;
+        if (generateCSV) {
+            // Aufruf der Methode zum Erzeugen eines Menueplans als CSV je existierender Kantine
+            int x = 1;
+            for (Canteen canteen : canteens) {
+                System.out.println("CSV-Menüplan wird erzeugt für Kantine " + x);
+                fileOutput.outputMenuPlan(canteen);
+                x++;
+            }
+
+            // Aufruf der Methode zum Erzeugen einer Einkaufsliste als CSV
+            System.out.println("CSV-Einkaufsliste wird erzeugt");
+            fileOutput.outputShoppingList(shoppingList);
+
+            // Aufruf der Methode zum Erzeugen einer Kostenuebersicht als CSV
+            System.out.println("CSV-Kostenuebersicht wird erzeugt");
+            fileOutput.outputTotalCosts(shoppingList);
+        }
+        else {
+            System.out.println("CSV soll nicht erzeugt werden");
+        }
+
+        if (generateHTML) {
+            // Aufruf der Methode zum Erzeugen eines Menueplans als HTML je existierender Kantine
+            int x = 1;
+            for (Canteen canteen : canteens) {
+                System.out.println("HTML-Menüplan wird erzeugt für Kantine " + x);
+                htmlOutput.outputMenuPlan(canteen);
+                x++;
+            }
+
+            // Aufruf der Methode zum Erzeugen einer Einkaufsliste als CSV
+            System.out.println("HTML-Einkaufsliste wird erzeugt");
+            htmlOutput.outputShoppingList(shoppingList);
+
+            // Aufruf der Methode zum Erzeugen einer Kostenuebersicht als CSV
+            System.out.println("HTML-Kostenuebersicht wird erzeugt");
+            htmlOutput.outputTotalCosts(shoppingList);
+        }
+        else {
+            System.out.println("HTML soll nicht erzeugt werden");
         }
 
         System.out.println("Ausgabe erfolgreich abgeschlossen");

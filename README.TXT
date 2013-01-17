@@ -21,11 +21,17 @@ das Ergebnis der Applikation individualisiert werden kann. Folgende Einstellunge
 planingPeriod.planingMode=sequential|random
 shoppingList.generationMode=simple|advanced
 
+
+
+
+
+
+FEATURELISTE (über Standardanforderungen hinaus):
 Auf folgende Features der Applikation, die über die Standardanforderungen hinausgehen, möchten wir an dieser Stelle 
 separat hinweisen:
 
 - 
 - 
 
- FEATURELISTE (über Standardanforderungen hinaus):
+
  
