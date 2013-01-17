@@ -233,7 +233,6 @@ public class Application {
         boolean generateCSV = Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateCSV"));
         boolean generateHTML = Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateHTML"));
 
-        System.out.println(generateCSV);
         // Konsoleninfo
         System.out.println("Beginne Aufbereitung Datenausgabe");
 
