@@ -25,9 +25,12 @@ public class FileOutput implements IOutput {
     // Defintion der Dateiendung
     String fileExt = ".csv";
     // zuweisen der Variante der Darstellung des Menueplans
-    // wenn single --> dann zweispaltige Auflistung nach Namen
-    // wenn grouped --> dann pro Spalte bzw. Datum drei Gerichte
+    // Abrufen der Werte aus Properties Datei
+    // wenn Wert single --> dann zweispaltige Auflistung nach Namen
+    // wenn Wert grouped --> dann pro Spalte bzw. Datum drei Gerichte
     String layoutMenuePlan = PropertyHelper.getProperty("outputData.LayoutMenuePlan");
+    // Abrufen des Voreingestellten Seperierungszeichens für die CSV-Datei aus den Properites
+    String dSSeperator = PropertyHelper.getProperty("outputData.dataSetSeperator");
 
     /**
      * Standardkonstruktor
@@ -56,7 +59,7 @@ public class FileOutput implements IOutput {
 
         if (layoutMenuePlan.equals("single")) {
             // Überschriften Zeile einfügen
-            ausgabeDaten.append("Datum;Gericht" + lineSeparator);
+            ausgabeDaten.append("Datum" + dSSeperator + "Gericht" + lineSeparator);
 
             // für jedes Gericht (meal) in der Liste werden das Datum und der Namen
             // ausgelesen und in den String-Puffer angehangen
@@ -65,16 +68,16 @@ public class FileOutput implements IOutput {
                 date = shortendDate(sortedMeal.getDate());
                 meal = sortedMeal.getRecipe().getName();
 
-                ausgabeDaten.append(date + ";" + meal + lineSeparator);
+                ausgabeDaten.append(date + dSSeperator + meal + lineSeparator);
             }
         }
         else if (layoutMenuePlan.equals("grouped")) {
             // TODO (Marcel Baxmann) Kommentieren
             int mealsPerDay = Integer.parseInt(PropertyHelper.getProperty("planingPeriod.mealsPerDay"));
 
-            ausgabeDaten.append("Datum;");
+            ausgabeDaten.append("Datum" + dSSeperator);
             for (int i = 1; i < mealsPerDay + 1; i++) {
-                ausgabeDaten.append("Gericht " + i + ";");
+                ausgabeDaten.append("Gericht " + i + dSSeperator);
             }
             ausgabeDaten.append(lineSeparator);
 
@@ -84,16 +87,16 @@ public class FileOutput implements IOutput {
                 meal = sortedMeal.getRecipe().getName();
 
                 if (previousDate == null) {
-                    ausgabeDaten.append(date + ";" + meal);
+                    ausgabeDaten.append(date + dSSeperator + meal);
                     previousDate = date;
                 }
                 else {
                     if (date.equals(previousDate)) {
-                        ausgabeDaten.append(";" + meal);
+                        ausgabeDaten.append(dSSeperator + meal);
                     }
                     else {
                         ausgabeDaten.append(lineSeparator);
-                        ausgabeDaten.append(date + ";" + meal);
+                        ausgabeDaten.append(date + dSSeperator + meal);
                         previousDate = date;
                     }
                 }
