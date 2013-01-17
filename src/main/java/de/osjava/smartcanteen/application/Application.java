@@ -29,7 +29,7 @@ import de.osjava.smartcanteen.output.FileOutput;
  * eigentliche Programmlogik und sorgt ganz am Ende des Ablaufs für die Ausgabe
  * der Ergebnisse.
  * 
- * @author Franceso Luciano und Tim Sahling
+ * @author Franceso Luciano und Tim Sahling und Marcel Baxmann
  */
 public class Application {
 
@@ -201,9 +201,10 @@ public class Application {
     }
 
     /**
+     * @throws IOException
      * 
      */
-    private void startApplication() {
+    private void startApplication() throws IOException {
 
         // Start der Applikationslogik für die Erstellung der Speisepläne für die beiden Kantinen
         MenuPlanBuilder mpb = new MenuPlanBuilder(providerBase, recipeBase);
@@ -218,24 +219,34 @@ public class Application {
     }
 
     /**
+     * Methode in der die Ergebnisse der Builderklassen {@link MenuPLanBuilder} und {@link ShoppingListBuilder}
+     * ausgegeben werden
      * 
      * @param shoppingList
      * @param canteens
+     * @throws IOException
      */
     private void outputApplicationResult(ShoppingList shoppingList,
-            Canteen... canteens) {
+            Canteen... canteens) throws IOException {
         System.out.println("Beginne Aufbereitung Datenausgabe");
 
         // TODO(Marcel Baxmann) Ergebnisse der Applikationslogik mit
         // Output-Klassen verarbeiten
 
-        // Erstellung Ausgabe-Objekts und Überagbe des Arrays der existenten Kantinen
-        FileOutput oput = new FileOutput(canteens);
+        // Erstellung Ausgabe-Objekt für CSV-Ausgabe
+        FileOutput fileOutput = new FileOutput();
 
+        // Aufruf der Methode zum erzeugen eines Menueplans als CSV je existierender Kantine
+        int x = 1;
         for (Canteen canteen : canteens) {
-
-            oput.outputMenuPlan(canteen);
+            System.out.println("Übergabe Kantine: " + x);
+            fileOutput.outputMenuPlan(canteen);
+            x++;
+            // temporärer Ausstieg, damit nur ein Menüplan ausgegeben wird zum testen
+            // break;
         }
+
+        System.out.println("Ausgabe erfolgreich abgeschlossen");
 
     }
 }

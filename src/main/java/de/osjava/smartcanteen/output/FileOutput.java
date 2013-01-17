@@ -3,11 +3,9 @@ package de.osjava.smartcanteen.output;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import de.osjava.smartcanteen.builder.result.Meal;
 import de.osjava.smartcanteen.builder.result.ShoppingList;
@@ -25,75 +23,51 @@ public class FileOutput implements IOutput {
     // Ablageort für die Ausagbedatei
     public String speicherort = "D:/";
     // Dateiname für die Ausagbedatei
-    public String dateiname = "MenuePlan.txt";
+    public String dateiname = "MenuePlan";
+    // Dateityp für die Ausagbedatei
+    public String dateityp = ".csv";
+    // auslesen des betriebssystemspezifisch Zeichens für einen Zeilenumbruch
+    public String lineSeparator = System.getProperty("line.separator");
 
     /**
      * Standardkonstruktor
      * 
      * @param canteens
      */
-    public FileOutput(Canteen[] canteens) {
-        Canteen canteen;
-
-        for (int x = 0; x != canteens.length; x++) {
-            canteen = canteens[x];
-            System.out.println("Übergabe Menu Plan:" + x);
-            outputMenuPlan(canteen);
-        }
+    public FileOutput() {
 
     }
 
     @Override
-    public void outputMenuPlan(Canteen canteen) {
-        // <<<<<<< .mine
+    public void outputMenuPlan(Canteen canteen) throws IOException {
+        String canteenName = canteen.getLocation().getName();
 
-        List<Meal> meals = canteen.getMenuPlan().getMeals();
+        List<Meal> mealsSortedByDate = canteen.getMenuPlan().getMealsSortedByDate();
 
-        Map<Date, List<Meal>> mealsGroupedByDate = canteen.getMenuPlan().getMealsGroupedByDate();
+        for (Meal sortedMeal : mealsSortedByDate) {
+            String date = shortendDate(sortedMeal.getDate());
 
-        for (Entry<Date, List<Meal>> entry : mealsGroupedByDate.entrySet()) {
+            String meal = sortedMeal.getRecipe().getName();
 
-            entry.getKey();
-
-            List<Meal> value = entry.getValue();
-
-            for (Meal xyz : value) {
-
-                xyz.getRecipe().getName();
-
-                String transformDateToNiceString = transformDateToNiceString(xyz.getDate());
-
-            }
-
+            // System.out.println(date + ": " + meal);
+            ausgebenInDatei(date + ";" + meal + "; " + lineSeparator, canteenName, true);
+            // ausgebenInDatei(System.getProperty(), true);
+            // System.out.println(System.getProperty("line.seperator"));
         }
-
-        if (true) {
-            // throw new IOException(PropertyHelper.getProperty(""));
-        }
-
-        Set<Date> keySet = mealsGroupedByDate.keySet();
-
-        for (Date xyz : keySet) {
-
-            System.out.println(xyz.toString());
-
-        }
-
-        System.out.println(canteen.getMenuPlan().getMeals());
-        // =======
-        // System.out.println(canteen.getMenuPlan().getMealsGroupedByDate());
-        // try {
-        // ausgebenInDatei("Die Daten die in die Datei geschrieben werden sollen als Objekt");
-        // } catch (IOException e) {
-        // // TODO(Marcel) handle this exception properly
-        // e.printStackTrace();
-        // }
-        // >>>>>>> .r154
 
     }
 
-    private String transformDateToNiceString(Date date) {
-        return "";
+    /**
+     * Klasse um ein Datum zu kürzen in das Format dd.mm.yyyy
+     * 
+     * @param date
+     * @return String eines Datums im Format dd.mm.yyyy
+     */
+    private String shortendDate(Date date) {
+        String stringDate;
+        DateFormat formatter = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        stringDate = formatter.format(date);
+        return stringDate;
     }
 
     @Override
@@ -110,11 +84,17 @@ public class FileOutput implements IOutput {
      * @param String wird übergeben
      * @throws IOException
      */
-    public void ausgebenInDatei(String ausgabeDaten) throws IOException {
-        File file = new File(speicherort + dateiname);
-        FileWriter writer = new FileWriter(file, true);
+    public void ausgebenInDatei(String ausgabeDaten, String namensZusatz, boolean anhaengen) throws IOException {
+        File file = new File(speicherort + dateiname + " - " + namensZusatz + dateityp);
+        FileWriter writer = new FileWriter(file, anhaengen);
+
+        // übergebener String wird in Datei geschrieben
         writer.write(ausgabeDaten);
+
+        // schreiben der Daten in Stream in die Datei
         writer.flush();
+
+        // schließen des Stream
         writer.close();
     }
 

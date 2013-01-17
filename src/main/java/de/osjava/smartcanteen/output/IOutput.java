@@ -1,5 +1,7 @@
 package de.osjava.smartcanteen.output;
 
+import java.io.IOException;
+
 import de.osjava.smartcanteen.builder.result.ShoppingList;
 import de.osjava.smartcanteen.data.Canteen;
 
@@ -21,8 +23,9 @@ public interface IOutput {
      * 
      * @param canteen
      *            Kantinen-Objekt wird übergeben
+     * @throws IOException
      */
-    void outputMenuPlan(Canteen canteen);
+    void outputMenuPlan(Canteen canteen) throws IOException;
 
     /**
      * Diese Methode stellt die Möglichkeit bereit eine Einkaufsliste als noch

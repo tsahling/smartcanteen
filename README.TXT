@@ -1,4 +1,4 @@
-PROJECT TITLE:
+PROJECT TITLE: 
 SmartCanteen
 
 PURPOSE OF PROJECT: 
@@ -14,7 +14,6 @@ AUTHORS:
 Marcel Baxmann, Francesco Luciano und Tim Sahling
 
 USER INSTRUCTIONS:
-
 Die Applikation SmartCanteen läuft grundsätzlich vollständig automatisch ab und generiert, bei übergebenen Eingabedaten, die 
 erwarteten Ergebnisse. Einige Einstellungen lassen sich über den Parameter --props von außen in die Applikation übergeben, wodurch
 das Ergebnis der Applikation individualisiert werden kann. Folgende Einstellungen sind verfügbar:
@@ -27,6 +26,6 @@ separat hinweisen:
 
 - 
 - 
- 
- 
+
+ FEATURELISTE (über Standardanforderungen hinaus):
  
