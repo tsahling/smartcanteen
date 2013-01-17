@@ -20,10 +20,14 @@ import de.osjava.smartcanteen.helper.PropertyHelper;
  * @author Marcel Baxmann
  */
 public class FileOutput implements IOutput {
-    // auslesen des betriebssystemspezifisch Zeichens für einen Zeilenumbruch
+    // Auslesen des betriebssystemspezifischen Zeichen für einen Zeilenumbruch
     String lineSeparator = System.getProperty("line.separator");
     // Defintion der Dateiendung
     String fileExt = ".csv";
+    // zuweisen der Variante der Darstellung des Menueplans
+    // wenn single --> dann zweispaltige Auflistung nach Namen
+    // wenn grouped --> dann pro Spalte bzw. Datum drei Gerichte
+    String layoutMenuePlan = PropertyHelper.getProperty("outputData.LayoutMenuePlan");
 
     /**
      * Standardkonstruktor
@@ -38,11 +42,8 @@ public class FileOutput implements IOutput {
     public void outputMenuPlan(Canteen canteen) throws IOException {
         // auslesen des Kantinen-Namens
         String canteenName = canteen.getLocation().getName();
-        // zuweisen der Variante der Datenaufbereitung
-        // wenn 0 --> dann zweispaltige Auflistung nach Namen
-        // wenn 1 --> dann pro Spalte bzw. Datum drei Gerichte
-        int variante = 1;
-        String startDate = null;
+        String meal;
+        String date;
 
         // Erzeugen String-Puffer Objekts in welches die Ergebnisse geschrieben werden
         StringBuilder ausgabeDaten = new StringBuilder();
@@ -51,12 +52,9 @@ public class FileOutput implements IOutput {
         List<Meal> mealsSortedByDate = canteen.getMenuPlan().getMealsSortedByDate();
 
         // das Datum des Gültigkeitsbeginns auslesen - Verwendung für Dateiname
-        startDate = shortendDate(mealsSortedByDate.get(0).getDate());
+        String startDate = shortendDate(mealsSortedByDate.get(0).getDate());
 
-        String meal;
-        String date;
-
-        if (variante == 0) {
+        if (layoutMenuePlan.equals("single")) {
             // Überschriften Zeile einfügen
             ausgabeDaten.append("Datum;Gericht" + lineSeparator);
 
@@ -70,7 +68,7 @@ public class FileOutput implements IOutput {
                 ausgabeDaten.append(date + ";" + meal + lineSeparator);
             }
         }
-        else {
+        else if (layoutMenuePlan.equals("grouped")) {
             // TODO (Marcel Baxmann) Kommentieren
             int mealsPerDay = Integer.parseInt(PropertyHelper.getProperty("planingPeriod.mealsPerDay"));
 

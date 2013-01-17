@@ -21,7 +21,9 @@ das Ergebnis der Applikation individualisiert werden kann. Folgende Einstellunge
 planingPeriod.planingMode=sequential|random
 shoppingList.generationMode=simple|advanced
 
-
+outputData.LayoutMenuePlan=grouped|single
+outputData.generateCSV=true|false
+outputData.generateHTML=true|false
 
 
 
@@ -30,8 +32,9 @@ FEATURELISTE (über Standardanforderungen hinaus):
 Auf folgende Features der Applikation, die über die Standardanforderungen hinausgehen, möchten wir an dieser Stelle 
 separat hinweisen:
 
-- 
-- 
+- Generierung von HTML Dateien
+- Prüfung vor Überschreibung von Dateien (automatische Anpassung des Dateinamens -> Vorbeugung vor Datenverlust)
+- Zwei Varianten für die Ausgabe des Menüplans (nach Datum gruppiert oder zweispaltig)
 
 
  
