@@ -49,7 +49,7 @@ public class FileHelper {
      * @return
      */
     public static String generateFilename(String customName, String fileExt) {
-        // TODO(Marcel Baxmann) Prüfung vornehmen
+        // TODO (Marcel Baxmann) Prüfung vornehmen !!! FEHLERHANDLING FÜR path
         // auslesen der Pfadangabe
         String path = PropertyHelper.getProperty("outputData.saveTo");
         // setzen der übergebenen Parameter für den Filenamen
@@ -64,17 +64,23 @@ public class FileHelper {
         // bis die Datei unter einem neuen Dateinamen gespeichert werden kann
 
         // solange File Exisitert wird die For-Schleife ausgeführt
-        for (int i = 1; file.exists(); i++) {
-            dateiname = path + customName + " (" + i + ")" + fileExt;
-            file = new File(dateiname);
-            // nach 100 versuchen wird abgebrochen und die Datei mit dem Zusatz (101) überschrieben
-            if (i == 100) {
-                System.out
-                        .println("Abbruch: Sie haben mehr als " + i + " mal die Datei abgelegt. Bitte leeren Sie ihren Ausgabeordner");
-                break;
+        if (file.exists()) {
+            for (int i = 1; file.exists(); i++) {
+                dateiname = path + customName + " (" + i + ")" + fileExt;
+                file = new File(dateiname);
+                // nach 100 versuchen wird abgebrochen und die Datei mit dem Zusatz (101) überschrieben
+                if (i == 100) {
+                    System.out
+                            .println("Abbruch: Sie haben mehr als " + i + " mal die Datei abgelegt. Bitte leeren Sie ihren Ausgabeordner");
+                    break;
+                }
             }
+            System.out.println("Datei exisitiert bereits, Name wird angepasst auf: " + file.getAbsolutePath());
         }
-        System.out.println("Datei exisitiert bereits, Name wird angepasst auf: " + file.getAbsolutePath());
+        else {
+            System.out.println("Datei abgelegt unter: " + file.getAbsolutePath());
+        }
+
         return dateiname;
     }
 
