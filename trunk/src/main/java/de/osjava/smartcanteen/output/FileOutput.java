@@ -10,6 +10,7 @@ import java.util.List;
 import de.osjava.smartcanteen.builder.result.Meal;
 import de.osjava.smartcanteen.builder.result.ShoppingList;
 import de.osjava.smartcanteen.data.Canteen;
+import de.osjava.smartcanteen.helper.PropertyHelper;
 
 /**
  * Die Klasse {@link FileOutput} ist eine Klasse, die das Interface {@link IOutput} implementiert und stellt daher die
@@ -19,15 +20,10 @@ import de.osjava.smartcanteen.data.Canteen;
  * @author Marcel Baxmann
  */
 public class FileOutput implements IOutput {
-
-    // Ablageort für die Ausagbedatei
-    public String speicherort = "D:/";
-    // Dateiname für die Ausagbedatei
-    public String dateiname = "MenuePlan";
-    // Dateityp für die Ausagbedatei
-    public String dateityp = ".csv";
     // auslesen des betriebssystemspezifisch Zeichens für einen Zeilenumbruch
-    public String lineSeparator = System.getProperty("line.separator");
+    String lineSeparator = System.getProperty("line.separator");
+    // Defintion der Dateiendung
+    String fileExt = ".csv";
 
     /**
      * Standardkonstruktor
@@ -40,21 +36,29 @@ public class FileOutput implements IOutput {
 
     @Override
     public void outputMenuPlan(Canteen canteen) throws IOException {
+        // auslesen des Kantinen-Namens
         String canteenName = canteen.getLocation().getName();
 
+        StringBuilder ausgabeDaten = new StringBuilder();
         List<Meal> mealsSortedByDate = canteen.getMenuPlan().getMealsSortedByDate();
 
+        // das Datum des Gültigkeitsbeginns auslesen - Verwendung für Dateiname
+        String startDate = shortendDate(mealsSortedByDate.get(0).getDate());
+
         for (Meal sortedMeal : mealsSortedByDate) {
-            String date = shortendDate(sortedMeal.getDate());
+            String meal;
+            String date;
 
-            String meal = sortedMeal.getRecipe().getName();
+            date = shortendDate(sortedMeal.getDate());
+            meal = sortedMeal.getRecipe().getName();
 
-            // System.out.println(date + ": " + meal);
-            ausgebenInDatei(date + ";" + meal + "; " + lineSeparator, canteenName, true);
-            // ausgebenInDatei(System.getProperty(), true);
-            // System.out.println(System.getProperty("line.seperator"));
+            ausgabeDaten.append(date + ";" + meal + "; " + lineSeparator);
+
         }
 
+        String filename = generateFilename("Menueplan ab " + startDate + " - " + canteenName);
+
+        ausgebenInDatei(ausgabeDaten.toString(), filename, true);
     }
 
     /**
@@ -79,13 +83,48 @@ public class FileOutput implements IOutput {
     }
 
     /**
+     * es wird der Dateiname generiert
+     * 
+     * @return
+     */
+    public String generateFilename(String customName) {
+        // TODO (Marcel Baxmann) Prüfung vornehmen
+        // auslesen der Pfadangabe
+        String path = PropertyHelper.getProperty("outputData.saveTo");
+        // setzen der übergebenen Parameter für den Filenamen
+        String dateiname = path + customName + fileExt;
+
+        // Anlage eines Objekts der Klasse File mit dem generierten Dateinamen
+        File file = new File(dateiname);
+
+        // Damit die bereits erstellten Ausgabeergebnisse nicht ueberschrieben werden
+        // erfolgt ein Test, ob bereits eine Datei mit dem Dateinamen exisitert.
+        // Ist dies der Fall wird solange der Dateiname hochgezählt,
+        // bis die Datei unter einem neuen Dateinamen gespeichert werden kann
+
+        // solange File Exisitert wird die For-Schleife ausgeführt
+        for (int i = 1; file.exists(); i++) {
+            dateiname = path + customName + " (" + i + ")" + fileExt;
+            file = new File(dateiname);
+            // nach 100 versuchen wird abgebrochen und die Datei mit dem Zusatz (101) überschrieben
+            if (i == 100) {
+                System.out
+                        .println("Abbruch: Sie haben mehr als " + i + " mal die Datei abgelegt. Bitte leeren Sie ihren Ausgabeordner");
+                break;
+            }
+        }
+        System.out.println("Datei exisitiert bereits, Name wird angepasst auf: " + file.getAbsolutePath());
+        return dateiname;
+    }
+
+    /**
      * Schreiben der übergebenen Daten in Datei
      * 
      * @param String wird übergeben
      * @throws IOException
      */
-    public void ausgebenInDatei(String ausgabeDaten, String namensZusatz, boolean anhaengen) throws IOException {
-        File file = new File(speicherort + dateiname + " - " + namensZusatz + dateityp);
+    public void ausgebenInDatei(String ausgabeDaten, String dateiname, boolean anhaengen) throws IOException {
+        File file = new File(dateiname);
         FileWriter writer = new FileWriter(file, anhaengen);
 
         // übergebener String wird in Datei geschrieben
