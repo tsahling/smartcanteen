@@ -24,7 +24,7 @@ shoppingList.generationMode=simple|advanced
 outputData.LayoutMenuePlan=grouped|single
 outputData.generateCSV=true|false
 outputData.generateHTML=true|false
-
+outputData.dataSetSeperator=;|,
 
 
 
