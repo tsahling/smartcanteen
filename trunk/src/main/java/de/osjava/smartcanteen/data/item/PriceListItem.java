@@ -1,6 +1,7 @@
 package de.osjava.smartcanteen.data.item;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import de.osjava.smartcanteen.data.Ingredient;
 import de.osjava.smartcanteen.datatype.Amount;
@@ -72,6 +73,10 @@ public class PriceListItem {
     }
 
     /**
+     * Dividiert die übergebene {@link Amount} mit der Größe des Gebindes. Das Ergebnis wird auf keine Nachkommastelle
+     * aufgerundet, da die tatsächliche Anzahl an benötigten Gebinden herausgefunden werden soll.
+     * 
+     * Beispiel: Quantity -> 15.050 GRM -> 15.05 => 16 Gebinde
      * 
      * @param quantity
      * @return
@@ -82,7 +87,7 @@ public class PriceListItem {
         if (validateSizeAndQuantity(quantity)) {
 
             if (this.size.getUnit().equals(quantity.getUnit())) {
-                result = NumberHelper.divide(quantity.getValue(), this.size.getValue());
+                result = NumberHelper.divide(quantity.getValue(), this.size.getValue()).setScale(0, RoundingMode.UP);
             }
         }
 

@@ -54,7 +54,7 @@ public class ShoppingList {
                 }
                 else if (entry.getKey() instanceof Wholesaler) {
                     Wholesaler wholesaler = (Wholesaler) entry.getKey();
-                    transportCosts = wholesaler.calculateTransportCosts(entry.getValue().size());
+                    transportCosts = wholesaler.calculateTransportCosts(BigDecimal.valueOf(entry.getValue().size()));
                 }
 
                 List<ShoppingListItem> shoppingListItems = entry.getValue();
@@ -62,6 +62,7 @@ public class ShoppingList {
                 if (shoppingListItems != null && !shoppingListItems.isEmpty()) {
 
                     for (ShoppingListItem shoppingListItem : shoppingListItems) {
+                        System.out.println(shoppingListItem.getIngredient().getName());
                         result.add(shoppingListItem.calculatePrice());
                     }
                 }

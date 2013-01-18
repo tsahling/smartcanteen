@@ -35,11 +35,11 @@ public class Wholesaler extends AbstractProvider {
      * der mit der Anzahl Artikel, die bei ihm bestellt werden sollen, multipliziert wird. Dieses Berechnungsverfahren
      * gilt für alle {@link Wholesaler}.
      * 
-     * @param numberOfItemsToOrder Artikel die bei dem {@link Wholesaler} bestellt werden
+     * @param numberOfItemsToOrder Anzahl an Zutaten, die bei dem {@link Wholesaler} bestellt werden
      * @return Die Transportkosten für einen {@link Wholesaler}
      */
-    public Amount calculateTransportCosts(int numberOfItemsToOrder) {
-        return new Amount(NumberHelper.multiply(this.transportFee.getValue(), new BigDecimal(numberOfItemsToOrder)),
+    public Amount calculateTransportCosts(BigDecimal numberOfIngredientsToOrder) {
+        return new Amount(NumberHelper.multiply(this.transportFee.getValue(), numberOfIngredientsToOrder),
                 UnitOfMeasurement.EUR);
     }
 

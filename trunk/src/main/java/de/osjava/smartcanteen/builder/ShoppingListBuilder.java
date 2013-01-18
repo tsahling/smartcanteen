@@ -108,8 +108,6 @@ public class ShoppingListBuilder {
      * @return
      */
     private ShoppingList determineBestPriceShoppingList(Map<Ingredient, Amount> ingredientQuantities) {
-        // TODO (Tim Sahling) Bei der Anbietern kann nur in ganzzahligen Mengen z.B. 1000 Gramm eingekauft werden.
-        // Derzeit berücksichtigt der Alg. aber auch 1 gramm schritte oder?
         List<ShoppingList> shoppingLists = new ArrayList<ShoppingList>();
 
         Map<IngredientQuantity, Map<AbstractProvider, List<Amount>>> tempMap = new HashMap<IngredientQuantity, Map<AbstractProvider, List<Amount>>>();
@@ -123,6 +121,8 @@ public class ShoppingListBuilder {
                     .distributeQuantityOfIngredientToProviders(ingredient, quantity);
 
             Set<AbstractProvider> keySet = distributedIngredientQuantityOfProviders.keySet();
+
+            distributedIngredientQuantityOfProviders.values();
 
             for (Entry<AbstractProvider, List<Amount>> diqop : distributedIngredientQuantityOfProviders.entrySet()) {
 
@@ -203,15 +203,8 @@ public class ShoppingListBuilder {
      */
     private void computeOneProviderWithIngredient(Map<AbstractProvider, Set<IngredientQuantity>> result,
             AbstractProvider provider, Ingredient ingredient, Amount ingredientQuantity) {
-
-        // Überprüfen ob Anbieter die Zutat in gewünschter Menge hat. Diese Abfrage ist allerdings nur aus
-        // Sicherheitsgründen implementiert, da die Abfrage ob ein Gericht beschaffbar ist, bereits bei der
-        // Speiseplangenerierung erfolgt.
-        if (provider.hasIngredientWithQuantity(ingredient, ingredientQuantity)) {
-            // Wenn Anbieter die Zutat in gewünschter Menge vorrätig hat, muss diese unabhängig vom Preis bei
-            // ihm gekauft werden, da er der einzige Anbieter der Zutat ist
-            addAndSubtractIngredientAndQuantity(result, provider, ingredient, ingredientQuantity, ingredientQuantity);
-        }
+        // Zutat muss unabhängig vom Preis bei Anbieter bestellt werden, da er der einzige Anbieter der Zutat ist
+        addAndSubtractIngredientAndQuantity(result, provider, ingredient, ingredientQuantity, ingredientQuantity);
     }
 
     /**
@@ -283,8 +276,8 @@ public class ShoppingListBuilder {
                 // Wenn das Ergebnis der Subtraktion kleiner 0 ist, ist die restliche Menge beim Anbieter
                 // bestellbar
                 else {
-                    addAndSubtractIngredientAndQuantity(result, bestPriceProvider, ingredient,
-                            ingredientQuantity, ingredientQuantity);
+                    addAndSubtractIngredientAndQuantity(result, bestPriceProvider, ingredient, ingredientQuantity,
+                            ingredientQuantity);
                     break;
                 }
             }
@@ -305,6 +298,71 @@ public class ShoppingListBuilder {
         addAndSubtractIngredientAndQuantity(result, provider, ingredient, ingredientQuantity, ingredientQuantity);
     }
 
+    private static final class ProviderRanking {
+        private AbstractProvider provider;
+        private Integer rank;
+
+        public ProviderRanking(AbstractProvider provider, Integer rank) {
+            this.provider = provider;
+            this.rank = rank;
+        }
+
+        public AbstractProvider getProvider() {
+            return provider;
+        }
+
+        public void setProvider(AbstractProvider provider) {
+            this.provider = provider;
+        }
+
+        public Integer getRank() {
+            return rank;
+        }
+
+        public void setRank(Integer rank) {
+            this.rank = rank;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((provider == null) ? 0 : provider.hashCode());
+            result = prime * result + ((rank == null) ? 0 : rank.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            ProviderRanking other = (ProviderRanking) obj;
+            if (provider == null) {
+                if (other.provider != null)
+                    return false;
+            }
+            else if (!provider.equals(other.provider))
+                return false;
+            if (rank == null) {
+                if (other.rank != null)
+                    return false;
+            }
+            else if (!rank.equals(other.rank))
+                return false;
+            return true;
+        }
+
+        @Override
+        public String toString() {
+            return "ProviderRanking [provider=" + provider + ", rank=" + rank + "]";
+        }
+
+    }
+
     /**
      * Berechnet den Fall, dass mehrere {@link AbstractProvider} die {@link Ingredient} in der benötigten {@link Amount}
      * vorrätig haben.
@@ -317,15 +375,79 @@ public class ShoppingListBuilder {
     private void computeMoreProvidersWithIngredientAndQuantity(Map<AbstractProvider, Set<IngredientQuantity>> result,
             Set<AbstractProvider> providers, Ingredient ingredient, Amount ingredientQuantity) {
 
-        // Ermitteln der preisgünstigsten Anbieter pro Zutat und Menge
+        List<ProviderRanking> providerRankings = new ArrayList<ProviderRanking>();
+
+        // 1. Schritt: Ermitteln der preisgünstigsten Anbieter pro Zutat und Menge
         List<AbstractProvider> bestPriceProviders = providerBase.findBestPriceProvidersByIngredientAndQuantity(
                 providers, ingredient, ingredientQuantity);
 
         if (bestPriceProviders != null && !bestPriceProviders.isEmpty()) {
 
-            AbstractProvider bestPriceProvider = bestPriceProviders.iterator().next();
+            for (int i = 0; i < bestPriceProviders.size(); i++) {
+                providerRankings.add(new ProviderRanking(bestPriceProviders.get(i), i));
+            }
 
-            addAndSubtractIngredientAndQuantity(result, bestPriceProvider, ingredient,
+            // 2. Schritt: Vergleich der Ausschussmenge
+            List<AbstractProvider> optimalQuantityProviders = providerBase
+                    .findOptimalQuantityProvidersByIngredientAndQuantity(providers, ingredient, ingredientQuantity);
+
+            for (ProviderRanking providerRanking : providerRankings) {
+                int lastIndexOf = optimalQuantityProviders.lastIndexOf(providerRanking.getProvider());
+                providerRanking.setRank(providerRanking.getRank() + lastIndexOf + 1);
+            }
+
+            // 3. Schritt: Sortiert die Anbieter nach Ranking
+            Collections.sort(providerRankings, new Comparator<ProviderRanking>() {
+
+                @Override
+                public int compare(ProviderRanking pr1, ProviderRanking pr2) {
+                    return pr1.getRank().compareTo(pr2.getRank());
+                }
+            });
+
+            // 4. Schritt: Vergleicht ob Anbieter mit gleichem Rank bereits im Ergebnis sind. Wenn ja, wird dieser
+            // bevorzugt verwendet.
+            Iterator<ProviderRanking> iterator = providerRankings.iterator();
+
+            while (iterator.hasNext()) {
+
+                ProviderRanking next = iterator.next();
+
+                if (iterator.hasNext()) {
+
+                    ProviderRanking next2 = iterator.next();
+
+                    if (next.getRank().equals(next2.getRank())) {
+
+                        if (result.containsKey(next.getProvider())) {
+                            next.setRank(next.getRank() - 1);
+                        }
+
+                        if (result.containsKey(next2.getProvider())) {
+                            next2.setRank(next2.getRank() - 1);
+                        }
+                    }
+                    else {
+                        break;
+                    }
+
+                }
+                else {
+                    break;
+                }
+
+            }
+
+            // 5. Schritt: Sortiert final die Anbieter nach Ranking
+            Collections.sort(providerRankings, new Comparator<ProviderRanking>() {
+
+                @Override
+                public int compare(ProviderRanking pr1, ProviderRanking pr2) {
+                    return pr1.getRank().compareTo(pr2.getRank());
+                }
+            });
+
+            addAndSubtractIngredientAndQuantity(result, providerRankings.iterator().next().getProvider(), ingredient,
                     ingredientQuantity, ingredientQuantity);
         }
     }
@@ -339,13 +461,21 @@ public class ShoppingListBuilder {
      * @param quantityToSubtractFrom
      */
     private void addAndSubtractIngredientAndQuantity(Map<AbstractProvider, Set<IngredientQuantity>> result,
-            AbstractProvider provider, Ingredient ingredient, Amount ingredientQuantity, Amount quantityToSubtractFrom) {
-        // Hinzufügen der Zutat und der Menge zum Ergebnis
-        addIngredientAndQuantity(result, provider, ingredient, ingredientQuantity);
-        // Subtraktion der Menge einer Zutat vom Anbieter
-        provider.subtractQuantityFromIngredient(ingredient, ingredientQuantity);
-        // Subtraktion der Menge einer Zutat von der Gesamtmenge der Zutat
-        quantityToSubtractFrom.subtract(ingredientQuantity);
+            AbstractProvider provider, Ingredient ingredient, Amount ingredientQuantity,
+            Amount ingredientQuantityToSubtractFrom) {
+
+        // Berechnet auf Basis der Zutat und der Menge der Zutat die tatsächlich vom Anbieter zu bestellende Menge
+        Amount quantityToStore = provider.calculateQuantityFromIngredientAndQuantity(ingredient, ingredientQuantity);
+
+        // Überprüfen ob Anbieter die Zutat in gewünschter Menge hat
+        if (quantityToStore != null && provider.hasIngredientWithQuantity(ingredient, quantityToStore)) {
+            // Hinzufügen der Zutat und der Menge zum Ergebnis
+            addIngredientAndQuantity(result, provider, ingredient, quantityToStore);
+            // Subtraktion der Menge einer Zutat vom Anbieter
+            provider.subtractQuantityFromIngredient(ingredient, quantityToStore);
+            // Subtraktion der Menge einer Zutat von der Gesamtmenge der Zutat
+            ingredientQuantityToSubtractFrom.subtract(quantityToStore);
+        }
     }
 
     /**
@@ -457,7 +587,6 @@ public class ShoppingListBuilder {
 
     /**
      * Repräsentiert eine temporäre Datenhaltungsklasse, die eine Zutat und eine Menge aufnehmen kann.
-     * 
      */
     private static final class IngredientQuantity {
         private Ingredient ingredient;

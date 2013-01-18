@@ -24,7 +24,8 @@ public class BuilderHelper {
      * @return
      */
     public static BigDecimal calculateTotalMealsForCanteen(Canteen canteen) {
-        return new BigDecimal(canteen.getNumberOfEmployees()).multiply(PROP_CANTEEN_MOREMEALSTHANEMPLOYEESFACTOR);
+        return NumberHelper.multiply(BigDecimal.valueOf(canteen.getNumberOfEmployees()),
+                PROP_CANTEEN_MOREMEALSTHANEMPLOYEESFACTOR);
     }
 
     /**
@@ -40,11 +41,11 @@ public class BuilderHelper {
         BigDecimal result = null;
 
         if (position == 0) {
-            result = totalMeals.multiply(PROP_CANTEEN_FAVMEALMULTIPLYFACTOR);
+            result = NumberHelper.multiply(totalMeals, PROP_CANTEEN_FAVMEALMULTIPLYFACTOR);
         }
         else {
-            result = totalMeals.multiply(PROP_CANTEEN_FAVMEALMULTIPLYFACTOR)
-                    .divide(BigDecimal.valueOf(PROP_PLANINGPERIOD_MEALSPERDAY - 1)).setScale(0, RoundingMode.HALF_UP);
+            result = NumberHelper.divide(NumberHelper.multiply(totalMeals, PROP_CANTEEN_FAVMEALMULTIPLYFACTOR),
+                    BigDecimal.valueOf(PROP_PLANINGPERIOD_MEALSPERDAY - 1)).setScale(0, RoundingMode.HALF_UP);
         }
 
         return result;

@@ -9,10 +9,10 @@ import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
 
 /**
  * Die Klasse {@link ShoppingListItem} stellt eine Einkaufslistenposition dar. Sie enthält einen Verweis auf die
- * jeweilige zu bestellende Zutat ( {@link Ingredient}), eine Menge ({@link Amount}), wieviel von der Zutat bestellt
- * werden soll, und einen Verweis auf den Anbieter ( {@link AbstractProvider}) von dem die Ware bezogen werden soll.
- * Über den Verweis auf den Anbieter und die Menge kann der Preis für ein {@link ShoppingListItem} berechnet werden und
- * muss nicht als extra Attribut enthalten sein.
+ * jeweilige zu bestellende {@link Ingredient}, eine {@link Amount}, wieviel von der Zutat bestellt werden soll, und
+ * einen Verweis auf den {@link AbstractProvider} von dem die Ware bezogen werden soll. Über den Verweis auf den
+ * Anbieter und die Menge kann der Preis für ein {@link ShoppingListItem} berechnet werden und muss nicht als extra
+ * Attribut enthalten sein.
  * 
  * @author Tim Sahling
  */
@@ -25,9 +25,9 @@ public class ShoppingListItem {
     /**
      * Standardkonstruktor
      * 
-     * @param ingredient Zutat
-     * @param quantity Menge
-     * @param provider Anbieter
+     * @param ingredient {@link Ingredient}
+     * @param quantity {@link Amount} der {@link Ingredient}
+     * @param provider {@link AbstractProvider}
      */
     public ShoppingListItem(Ingredient ingredient, Amount quantity, AbstractProvider provider) {
         this.ingredient = ingredient;
@@ -43,8 +43,8 @@ public class ShoppingListItem {
     public Amount calculatePrice() {
         Amount result = new Amount(BigDecimal.valueOf(0), UnitOfMeasurement.EUR);
 
-        if (provider != null) {
-            result.add(provider.calculatePriceForIngredientAndQuantity(ingredient, quantity));
+        if (this.provider != null) {
+            result.add(this.provider.calculatePriceForIngredientAndQuantity(this.ingredient, this.quantity));
         }
 
         return result;
@@ -70,19 +70,17 @@ public class ShoppingListItem {
     }
 
     /**
-     * Liefert die Menge
+     * Liefert die {@link Amount}.
      * 
-     * @return Eine Menge
+     * @return Die {@link Amount} der {@link Ingredient} die bestellt werden soll
      */
     public Amount getQuantity() {
         return quantity;
     }
 
     /**
-     * Setzt eine Menge
      * 
      * @param quantity
-     *            Die zu setzende Menge
      */
     public void setQuantity(Amount quantity) {
         this.quantity = quantity;
@@ -117,20 +115,17 @@ public class ShoppingListItem {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                + ((ingredient == null) ? 0 : ingredient.hashCode());
-        result = prime * result
-                + ((provider == null) ? 0 : provider.hashCode());
-        result = prime * result
-                + ((quantity == null) ? 0 : quantity.hashCode());
+        result = prime * result + ((ingredient == null) ? 0 : ingredient.hashCode());
+        result = prime * result + ((provider == null) ? 0 : provider.hashCode());
+        result = prime * result + ((quantity == null) ? 0 : quantity.hashCode());
         return result;
     }
 
     /**
-     * Diese Methode prueft, ob das uebergebene Objekt gleich dem Objekt ist,
-     * von dem die Methode aufgerufen wurde.
+     * Diese Methode prüft, ob das übergebene Objekt gleich dem Objekt ist, von
+     * dem die Methode aufgerufen wurde.
      * 
-     * @return wahr/falsch, je nachdem ob zu vergleichende Objekte gleich sind
+     * @return WAHR/FALSCH, je nachdem ob die zu vergleichenden Objekte gleich sind
      */
     @Override
     public boolean equals(Object obj) {
@@ -163,13 +158,12 @@ public class ShoppingListItem {
     }
 
     /**
-     * Erstellt die String-Representation des Objekts {@link ShoppingListItem}.
+     * Erstellt die String-Representation des Objekts.
      * 
-     * @return Die String-Representation von {@link ShoppingListItem}
+     * @return Die String-Representation des Objekts
      */
     @Override
     public String toString() {
-        return "ShoppingListItem [ingredient=" + ingredient + ", quantity="
-                + quantity + ", provider=" + provider + "]";
+        return "ShoppingListItem [ingredient=" + ingredient + ", quantity=" + quantity + ", provider=" + provider + "]";
     }
 }

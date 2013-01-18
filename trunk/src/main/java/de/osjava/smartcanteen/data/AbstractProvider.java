@@ -44,21 +44,14 @@ public abstract class AbstractProvider {
     public boolean hasIngredientWithQuantity(Ingredient ingredient, Amount quantity) {
         boolean result = false;
 
-        if (priceList != null && !priceList.isEmpty()) {
+        PriceListItem priceListItem = findPriceListItemByIngredient(ingredient);
 
-            for (PriceListItem priceListItem : priceList) {
+        if (priceListItem != null) {
+            BigDecimal quantityOfIngredient = priceListItem.divideQuantityWithSize(quantity);
 
-                if (priceListItem.getIngredient().equals(ingredient)) {
-
-                    BigDecimal quantityOfIngredient = priceListItem.divideQuantityWithSize(quantity);
-
-                    if (NumberHelper.compareGreaterOrEqual(priceListItem.getAvailableQuantityOfIngredient(),
-                            quantityOfIngredient)) {
-                        result = true;
-                    }
-
-                    break;
-                }
+            if (NumberHelper.compareGreaterOrEqual(priceListItem.getAvailableQuantityOfIngredient(),
+                    quantityOfIngredient)) {
+                result = true;
             }
         }
 
@@ -66,34 +59,78 @@ public abstract class AbstractProvider {
     }
 
     /**
-     * Subtrahiert eine Menge von einer Zutat.
+     * Berechnet auf Basis der {@link Ingredient} und der {@link Amount} die tatsächlich vom {@link AbstractProvider} zu
+     * bestellende {@link Amount}.
+     * 
+     * @param ingredient
+     * @param quantity
+     * @return
+     */
+    public Amount calculateQuantityFromIngredientAndQuantity(Ingredient ingredient, Amount quantity) {
+        Amount result = null;
+
+        PriceListItem priceListItem = findPriceListItemByIngredient(ingredient);
+
+        if (priceListItem != null) {
+            BigDecimal quantityOfIngredient = priceListItem.divideQuantityWithSize(quantity);
+
+            if (quantityOfIngredient != null) {
+                result = new Amount(NumberHelper.multiply(priceListItem.getSize().getValue(), quantityOfIngredient),
+                        priceListItem.getSize().getUnit());
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 
+     * @param ingredient
+     * @param quantity
+     * @return
+     */
+    public Amount calculateWasteQuantityFromIngredientAndQuantity(Ingredient ingredient, Amount quantity) {
+        Amount result = null;
+
+        PriceListItem priceListItem = findPriceListItemByIngredient(ingredient);
+
+        if (priceListItem != null) {
+            BigDecimal quantityOfIngredient = priceListItem.divideQuantityWithSize(quantity);
+
+            if (quantityOfIngredient != null) {
+                result = new Amount(NumberHelper.subtract(
+                        NumberHelper.multiply(priceListItem.getSize().getValue(), quantityOfIngredient),
+                        quantity.getValue()), priceListItem.getSize().getUnit());
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Subtrahiert eine Menge von einer Zutat von der beim Anieter verfügbaren Menge.
      * 
      * @param ingredient
      * @param quantity
      */
     public void subtractQuantityFromIngredient(Ingredient ingredient, Amount quantity) {
-        if (priceList != null && !priceList.isEmpty()) {
 
-            for (PriceListItem priceListItem : priceList) {
+        PriceListItem priceListItem = findPriceListItemByIngredient(ingredient);
 
-                if (priceListItem.getIngredient().equals(ingredient)) {
+        if (priceListItem != null) {
+            BigDecimal quantityOfIngredient = priceListItem.divideQuantityWithSize(quantity);
 
-                    BigDecimal quantityOfIngredient = priceListItem.divideQuantityWithSize(quantity);
-
-                    if (quantityOfIngredient != null) {
-                        priceListItem.setAvailableQuantityOfIngredient(NumberHelper.subtract(
-                                priceListItem.getAvailableQuantityOfIngredient(), quantityOfIngredient));
-                    }
-
-                    break;
-                }
+            if (quantityOfIngredient != null) {
+                priceListItem.setAvailableQuantityOfIngredient(NumberHelper.subtract(
+                        priceListItem.getAvailableQuantityOfIngredient(), quantityOfIngredient));
             }
         }
     }
 
     /**
-     * Kalkuliert einen Preis für eine Zutat und eine Menge bei einem Anbieter. Transportkosten der Anbieter werden an
-     * dieser Stelle nicht berücksichtigt, sondern nur beim Berechnen der gesamten Einkaufsliste.
+     * Kalkuliert einen Preis für eine {@link Ingredient} und eine {@link Amount} bei einem {@link AbstractProvider}.
+     * Transportkosten der Anbieter werden an dieser Stelle nicht berücksichtigt, sondern nur beim Berechnen der
+     * gesamten Einkaufsliste.
      * 
      * @param ingredient
      * @param quantity
@@ -102,20 +139,14 @@ public abstract class AbstractProvider {
     public Amount calculatePriceForIngredientAndQuantity(Ingredient ingredient, Amount quantity) {
         Amount result = new Amount(BigDecimal.valueOf(0), UnitOfMeasurement.EUR);
 
-        if (priceList != null && !priceList.isEmpty()) {
+        PriceListItem priceListItem = findPriceListItemByIngredient(ingredient);
 
-            for (PriceListItem priceListItem : priceList) {
+        if (priceListItem != null) {
 
-                if (priceListItem.getIngredient().equals(ingredient)) {
+            BigDecimal quantityOfIngredient = priceListItem.divideQuantityWithSize(quantity);
 
-                    BigDecimal quantityOfIngredient = priceListItem.divideQuantityWithSize(quantity);
-
-                    result.add(new Amount(NumberHelper.multiply(quantityOfIngredient, priceListItem.getPrice()
-                            .getValue()), UnitOfMeasurement.EUR));
-
-                    break;
-                }
-            }
+            result.add(new Amount(NumberHelper.multiply(priceListItem.getPrice().getValue(), quantityOfIngredient),
+                    UnitOfMeasurement.EUR));
         }
 
         return result;
