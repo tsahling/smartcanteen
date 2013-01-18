@@ -241,8 +241,8 @@ public class Application {
     private void outputApplicationResult(ShoppingList shoppingList,
             Canteen... canteens) throws IOException {
 
-        // Konsoleninfo
-        System.out.println("Beginne Aufbereitung Datenausgabe");
+        // Logging
+        LOG.log(Level.INFO, "Beginne Aufbereitung Datenausgabe");
 
         // Erstellung Ausgabe-Objekt für CSV-Ausgabe
         FileOutput fileOutput = new FileOutput();
@@ -253,45 +253,45 @@ public class Application {
             // Aufruf der Methode zum Erzeugen eines Menueplans als CSV je existierender Kantine
             int x = 1;
             for (Canteen canteen : canteens) {
-                System.out.println("CSV-Menüplan wird erzeugt für Kantine " + x);
+                LOG.log(Level.INFO, "CSV-Menüplan wird erzeugt für Kantine " + x);
                 fileOutput.outputMenuPlan(canteen);
                 x++;
             }
 
             // Aufruf der Methode zum Erzeugen einer Einkaufsliste als CSV
-            System.out.println("CSV-Einkaufsliste wird erzeugt");
+            LOG.log(Level.INFO, "CSV-Einkaufsliste wird erzeugt");
             fileOutput.outputShoppingList(shoppingList);
 
             // Aufruf der Methode zum Erzeugen einer Kostenuebersicht als CSV
-            System.out.println("CSV-Kostenuebersicht wird erzeugt");
+            LOG.log(Level.INFO, "CSV-Kostenuebersicht wird erzeugt");
             fileOutput.outputTotalCosts(shoppingList);
         }
         else {
-            System.out.println("CSV soll nicht erzeugt werden");
+            LOG.log(Level.INFO, "CSV soll nicht erzeugt werden");
         }
 
         if (GENERATE_HTML) {
             // Aufruf der Methode zum Erzeugen eines Menueplans als HTML je existierender Kantine
             int x = 1;
             for (Canteen canteen : canteens) {
-                System.out.println("HTML-Menüplan wird erzeugt für Kantine " + x);
+                LOG.log(Level.INFO, "HTML-Menüplan wird erzeugt für Kantine " + x);
                 htmlOutput.outputMenuPlan(canteen);
                 x++;
             }
 
             // Aufruf der Methode zum Erzeugen einer Einkaufsliste als CSV
-            System.out.println("HTML-Einkaufsliste wird erzeugt");
+            LOG.log(Level.INFO, "HTML-Einkaufsliste wird erzeugt");
             htmlOutput.outputShoppingList(shoppingList);
 
             // Aufruf der Methode zum Erzeugen einer Kostenuebersicht als CSV
-            System.out.println("HTML-Kostenuebersicht wird erzeugt");
+            LOG.log(Level.INFO, "HTML-Kostenuebersicht wird erzeugt");
             htmlOutput.outputTotalCosts(shoppingList);
         }
         else {
-            System.out.println("HTML soll nicht erzeugt werden");
+            LOG.log(Level.INFO, "HTML soll nicht erzeugt werden");
         }
 
-        System.out.println("Ausgabe erfolgreich abgeschlossen");
+        LOG.log(Level.INFO, "Ausgabe erfolgreich abgeschlossen");
 
     }
 }

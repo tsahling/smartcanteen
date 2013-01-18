@@ -162,40 +162,53 @@ public class FileOutput implements IOutput {
      */
     @Override
     public void outputShoppingList(ShoppingList shoppingList) throws IOException {
-        // TODO (Marcel Baxmann) Fehlerhandling, Design, Doku
-
         // Erzeugen StringBuilder-Objekts (Ausgabepuffer) in welches die Ergebnisse geschrieben werden
         StringBuilder ausgabeDaten = new StringBuilder();
 
+        // Map mit Key Abstract Provider und Value List<ShoppingListItem> anlegen
         Map<AbstractProvider, List<ShoppingListItem>> shoppingListItems = shoppingList
                 .getShoppingListItemsGroupedByProvider();
 
+        // Ueberschrift Zeile einfügen in Ausgabepuffer
         ausgabeDaten.append("Lieferant" + dSSeperator + "Zutat" + dSSeperator +
                 "Menge" + dSSeperator +
                 "Einheit" + dSSeperator +
                 "Menge & Einheit" + lineSeparator);
 
+        // prüfen, dass Objekt nicht null ist
         if (shoppingListItems != null) {
+            // für jeden Eintrag Abstract Provider Anweisungen ausfuehren
             for (Entry<AbstractProvider, List<ShoppingListItem>> entry : shoppingListItems.entrySet()) {
+                // Name des Anbieters auslesen
                 String name = entry.getKey().getName();
 
+                // Liste mit Shoppinglist Items auslesen und in lokale Variable speichern
                 List<ShoppingListItem> value = entry.getValue();
 
+                // fuer jedes Listenelement Anweisungen ausfuehren
                 for (ShoppingListItem item : value) {
+                    // Name des Anbieters in Puffer anhaengen und Trennzeichen setzen
                     ausgabeDaten.append(name + dSSeperator);
+                    // Name der Zutat in Puffer anhaengen und Trennzeichen setzen
                     ausgabeDaten.append(item.getIngredient().getName() + dSSeperator);
+
+                    // Wert und Einheit in getrennte Spalten
+                    // Wert in Puffer anhaengen und Trennzeichen setzen
                     ausgabeDaten.append(item.getQuantity().getValue() + dSSeperator);
+                    // Einheit in Puffer anhaengen und Trennzeichen setzen
                     ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator);
 
+                    // Wert und Einheit in gleiche Spalte schreiben
+                    // Wert in Puffer anhaengen und Trennzeichen setzen
                     ausgabeDaten.append(item.getQuantity().getValue() + " ");
-                    ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator);
-                    ausgabeDaten.append(lineSeparator);
+                    // Einheit in Puffer anhaengen und Trennzeichen setzen
+                    ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator + lineSeparator);
 
                 }
+                // neue Zeile in Puffer schreiben
                 ausgabeDaten.append(lineSeparator);
             }
         }
-
         // sind alle Gerichte ausgelesen wird der Dateiname generiert
         String filename = FileHelper.generateFilename("Einkaufsliste", fileExt);
 
@@ -216,52 +229,72 @@ public class FileOutput implements IOutput {
      */
     @Override
     public void outputTotalCosts(ShoppingList shoppingList) throws IOException {
-        // TODO (Marcel Baxmann) Ausgabe Cost List als CSV
-
         // Erzeugen StringBuilder-Objekts (Ausgabepuffer) in welches die Ergebnisse geschrieben werden
         StringBuilder ausgabeDaten = new StringBuilder();
 
+        // Map mit Key Abstract Provider und Value List<ShoppingListItem> anlegen
         Map<AbstractProvider, List<ShoppingListItem>> shoppingListItems = shoppingList
                 .getShoppingListItemsGroupedByProvider();
 
-        ausgabeDaten.append("Lieferant" + dSSeperator + "Zutat" + dSSeperator +
-                "Menge" + dSSeperator + "Kosten" + lineSeparator);
+        // Ueberschrift Zeile einfügen in Ausgabepuffer
+        ausgabeDaten
+                .append("Lieferant" + dSSeperator + "Zutat" + dSSeperator +
+                        "Menge" + dSSeperator + "Kosten" + dSSeperator +
+                        "Waehrung" + dSSeperator + "Kosten in Euro" + dSSeperator + lineSeparator);
 
+        // prüfen, dass Objekt nicht null ist
         if (shoppingListItems != null) {
+            // für jeden Eintrag Abstract Provider Anweisungen ausfuehren
             for (Entry<AbstractProvider, List<ShoppingListItem>> entry : shoppingListItems.entrySet()) {
-                // Variable für das Hochzählen der Gesamtkosten
-                BigDecimal completeCost = BigDecimal.valueOf(0);
+                // Variable für das Hochzählen der Kosten je Anbieter
+                BigDecimal costPerDistributor = BigDecimal.valueOf(0);
 
+                // Name des Anbieters auslesen
                 String name = entry.getKey().getName();
 
+                // Liste mit Shoppinglist Items auslesen und in lokale Variable speichern
                 List<ShoppingListItem> value = entry.getValue();
 
+                // fuer jedes Listenelement Anweisungen ausfuehren
                 for (ShoppingListItem item : value) {
+                    // Name des Anbieters in Puffer anhaengen und Trennzeichen setzen
                     ausgabeDaten.append(name + dSSeperator);
+                    // Name der Zutat in Puffer anhaengen und Trennzeichen setzen
                     ausgabeDaten.append(item.getIngredient().getName() + dSSeperator);
-                    ausgabeDaten.append(item.getQuantity().getValue() + " ");
+                    // Wert in Puffer anhaengen und Trennzeichen setzen
+                    ausgabeDaten.append((item.getQuantity().getValue()) + " ");
+                    // Einheit in Puffer anhaengen und Trennzeichen setzen
                     ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator);
 
                     Amount calculatePrice = item.calculatePrice();
+                    // Kosten ausgeben
+                    // Wert und Einheit in getrennte Spalten
+                    // formatierten Wert in Puffer anhaengen und Trennzeichen setzen
+                    ausgabeDaten.append(FileHelper.formatBD(calculatePrice.getValue()) + dSSeperator);
+                    // Einheit in Puffer anhaengen und Trennzeichen setzen
+                    ausgabeDaten.append(calculatePrice.getUnit().getName() + dSSeperator);
 
-                    // HINZUGEKOMMEN
-                    ausgabeDaten.append(calculatePrice.getValue() + " ");
-                    ausgabeDaten.append(calculatePrice.getUnit().getName());
+                    // Wert und Einheit in gleiche Spalte schreiben
+                    // formatierten Wert in Puffer anhaengen plus Leerzeichen
+                    ausgabeDaten.append(FileHelper.formatBD(calculatePrice.getValue()) + " ");
+                    // Einheit in Puffer anhaengen und Trennzeichen setzen
+                    ausgabeDaten.append(calculatePrice.getUnit().getName() + lineSeparator);
 
-                    ausgabeDaten.append(lineSeparator);
-
-                    completeCost = completeCost.add(calculatePrice.getValue());
+                    // hochzaehlen der Einkaufskosten je Anbieter
+                    costPerDistributor = costPerDistributor.add(calculatePrice.getValue());
 
                 }
-                // Ausgabe Gesamtkosten pro Provider
-                ausgabeDaten.append(dSSeperator + dSSeperator + "Kosten fuer " +
-                        name + dSSeperator + completeCost + "Euro" + lineSeparator + lineSeparator);
+                // Ausgabe formatierte Gesamtkosten pro Provider
+                ausgabeDaten
+                        .append(dSSeperator + dSSeperator + dSSeperator + dSSeperator + "Kosten fuer " +
+                                name + ":" + dSSeperator + FileHelper.formatBD(costPerDistributor) + " Euro" + lineSeparator + lineSeparator);
 
             }
-            // Ausgabe der Gesamtkosten
+            // Ausgabe der formatierten Gesamtkosten
             Amount calculateTotalPrice = shoppingList.calculateTotalPrice();
-            ausgabeDaten.append(dSSeperator + dSSeperator + "Gesamtkosten" + dSSeperator +
-                    calculateTotalPrice.getValue() + " " + calculateTotalPrice.getUnit().getName() + lineSeparator);
+            ausgabeDaten.append(dSSeperator + dSSeperator + dSSeperator + dSSeperator +
+                    "Gesamtkosten:" + dSSeperator + FileHelper.formatBD(calculateTotalPrice.getValue()) + " "
+                    + calculateTotalPrice.getUnit().getName() + lineSeparator);
         }
         // sind alle Gerichte ausgelesen wird der Dateiname generiert
         String filename = FileHelper.generateFilename("Kostenuebersicht", fileExt);
