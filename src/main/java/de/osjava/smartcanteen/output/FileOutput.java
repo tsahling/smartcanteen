@@ -83,14 +83,15 @@ public class FileOutput implements IOutput {
 
             // für jedes Gericht (meal) in der Liste werden das Datum und der Namen
             // ausgelesen und in den Ausgabepuffer angehangen
-            for (Meal sortedMeal : mealsSortedByDate) {
+            if (mealsSortedByDate != null) {
+                for (Meal sortedMeal : mealsSortedByDate) {
 
-                date = FileHelper.shortendDate(sortedMeal.getDate());
-                meal = sortedMeal.getRecipe().getName();
+                    date = FileHelper.shortendDate(sortedMeal.getDate());
+                    meal = sortedMeal.getRecipe().getName();
 
-                ausgabeDaten.append(date + dSSeperator + meal + lineSeparator);
+                    ausgabeDaten.append(date + dSSeperator + meal + lineSeparator);
+                }
             }
-
             // Ende Variante single und Abfrage für Layouttyp grouped
         }
         else if (layoutMenuePlan.equals("grouped")) {
@@ -108,32 +109,34 @@ public class FileOutput implements IOutput {
             // Defintion einer Variable für die Abfrage, ob bereits ein Datum durchlaufen wurde
             String previousDate = null;
 
-            // für jedes Gericht (meal) in der Liste werden das Datum und der Namen ausgelesen
-            for (Meal sortedMeal : mealsSortedByDate) {
-                date = FileHelper.shortendDate(sortedMeal.getDate());
-                meal = sortedMeal.getRecipe().getName();
+            if (mealsSortedByDate != null) {
+                // für jedes Gericht (meal) in der Liste werden das Datum und der Namen ausgelesen
+                for (Meal sortedMeal : mealsSortedByDate) {
+                    date = FileHelper.shortendDate(sortedMeal.getDate());
+                    meal = sortedMeal.getRecipe().getName();
 
-                // wenn previusDate noch nicht gefüllt ist (null) starte erste Zeile in Ausgabedatei
-                // indem erstes Datum und erstes Gericht in Ausgabepuffer angehangen werden
-                if (previousDate == null) {
-                    ausgabeDaten.append(date + dSSeperator + meal);
-                    // setze Variable previousDate auf aktuelles Datum
-                    previousDate = date;
-                }
-                // wenn previous Date bereits mit einem Datum gefüllt ist rufe folgenden Strang auf
-                else {
-                    // wenn vorhergehendes Datum aktuellem Datum entspricht haenge
-                    // aktuelles Gericht in gleiche Zeile in Ausgabepuffer an
-                    if (date.equals(previousDate)) {
-                        ausgabeDaten.append(dSSeperator + meal);
-                    }
-                    // ansonsten
-                    else {
-                        // haenge neue Zeile an und starte mit neuem Datum und erstem Gericht
-                        ausgabeDaten.append(lineSeparator);
+                    // wenn previusDate noch nicht gefüllt ist (null) starte erste Zeile in Ausgabedatei
+                    // indem erstes Datum und erstes Gericht in Ausgabepuffer angehangen werden
+                    if (previousDate == null) {
                         ausgabeDaten.append(date + dSSeperator + meal);
                         // setze Variable previousDate auf aktuelles Datum
                         previousDate = date;
+                    }
+                    // wenn previous Date bereits mit einem Datum gefüllt ist rufe folgenden Strang auf
+                    else {
+                        // wenn vorhergehendes Datum aktuellem Datum entspricht haenge
+                        // aktuelles Gericht in gleiche Zeile in Ausgabepuffer an
+                        if (date.equals(previousDate)) {
+                            ausgabeDaten.append(dSSeperator + meal);
+                        }
+                        // ansonsten
+                        else {
+                            // haenge neue Zeile an und starte mit neuem Datum und erstem Gericht
+                            ausgabeDaten.append(lineSeparator);
+                            ausgabeDaten.append(date + dSSeperator + meal);
+                            // setze Variable previousDate auf aktuelles Datum
+                            previousDate = date;
+                        }
                     }
                 }
             }
@@ -168,21 +171,22 @@ public class FileOutput implements IOutput {
 
         ausgabeDaten.append("Lieferant" + dSSeperator + "Zutat" + dSSeperator + "Menge" + lineSeparator);
 
-        for (Entry<AbstractProvider, List<ShoppingListItem>> entry : shoppingListItems.entrySet()) {
-            String name = entry.getKey().getName();
+        if (shoppingListItems != null) {
+            for (Entry<AbstractProvider, List<ShoppingListItem>> entry : shoppingListItems.entrySet()) {
+                String name = entry.getKey().getName();
 
-            List<ShoppingListItem> value = entry.getValue();
+                List<ShoppingListItem> value = entry.getValue();
 
-            for (ShoppingListItem item : value) {
-                ausgabeDaten.append(name + dSSeperator);
-                ausgabeDaten.append(item.getIngredient().getName() + dSSeperator);
-                ausgabeDaten.append(item.getQuantity().getValue() + " ");
-                ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator);
+                for (ShoppingListItem item : value) {
+                    ausgabeDaten.append(name + dSSeperator);
+                    ausgabeDaten.append(item.getIngredient().getName() + dSSeperator);
+                    ausgabeDaten.append(item.getQuantity().getValue() + " ");
+                    ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator);
+                    ausgabeDaten.append(lineSeparator);
+
+                }
                 ausgabeDaten.append(lineSeparator);
-
             }
-            ausgabeDaten.append(lineSeparator);
-
         }
 
         // sind alle Gerichte ausgelesen wird der Dateiname generiert
@@ -219,29 +223,31 @@ public class FileOutput implements IOutput {
         ausgabeDaten.append("Lieferant" + dSSeperator + "Zutat" + dSSeperator +
                 "Menge" + dSSeperator + "Kosten" + lineSeparator);
 
-        for (Entry<AbstractProvider, List<ShoppingListItem>> entry : shoppingListItems.entrySet()) {
-            String name = entry.getKey().getName();
+        if (shoppingListItems != null) {
+            for (Entry<AbstractProvider, List<ShoppingListItem>> entry : shoppingListItems.entrySet()) {
+                String name = entry.getKey().getName();
 
-            List<ShoppingListItem> value = entry.getValue();
+                List<ShoppingListItem> value = entry.getValue();
 
-            for (ShoppingListItem item : value) {
-                ausgabeDaten.append(name + dSSeperator);
-                ausgabeDaten.append(item.getIngredient().getName() + dSSeperator);
-                ausgabeDaten.append(item.getQuantity().getValue() + " ");
-                ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator);
+                for (ShoppingListItem item : value) {
+                    ausgabeDaten.append(name + dSSeperator);
+                    ausgabeDaten.append(item.getIngredient().getName() + dSSeperator);
+                    ausgabeDaten.append(item.getQuantity().getValue() + " ");
+                    ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator);
 
-                // HINZUGEKOMMEN
-                ausgabeDaten.append(item.calculatePrice().getValue() + " ");
-                ausgabeDaten.append(item.calculatePrice().getUnit().getName());
+                    // HINZUGEKOMMEN
+                    ausgabeDaten.append(item.calculatePrice().getValue() + " ");
+                    ausgabeDaten.append(item.calculatePrice().getUnit().getName());
 
+                    ausgabeDaten.append(lineSeparator);
+
+                    // System.out.println(completeCost);
+                    // (TODO) Gesamtkosten ausgeben ---> WOHER
+                }
                 ausgabeDaten.append(lineSeparator);
 
-                // System.out.println(completeCost);
             }
-            ausgabeDaten.append(lineSeparator);
-
         }
-
         // sind alle Gerichte ausgelesen wird der Dateiname generiert
         String filename = FileHelper.generateFilename("Kostenuebersicht", fileExt);
 
