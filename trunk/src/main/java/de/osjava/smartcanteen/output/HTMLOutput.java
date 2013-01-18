@@ -76,8 +76,6 @@ public class HTMLOutput implements IOutput {
                 "<tr>");
 
         // HTML-Ausgabe Beginn Überschriftzeile der Tabelle
-        // TODO (Marcel Baxmann) Tim fragen, wie ich bei der unbestimmten Anzahl der Ingredients bei der Shopliste die
-        // Anzahl abfragen kann
         ausgabeDaten.append("<th>Datum</th>");
 
         // Je nach Anzahl der Gerichte werden in den Ausgabepuffer die Überschriften Zeile angehangen
@@ -91,43 +89,44 @@ public class HTMLOutput implements IOutput {
 
         // für jedes Gericht (meal) in der Liste werden das Datum und der Namen ausgelesen
         String previousDate = null;
-        for (Meal sortedMeal : mealsSortedByDate) {
-            date = FileHelper.shortendDate(sortedMeal.getDate());
-            meal = sortedMeal.getRecipe().getName();
+        if (mealsSortedByDate != null) {
+            for (Meal sortedMeal : mealsSortedByDate) {
+                date = FileHelper.shortendDate(sortedMeal.getDate());
+                meal = sortedMeal.getRecipe().getName();
 
-            // wenn previusDate noch nicht gefüllt ist (null) starte erste Zeile in Ausgabedatei
-            // indem erstes Datum und erstes Gericht in Ausgabepuffer angehangen werden
-            if (previousDate == null) {
-                // Dateum umrundet von HTML Elementen für eine Zelle
-                ausgabeDaten.append("<td>" + date + "</td>");
-                // Ein Gericht umrundet von HTML Elementen für eine Zelle
-                // Check ob Bild vorhanden und einfügen img-tag je nach Typ des Gerichts
-                ausgabeDaten.append("<td>" + meal + pictureCheck(sortedMeal) + "</td>");
-                // setze Variable previousDate auf aktuelles Datum
-                previousDate = date;
-            }
-            // wenn previous Date bereits mit einem Datum gefüllt ist rufe folgenden Strang auf
-            else {
-                // wenn vorhergehendes Datum aktuellem Datum entspricht haenge
-                // aktuelles Gericht in gleiche Zeile in Ausgabepuffer an
-                if (date.equals(previousDate)) {
-                    // Ein Gericht umrundet von HTML-Tag für eine Zelle
-                    // Check ob Bild vorhanden und einfügen img-tag je nach Typ des Gerichts
-                    ausgabeDaten.append("<td>" + meal + pictureCheck(sortedMeal) + "</td>");
-                }
-                else {
-                    // beende Zeile durch </tr> und starte mit neuem Datum umrundet mit HTML-Tag für Zelle
-                    ausgabeDaten.append("</tr>" + lineSeparator +
-                            "<td>" + date + "</td>");
-                    // Ein Gericht umrundet von HTML-Tag für eine Zelle
+                // wenn previusDate noch nicht gefüllt ist (null) starte erste Zeile in Ausgabedatei
+                // indem erstes Datum und erstes Gericht in Ausgabepuffer angehangen werden
+                if (previousDate == null) {
+                    // Dateum umrundet von HTML Elementen für eine Zelle
+                    ausgabeDaten.append("<td>" + date + "</td>");
+                    // Ein Gericht umrundet von HTML Elementen für eine Zelle
                     // Check ob Bild vorhanden und einfügen img-tag je nach Typ des Gerichts
                     ausgabeDaten.append("<td>" + meal + pictureCheck(sortedMeal) + "</td>");
                     // setze Variable previousDate auf aktuelles Datum
                     previousDate = date;
                 }
+                // wenn previous Date bereits mit einem Datum gefüllt ist rufe folgenden Strang auf
+                else {
+                    // wenn vorhergehendes Datum aktuellem Datum entspricht haenge
+                    // aktuelles Gericht in gleiche Zeile in Ausgabepuffer an
+                    if (date.equals(previousDate)) {
+                        // Ein Gericht umrundet von HTML-Tag für eine Zelle
+                        // Check ob Bild vorhanden und einfügen img-tag je nach Typ des Gerichts
+                        ausgabeDaten.append("<td>" + meal + pictureCheck(sortedMeal) + "</td>");
+                    }
+                    else {
+                        // beende Zeile durch </tr> und starte mit neuem Datum umrundet mit HTML-Tag für Zelle
+                        ausgabeDaten.append("</tr>" + lineSeparator +
+                                "<td>" + date + "</td>");
+                        // Ein Gericht umrundet von HTML-Tag für eine Zelle
+                        // Check ob Bild vorhanden und einfügen img-tag je nach Typ des Gerichts
+                        ausgabeDaten.append("<td>" + meal + pictureCheck(sortedMeal) + "</td>");
+                        // setze Variable previousDate auf aktuelles Datum
+                        previousDate = date;
+                    }
+                }
             }
         }
-
         // HTML-Ausgabe Ende Tabelle und HTML-Dokument
         ausgabeDaten.append(lineSeparator + "</table>" + lineSeparator +
                 "</body>" + lineSeparator +
