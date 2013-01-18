@@ -46,6 +46,13 @@ public class Application {
     private static final String INPUT_FILENAME_PRICELIST = PropertyHelper.getProperty("inputFile.name.priceList");
     private static final String INPUT_FILENAME_RECIPELIST = PropertyHelper.getProperty("inputFile.name.recipeList");
 
+    // Setze Werte ob beschriebenes Fileformat erzeugt werden soll
+    // Auslesen der Werte aus externer Properties Datei und casten auf Wahrheitswert
+    private static final boolean GENERATE_CSV = Boolean.parseBoolean(PropertyHelper
+            .getProperty("outputData.generateCSV"));
+    private static final boolean GENERATE_HTML = Boolean.parseBoolean(PropertyHelper
+            .getProperty("outputData.generateHTML"));
+
     private HitListBase hitListBase;
     private RecipeBase recipeBase;
     private ProviderBase providerBase;
@@ -233,10 +240,6 @@ public class Application {
      */
     private void outputApplicationResult(ShoppingList shoppingList,
             Canteen... canteens) throws IOException {
-        // Setze Werte ob beschriebenes Fileformat erzeugt werden soll
-        // Auslesen der Werte aus externer Properties Datei und casten auf Wahrheitswert
-        final boolean generateCSV = Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateCSV"));
-        final boolean generateHTML = Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateHTML"));
 
         // Konsoleninfo
         System.out.println("Beginne Aufbereitung Datenausgabe");
@@ -246,7 +249,7 @@ public class Application {
         // Erstellung Ausgabe-Objekt für HTML-Ausgabe
         HTMLOutput htmlOutput = new HTMLOutput();
 
-        if (generateCSV) {
+        if (GENERATE_CSV) {
             // Aufruf der Methode zum Erzeugen eines Menueplans als CSV je existierender Kantine
             int x = 1;
             for (Canteen canteen : canteens) {
@@ -267,7 +270,7 @@ public class Application {
             System.out.println("CSV soll nicht erzeugt werden");
         }
 
-        if (generateHTML) {
+        if (GENERATE_HTML) {
             // Aufruf der Methode zum Erzeugen eines Menueplans als HTML je existierender Kantine
             int x = 1;
             for (Canteen canteen : canteens) {

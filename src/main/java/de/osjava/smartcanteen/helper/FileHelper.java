@@ -5,6 +5,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Die Klasse {@lin FileHelper} bietet Methoden
@@ -17,6 +19,11 @@ import java.util.Date;
 
 public class FileHelper {
 
+    private static final Logger LOG = LogHelper.getLogger(FileHelper.class.getName());
+
+    // auslesen der Pfadangabe
+    private static final String PATH = PropertyHelper.getProperty("outputData.saveTo");
+
     /**
      * Schreiben der übergebenen Daten in Datei
      * 
@@ -28,8 +35,6 @@ public class FileHelper {
      * @author Marcel Baxmann
      */
     public static boolean ausgebenInDatei(String ausgabeDaten, String dateiname, boolean anhaengen) throws IOException {
-        // TODO (Marcel Baxmann) kommentieren und auf Fehler prüfen
-
         File file = new File(dateiname);
         FileWriter writer = new FileWriter(file, anhaengen);
 
@@ -53,10 +58,10 @@ public class FileHelper {
      */
     public static String generateFilename(String customName, String fileExt) {
         // TODO (Marcel Baxmann) Prüfung vornehmen !!! FEHLERHANDLING FÜR path
-        // auslesen der Pfadangabe
-        String path = PropertyHelper.getProperty("outputData.saveTo");
+        // TODO (Marcel Baxmann) kommentieren
+
         // setzen der übergebenen Parameter für den Filenamen
-        String dateiname = path + customName + fileExt;
+        String dateiname = PATH + customName + fileExt;
 
         // Anlage eines Objekts der Klasse File mit dem generierten Dateinamen
         File file = new File(dateiname);
@@ -69,19 +74,19 @@ public class FileHelper {
         // solange File Exisitert wird die For-Schleife ausgeführt
         if (file.exists()) {
             for (int i = 1; file.exists(); i++) {
-                dateiname = path + customName + " (" + i + ")" + fileExt;
+                dateiname = PATH + customName + " (" + i + ")" + fileExt;
                 file = new File(dateiname);
                 // nach 100 versuchen wird abgebrochen und die Datei mit dem Zusatz (101) überschrieben
                 if (i == 100) {
-                    System.out
-                            .println("Abbruch: Sie haben mehr als " + i + " mal die Datei abgelegt. Bitte leeren Sie ihren Ausgabeordner");
+                    LOG.log(Level.INFO,
+                            "Abbruch: Sie haben mehr als " + i + " mal die Datei abgelegt. Bitte leeren Sie ihren Ausgabeordner");
                     break;
                 }
             }
-            System.out.println("Datei exisitiert bereits, Name wird angepasst auf: " + file.getAbsolutePath());
+            LOG.log(Level.INFO, "Datei exisitiert bereits, Name wird angepasst auf: " + file.getAbsolutePath());
         }
         else {
-            System.out.println("Datei abgelegt unter: " + file.getAbsolutePath());
+            LOG.log(Level.INFO, "Datei abgelegt unter: " + file.getAbsolutePath());
         }
 
         return dateiname;
