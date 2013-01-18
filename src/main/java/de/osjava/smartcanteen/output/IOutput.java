@@ -24,6 +24,7 @@ public interface IOutput {
      * @param canteen
      *            Kantinen-Objekt wird übergeben
      * @throws IOException
+     * @author Marcel Baxmann
      */
     void outputMenuPlan(Canteen canteen) throws IOException;
 
@@ -35,6 +36,7 @@ public interface IOutput {
      * 
      * @param shoppingList
      *            Einkaufslisten-Objekt wird übergeben
+     * @author Marcel Baxmann
      */
     void outputShoppingList(ShoppingList shoppingList);
 
@@ -46,6 +48,7 @@ public interface IOutput {
      * 
      * @param shoppingList
      *            Einkaufslisten-Objekt wird übergeben
+     * @author Marcel Baxmann
      */
     void outputTotalCosts(ShoppingList shoppingList);
 }

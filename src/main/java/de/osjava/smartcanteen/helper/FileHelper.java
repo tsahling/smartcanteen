@@ -3,11 +3,14 @@ package de.osjava.smartcanteen.helper;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 
 /**
  * Die Klasse {@lin FileHelper} bietet Methoden
- * für Tätigkeiten die hinischtlich dem Schreiben von Dateien anfallen
- * Dies betrifft inbesondere das Schreiben von Dateien
+ * für Tätigkeiten die hinischtlich dem Schreiben von Dateien anfallen.
+ * Dazu zählt unter anderem die Formatierung der zu schreibenden Daten,
+ * überprüfen der Dateinamen und das Schreiben der Daten in eine Datei
  * 
  * @author Marcel Baxmann
  */
@@ -26,7 +29,7 @@ public class FileHelper {
      */
     public static boolean ausgebenInDatei(String ausgabeDaten, String dateiname, boolean anhaengen) throws IOException {
         // TODO (Marcel Baxmann) kommentieren und auf Fehler prüfen
-        // neue
+
         File file = new File(dateiname);
         FileWriter writer = new FileWriter(file, anhaengen);
 
@@ -84,4 +87,47 @@ public class FileHelper {
         return dateiname;
     }
 
+    /**
+     * Methode um ein Datum zu formatieren
+     * in das Format dd.mm.yyyy
+     * 
+     * @param date
+     * @return String eines Datums im Format dd.mm.yyyy
+     * @author Marcel Baxmann
+     */
+    public static String shortendDate(Date date) {
+        // Typsisierung Rückgabewert als String
+        String stringDate;
+
+        // Dateformater anlegen und Formatstruktur auf dd.mm.yyyy festlegen
+        DateFormat formatter = DateFormat.getDateInstance(DateFormat.MEDIUM);
+
+        // anwenden der Formatierung auf uebergebenes Datum und speicher in Rueckgabewert
+        stringDate = formatter.format(date);
+
+        // Rückgabe des Werts mit angepassten Datum
+        return stringDate;
+    }
+
+    /**
+     * Die Methode prüft ob unter dem angegebenen Pfad
+     * die Datei zu finden ist.
+     * 
+     * @param String des Pfads und Dateinamens
+     * @return boolean Wahrheitswert ob Bild vorhanden
+     * @author Marcel Baxmann
+     */
+    public static boolean foundPicture(String fullPath) {
+        // Standardwert für Rueckgabe setzen
+        boolean foundPicture = false;
+
+        // neues Fileobjekt erzeugen
+        File test = new File(fullPath);
+
+        // prüfen ob Fileobjekt exisitert
+        foundPicture = test.exists();
+
+        // Rueckgabe des Wahrheitswerts
+        return foundPicture;
+    }
 }
