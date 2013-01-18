@@ -1,8 +1,10 @@
 package de.osjava.smartcanteen.output;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import de.osjava.smartcanteen.builder.result.Meal;
 import de.osjava.smartcanteen.builder.result.ShoppingList;
@@ -152,14 +154,42 @@ public class FileOutput implements IOutput {
      * @param shoppingList
      *            Einkaufslisten-Objekt wird übergeben
      * @author Marcel Baxmann
+     * @throws IOException
      */
     @Override
-    public void outputShoppingList(ShoppingList shoppingList) {
-        // TODO (Marcel Baxmann) Ausgabe Shopping List als CSV
+    public void outputShoppingList(ShoppingList shoppingList) throws IOException {
+        // TODO (Marcel Baxmann) Fehlerhandling, Design, Doku
+
+        // Erzeugen StringBuilder-Objekts (Ausgabepuffer) in welches die Ergebnisse geschrieben werden
+        StringBuilder ausgabeDaten = new StringBuilder();
 
         Map<AbstractProvider, List<ShoppingListItem>> shoppingListItems = shoppingList
                 .getShoppingListItemsGroupedByProvider();
 
+        ausgabeDaten.append("Lieferant" + dSSeperator + "Zutat" + dSSeperator + "Menge" + lineSeparator);
+
+        for (Entry<AbstractProvider, List<ShoppingListItem>> entry : shoppingListItems.entrySet()) {
+            String name = entry.getKey().getName();
+
+            List<ShoppingListItem> value = entry.getValue();
+
+            for (ShoppingListItem item : value) {
+                ausgabeDaten.append(name + dSSeperator);
+                ausgabeDaten.append(item.getIngredient().getName() + dSSeperator);
+                ausgabeDaten.append(item.getQuantity().getValue() + " ");
+                ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator);
+                ausgabeDaten.append(lineSeparator);
+
+            }
+            ausgabeDaten.append(lineSeparator);
+
+        }
+
+        // sind alle Gerichte ausgelesen wird der Dateiname generiert
+        String filename = FileHelper.generateFilename("Einkaufsliste", fileExt);
+
+        // der Ausgabepuffer und der Dateiname werden an die Methode zum Schreiben in eine Datei übergeben
+        FileHelper.ausgebenInDatei(ausgabeDaten.toString(), filename, true);
     }
 
     /**
@@ -171,11 +201,52 @@ public class FileOutput implements IOutput {
      * @param shoppingList
      *            Einkaufslisten-Objekt wird übergeben
      * @author Marcel Baxmann
+     * @throws IOException
      */
     @Override
-    public void outputTotalCosts(ShoppingList shoppingList) {
+    public void outputTotalCosts(ShoppingList shoppingList) throws IOException {
         // TODO (Marcel Baxmann) Ausgabe Cost List als CSV
 
-    }
+        // Erzeugen StringBuilder-Objekts (Ausgabepuffer) in welches die Ergebnisse geschrieben werden
+        StringBuilder ausgabeDaten = new StringBuilder();
 
+        // Variable für das Hochzählen der Gesamtkosten
+        BigDecimal completeCost;
+
+        Map<AbstractProvider, List<ShoppingListItem>> shoppingListItems = shoppingList
+                .getShoppingListItemsGroupedByProvider();
+
+        ausgabeDaten.append("Lieferant" + dSSeperator + "Zutat" + dSSeperator +
+                "Menge" + dSSeperator + "Kosten" + lineSeparator);
+
+        for (Entry<AbstractProvider, List<ShoppingListItem>> entry : shoppingListItems.entrySet()) {
+            String name = entry.getKey().getName();
+
+            List<ShoppingListItem> value = entry.getValue();
+
+            for (ShoppingListItem item : value) {
+                ausgabeDaten.append(name + dSSeperator);
+                ausgabeDaten.append(item.getIngredient().getName() + dSSeperator);
+                ausgabeDaten.append(item.getQuantity().getValue() + " ");
+                ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator);
+
+                // HINZUGEKOMMEN
+                ausgabeDaten.append(item.calculatePrice().getValue() + " ");
+                ausgabeDaten.append(item.calculatePrice().getUnit().getName());
+
+                ausgabeDaten.append(lineSeparator);
+
+                // System.out.println(completeCost);
+            }
+            ausgabeDaten.append(lineSeparator);
+
+        }
+
+        // sind alle Gerichte ausgelesen wird der Dateiname generiert
+        String filename = FileHelper.generateFilename("Kostenuebersicht", fileExt);
+
+        // der Ausgabepuffer und der Dateiname werden an die Methode zum Schreiben in eine Datei übergeben
+        FileHelper.ausgebenInDatei(ausgabeDaten.toString(), filename, true);
+
+    }
 }

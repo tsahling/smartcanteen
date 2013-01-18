@@ -180,7 +180,7 @@ public class HTMLOutput implements IOutput {
      * @author Marcel Baxmann
      */
     private String pictureCheck(Meal sortedMeal) {
-        // TODO(Marcel) Pfadangabe für spätere Ergebnisse?
+        // TODO(Marcel Baxmann) Pfadangabe für spätere Ergebnisse?
         // TODO(Marcel Baxmann) Methode in FileHelper zum kopieren der Bilder in Ausgabeordner, sofern diese noch nicht
         // exisiteren
         // vordefinierte Bildergrößte wird aus Properties ausgelesen

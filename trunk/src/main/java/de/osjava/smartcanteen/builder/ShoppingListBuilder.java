@@ -108,6 +108,8 @@ public class ShoppingListBuilder {
      * @return
      */
     private ShoppingList determineBestPriceShoppingList(Map<Ingredient, Amount> ingredientQuantities) {
+        // TODO (Tim Sahling) Bei der Anbietern kann nur in ganzzahligen Mengen z.B. 1000 Gramm eingekauft werden.
+        // Derzeit berücksichtigt der Alg. aber auch 1 gramm schritte oder?
         List<ShoppingList> shoppingLists = new ArrayList<ShoppingList>();
 
         Map<IngredientQuantity, Map<AbstractProvider, List<Amount>>> tempMap = new HashMap<IngredientQuantity, Map<AbstractProvider, List<Amount>>>();
