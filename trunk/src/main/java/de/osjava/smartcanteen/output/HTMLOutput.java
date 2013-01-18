@@ -72,8 +72,10 @@ public class HTMLOutput implements IOutput {
         ausgabeDaten.append("<h1>Menueplan ab dem " + startDate + " - Kantine " + canteenName + "</h1>");
 
         // HTML-Ausgabe Start Tabelle
-        ausgabeDaten.append("<table border=\"1\"" + lineSeparator +
-                "<tr>");
+        ausgabeDaten.append("<table border=\"1\">" + lineSeparator + "<tr>");
+
+        // TODO (Marcel Baxmann) HTML Header als Methode auslagern
+        kopfdatenHTML("blabla");
 
         // HTML-Ausgabe Beginn Überschriftzeile der Tabelle
         ausgabeDaten.append("<th>Datum</th>");
@@ -139,6 +141,11 @@ public class HTMLOutput implements IOutput {
         FileHelper.ausgebenInDatei(ausgabeDaten.toString(), filename, true);
     }
 
+    private void kopfdatenHTML(String string) {
+        // TODO(Marcel) provide sensible implementation
+
+    }
+
     /**
      * Diese Methode stellt die Möglichkeit bereit eine Einkaufsliste als
      * HTML-Datei bereitzustellen. Die Ausgabe wird
@@ -180,8 +187,8 @@ public class HTMLOutput implements IOutput {
      */
     private String pictureCheck(Meal sortedMeal) {
         // TODO(Marcel Baxmann) Pfadangabe für spätere Ergebnisse?
-        // TODO(Marcel Baxmann) Methode in FileHelper zum kopieren der Bilder in Ausgabeordner, sofern diese noch nicht
-        // exisiteren
+        // TODO(Tim Sahling) Pfadangabe für spätere Ergebnisse?
+
         // vordefinierte Bildergrößte wird aus Properties ausgelesen
         int size = Integer.parseInt(PropertyHelper.getProperty("outputData.picSize"));
         // auslesen der Pfadangabe

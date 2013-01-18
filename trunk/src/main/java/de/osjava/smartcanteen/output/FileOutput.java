@@ -11,6 +11,7 @@ import de.osjava.smartcanteen.builder.result.ShoppingList;
 import de.osjava.smartcanteen.builder.result.ShoppingListItem;
 import de.osjava.smartcanteen.data.AbstractProvider;
 import de.osjava.smartcanteen.data.Canteen;
+import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.helper.FileHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 
@@ -49,7 +50,7 @@ public class FileOutput implements IOutput {
     }
 
     /**
-     * Diese Methode stellt die Möglichkeit bereit einn Speiseplan als
+     * Diese Methode stellt die Möglichkeit bereit ein Speiseplan als
      * CSV Ausgabe bereitzustellen. Die Ausgabe wird
      * auf Basis der Daten eines Objekts {@link Canteen} gestaltet. Dieses
      * Objekt muss der Methode beim Aufruf übergeben werden.
@@ -169,7 +170,10 @@ public class FileOutput implements IOutput {
         Map<AbstractProvider, List<ShoppingListItem>> shoppingListItems = shoppingList
                 .getShoppingListItemsGroupedByProvider();
 
-        ausgabeDaten.append("Lieferant" + dSSeperator + "Zutat" + dSSeperator + "Menge" + lineSeparator);
+        ausgabeDaten.append("Lieferant" + dSSeperator + "Zutat" + dSSeperator +
+                "Menge" + dSSeperator +
+                "Einheit" + dSSeperator +
+                "Menge & Einheit" + lineSeparator);
 
         if (shoppingListItems != null) {
             for (Entry<AbstractProvider, List<ShoppingListItem>> entry : shoppingListItems.entrySet()) {
@@ -180,6 +184,9 @@ public class FileOutput implements IOutput {
                 for (ShoppingListItem item : value) {
                     ausgabeDaten.append(name + dSSeperator);
                     ausgabeDaten.append(item.getIngredient().getName() + dSSeperator);
+                    ausgabeDaten.append(item.getQuantity().getValue() + dSSeperator);
+                    ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator);
+
                     ausgabeDaten.append(item.getQuantity().getValue() + " ");
                     ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator);
                     ausgabeDaten.append(lineSeparator);
@@ -214,9 +221,6 @@ public class FileOutput implements IOutput {
         // Erzeugen StringBuilder-Objekts (Ausgabepuffer) in welches die Ergebnisse geschrieben werden
         StringBuilder ausgabeDaten = new StringBuilder();
 
-        // Variable für das Hochzählen der Gesamtkosten
-        BigDecimal completeCost;
-
         Map<AbstractProvider, List<ShoppingListItem>> shoppingListItems = shoppingList
                 .getShoppingListItemsGroupedByProvider();
 
@@ -225,6 +229,9 @@ public class FileOutput implements IOutput {
 
         if (shoppingListItems != null) {
             for (Entry<AbstractProvider, List<ShoppingListItem>> entry : shoppingListItems.entrySet()) {
+                // Variable für das Hochzählen der Gesamtkosten
+                BigDecimal completeCost = BigDecimal.valueOf(0);
+
                 String name = entry.getKey().getName();
 
                 List<ShoppingListItem> value = entry.getValue();
@@ -235,18 +242,26 @@ public class FileOutput implements IOutput {
                     ausgabeDaten.append(item.getQuantity().getValue() + " ");
                     ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator);
 
+                    Amount calculatePrice = item.calculatePrice();
+
                     // HINZUGEKOMMEN
-                    ausgabeDaten.append(item.calculatePrice().getValue() + " ");
-                    ausgabeDaten.append(item.calculatePrice().getUnit().getName());
+                    ausgabeDaten.append(calculatePrice.getValue() + " ");
+                    ausgabeDaten.append(calculatePrice.getUnit().getName());
 
                     ausgabeDaten.append(lineSeparator);
 
-                    // System.out.println(completeCost);
-                    // (TODO) Gesamtkosten ausgeben ---> WOHER
+                    completeCost = completeCost.add(calculatePrice.getValue());
+
                 }
-                ausgabeDaten.append(lineSeparator);
+                // Ausgabe Gesamtkosten pro Provider
+                ausgabeDaten.append(dSSeperator + dSSeperator + "Kosten fuer " +
+                        name + dSSeperator + completeCost + "Euro" + lineSeparator + lineSeparator);
 
             }
+            // Ausgabe der Gesamtkosten
+            Amount calculateTotalPrice = shoppingList.calculateTotalPrice();
+            ausgabeDaten.append(dSSeperator + dSSeperator + "Gesamtkosten" + dSSeperator +
+                    calculateTotalPrice.getValue() + " " + calculateTotalPrice.getUnit().getName() + lineSeparator);
         }
         // sind alle Gerichte ausgelesen wird der Dateiname generiert
         String filename = FileHelper.generateFilename("Kostenuebersicht", fileExt);
