@@ -60,9 +60,6 @@ public class FileHelper {
      * @return
      */
     public static String generateFilename(String customName, String fileExt) {
-        // TODO (Marcel Baxmann) Prüfung vornehmen !!! FEHLERHANDLING FÜR path
-        // TODO (Marcel Baxmann) kommentieren
-
         // setzen der übergebenen Parameter für den Filenamen
         String dateiname = PATH + customName + fileExt;
 

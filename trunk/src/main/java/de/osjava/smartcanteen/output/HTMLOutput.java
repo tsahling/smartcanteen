@@ -63,6 +63,9 @@ public class HTMLOutput implements IOutput {
         // HTML-Ausgabe Generierung Kopfdaten des Dokuemnts und anhaengen in Puffer
         outputBuffer.append(generateHTMLHeader("Menueplan ab dem " + startDate + " - Kantine " + canteenName));
 
+        // HTML-Ausgabe Start Tabelle
+        outputBuffer.append("<table border=\"1\">" + lineSeparator + "<tr>");
+
         // HTML-Ausgabe Beginn Überschriftzeile der Tabelle
         outputBuffer.append("<th>Datum</th>");
 
@@ -139,6 +142,7 @@ public class HTMLOutput implements IOutput {
      */
     @Override
     public void outputShoppingList(ShoppingList shoppingList) {
+        // TODO (Marcel Baxmann) Methode implementieren
     }
 
     /**
@@ -153,6 +157,7 @@ public class HTMLOutput implements IOutput {
      */
     @Override
     public void outputTotalCosts(ShoppingList shoppingList) {
+        // TODO (Marcel Baxmann) Methode implementieren
     }
 
     /**
@@ -205,6 +210,14 @@ public class HTMLOutput implements IOutput {
         return picture;
     }
 
+    /**
+     * Methode zum generieren eines HTML-Headers mit Überschrift
+     * 
+     * @param String
+     *            Titel der im Mail-Header und in Überschrift stehen soll
+     * @author Marcel Baxmann
+     * @return String
+     */
     private String generateHTMLHeader(String title) {
 
         StringBuilder buffer = new StringBuilder();
@@ -219,9 +232,6 @@ public class HTMLOutput implements IOutput {
 
         // HTML-Ausgabe Überschrift
         buffer.append("<h1>" + title + "</h1>");
-
-        // HTML-Ausgabe Start Tabelle
-        buffer.append("<table border=\"1\">" + lineSeparator + "<tr>");
 
         return buffer.toString();
     }
