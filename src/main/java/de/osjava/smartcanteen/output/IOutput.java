@@ -37,8 +37,9 @@ public interface IOutput {
      * @param shoppingList
      *            Einkaufslisten-Objekt wird übergeben
      * @author Marcel Baxmann
+     * @throws IOException
      */
-    void outputShoppingList(ShoppingList shoppingList);
+    void outputShoppingList(ShoppingList shoppingList) throws IOException;
 
     /**
      * Diese Methode stellt die Möglichkeit bereit eine Kostenübersicht als noch
@@ -49,6 +50,7 @@ public interface IOutput {
      * @param shoppingList
      *            Einkaufslisten-Objekt wird übergeben
      * @author Marcel Baxmann
+     * @throws IOException
      */
-    void outputTotalCosts(ShoppingList shoppingList);
+    void outputTotalCosts(ShoppingList shoppingList) throws IOException;
 }
