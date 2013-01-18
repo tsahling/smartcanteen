@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import de.osjava.smartcanteen.builder.MenuPlanBuilder;
 
@@ -40,8 +41,8 @@ public class MenuPlan {
             Collections.sort(meals, new Comparator<Meal>() {
 
                 @Override
-                public int compare(Meal meal1, Meal meal2) {
-                    return meal1.getDate().compareTo(meal2.getDate());
+                public int compare(Meal m1, Meal m2) {
+                    return m1.getDate().compareTo(m2.getDate());
                 }
             });
         }
@@ -70,6 +71,29 @@ public class MenuPlan {
                     result.put(date, new LinkedList<Meal>(Arrays.asList(meal)));
                 }
             }
+        }
+
+        return result;
+    }
+
+    /**
+     * Gruppiert die Gerichte eines Speiseplans nach Datum und sortiert diese.
+     * 
+     * @return Eine sortierte Zuordnung von Daten zu Gerichten, die an dem jeweiligen Datum gekocht werden sollen
+     */
+    public Map<Date, List<Meal>> getMealsGroupedAndSortedByDate() {
+        Map<Date, List<Meal>> result = new TreeMap<Date, List<Meal>>(new Comparator<Date>() {
+
+            @Override
+            public int compare(Date d1, Date d2) {
+                return d1.compareTo(d2);
+            }
+        });
+
+        Map<Date, List<Meal>> mealsGroupedByDate = getMealsGroupedByDate();
+
+        if (mealsGroupedByDate != null && !mealsGroupedByDate.isEmpty()) {
+            result.putAll(mealsGroupedByDate);
         }
 
         return result;

@@ -388,6 +388,41 @@ public class ProviderBase {
     }
 
     /**
+     * Methode um die {@link AbstractProvider} zu ermitteln, die für eine {@link Ingredient} und eine {@link Amount} den
+     * geringsten Ausschuss haben. Die Auswahl beschränkt sich dabei auf {@link AbstractProvider}, welche die Zutat auch
+     * vorrätig haben.
+     * 
+     * @param providersWithIngredientAndQuantity
+     * @param ingredient
+     * @param ingredientQuantity
+     * @return
+     */
+    public List<AbstractProvider> findOptimalQuantityProvidersByIngredientAndQuantity(
+            final Set<AbstractProvider> providersWithIngredientAndQuantity, final Ingredient ingredient,
+            final Amount ingredientQuantity) {
+
+        List<AbstractProvider> result = new ArrayList<AbstractProvider>();
+
+        if (providersWithIngredientAndQuantity != null && !providersWithIngredientAndQuantity.isEmpty()) {
+
+            result.addAll(providersWithIngredientAndQuantity);
+
+            Collections.sort(result, new Comparator<AbstractProvider>() {
+
+                @Override
+                public int compare(AbstractProvider p1, AbstractProvider p2) {
+                    return p1.calculateWasteQuantityFromIngredientAndQuantity(ingredient, ingredientQuantity)
+                            .compareTo(
+                                    p2.calculateWasteQuantityFromIngredientAndQuantity(ingredient, ingredientQuantity));
+                }
+            });
+        }
+
+        return result;
+
+    }
+
+    /**
      * Methode um die Anbieter zu ermitteln, die eine bestimmte Zutat vorrätig haben.
      * 
      * @param ingredient
@@ -419,8 +454,9 @@ public class ProviderBase {
     }
 
     /**
-     * Methode um die {@link AbstractProvider} zu ermitteln, die eine bestimmte Zutat in einer bestimmten Menge vorrätig
-     * haben. Die Auswahl beschränkt sich dabei auf {@link AbstractProvider}, welche die Zutat auch vorrätig haben.
+     * Methode um die {@link AbstractProvider} zu ermitteln, die eine bestimmte {@link Ingredient} in einer bestimmten
+     * {@link Amount} vorrätig haben. Die Auswahl beschränkt sich dabei auf {@link AbstractProvider}, welche die Zutat
+     * vollständig vorrätig haben.
      * 
      * @param providersWithIngredient
      * @param ingredient
