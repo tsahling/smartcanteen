@@ -44,8 +44,11 @@ public class HTMLOutput implements IOutput {
     public void outputMenuPlan(Canteen canteen) throws IOException {
         // auslesen des Kantinen-Namens
         String canteenName = canteen.getLocation().getName();
+        // typisieren von Variablen für Datensätze der Gerichte und Datum
+        String meal;
+        String date;
 
-        // Erzeugen String-Puffer Objekts in welches die Ergebnisse geschrieben werden
+        // Erzeugen StringBuilder-Objekts (Ausgabepuffer) in welches die Ergebnisse geschrieben werden
         StringBuilder ausgabeDaten = new StringBuilder();
 
         // List erstellen, in der die Gerichte nach Datum 1zu1 zugeordnet sind
@@ -54,10 +57,7 @@ public class HTMLOutput implements IOutput {
         // das Datum des Gültigkeitsbeginns auslesen - Verwendung für Dateiname
         String startDate = FileHelper.shortendDate(mealsSortedByDate.get(0).getDate());
 
-        String meal;
-        String date;
-
-        // TODO (Marcel Baxmann) Kommentieren
+        // Abfrage der Anzahl der Gerichte pro Tag und speichern in lokale Variable (geparstes int)
         int mealsPerDay = Integer.parseInt(PropertyHelper.getProperty("planingPeriod.mealsPerDay"));
 
         // HTML-Ausgabe Startsequenz
@@ -80,32 +80,49 @@ public class HTMLOutput implements IOutput {
         // Anzahl abfragen kann
         ausgabeDaten.append("<th>Datum</th>");
 
+        // Je nach Anzahl der Gerichte werden in den Ausgabepuffer die Überschriften Zeile angehangen
         for (int i = 1; i < mealsPerDay + 1; i++) {
             ausgabeDaten.append("<th>Gericht " + i + "</th>");
         }
 
-        // HTML-Ausgabe Ende einer Zeile und Start neue Zeile
+        // HTML-Ausgabe Ende der Überschrift-Zeile und Start Inhalts-Zeile
         ausgabeDaten.append("</tr>" + lineSeparator +
                 "<tr>");
 
+        // für jedes Gericht (meal) in der Liste werden das Datum und der Namen ausgelesen
         String previousDate = null;
         for (Meal sortedMeal : mealsSortedByDate) {
             date = FileHelper.shortendDate(sortedMeal.getDate());
             meal = sortedMeal.getRecipe().getName();
 
+            // wenn previusDate noch nicht gefüllt ist (null) starte erste Zeile in Ausgabedatei
+            // indem erstes Datum und erstes Gericht in Ausgabepuffer angehangen werden
             if (previousDate == null) {
+                // Dateum umrundet von HTML Elementen für eine Zelle
                 ausgabeDaten.append("<td>" + date + "</td>");
+                // Ein Gericht umrundet von HTML Elementen für eine Zelle
+                // Check ob Bild vorhanden und einfügen img-tag je nach Typ des Gerichts
                 ausgabeDaten.append("<td>" + meal + pictureCheck(sortedMeal) + "</td>");
+                // setze Variable previousDate auf aktuelles Datum
                 previousDate = date;
             }
+            // wenn previous Date bereits mit einem Datum gefüllt ist rufe folgenden Strang auf
             else {
+                // wenn vorhergehendes Datum aktuellem Datum entspricht haenge
+                // aktuelles Gericht in gleiche Zeile in Ausgabepuffer an
                 if (date.equals(previousDate)) {
+                    // Ein Gericht umrundet von HTML-Tag für eine Zelle
+                    // Check ob Bild vorhanden und einfügen img-tag je nach Typ des Gerichts
                     ausgabeDaten.append("<td>" + meal + pictureCheck(sortedMeal) + "</td>");
                 }
                 else {
+                    // beende Zeile durch </tr> und starte mit neuem Datum umrundet mit HTML-Tag für Zelle
                     ausgabeDaten.append("</tr>" + lineSeparator +
                             "<td>" + date + "</td>");
+                    // Ein Gericht umrundet von HTML-Tag für eine Zelle
+                    // Check ob Bild vorhanden und einfügen img-tag je nach Typ des Gerichts
                     ausgabeDaten.append("<td>" + meal + pictureCheck(sortedMeal) + "</td>");
+                    // setze Variable previousDate auf aktuelles Datum
                     previousDate = date;
                 }
             }
@@ -116,7 +133,10 @@ public class HTMLOutput implements IOutput {
                 "</body>" + lineSeparator +
                 "</html>");
 
+        // sind alle Gerichte ausgelesen wird der Dateiname generiert
         String filename = FileHelper.generateFilename("Menueplan ab " + startDate + " - " + canteenName, fileExt);
+
+        // der Ausgabepuffer und der Dateiname werden an die Methode zum Schreiben in eine Datei übergeben
         FileHelper.ausgebenInDatei(ausgabeDaten.toString(), filename, true);
     }
 
