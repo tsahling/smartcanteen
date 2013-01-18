@@ -49,7 +49,7 @@ public class HTMLOutput implements IOutput {
         String date;
 
         // Erzeugen StringBuilder-Objekts (Ausgabepuffer) in welches die Ergebnisse geschrieben werden
-        StringBuilder ausgabeDaten = new StringBuilder();
+        StringBuilder outputBuffer = new StringBuilder();
 
         // List erstellen, in der die Gerichte nach Datum 1zu1 zugeordnet sind
         List<Meal> mealsSortedByDate = canteen.getMenuPlan().getMealsSortedByDate();
@@ -60,33 +60,19 @@ public class HTMLOutput implements IOutput {
         // Abfrage der Anzahl der Gerichte pro Tag und speichern in lokale Variable (geparstes int)
         int mealsPerDay = Integer.parseInt(PropertyHelper.getProperty("planingPeriod.mealsPerDay"));
 
-        // HTML-Ausgabe Startsequenz
-        ausgabeDaten.append("<html>" + lineSeparator +
-                "<head>" + lineSeparator +
-                "<title>Menueplan ab dem " + startDate + " - Kantine " + canteenName +
-                "</title>" + lineSeparator +
-                "</head>" + lineSeparator +
-                "<body>" + lineSeparator);
-
-        // HTML-Ausgabe Überschrift
-        ausgabeDaten.append("<h1>Menueplan ab dem " + startDate + " - Kantine " + canteenName + "</h1>");
-
-        // HTML-Ausgabe Start Tabelle
-        ausgabeDaten.append("<table border=\"1\">" + lineSeparator + "<tr>");
-
-        // TODO (Marcel Baxmann) HTML Header als Methode auslagern
-        kopfdatenHTML("blabla");
+        // HTML-Ausgabe Generierung Kopfdaten des Dokuemnts und anhaengen in Puffer
+        outputBuffer.append(generateHTMLHeader("Menueplan ab dem " + startDate + " - Kantine " + canteenName));
 
         // HTML-Ausgabe Beginn Überschriftzeile der Tabelle
-        ausgabeDaten.append("<th>Datum</th>");
+        outputBuffer.append("<th>Datum</th>");
 
         // Je nach Anzahl der Gerichte werden in den Ausgabepuffer die Überschriften Zeile angehangen
         for (int i = 1; i < mealsPerDay + 1; i++) {
-            ausgabeDaten.append("<th>Gericht " + i + "</th>");
+            outputBuffer.append("<th>Gericht " + i + "</th>");
         }
 
         // HTML-Ausgabe Ende der Überschrift-Zeile und Start Inhalts-Zeile
-        ausgabeDaten.append("</tr>" + lineSeparator +
+        outputBuffer.append("</tr>" + lineSeparator +
                 "<tr>");
 
         // für jedes Gericht (meal) in der Liste werden das Datum und der Namen ausgelesen
@@ -100,10 +86,10 @@ public class HTMLOutput implements IOutput {
                 // indem erstes Datum und erstes Gericht in Ausgabepuffer angehangen werden
                 if (previousDate == null) {
                     // Dateum umrundet von HTML Elementen für eine Zelle
-                    ausgabeDaten.append("<td>" + date + "</td>");
+                    outputBuffer.append("<td>" + date + "</td>");
                     // Ein Gericht umrundet von HTML Elementen für eine Zelle
                     // Check ob Bild vorhanden und einfügen img-tag je nach Typ des Gerichts
-                    ausgabeDaten.append("<td>" + meal + pictureCheck(sortedMeal) + "</td>");
+                    outputBuffer.append("<td>" + meal + pictureCheck(sortedMeal) + "</td>");
                     // setze Variable previousDate auf aktuelles Datum
                     previousDate = date;
                 }
@@ -114,15 +100,15 @@ public class HTMLOutput implements IOutput {
                     if (date.equals(previousDate)) {
                         // Ein Gericht umrundet von HTML-Tag für eine Zelle
                         // Check ob Bild vorhanden und einfügen img-tag je nach Typ des Gerichts
-                        ausgabeDaten.append("<td>" + meal + pictureCheck(sortedMeal) + "</td>");
+                        outputBuffer.append("<td>" + meal + pictureCheck(sortedMeal) + "</td>");
                     }
                     else {
                         // beende Zeile durch </tr> und starte mit neuem Datum umrundet mit HTML-Tag für Zelle
-                        ausgabeDaten.append("</tr>" + lineSeparator +
-                                "<td>" + date + "</td>");
+                        outputBuffer.append("</tr>" + lineSeparator +
+                                "<tr><td>" + date + "</td>");
                         // Ein Gericht umrundet von HTML-Tag für eine Zelle
                         // Check ob Bild vorhanden und einfügen img-tag je nach Typ des Gerichts
-                        ausgabeDaten.append("<td>" + meal + pictureCheck(sortedMeal) + "</td>");
+                        outputBuffer.append("<td>" + meal + pictureCheck(sortedMeal) + "</td>");
                         // setze Variable previousDate auf aktuelles Datum
                         previousDate = date;
                     }
@@ -130,7 +116,7 @@ public class HTMLOutput implements IOutput {
             }
         }
         // HTML-Ausgabe Ende Tabelle und HTML-Dokument
-        ausgabeDaten.append(lineSeparator + "</table>" + lineSeparator +
+        outputBuffer.append(lineSeparator + "</table>" + lineSeparator +
                 "</body>" + lineSeparator +
                 "</html>");
 
@@ -138,12 +124,7 @@ public class HTMLOutput implements IOutput {
         String filename = FileHelper.generateFilename("Menueplan ab " + startDate + " - " + canteenName, fileExt);
 
         // der Ausgabepuffer und der Dateiname werden an die Methode zum Schreiben in eine Datei übergeben
-        FileHelper.ausgebenInDatei(ausgabeDaten.toString(), filename, true);
-    }
-
-    private void kopfdatenHTML(String string) {
-        // TODO(Marcel) provide sensible implementation
-
+        FileHelper.ausgebenInDatei(outputBuffer.toString(), filename, true);
     }
 
     /**
@@ -222,6 +203,27 @@ public class HTMLOutput implements IOutput {
         }
         // Rueckgabe des Strings
         return picture;
+    }
+
+    private String generateHTMLHeader(String title) {
+
+        StringBuilder buffer = new StringBuilder();
+
+        // HTML-Ausgabe Startsequenz
+        buffer.append("<html>" + lineSeparator +
+                "<head>" + lineSeparator +
+                "<title>" + title +
+                "</title>" + lineSeparator +
+                "</head>" + lineSeparator +
+                "<body>" + lineSeparator);
+
+        // HTML-Ausgabe Überschrift
+        buffer.append("<h1>" + title + "</h1>");
+
+        // HTML-Ausgabe Start Tabelle
+        buffer.append("<table border=\"1\">" + lineSeparator + "<tr>");
+
+        return buffer.toString();
     }
 
 }

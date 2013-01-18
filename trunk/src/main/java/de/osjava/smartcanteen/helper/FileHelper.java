@@ -3,7 +3,10 @@ package de.osjava.smartcanteen.helper;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,10 +74,12 @@ public class FileHelper {
         // Ist dies der Fall wird solange der Dateiname hochgezählt,
         // bis die Datei unter einem neuen Dateinamen gespeichert werden kann
 
-        // solange File Exisitert wird die For-Schleife ausgeführt
+        // solange Datei mit gesetzten Dateiname exisitert wird die For-Schleife ausgeführt (Abbruch nach 100 versuchen)
         if (file.exists()) {
             for (int i = 1; file.exists(); i++) {
+                // Dateiname ergaenzen um (i)
                 dateiname = PATH + customName + " (" + i + ")" + fileExt;
+                // Datei mit dem angepassten Dateinamen erstellen
                 file = new File(dateiname);
                 // nach 100 versuchen wird abgebrochen und die Datei mit dem Zusatz (101) überschrieben
                 if (i == 100) {
@@ -83,12 +88,14 @@ public class FileHelper {
                     break;
                 }
             }
+            // Logausgabe wie Datei jetzt heißt inkl. Pfadangabe
             LOG.log(Level.INFO, "Datei exisitiert bereits, Name wird angepasst auf: " + file.getAbsolutePath());
         }
         else {
+            // Logausgabe der Pfadangabe
             LOG.log(Level.INFO, "Datei abgelegt unter: " + file.getAbsolutePath());
         }
-
+        // Rückgabe angepasster Dateiname
         return dateiname;
     }
 
@@ -112,6 +119,24 @@ public class FileHelper {
 
         // Rückgabe des Werts mit angepassten Datum
         return stringDate;
+    }
+
+    /**
+     * Methode um ein BigDecimal zu formatieren
+     * in das Format ###,###.00
+     * Für den Wert 99999900 entspricht Ausagbe: 999.999,00
+     * 
+     * @param BigDecimal
+     * @return String eines im Format ###,###.00
+     * @author Marcel Baxmann
+     */
+    public static String formatBD(BigDecimal input) {
+        // Formatierungsformat festlegen
+        NumberFormat df = new DecimalFormat("###,###.00");
+        // Formatierung auf übergebene Variable anwenden
+        String formatiert = df.format(input);
+        // Rückgabe des formatierten Werts
+        return formatiert;
     }
 
     /**
