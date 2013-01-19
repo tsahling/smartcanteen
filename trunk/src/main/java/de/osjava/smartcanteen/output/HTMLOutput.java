@@ -160,22 +160,25 @@ public class HTMLOutput implements IOutput {
         outputBuffer.append(generateHTMLHeader("Einkaufsliste je Lieferant"));
 
         // Generiere Übersicht mit Links auf Anker der einzelnen Tabellen
-        outputBuffer
-                .append("Einkaufslisten fuer folgende Lieferanten wurden generiert (anklicken zum anzeigen):<ul>" + lineSeparator);
-        // Alagen lokale Variable für die Positionbestimmung des Distributors
+        outputBuffer.append("Einkaufslisten fuer folgende Lieferanten wurden " +
+                "generiert (anklicken zum anzeigen):<ul>" + lineSeparator);
+
+        // Alagen lokale Variable für die Positionbestimmung des Distributors (Distributor-ID)
         int numberDistributor = 0;
+
         // für jeden Eintrag Abstract Provider Anweisungen ausfuehren
         for (Entry<AbstractProvider, List<ShoppingListItem>> entry : shoppingListItems.entrySet()) {
+            // Name des aktuellen Providers auslesen
             String name = entry.getKey().getName();
-            outputBuffer
-                    .append("<li><a href=\"#" + numberDistributor + "\">" + name + "</a></li>" + lineSeparator);
-            // zum nächsten Distributor hochzahlen
+            outputBuffer.append("<li><a href=\"#" + numberDistributor +
+                    "\">" + name + "</a></li>" + lineSeparator);
+            // zum nächsten Distributor hochzaehlen (Distributor-ID)
             numberDistributor++;
         }
         // Aufzaehlung beenden
         outputBuffer.append("</ul>" + lineSeparator + lineSeparator);
 
-        // Zaehler für die Positionbestimmung des Distributors zuruecksetzen, da neue Schleife
+        // Zaehler für die Positionbestimmung des Distributors (Distributor-ID) zuruecksetzen, da neue Schleife
         numberDistributor = 0;
         // prüfen, dass Objekt nicht null ist
         if (shoppingListItems != null) {
@@ -219,8 +222,9 @@ public class HTMLOutput implements IOutput {
                     outputBuffer.append(item.getQuantity().getUnit().getName() + "</td></tr>" + lineSeparator);
                 }
                 // HTML-Ausgabe Ende Tabelle mit Link zum Seitenbeginn
-                outputBuffer
-                        .append("</table>" + lineSeparator + "<a href=\"#top\"> zurueck zur Uebersicht</a>" + lineSeparator);
+                outputBuffer.append("</table>" + lineSeparator + "<a href=\"#top\">" +
+                        " zurueck zur Uebersicht</a>" + lineSeparator);
+                // zum nächsten Distributor hochzaehlen (Distributor-ID)
                 numberDistributor++;
             }
         }
@@ -254,7 +258,9 @@ public class HTMLOutput implements IOutput {
         Map<AbstractProvider, List<ShoppingListItem>> shoppingListItems = shoppingList
                 .getShoppingListItemsGroupedByProvider();
 
+        // Abfragen der Anzahl an Lieferanten aus der Map
         int elements = shoppingListItems.entrySet().size();
+        // Array initalisieren mit 2 Datensaetzen pro Anzahl Provider
         String dataOverview[][] = new String[elements][2];
 
         // HTML-Ausgabe Generierung Kopfdaten des Dokuemnts und anhaengen in Puffer
@@ -264,15 +270,15 @@ public class HTMLOutput implements IOutput {
         outputBuffer
                 .append("Die Darstellung enhaelt Kostenuebersichten mit Einzelposition je Lieferant<br>" +
                         "sowie eine Gesamtkostenuebersicht (anklicken zum anzeigen):<ul>" + lineSeparator);
-        // Alagen lokale Variable für die Positionbestimmung des Distributors
+
+        // Zaehler für die Positionbestimmung des Distributors (Distributor-ID) zuruecksetzen, da neue Schleife
         int numberDistributor = 0;
         // für jeden Eintrag Abstract Provider Anweisungen ausfuehren
         for (Entry<AbstractProvider, List<ShoppingListItem>> entry : shoppingListItems.entrySet()) {
             String name = entry.getKey().getName();
             outputBuffer
                     .append("<li><a href=\"#" + numberDistributor + "\">" + name + "</a></li>" + lineSeparator);
-
-            // zum nächsten Distributor hochzahlen
+            // zum nächsten Distributor hochzaehlen (Distributor-ID)
             numberDistributor++;
         }
         // lokale Variable zum Speichern der Ankernummer der Gesamtkostenuebersicht
@@ -284,7 +290,7 @@ public class HTMLOutput implements IOutput {
 
         // Beginn Ausgabe Kostenuebersichten mit Einzelposition je Lieferant
         outputBuffer.append("<h2> Kostenuebersichten mit Einzelposition je Lieferant</h2>" + lineSeparator);
-        // Zaehler für die Positionbestimmung des Distributors zuruecksetzen, da neue Schleife
+        // Zaehler für die Positionbestimmung des Distributors (Dristributor-ID) zuruecksetzen, da neue Schleife
         numberDistributor = 0;
         // prüfen, dass Objekt nicht null ist
         if (shoppingListItems != null) {
@@ -342,7 +348,7 @@ public class HTMLOutput implements IOutput {
                     costPerDistributor = costPerDistributor.add(calculatePrice.getValue());
 
                 }
-                // sichern Datensaetze fuer Uebersichtsanzeige
+                // sichern Datensaetze fuer Uebersichtsanzeige in Array
                 dataOverview[numberDistributor][0] = name;
                 if (calculatePrice != null) {
                     dataOverview[numberDistributor][1] = FileHelper.formatBD(costPerDistributor)
@@ -354,7 +360,7 @@ public class HTMLOutput implements IOutput {
                         name + ":</td><td>" + FileHelper.formatBD(costPerDistributor) +
                         " Euro</td></tr>" + lineSeparator);
 
-                // HTML-Ausgabe Ende Tabelle mit Link zum Seitenbeginn
+                // HTML-Ausgabe Ende Tabelle mit Link zum Seitenbeginn-Anker
                 outputBuffer
                         .append("</table>" + lineSeparator + "<a href=\"#top\"> zurueck zur Uebersicht</a>" + lineSeparator);
                 numberDistributor++;
@@ -380,7 +386,7 @@ public class HTMLOutput implements IOutput {
                 "<td><b>" + FileHelper.formatBD(calculateTotalPrice.getValue()) + " "
                 + calculateTotalPrice.getUnit().getName() + "</b></td></tr>" + lineSeparator);
 
-        // HTML-Ausgabe Ende Tabelle mit Link zum Seitenbeginn
+        // HTML-Ausgabe Ende Tabelle mit Link zum Seitenbeginn-Anker
         outputBuffer
                 .append("</table>" + lineSeparator + "<a href=\"#top\"> zurueck zur Uebersicht</a>" + lineSeparator);
         numberDistributor++;
