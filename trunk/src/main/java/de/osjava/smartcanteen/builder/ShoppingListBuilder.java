@@ -137,7 +137,7 @@ public class ShoppingListBuilder {
 
         for (Entry<IngredientQuantity, Map<AbstractProvider, List<Amount>>> outerEntry : tempMap.entrySet()) {
 
-            System.out.println(outerEntry.getKey());
+            //System.out.println(outerEntry.getKey());
 
             for (Entry<AbstractProvider, List<Amount>> innerEntry : outerEntry.getValue().entrySet()) {
                 System.out.println(innerEntry.getKey());
