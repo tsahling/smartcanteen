@@ -32,7 +32,8 @@ FEATURELISTE (über Standardanforderungen hinaus):
 Auf folgende Features der Applikation, die über die Standardanforderungen hinausgehen, möchten wir an dieser Stelle 
 separat hinweisen:
 
-- Generierung von HTML Dateien
+- Generierung von HTML Dateien (Menueplan, Einkaufsliste, Kostenuebersicht)
+- HTML-Dateien für Einkaufsliste und Kostenuebersicht mit zusaetzlichen Datenaufbereitungen und Inhaltsverzeichnis
 - Prüfung vor Überschreibung von Dateien (automatische Anpassung des Dateinamens -> Vorbeugung vor Datenverlust)
 - Zwei Varianten für die Ausgabe des Menüplans (nach Datum gruppiert oder zweispaltig)
 
