@@ -227,8 +227,6 @@ public class Application {
         ShoppingListBuilder slb = new ShoppingListBuilder(providerBase, canteens);
         ShoppingList shoppingList = slb.buildShoppingList();
 
-        LOG.log(Level.INFO, shoppingList.calculateTotalPrice().toString());
-
         // Übergabe der Ergebnisse der Applikationslogik an die ausgebende Methode
         outputApplicationResult(shoppingList, canteens);
     }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -57,6 +58,9 @@ public class MenuPlanBuilder {
             .getProperty("planingPeriod.weekWorkdays"));
     private static final Integer PROP_PLANINGPERIOD_WEEKS = Integer.valueOf(PropertyHelper
             .getProperty("planingPeriod.weeks"));
+
+    private static final BigDecimal PROP_INGREDIENT_PRICEFORONEUNIT_MAX = new BigDecimal(
+            PropertyHelper.getProperty("ingredient.priceForOneUnit.max"));
 
     private static final Integer PROP_PLANINGPERIOD_TOTALWEEKANDWORKDAYS = (PROP_PLANINGPERIOD_WEEKWORKDAYS * PROP_PLANINGPERIOD_WEEKS);
     private static final Integer PROP_PLANINGPERIOD_TOTALMEALS = (PROP_PLANINGPERIOD_MEALSPERDAY * PROP_PLANINGPERIOD_WEEKWORKDAYS * PROP_PLANINGPERIOD_WEEKS);
@@ -156,10 +160,11 @@ public class MenuPlanBuilder {
 
     /**
      * Überprüft initial ob ein Rezept valide ist. Ein Rezept ist nicht valide wenn es bereits ausgewählt wurde oder
-     * wenn nicht alle Zutaten auch einen {@link IngredientType} haben. Ein fehlender {@link IngredientType} weist
-     * darauf hin, dass diese Zutat bei gegebenen Preislisten bzw. Anbietern nicht beschaffbar ist, da die Typen erst
-     * nach Einlesen der Anbieter gesetzt werden. Dies muss erfolgen, da in der Rezepte Eingangsdatei keine Typen
-     * definiert sind, sondern nur in den Listen der Anbieter.
+     * wenn nicht alle Zutaten auch einen {@link IngredientType} haben oder wenn eine Zutat eines Rezepts einen
+     * bestimmten Maximalwert überschreitet. Ein fehlender {@link IngredientType} weist darauf hin, dass diese Zutat bei
+     * gegebenen Preislisten bzw. Anbietern nicht beschaffbar ist, da die Typen erst nach Einlesen der Anbieter gesetzt
+     * werden. Dies muss erfolgen, da in der Rezepte Eingangsdatei keine Typen definiert sind, sondern nur in den Listen
+     * der Anbieter.
      * 
      * @param recipe
      * @return
@@ -169,6 +174,21 @@ public class MenuPlanBuilder {
         for (IngredientListItem ingredientListItem : recipe.getIngredientList()) {
             if (ingredientListItem.getIngredient().getIngredientType() == null) {
                 return false;
+            }
+        }
+
+        // Überprüfung ob eine Zutat eines Gerichts über einem festgelegten Maximalwert liegt. Wenn ja, wird dieses
+        // Gericht nicht bestellt, um die Kosten des Speiseplans ökonomisch sinnvoll zu begrenzen
+        for (IngredientListItem ingredientListItem : recipe.getIngredientList()) {
+
+            Amount bestPriceForOneUnitOfIngredient = providerBase
+                    .findBestPriceForOneUnitOfIngredient(ingredientListItem.getIngredient());
+
+            if (bestPriceForOneUnitOfIngredient != null) {
+                if (NumberHelper.compareGreaterOrEqual(bestPriceForOneUnitOfIngredient.getValue(),
+                        PROP_INGREDIENT_PRICEFORONEUNIT_MAX)) {
+                    return false;
+                }
             }
         }
 
@@ -394,15 +414,6 @@ public class MenuPlanBuilder {
 
         // Bisher keine Rezepte für diesen Tag vorhanden
         if (recipes.isEmpty()) {
-
-            // Wenn Rezept ein Fischrezept ist, muss überprüft werden ob es bereits ein Fischrezept diese Woche gibt
-            if (recipe.isFishRecipe()) {
-
-                if (existsFishRecipeInWeek(planingPeriod, weekAndWorkday)) {
-                    return false;
-                }
-            }
-
             return true;
         }
         else { // Bereits Rezepte für diesen Tag vorhanden
@@ -412,13 +423,6 @@ public class MenuPlanBuilder {
             if (recipe.isMeatRecipe()) {
 
                 if (countRecipesForWeekWorkdayAndIngredientType(planingPeriod, weekAndWorkday, IngredientType.MEAT) == PROP_PLANINGPERIOD_MEATMEALSPERDAY_MAX) {
-                    return false;
-                }
-            }
-            // Wenn Rezept ein Fischrezept ist, muss überprüft werden ob es bereits ein Fischrezept diese Woche gibt
-            else if (recipe.isFishRecipe()) {
-
-                if (existsFishRecipeInWeek(planingPeriod, weekAndWorkday)) {
                     return false;
                 }
             }
@@ -590,6 +594,32 @@ public class MenuPlanBuilder {
         return result;
     }
 
+    private Map<Integer, Integer> getWeeksWithFishRecipes(Map<WeekWorkday, Set<Recipe>> planingPeriod) {
+        Map<Integer, Integer> result = new HashMap<Integer, Integer>();
+
+        for (Entry<WeekWorkday, Set<Recipe>> entry : planingPeriod.entrySet()) {
+
+            for (Recipe recipe : entry.getValue()) {
+
+                if (recipe.isFishRecipe()) {
+
+                    if (result.containsKey(entry.getKey().getWeek())) {
+                        Integer fishRecipeCounter = result.get(entry.getKey().getWeek());
+
+                        fishRecipeCounter++;
+
+                        result.put(entry.getKey().getWeek(), fishRecipeCounter);
+                    }
+                    else {
+                        result.put(entry.getKey().getWeek(), 1);
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
     /**
      * 
      * @param planingPeriod
@@ -606,8 +636,15 @@ public class MenuPlanBuilder {
         }
 
         // Wenn nicht mindestens ein Fischgericht jede Woche vorhanden ist, muss dieses nachträglich eingefügt werden
-        if (countRecipesForIngredientType(planingPeriod, IngredientType.FISH) < PROP_PLANINGPERIOD_WEEKS) {
-            // TODO(Tim Sahling) Wochen auswählen in denen kein Fischgericht vorhanden ist und hinzufügen
+        Map<Integer, Integer> weeksWithFishRecipes = getWeeksWithFishRecipes(planingPeriod);
+
+        if (weeksWithFishRecipes.size() < PROP_PLANINGPERIOD_WEEKS) {
+
+            // TODO (Tim Sahling) Fischgerichte hinzufügen in die woche wo sie fehlen
+
+            boolean test = false;
+
+            boolean foo = true;
 
         }
     }

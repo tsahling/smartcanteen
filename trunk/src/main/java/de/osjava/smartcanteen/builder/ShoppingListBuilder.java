@@ -137,7 +137,7 @@ public class ShoppingListBuilder {
 
         for (Entry<IngredientQuantity, Map<AbstractProvider, List<Amount>>> outerEntry : tempMap.entrySet()) {
 
-            //System.out.println(outerEntry.getKey());
+            // System.out.println(outerEntry.getKey());
 
             for (Entry<AbstractProvider, List<Amount>> innerEntry : outerEntry.getValue().entrySet()) {
                 System.out.println(innerEntry.getKey());
@@ -296,71 +296,6 @@ public class ShoppingListBuilder {
     private void computeOneProviderWithIngredientAndQuantity(Map<AbstractProvider, Set<IngredientQuantity>> result,
             AbstractProvider provider, Ingredient ingredient, Amount ingredientQuantity) {
         addAndSubtractIngredientAndQuantity(result, provider, ingredient, ingredientQuantity, ingredientQuantity);
-    }
-
-    private static final class ProviderRanking {
-        private AbstractProvider provider;
-        private Integer rank;
-
-        public ProviderRanking(AbstractProvider provider, Integer rank) {
-            this.provider = provider;
-            this.rank = rank;
-        }
-
-        public AbstractProvider getProvider() {
-            return provider;
-        }
-
-        public void setProvider(AbstractProvider provider) {
-            this.provider = provider;
-        }
-
-        public Integer getRank() {
-            return rank;
-        }
-
-        public void setRank(Integer rank) {
-            this.rank = rank;
-        }
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((provider == null) ? 0 : provider.hashCode());
-            result = prime * result + ((rank == null) ? 0 : rank.hashCode());
-            return result;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            ProviderRanking other = (ProviderRanking) obj;
-            if (provider == null) {
-                if (other.provider != null)
-                    return false;
-            }
-            else if (!provider.equals(other.provider))
-                return false;
-            if (rank == null) {
-                if (other.rank != null)
-                    return false;
-            }
-            else if (!rank.equals(other.rank))
-                return false;
-            return true;
-        }
-
-        @Override
-        public String toString() {
-            return "ProviderRanking [provider=" + provider + ", rank=" + rank + "]";
-        }
-
     }
 
     /**
@@ -583,6 +518,70 @@ public class ShoppingListBuilder {
         }
 
         return result;
+    }
+
+    /**
+     * Repräsentiert eine temporäre Datenhaltungsklasse, die einen Anbieter und einen Rang aufnehmen kann.
+     */
+    private static final class ProviderRanking {
+        private AbstractProvider provider;
+        private Integer rank;
+
+        public ProviderRanking(AbstractProvider provider, Integer rank) {
+            this.provider = provider;
+            this.rank = rank;
+        }
+
+        public AbstractProvider getProvider() {
+            return provider;
+        }
+
+        public Integer getRank() {
+            return rank;
+        }
+
+        public void setRank(Integer rank) {
+            this.rank = rank;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((provider == null) ? 0 : provider.hashCode());
+            result = prime * result + ((rank == null) ? 0 : rank.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            ProviderRanking other = (ProviderRanking) obj;
+            if (provider == null) {
+                if (other.provider != null)
+                    return false;
+            }
+            else if (!provider.equals(other.provider))
+                return false;
+            if (rank == null) {
+                if (other.rank != null)
+                    return false;
+            }
+            else if (!rank.equals(other.rank))
+                return false;
+            return true;
+        }
+
+        @Override
+        public String toString() {
+            return "ProviderRanking [provider=" + provider + ", rank=" + rank + "]";
+        }
+
     }
 
     /**

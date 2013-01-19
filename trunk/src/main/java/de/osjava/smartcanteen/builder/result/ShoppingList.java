@@ -62,7 +62,6 @@ public class ShoppingList {
                 if (shoppingListItems != null && !shoppingListItems.isEmpty()) {
 
                     for (ShoppingListItem shoppingListItem : shoppingListItems) {
-                        System.out.println(shoppingListItem.getIngredient().getName());
                         result.add(shoppingListItem.calculatePrice());
                     }
                 }

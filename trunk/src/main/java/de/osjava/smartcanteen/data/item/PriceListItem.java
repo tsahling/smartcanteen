@@ -65,10 +65,11 @@ public class PriceListItem {
     }
 
     /**
+     * Berechnet den Preis des Gebindes für eine Einheit.
      * 
      * @return
      */
-    private BigDecimal calculatePriceForOneUnitOfSize() {
+    public BigDecimal calculatePriceForOneUnitOfSize() {
         return NumberHelper.divide(this.price.getValue(), this.size.getValue());
     }
 

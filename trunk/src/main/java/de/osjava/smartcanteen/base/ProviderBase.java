@@ -23,6 +23,7 @@ import de.osjava.smartcanteen.data.Ingredient;
 import de.osjava.smartcanteen.data.item.PriceListItem;
 import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.datatype.IngredientType;
+import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
 import de.osjava.smartcanteen.helper.NumberHelper;
 
 /**
@@ -273,6 +274,59 @@ public class ProviderBase {
     }
 
     /**
+     * 
+     * @param ingredient
+     * @return
+     */
+    public Amount findBestPriceForOneUnitOfIngredient(Ingredient ingredient) {
+        Amount result = null;
+
+        List<PriceListItem> priceListItems = findPriceListItemsByIngredient(ingredient);
+
+        if (priceListItems != null && !priceListItems.isEmpty()) {
+
+            Collections.sort(priceListItems, new Comparator<PriceListItem>() {
+
+                @Override
+                public int compare(PriceListItem pli1, PriceListItem pli2) {
+                    return comparePriceOfPriceListItems(pli1, pli2);
+                }
+            });
+
+            result = new Amount(priceListItems.iterator().next().calculatePriceForOneUnitOfSize(),
+                    UnitOfMeasurement.EUR);
+        }
+
+        return result;
+    }
+
+    /**
+     * 
+     * @param ingredient
+     * @return
+     */
+    private List<PriceListItem> findPriceListItemsByIngredient(Ingredient ingredient) {
+        List<PriceListItem> result = new ArrayList<PriceListItem>();
+
+        Set<AbstractProvider> ingredientProviders = findProvidersByIngredient(ingredient);
+
+        if (ingredientProviders != null && !ingredientProviders.isEmpty()) {
+
+            for (AbstractProvider provider : ingredientProviders) {
+
+                PriceListItem priceListItem = provider.findPriceListItemByIngredient(ingredient);
+
+                if (priceListItem != null) {
+                    result.add(priceListItem);
+                }
+            }
+        }
+
+        return result;
+
+    }
+
+    /**
      * Methode um den {@link IngredientType} auf Basis des übergebenen Namen zu finden.
      * 
      * @param name
@@ -431,7 +485,7 @@ public class ProviderBase {
     public Set<AbstractProvider> findProvidersByIngredient(Ingredient ingredient) {
         Set<AbstractProvider> result = new HashSet<AbstractProvider>();
 
-        if (providers != null && !providers.isEmpty()) {
+        if (providers != null && !providers.isEmpty() && ingredient != null) {
 
             for (AbstractProvider provider : providers) {
 
