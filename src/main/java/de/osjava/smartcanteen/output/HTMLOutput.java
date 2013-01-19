@@ -1,6 +1,7 @@
 package de.osjava.smartcanteen.output;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,6 +11,7 @@ import de.osjava.smartcanteen.builder.result.ShoppingList;
 import de.osjava.smartcanteen.builder.result.ShoppingListItem;
 import de.osjava.smartcanteen.data.AbstractProvider;
 import de.osjava.smartcanteen.data.Canteen;
+import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.helper.FileHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 
@@ -155,11 +157,11 @@ public class HTMLOutput implements IOutput {
                 .getShoppingListItemsGroupedByProvider();
 
         // HTML-Ausgabe Generierung Kopfdaten des Dokuemnts und anhaengen in Puffer
-        outputBuffer.append(generateHTMLHeader("Einkaufsliste je Anbieter"));
+        outputBuffer.append(generateHTMLHeader("Einkaufsliste je Lieferant"));
 
         // Generiere Übersicht mit Links auf Anker der einzelnen Tabellen
         outputBuffer
-                .append("Einkaufslisten für folgende Lieferanten wurden generiert (anklicken zum anzeigen):<ul>" + lineSeparator);
+                .append("Einkaufslisten fuer folgende Lieferanten wurden generiert (anklicken zum anzeigen):<ul>" + lineSeparator);
         // Alagen lokale Variable für die Positionbestimmung des Distributors
         int numberDistributor = 0;
         // für jeden Eintrag Abstract Provider Anweisungen ausfuehren
@@ -184,7 +186,7 @@ public class HTMLOutput implements IOutput {
 
                 // HTML-Ausgabe Ueberschrift Lieferant mit HTML-Name Tag,
                 // so dass ueber die erstellte Liste direktzum Anbieter gesprungen werden kann
-                outputBuffer.append("<h2><a name=\"" + numberDistributor +
+                outputBuffer.append("<h3><a name=\"" + numberDistributor +
                         "\">Einkaufsliste fuer Lieferant: " + name + "</a></h2>");
 
                 // HTML-Ausgabe Start Tabelle
@@ -241,10 +243,156 @@ public class HTMLOutput implements IOutput {
      * @param shoppingList
      *            Einkaufslisten-Objekt wird übergeben
      * @author Marcel Baxmann
+     * @throws IOException
      */
     @Override
-    public void outputTotalCosts(ShoppingList shoppingList) {
-        // TODO (Marcel Baxmann) Methode implementieren
+    public void outputTotalCosts(ShoppingList shoppingList) throws IOException {
+        // Erzeugen StringBuilder-Objekts (Ausgabepuffer) in welches die Ergebnisse geschrieben werden
+        StringBuilder outputBuffer = new StringBuilder();
+
+        // Map mit Key Abstract Provider und Value List<ShoppingListItem> anlegen
+        Map<AbstractProvider, List<ShoppingListItem>> shoppingListItems = shoppingList
+                .getShoppingListItemsGroupedByProvider();
+
+        int elements = shoppingListItems.entrySet().size();
+        String dataOverview[][] = new String[elements][2];
+
+        // HTML-Ausgabe Generierung Kopfdaten des Dokuemnts und anhaengen in Puffer
+        outputBuffer.append(generateHTMLHeader("Kostenubersicht"));
+
+        // Generiere Übersicht mit Links auf Anker der einzelnen Tabellen
+        outputBuffer
+                .append("Die Darstellung enhaelt Kostenuebersichten mit Einzelposition je Lieferant<br>" +
+                        "sowie eine Gesamtkostenuebersicht (anklicken zum anzeigen):<ul>" + lineSeparator);
+        // Alagen lokale Variable für die Positionbestimmung des Distributors
+        int numberDistributor = 0;
+        // für jeden Eintrag Abstract Provider Anweisungen ausfuehren
+        for (Entry<AbstractProvider, List<ShoppingListItem>> entry : shoppingListItems.entrySet()) {
+            String name = entry.getKey().getName();
+            outputBuffer
+                    .append("<li><a href=\"#" + numberDistributor + "\">" + name + "</a></li>" + lineSeparator);
+
+            // zum nächsten Distributor hochzahlen
+            numberDistributor++;
+        }
+        // lokale Variable zum Speichern der Ankernummer der Gesamtkostenuebersicht
+        int positionCostOverview = numberDistributor;
+        outputBuffer
+                .append("<li><a href=\"#" + positionCostOverview + "\">Gesamtkostenuebersicht</a></li>" + lineSeparator);
+        // Aufzaehlung beenden
+        outputBuffer.append("</ul>" + lineSeparator + lineSeparator);
+
+        // Beginn Ausgabe Kostenuebersichten mit Einzelposition je Lieferant
+        outputBuffer.append("<h2> Kostenuebersichten mit Einzelposition je Lieferant</h2>" + lineSeparator);
+        // Zaehler für die Positionbestimmung des Distributors zuruecksetzen, da neue Schleife
+        numberDistributor = 0;
+        // prüfen, dass Objekt nicht null ist
+        if (shoppingListItems != null) {
+            // für jeden Eintrag Abstract Provider Anweisungen ausfuehren
+            for (Entry<AbstractProvider, List<ShoppingListItem>> entry : shoppingListItems.entrySet()) {
+                // Variable für das Hochzählen der Kosten je Anbieter
+                BigDecimal costPerDistributor = BigDecimal.valueOf(0);
+
+                // Name des Anbieters auslesen
+                String name = entry.getKey().getName();
+
+                // HTML-Ausgabe Ueberschrift Lieferant mit HTML-Name Tag,
+                // so dass ueber die erstellte Liste direktzum Anbieter gesprungen werden kann
+                outputBuffer.append("<h3><a name=\"" + numberDistributor +
+                        "\">Einkaufsliste fuer Lieferant: " + name + "</a></h2>");
+
+                // HTML-Ausgabe Start Tabelle
+                outputBuffer.append("<table border=\"1\">" + lineSeparator + "<tr>");
+
+                // HTML-Ausgabe Beginn Überschriftzeile der Tabelle
+                outputBuffer.append("<th>Lieferant</th><th>Zutat</th>" +
+                        "<th>Menge</th><th>Wert</th><th>Waehrung</th><th>Kosten in Euro</th></tr>");
+
+                // Liste mit Shoppinglist Items auslesen und in lokale Variable speichern
+                List<ShoppingListItem> value = entry.getValue();
+
+                Amount calculatePrice = null;
+                // fuer jedes Listenelement Anweisungen ausfuehren - jeweils eine Zeile generieren
+                for (ShoppingListItem item : value) {
+                    // Name des Anbieters in Puffer anhaengen und Trennzeichen setzen
+                    outputBuffer.append("<tr><td>" + name + "</td>");
+                    // Name der Zutat in Puffer anhaengen und Trennzeichen setzen
+                    outputBuffer.append("<td>" + item.getIngredient().getName() + "</td>");
+
+                    // Wert in Puffer anhaengen und Trennzeichen setzen
+                    outputBuffer.append("<td>" + item.getQuantity().getValue() + " ");
+                    // Einheit in Puffer anhaengen und Trennzeichen setzen
+                    outputBuffer.append(item.getQuantity().getUnit().getName() + "</td>");
+
+                    calculatePrice = item.calculatePrice();
+                    // Kosten ausgeben
+                    // Wert und Einheit in getrennte Spalten
+                    // formatierten Wert in Puffer anhaengen und Trennzeichen setzen
+                    outputBuffer.append("<td>" + FileHelper.formatBD(calculatePrice.getValue()) + "</td>");
+                    // Einheit in Puffer anhaengen und Trennzeichen setzen
+                    outputBuffer.append("<td>" + calculatePrice.getUnit().getName() + "</td>");
+
+                    // Wert und Einheit in gleiche Spalte schreiben
+                    // formatierten Wert in Puffer anhaengen plus Leerzeichen
+                    outputBuffer.append("<td>" + FileHelper.formatBD(calculatePrice.getValue()) + " ");
+                    // Einheit in Puffer anhaengen und Trennzeichen setzen
+                    outputBuffer.append(calculatePrice.getUnit().getName() + "</td></tr>" + lineSeparator);
+
+                    // hochzaehlen der Einkaufskosten je Anbieter
+                    costPerDistributor = costPerDistributor.add(calculatePrice.getValue());
+
+                }
+                // sichern Datensaetze fuer Uebersichtsanzeige
+                dataOverview[numberDistributor][0] = name;
+                if (calculatePrice != null) {
+                    dataOverview[numberDistributor][1] = FileHelper.formatBD(costPerDistributor)
+                            + " " + calculatePrice.getUnit().getName();
+                }
+
+                // Ausgabe formatierte Gesamtkosten pro Provider
+                outputBuffer.append("<tr><td colspan=\"5\" align=\"right\"> Kosten fuer " +
+                        name + ":</td><td>" + FileHelper.formatBD(costPerDistributor) +
+                        " Euro</td></tr>" + lineSeparator);
+
+                // HTML-Ausgabe Ende Tabelle mit Link zum Seitenbeginn
+                outputBuffer
+                        .append("</table>" + lineSeparator + "<a href=\"#top\"> zurueck zur Uebersicht</a>" + lineSeparator);
+                numberDistributor++;
+            }
+        }
+
+        // Beginn Ausgabe Gesamtkostenuebersicht
+        outputBuffer.append("<h2><a name=\"" + positionCostOverview + "\">" +
+                "Gesamtkostenuebersicht</a></h2>" + lineSeparator);
+        // HTML-Ausgabe Start Tabelle
+        outputBuffer.append("<table border=\"1\">" + lineSeparator + "<tr>");
+        // Ueberschriftzeile für Tabelle
+        outputBuffer.append("<tr><th>Lieferant</th><th>Kosten in Euro</th></tr>");
+
+        for (int i = 0; i < dataOverview.length; i++) {
+            outputBuffer.append("<tr><td>" + dataOverview[i][0] + "</td>");
+            outputBuffer.append("<td>" + dataOverview[i][1] + "</td></tr>");
+        }
+
+        // HTML-Ausgabe der formatierten Gesamtkosten
+        Amount calculateTotalPrice = shoppingList.calculateTotalPrice();
+        outputBuffer.append("<tr><td align=\"right\"><b>Gesamtkosten:</b></td>" +
+                "<td><b>" + FileHelper.formatBD(calculateTotalPrice.getValue()) + " "
+                + calculateTotalPrice.getUnit().getName() + "</b></td></tr>" + lineSeparator);
+
+        // HTML-Ausgabe Ende Tabelle mit Link zum Seitenbeginn
+        outputBuffer
+                .append("</table>" + lineSeparator + "<a href=\"#top\"> zurueck zur Uebersicht</a>" + lineSeparator);
+        numberDistributor++;
+
+        // HTML-Ausgabe Ende Tabelle und HTML-Dokument
+        outputBuffer.append("</body>" + lineSeparator + "</html>");
+
+        // sind alle Gerichte ausgelesen wird der Dateiname generiert
+        String filename = FileHelper.generateFilename("Kostenuebersicht", fileExt);
+
+        // der Ausgabepuffer und der Dateiname werden an die Methode zum Schreiben in eine Datei übergeben
+        FileHelper.ausgebenInDatei(outputBuffer.toString(), filename, true);
     }
 
     /**

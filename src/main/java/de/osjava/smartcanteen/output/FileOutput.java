@@ -239,7 +239,7 @@ public class FileOutput implements IOutput {
         // Ueberschrift Zeile einfügen in Ausgabepuffer
         outputBuffer
                 .append("Lieferant" + dSSeperator + "Zutat" + dSSeperator +
-                        "Menge" + dSSeperator + "Kosten" + dSSeperator +
+                        "Menge" + dSSeperator + "Wert" + dSSeperator +
                         "Waehrung" + dSSeperator + "Kosten in Euro" + dSSeperator + lineSeparator);
 
         // prüfen, dass Objekt nicht null ist
