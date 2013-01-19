@@ -38,6 +38,10 @@ public class FileHelper {
      * @author Marcel Baxmann
      */
     public static boolean ausgebenInDatei(String ausgabeDaten, String dateiname, boolean anhaengen) throws IOException {
+        // TODO (Marcel Baxmann) Prüfung der Strings auf Zeichen die HTML nicht ausgeben kann
+        // TODO (Tim Sahling) bräuchte hier deine Unterstützung: Prüfung der Strings auf Zeichen die HTML nicht ausgeben
+        // kann
+
         File file = new File(dateiname);
         FileWriter writer = new FileWriter(file, anhaengen);
 
