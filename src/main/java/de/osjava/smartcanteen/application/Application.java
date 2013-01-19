@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import de.osjava.smartcanteen.application.gui.ApplicationGUI;
 import de.osjava.smartcanteen.base.HitListBase;
 import de.osjava.smartcanteen.base.ProviderBase;
 import de.osjava.smartcanteen.base.RecipeBase;
@@ -214,6 +215,9 @@ public class Application {
      * 
      */
     private void startApplication() throws IOException {
+
+        // TODO (Marcel Baxmann) Ausbauen der Funktionen
+        ApplicationGUI gui = new ApplicationGUI();
 
         // Start der Applikationslogik für die Erstellung der Speisepläne für die beiden Kantinen
         MenuPlanBuilder mpb = new MenuPlanBuilder(providerBase, recipeBase);
