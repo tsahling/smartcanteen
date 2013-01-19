@@ -69,7 +69,7 @@ public class FileOutput implements IOutput {
         String date;
 
         // Erzeugen StringBuilder-Objekts (Ausgabepuffer) in welches die Ergebnisse geschrieben werden
-        StringBuilder ausgabeDaten = new StringBuilder();
+        StringBuilder outputBuffer = new StringBuilder();
 
         // List erstellen, in der die Gerichte nach Datum 1zu1 zugeordnet sind
         List<Meal> mealsSortedByDate = canteen.getMenuPlan().getMealsSortedByDate();
@@ -80,7 +80,7 @@ public class FileOutput implements IOutput {
         // Abfrage des Layouttyps - Springe in Ausführung wenn "single"
         if (layoutMenuePlan.equals("single")) {
             // Überschriften Zeile einfügen in Ausgabepuffer
-            ausgabeDaten.append("Datum" + dSSeperator + "Gericht" + lineSeparator);
+            outputBuffer.append("Datum" + dSSeperator + "Gericht" + lineSeparator);
 
             // für jedes Gericht (meal) in der Liste werden das Datum und der Namen
             // ausgelesen und in den Ausgabepuffer angehangen
@@ -90,7 +90,7 @@ public class FileOutput implements IOutput {
                     date = FileHelper.shortendDate(sortedMeal.getDate());
                     meal = sortedMeal.getRecipe().getName();
 
-                    ausgabeDaten.append(date + dSSeperator + meal + lineSeparator);
+                    outputBuffer.append(date + dSSeperator + meal + lineSeparator);
                 }
             }
             // Ende Variante single und Abfrage für Layouttyp grouped
@@ -100,12 +100,12 @@ public class FileOutput implements IOutput {
             int mealsPerDay = Integer.parseInt(PropertyHelper.getProperty("planingPeriod.mealsPerDay"));
 
             // Je nach Anzahl der Gerichte werden in den Ausgabepuffer die Überschriften Zeile angehangen
-            ausgabeDaten.append("Datum" + dSSeperator);
+            outputBuffer.append("Datum" + dSSeperator);
             for (int i = 1; i < mealsPerDay + 1; i++) {
-                ausgabeDaten.append("Gericht " + i + dSSeperator);
+                outputBuffer.append("Gericht " + i + dSSeperator);
             }
             // Springe in nächste Zeile in Ausgabedatei
-            ausgabeDaten.append(lineSeparator);
+            outputBuffer.append(lineSeparator);
 
             // Defintion einer Variable für die Abfrage, ob bereits ein Datum durchlaufen wurde
             String previousDate = null;
@@ -119,7 +119,7 @@ public class FileOutput implements IOutput {
                     // wenn previusDate noch nicht gefüllt ist (null) starte erste Zeile in Ausgabedatei
                     // indem erstes Datum und erstes Gericht in Ausgabepuffer angehangen werden
                     if (previousDate == null) {
-                        ausgabeDaten.append(date + dSSeperator + meal);
+                        outputBuffer.append(date + dSSeperator + meal);
                         // setze Variable previousDate auf aktuelles Datum
                         previousDate = date;
                     }
@@ -128,13 +128,13 @@ public class FileOutput implements IOutput {
                         // wenn vorhergehendes Datum aktuellem Datum entspricht haenge
                         // aktuelles Gericht in gleiche Zeile in Ausgabepuffer an
                         if (date.equals(previousDate)) {
-                            ausgabeDaten.append(dSSeperator + meal);
+                            outputBuffer.append(dSSeperator + meal);
                         }
                         // ansonsten
                         else {
                             // haenge neue Zeile an und starte mit neuem Datum und erstem Gericht
-                            ausgabeDaten.append(lineSeparator);
-                            ausgabeDaten.append(date + dSSeperator + meal);
+                            outputBuffer.append(lineSeparator);
+                            outputBuffer.append(date + dSSeperator + meal);
                             // setze Variable previousDate auf aktuelles Datum
                             previousDate = date;
                         }
@@ -146,7 +146,7 @@ public class FileOutput implements IOutput {
         String filename = FileHelper.generateFilename("Menueplan ab " + startDate + " - " + canteenName, fileExt);
 
         // der Ausgabepuffer und der Dateiname werden an die Methode zum Schreiben in eine Datei übergeben
-        FileHelper.ausgebenInDatei(ausgabeDaten.toString(), filename, true);
+        FileHelper.ausgebenInDatei(outputBuffer.toString(), filename, true);
     }
 
     /**
@@ -163,14 +163,14 @@ public class FileOutput implements IOutput {
     @Override
     public void outputShoppingList(ShoppingList shoppingList) throws IOException {
         // Erzeugen StringBuilder-Objekts (Ausgabepuffer) in welches die Ergebnisse geschrieben werden
-        StringBuilder ausgabeDaten = new StringBuilder();
+        StringBuilder outputBuffer = new StringBuilder();
 
         // Map mit Key Abstract Provider und Value List<ShoppingListItem> anlegen
         Map<AbstractProvider, List<ShoppingListItem>> shoppingListItems = shoppingList
                 .getShoppingListItemsGroupedByProvider();
 
         // Ueberschrift Zeile einfügen in Ausgabepuffer
-        ausgabeDaten.append("Lieferant" + dSSeperator + "Zutat" + dSSeperator +
+        outputBuffer.append("Lieferant" + dSSeperator + "Zutat" + dSSeperator +
                 "Menge" + dSSeperator +
                 "Einheit" + dSSeperator +
                 "Menge & Einheit" + lineSeparator);
@@ -188,32 +188,32 @@ public class FileOutput implements IOutput {
                 // fuer jedes Listenelement Anweisungen ausfuehren
                 for (ShoppingListItem item : value) {
                     // Name des Anbieters in Puffer anhaengen und Trennzeichen setzen
-                    ausgabeDaten.append(name + dSSeperator);
+                    outputBuffer.append(name + dSSeperator);
                     // Name der Zutat in Puffer anhaengen und Trennzeichen setzen
-                    ausgabeDaten.append(item.getIngredient().getName() + dSSeperator);
+                    outputBuffer.append(item.getIngredient().getName() + dSSeperator);
 
                     // Wert und Einheit in getrennte Spalten
                     // Wert in Puffer anhaengen und Trennzeichen setzen
-                    ausgabeDaten.append(item.getQuantity().getValue() + dSSeperator);
+                    outputBuffer.append(item.getQuantity().getValue() + dSSeperator);
                     // Einheit in Puffer anhaengen und Trennzeichen setzen
-                    ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator);
+                    outputBuffer.append(item.getQuantity().getUnit().getName() + dSSeperator);
 
                     // Wert und Einheit in gleiche Spalte schreiben
                     // Wert in Puffer anhaengen und Trennzeichen setzen
-                    ausgabeDaten.append(item.getQuantity().getValue() + " ");
+                    outputBuffer.append(item.getQuantity().getValue() + " ");
                     // Einheit in Puffer anhaengen und Trennzeichen setzen
-                    ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator + lineSeparator);
+                    outputBuffer.append(item.getQuantity().getUnit().getName() + dSSeperator + lineSeparator);
 
                 }
                 // neue Zeile in Puffer schreiben
-                ausgabeDaten.append(lineSeparator);
+                outputBuffer.append(lineSeparator);
             }
         }
         // sind alle Gerichte ausgelesen wird der Dateiname generiert
         String filename = FileHelper.generateFilename("Einkaufsliste", fileExt);
 
         // der Ausgabepuffer und der Dateiname werden an die Methode zum Schreiben in eine Datei übergeben
-        FileHelper.ausgebenInDatei(ausgabeDaten.toString(), filename, true);
+        FileHelper.ausgebenInDatei(outputBuffer.toString(), filename, true);
     }
 
     /**
@@ -230,14 +230,14 @@ public class FileOutput implements IOutput {
     @Override
     public void outputTotalCosts(ShoppingList shoppingList) throws IOException {
         // Erzeugen StringBuilder-Objekts (Ausgabepuffer) in welches die Ergebnisse geschrieben werden
-        StringBuilder ausgabeDaten = new StringBuilder();
+        StringBuilder outputBuffer = new StringBuilder();
 
         // Map mit Key Abstract Provider und Value List<ShoppingListItem> anlegen
         Map<AbstractProvider, List<ShoppingListItem>> shoppingListItems = shoppingList
                 .getShoppingListItemsGroupedByProvider();
 
         // Ueberschrift Zeile einfügen in Ausgabepuffer
-        ausgabeDaten
+        outputBuffer
                 .append("Lieferant" + dSSeperator + "Zutat" + dSSeperator +
                         "Menge" + dSSeperator + "Kosten" + dSSeperator +
                         "Waehrung" + dSSeperator + "Kosten in Euro" + dSSeperator + lineSeparator);
@@ -258,41 +258,41 @@ public class FileOutput implements IOutput {
                 // fuer jedes Listenelement Anweisungen ausfuehren
                 for (ShoppingListItem item : value) {
                     // Name des Anbieters in Puffer anhaengen und Trennzeichen setzen
-                    ausgabeDaten.append(name + dSSeperator);
+                    outputBuffer.append(name + dSSeperator);
                     // Name der Zutat in Puffer anhaengen und Trennzeichen setzen
-                    ausgabeDaten.append(item.getIngredient().getName() + dSSeperator);
+                    outputBuffer.append(item.getIngredient().getName() + dSSeperator);
                     // Wert in Puffer anhaengen und Trennzeichen setzen
-                    ausgabeDaten.append((item.getQuantity().getValue()) + " ");
+                    outputBuffer.append((item.getQuantity().getValue()) + " ");
                     // Einheit in Puffer anhaengen und Trennzeichen setzen
-                    ausgabeDaten.append(item.getQuantity().getUnit().getName() + dSSeperator);
+                    outputBuffer.append(item.getQuantity().getUnit().getName() + dSSeperator);
 
                     Amount calculatePrice = item.calculatePrice();
                     // Kosten ausgeben
                     // Wert und Einheit in getrennte Spalten
                     // formatierten Wert in Puffer anhaengen und Trennzeichen setzen
-                    ausgabeDaten.append(FileHelper.formatBD(calculatePrice.getValue()) + dSSeperator);
+                    outputBuffer.append(FileHelper.formatBD(calculatePrice.getValue()) + dSSeperator);
                     // Einheit in Puffer anhaengen und Trennzeichen setzen
-                    ausgabeDaten.append(calculatePrice.getUnit().getName() + dSSeperator);
+                    outputBuffer.append(calculatePrice.getUnit().getName() + dSSeperator);
 
                     // Wert und Einheit in gleiche Spalte schreiben
                     // formatierten Wert in Puffer anhaengen plus Leerzeichen
-                    ausgabeDaten.append(FileHelper.formatBD(calculatePrice.getValue()) + " ");
+                    outputBuffer.append(FileHelper.formatBD(calculatePrice.getValue()) + " ");
                     // Einheit in Puffer anhaengen und Trennzeichen setzen
-                    ausgabeDaten.append(calculatePrice.getUnit().getName() + lineSeparator);
+                    outputBuffer.append(calculatePrice.getUnit().getName() + lineSeparator);
 
                     // hochzaehlen der Einkaufskosten je Anbieter
                     costPerDistributor = costPerDistributor.add(calculatePrice.getValue());
 
                 }
                 // Ausgabe formatierte Gesamtkosten pro Provider
-                ausgabeDaten
+                outputBuffer
                         .append(dSSeperator + dSSeperator + dSSeperator + dSSeperator + "Kosten fuer " +
                                 name + ":" + dSSeperator + FileHelper.formatBD(costPerDistributor) + " Euro" + lineSeparator + lineSeparator);
 
             }
             // Ausgabe der formatierten Gesamtkosten
             Amount calculateTotalPrice = shoppingList.calculateTotalPrice();
-            ausgabeDaten.append(dSSeperator + dSSeperator + dSSeperator + dSSeperator +
+            outputBuffer.append(dSSeperator + dSSeperator + dSSeperator + dSSeperator +
                     "Gesamtkosten:" + dSSeperator + FileHelper.formatBD(calculateTotalPrice.getValue()) + " "
                     + calculateTotalPrice.getUnit().getName() + lineSeparator);
         }
@@ -300,7 +300,7 @@ public class FileOutput implements IOutput {
         String filename = FileHelper.generateFilename("Kostenuebersicht", fileExt);
 
         // der Ausgabepuffer und der Dateiname werden an die Methode zum Schreiben in eine Datei übergeben
-        FileHelper.ausgebenInDatei(ausgabeDaten.toString(), filename, true);
+        FileHelper.ausgebenInDatei(outputBuffer.toString(), filename, true);
 
     }
 }
