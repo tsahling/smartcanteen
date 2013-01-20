@@ -43,8 +43,8 @@ import de.osjava.smartcanteen.application.Application;
 public class ApplicationGUI {
     int windowWidth = 800; // Angabe der Breite des Fensters
     int windowHeight = 400; // Angabe der Höhe des Fensters
-    int procentOptionPane = 65;
-    int procentOutputPane = 35;
+    // int procentOptionPane = 65;
+    // int procentOutputPane = 35;
     private Application application;
     boolean finishedProcess = false;
 
@@ -58,9 +58,12 @@ public class ApplicationGUI {
         this.application = application;
     }
 
+    /**
+     * Methode zum initalisieren der Benutzeroberfläche
+     * 
+     * @author Marcel Baxmann
+     */
     public void initialize() {
-        // TODO (Marcel Baxmann)
-
         // Anlegen des Rahmens für die Anzeige
         JFrame frame = new JFrame("SmartCanteen");
         frame.setSize(windowWidth, windowHeight);
@@ -76,6 +79,7 @@ public class ApplicationGUI {
         pnlOptionArea.setBorder(BorderFactory.createTitledBorder("Optionen"));
         frame.add(pnlOptionArea);
 
+        // TODO (Marcel Baxmman) Entweder die Daten in Tabellen einpflegen oder Pane wieder rausnehmen
         // Ausagbebereich --> noch zu bauen
         JPanel pnlOutputArea = new JPanel();
         pnlOutputArea.setBorder(BorderFactory.createTitledBorder("Voransicht:"));
@@ -121,6 +125,7 @@ public class ApplicationGUI {
         JLabel lblProcessText = new JLabel("Verarbeitungs-Art einstellen:");
         pnlProcessOptionArea.add(lblProcessText);
 
+        // TODO (Marcel Baxmman) Radiobuttons mit Funktion versehen
         ButtonGroup rbtnProcessTypeGroup = new ButtonGroup();
         // JPanel rbtnPanel = new JPanel();
         // rbtnPanel.setLayout(new FlowLayout());
@@ -135,10 +140,12 @@ public class ApplicationGUI {
         pnlProcessOptionArea.add(rbtnProcessType1);
         pnlProcessOptionArea.add(rbtnProcessType2);
 
+        // Anlegen eines Buttons für den Start der Verarbeitung und setzen des Actionlisteners
         final JButton btnStartProcess = new JButton("Verarbeitung starten");
         btnStartProcess.setEnabled(true);
         pnlProcessOptionArea.add(btnStartProcess);
 
+        // TODO (Marcel Baxmman) Checkboxen mit Funktion versehen
         // Füllen des Bereichs Output-Option mit Content und Einstellmöglichkeiten
         JLabel llbOutputText = new JLabel("Ausgabeformat festlegen:");
         pnlOutputOptionArea.add(llbOutputText);
@@ -147,10 +154,12 @@ public class ApplicationGUI {
         JCheckBox cboxOutputFormat2 = new JCheckBox("HTML:");
         pnlOutputOptionArea.add(cboxOutputFormat2);
 
+        // Anlegen eines Buttons für den Start der Dateiausgabe und setzen des Actionlisteners
         final JButton btnSaveResults = new JButton("Speichern der Ergebnisse");
         pnlOutputOptionArea.add(btnSaveResults);
         btnSaveResults.setEnabled(false);
 
+        // Actionlistener für die Generierung des MenuPlans und der Einkaufsliste
         btnStartProcess.addActionListener(new ActionListener() {
 
             @Override
@@ -171,6 +180,7 @@ public class ApplicationGUI {
             }
         });
 
+        // Actionlistener für die Ausgabe der Dateien
         btnSaveResults.addActionListener(new ActionListener() {
 
             @Override
