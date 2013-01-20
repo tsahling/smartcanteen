@@ -58,11 +58,34 @@ public class Application {
     private RecipeBase recipeBase;
     private ProviderBase providerBase;
 
+    private Canteen[] canteens;
+    private ShoppingList shoppingList;
+
     /**
      * Standardkonstruktor
      */
     public Application() {
 
+    }
+
+    public HitListBase getHitListBase() {
+        return hitListBase;
+    }
+
+    public RecipeBase getRecipeBase() {
+        return recipeBase;
+    }
+
+    public ProviderBase getProviderBase() {
+        return providerBase;
+    }
+
+    public Canteen[] getCanteens() {
+        return canteens;
+    }
+
+    public ShoppingList getShoppingList() {
+        return shoppingList;
     }
 
     /**
@@ -215,20 +238,58 @@ public class Application {
      * 
      */
     private void startApplication() throws IOException {
+        // wenn du GUI angezeigt werden soll auf true setzen
+        boolean startGui = true;
+        // Öffnen einer Benutzerabfrage, ob die Software in der Konsole
+        // ohne User-Interaktion durchlaufen soll oder mit einer GUI gestartet wird
+        // JOptionPane.showInputDialog(null, "test", "test2", JOptionPane.QUESTION_MESSAGE);
 
-        // TODO (Marcel Baxmann) Ausbauen der Funktionen
-        ApplicationGUI gui = new ApplicationGUI();
+        // wenn startGui wahr ist dann generiere Benutzeroberfläche
+        if (startGui) {
+            // TODO (Marcel Baxmann) Ausbauen der Funktionen
+            ApplicationGUI gui = new ApplicationGUI(this);
+        }
+        // wenn startGui falsch ist dann fuehre Aktionen ohne Benutzereingaben aus
+        else {
+            // Start der Applikationslogik für die Erstellung der Speisepläne für die beiden Kantinen
+            buildMenuePlan();
 
-        // Start der Applikationslogik für die Erstellung der Speisepläne für die beiden Kantinen
+            // Start der Applikationslogik für die Erstellung der Einkaufsliste
+            buildShoppingList();
+
+            // Start der Ausgabelogik fuer die Ergebnisse der Applikationslogik ausgeben
+            outputApplicationResult();
+        }
+
+    }
+
+    /**
+     * Start der Applikationslogik für die Erstellung der Speisepläne für die beiden Kantinen
+     * erstellt ein Objekt der Klasse {@link MenuPLanBuilder} und erhaelt von diesem
+     * das Objekt canteens zurueck
+     * 
+     * @param providerBase
+     * @param recipeBase
+     * @throws IOException
+     */
+    public void buildMenuePlan() throws IOException {
         MenuPlanBuilder mpb = new MenuPlanBuilder(providerBase, recipeBase);
-        Canteen[] canteens = mpb.buildMenuPlan();
+        canteens = mpb.buildMenuPlan();
+    }
 
-        // Start der Applikationslogik für die Erstellung der Einkaufsliste
+    /**
+     * Start der Applikationslogik für die Erstellung der Einkaufsliste
+     * Erstellt ein Objekt der Klasse {@link ShoppingListBuilder} und erhaelt von diesem
+     * das Objekt shoppingList zurueck
+     * 
+     * @param providerBase
+     * @param canteens
+     * @throws IOException
+     */
+
+    public void buildShoppingList() throws IOException {
         ShoppingListBuilder slb = new ShoppingListBuilder(providerBase, canteens);
-        ShoppingList shoppingList = slb.buildShoppingList();
-
-        // Übergabe der Ergebnisse der Applikationslogik an die ausgebende Methode
-        outputApplicationResult(shoppingList, canteens);
+        shoppingList = slb.buildShoppingList();
     }
 
     /**
@@ -240,8 +301,7 @@ public class Application {
      * @throws IOException
      * @author Marcel
      */
-    private void outputApplicationResult(ShoppingList shoppingList,
-            Canteen... canteens) throws IOException {
+    public void outputApplicationResult() throws IOException {
 
         // Logging
         LOG.log(Level.INFO, "Beginne Aufbereitung Datenausgabe");

@@ -3,10 +3,18 @@ package de.osjava.smartcanteen.application.gui;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import de.osjava.smartcanteen.application.Application;
 
 /**
  * Die {@link AplicationGUI} ist keine Basis-Anforderung an das System. Sie
@@ -29,13 +37,15 @@ public class ApplicationGUI {
 
     /**
      * Standardkonstruktor
+     * 
+     * @param canteens
+     * @param shoppingList
      */
-    public ApplicationGUI() {
-
+    public ApplicationGUI(final Application application) throws IOException {
         JFrame frame = new JFrame("SmartCanteen");
         frame.setSize(windowWidth, windowHeight);
         // frame.setLocation(getDisplayCenter());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.addWindowListener(new DialogWindowClosingListener());
         frame.setLayout(new GridLayout(5, 1));
         frame.setVisible(true);
         frame.toFront();
@@ -50,10 +60,43 @@ public class ApplicationGUI {
         frame.add(output);
 
         JButton startProcess = new JButton("Verarbeitung starten");
+        startProcess.setEnabled(true);
         frame.add(startProcess);
+        startProcess.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    application.buildMenuePlan();
+                    application.buildShoppingList();
+                    System.out.println("Erstellung Plaene erfolgreich");
+                } catch (IOException e1) {
+                    // TODO(Marcel) handle this exception properly
+                    e1.printStackTrace();
+                    System.out.println("Fehler");
+                }
+
+            }
+        });
 
         JButton saveResults = new JButton("Speichern der Ergebnisse");
         frame.add(saveResults);
+        saveResults.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    application.outputApplicationResult();
+                    System.out.println("ok");
+                } catch (IOException e1) {
+                    // TODO(Marcel) handle this exception properly
+                    e1.printStackTrace();
+                    System.out.println("not");
+                }
+                // Application.outputApplicationResult(shoppingList, canteens);
+
+            }
+        });
 
     }
 
@@ -71,4 +114,13 @@ public class ApplicationGUI {
         return displayCenter;
     }
 
+    public class DialogWindowClosingListener extends WindowAdapter {
+        @Override
+        public void windowClosing(WindowEvent event)
+        {
+            int option = JOptionPane.showConfirmDialog(null, "Applikation beenden?");
+            if (option == JOptionPane.OK_OPTION)
+                System.exit(0);
+        }
+    }
 }
