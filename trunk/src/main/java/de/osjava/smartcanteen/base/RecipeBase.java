@@ -76,8 +76,19 @@ public class RecipeBase {
      * @return Set {@link Recipe} mit dem Inhalt aller Datenobjekte {@link Recipe} die auf den angebenen Typ
      *         {@link IngredientType} matchen
      */
-    public Set<Recipe> findRecipesByIngredientType(IngredientType ingredientType) {
-        return null;
+    private Set<Recipe> findRecipesByIngredientType(IngredientType ingredientType) {
+        Set<Recipe> result = new HashSet<Recipe>();
+
+        if (this.recipes != null && !this.recipes.isEmpty()) {
+
+            for (Recipe recipe : this.recipes) {
+
+                if (recipe.isFishRecipe()) {
+                    result.add(recipe);
+                }
+            }
+        }
+        return result;
     }
 
     /**
@@ -87,7 +98,7 @@ public class RecipeBase {
      * @return Set {@link Recipe} in dem die Datenobjekte aufsteigend sortiert
      *         sind
      */
-    public Set<Recipe> getRecipesSortedByRank() {
+    public Set<Recipe> getRecipesSortedByRank(Set<Recipe> recipes) {
         Set<Recipe> result = new TreeSet<Recipe>(new Comparator<Recipe>() {
 
             @Override
@@ -100,8 +111,15 @@ public class RecipeBase {
         if (recipes != null && !recipes.isEmpty()) {
             result.addAll(recipes);
         }
+        else {
+            result.addAll(this.recipes);
+        }
 
         return result;
+    }
+
+    public Set<Recipe> getRecipesForIngredientTypeSortedByRank(IngredientType ingredientType) {
+        return getRecipesSortedByRank(findRecipesByIngredientType(ingredientType));
     }
 
     /**

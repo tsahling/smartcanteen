@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -110,7 +111,7 @@ public class MenuPlanBuilder {
 
         // Ermittelt die Rezepte, sortiert nach Rang, um die Zufriedenheit und Leistungsfähigkeit der Mitarbeiter zu
         // steigern
-        Set<Recipe> recipesSortedByRank = recipeBase.getRecipesSortedByRank();
+        Set<Recipe> recipesSortedByRank = recipeBase.getRecipesSortedByRank(null);
 
         // Um den Kantinen einen größere Individualität zu geben wird der Algorithmus für den optimalen Speiseplan pro
         // Kantine durchlaufen.
@@ -594,6 +595,11 @@ public class MenuPlanBuilder {
         return result;
     }
 
+    /**
+     * 
+     * @param planingPeriod
+     * @return
+     */
     private Map<Integer, Integer> getWeeksWithFishRecipes(Map<WeekWorkday, Set<Recipe>> planingPeriod) {
         Map<Integer, Integer> result = new HashMap<Integer, Integer>();
 
@@ -611,7 +617,7 @@ public class MenuPlanBuilder {
                         result.put(entry.getKey().getWeek(), fishRecipeCounter);
                     }
                     else {
-                        result.put(entry.getKey().getWeek(), 1);
+                        result.put(entry.getKey().getWeek(), Integer.valueOf(1));
                     }
                 }
             }
@@ -640,13 +646,79 @@ public class MenuPlanBuilder {
 
         if (weeksWithFishRecipes.size() < PROP_PLANINGPERIOD_WEEKS) {
 
-            // TODO (Tim Sahling) Fischgerichte hinzufügen in die woche wo sie fehlen
+            while (weeksWithFishRecipes.size() < PROP_PLANINGPERIOD_WEEKS) {
 
-            boolean test = false;
+                int tempWeek = 0;
 
-            boolean foo = true;
+                for (Entry<WeekWorkday, Set<Recipe>> entry : planingPeriod.entrySet()) {
 
+                    Set<Recipe> recipes = null;
+
+                    if (tempWeek == 0 || tempWeek != entry.getKey().getWeek()) {
+                        Set<Recipe> fishRecipes = canteenContext.getFishRecipes();
+
+                        recipes = recipeBase.getRecipesForIngredientTypeSortedByRank(IngredientType.FISH);
+
+                        recipes.removeAll(fishRecipes);
+                    }
+
+                    if (!weeksWithFishRecipes.containsKey(entry.getKey().getWeek())) {
+
+                        Recipe fishRecipe = recipes.iterator().next();
+
+                        WeekWorkday weekAndWorkday = entry.getKey();
+                        Set<Recipe> value = entry.getValue();
+
+                        int meatRecipes = countRecipesForWeekWorkdayAndIngredientType(planingPeriod, weekAndWorkday,
+                                IngredientType.MEAT);
+                        int vegetableRecipes = countRecipesForWeekWorkdayAndIngredientType(planingPeriod,
+                                weekAndWorkday, IngredientType.VEGETABLE);
+
+                        if (meatRecipes >= PROP_PLANINGPERIOD_MEATMEALSPERDAY_MIN && vegetableRecipes >= PROP_PLANINGPERIOD_VEGETABLEMEALSPERDAY_MIN) {
+
+                            if (meatRecipes > vegetableRecipes) {
+                                removeRecipeFromWeekWorkday(value, IngredientType.MEAT);
+                            }
+                            else {
+                                removeRecipeFromWeekWorkday(value, IngredientType.VEGETABLE);
+                            }
+
+                            if (addRecipeToPlaningPeriod(planingPeriod, weekAndWorkday, fishRecipe)) {
+
+                                weeksWithFishRecipes.put(entry.getKey().getWeek(), Integer.valueOf(1));
+                            }
+                        }
+                    }
+
+                    tempWeek = entry.getKey().getWeek();
+                }
+
+            }
         }
+    }
+
+    private void removeRecipeFromWeekWorkday(Set<Recipe> recipes, IngredientType ingredientType) {
+        Set<Recipe> sortedRecipes = new TreeSet<Recipe>(new Comparator<Recipe>() {
+
+            @Override
+            public int compare(Recipe arg0, Recipe arg1) {
+
+                return Integer.valueOf(arg1.getRank()).compareTo(Integer.valueOf(arg0.getRank()));
+            }
+        });
+
+        sortedRecipes.addAll(recipes);
+
+        for (Recipe recipe : sortedRecipes) {
+
+            if (recipe.isMeatRecipe() && ingredientType.equals(IngredientType.MEAT)) {
+                recipes.remove(recipe);
+            }
+            else if (recipe.isVegetableRecipe() && ingredientType.equals(IngredientType.VEGETABLE)) {
+                recipes.remove(recipe);
+            }
+        }
+
     }
 
     /**
@@ -784,6 +856,21 @@ public class MenuPlanBuilder {
             this.recipes = new LinkedHashSet<Recipe>();
             this.lastRecipe = null;
             this.totalMealsForCanteen = BuilderHelper.calculateTotalMealsForCanteen(canteen);
+        }
+
+        public Set<Recipe> getFishRecipes() {
+            Set<Recipe> result = new HashSet<Recipe>();
+
+            if (recipes != null && !recipes.isEmpty()) {
+
+                for (Recipe recipe : recipes) {
+                    if (recipe.isFishRecipe()) {
+                        result.add(recipe);
+                    }
+                }
+            }
+
+            return result;
         }
 
         public Set<Recipe> getRecipes() {
