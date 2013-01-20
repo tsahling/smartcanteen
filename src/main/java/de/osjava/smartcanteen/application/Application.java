@@ -60,6 +60,15 @@ public class Application {
 
     private Canteen[] canteens;
     private ShoppingList shoppingList;
+    private String inputFiles;
+
+    public String getInputFiles() {
+        return inputFiles;
+    }
+
+    public void setInputFiles(String inputFiles) {
+        this.inputFiles = inputFiles;
+    }
 
     /**
      * Standardkonstruktor
@@ -112,7 +121,7 @@ public class Application {
      * @throws IOException
      */
     private boolean initInput(final String[] args) throws IOException {
-        String inputFiles = EMPTY;
+        inputFiles = EMPTY;
 
         if (args.length == 0) {
             inputFiles = JOptionPane.showInputDialog(null,
@@ -234,20 +243,25 @@ public class Application {
     }
 
     /**
-     * @throws IOException
+     * Diese Methode stellt dem User zur Auswahl ob die Anwendung in der Konsole
+     * oder mit GUI-Unterstützung geladen werden soll
      * 
+     * @throws IOException
+     * @author Tim Sahling und Marcel Baxmann
      */
     private void startApplication() throws IOException {
-        // wenn du GUI angezeigt werden soll auf true setzen
-        boolean startGui = true;
         // Öffnen einer Benutzerabfrage, ob die Software in der Konsole
-        // ohne User-Interaktion durchlaufen soll oder mit einer GUI gestartet wird
-        // JOptionPane.showInputDialog(null, "test", "test2", JOptionPane.QUESTION_MESSAGE);
+        // ohne User-Interaktion (0) durchlaufen soll oder mit einer GUI (1) gestartet wird
+        int startGui = JOptionPane.showOptionDialog(null, "Bitte wählen Sie die Darstellungsweise!",
+                "Auswahl Darstellungsweise",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.INFORMATION_MESSAGE, null,
+                new String[]{ "Konsolenanwendung", "GUI-Unterstützung" }, "GUI-Unterstützung");
 
         // wenn startGui wahr ist dann generiere Benutzeroberfläche
-        if (startGui) {
-            // TODO (Marcel Baxmann) Ausbauen der Funktionen
+        if (startGui == 1) {
             ApplicationGUI gui = new ApplicationGUI(this);
+            gui.initialize();
         }
         // wenn startGui falsch ist dann fuehre Aktionen ohne Benutzereingaben aus
         else {
@@ -299,7 +313,7 @@ public class Application {
      * @param shoppingList
      * @param canteens
      * @throws IOException
-     * @author Marcel
+     * @author Marcel Baxmann
      */
     public void outputApplicationResult() throws IOException {
 
