@@ -47,6 +47,8 @@ public class Application {
     private static final String INPUT_FILENAME_PRICELIST = PropertyHelper.getProperty("inputFile.name.priceList");
     private static final String INPUT_FILENAME_RECIPELIST = PropertyHelper.getProperty("inputFile.name.recipeList");
 
+    private static final String PROP_APPLICATION_START_GUI = PropertyHelper.getProperty("application.startGui");
+
     // Setze Werte ob beschriebenes Fileformat erzeugt werden soll
     // Auslesen der Werte aus externer Properties Datei und casten auf Wahrheitswert
     private static final boolean GENERATE_CSV = Boolean.parseBoolean(PropertyHelper
@@ -62,39 +64,11 @@ public class Application {
     private ShoppingList shoppingList;
     private String inputFiles;
 
-    public String getInputFiles() {
-        return inputFiles;
-    }
-
-    public void setInputFiles(String inputFiles) {
-        this.inputFiles = inputFiles;
-    }
-
     /**
      * Standardkonstruktor
      */
     public Application() {
 
-    }
-
-    public HitListBase getHitListBase() {
-        return hitListBase;
-    }
-
-    public RecipeBase getRecipeBase() {
-        return recipeBase;
-    }
-
-    public ProviderBase getProviderBase() {
-        return providerBase;
-    }
-
-    public Canteen[] getCanteens() {
-        return canteens;
-    }
-
-    public ShoppingList getShoppingList() {
-        return shoppingList;
     }
 
     /**
@@ -250,23 +224,41 @@ public class Application {
      * @author Tim Sahling und Marcel Baxmann
      */
     private void startApplication() throws IOException {
-        // Öffnen einer Benutzerabfrage, ob die Software in der Konsole
-        // ohne User-Interaktion (0) durchlaufen soll oder mit einer GUI (1) gestartet wird
-        int startGui = JOptionPane.showOptionDialog(null, "Bitte wählen Sie die Darstellungsweise!",
-                "Auswahl Darstellungsweise",
-                JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.INFORMATION_MESSAGE, null,
-                new String[]{ "Konsolenanwendung", "GUI-Unterstützung" }, "GUI-Unterstützung");
 
-        // wenn startGui wahr ist dann generiere Benutzeroberfläche
-        if (startGui == 1) {
-            ApplicationGUI gui = new ApplicationGUI(this);
-            gui.initialize();
+        int startGui = 0;
+
+        // Wenn Property für Application GUI Start nicht gesetzt ist, kommt eine Benutzerabfrage, ob die Software in der
+        // Konsole ohne User-Interaktion (0) durchlaufen soll oder mit einer GUI (1) gestartet wird
+        if (PROP_APPLICATION_START_GUI == null || PROP_APPLICATION_START_GUI.equals(EMPTY)) {
+            startGui = JOptionPane
+                    .showOptionDialog(
+                            null,
+                            PropertyHelper.getProperty("message.applicationStart.message"),
+                            PropertyHelper.getProperty("message.applicationStart.title"),
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE,
+                            null,
+                            new String[]{ PropertyHelper.getProperty("message.applicationStart.option1"), PropertyHelper
+                                    .getProperty("message.applicationStart.option2") }, PropertyHelper
+                                    .getProperty("message.applicationStart.option2"));
         }
-        // wenn startGui falsch ist dann fuehre Aktionen ohne Benutzereingaben aus
+        // Wenn Property für Application GUI Start gesetzt ist, wird dieser Wert verwendet um abzufragen ob Applikation
+        // mit GUI oder ohne gestartet werden soll
+        else {
+            if (Boolean.parseBoolean(PROP_APPLICATION_START_GUI)) {
+                startGui = 1;
+            }
+        }
+
+        // Wenn startGui wahr ist dann generiere Benutzeroberfläche
+        if (startGui == 1) {
+            ApplicationGUI applicationGUI = new ApplicationGUI(this);
+            applicationGUI.initialize();
+        }
+        // Wenn startGui falsch ist dann führe Aktionen ohne Benutzereingaben aus
         else {
             // Start der Applikationslogik für die Erstellung der Speisepläne für die beiden Kantinen
-            buildMenuePlan();
+            buildMenuPlan();
 
             // Start der Applikationslogik für die Erstellung der Einkaufsliste
             buildShoppingList();
@@ -274,7 +266,6 @@ public class Application {
             // Start der Ausgabelogik fuer die Ergebnisse der Applikationslogik ausgeben
             outputApplicationResult();
         }
-
     }
 
     /**
@@ -284,9 +275,8 @@ public class Application {
      * 
      * @param providerBase
      * @param recipeBase
-     * @throws IOException
      */
-    public void buildMenuePlan() throws IOException {
+    public void buildMenuPlan() {
         MenuPlanBuilder mpb = new MenuPlanBuilder(providerBase, recipeBase);
         canteens = mpb.buildMenuPlan();
     }
@@ -301,7 +291,7 @@ public class Application {
      * @throws IOException
      */
 
-    public void buildShoppingList() throws IOException {
+    public void buildShoppingList() {
         ShoppingListBuilder slb = new ShoppingListBuilder(providerBase, canteens);
         shoppingList = slb.buildShoppingList();
     }
@@ -368,6 +358,33 @@ public class Application {
         }
 
         LOG.log(Level.INFO, "Ausgabe erfolgreich abgeschlossen");
+    }
 
+    public HitListBase getHitListBase() {
+        return hitListBase;
+    }
+
+    public RecipeBase getRecipeBase() {
+        return recipeBase;
+    }
+
+    public ProviderBase getProviderBase() {
+        return providerBase;
+    }
+
+    public Canteen[] getCanteens() {
+        return canteens;
+    }
+
+    public ShoppingList getShoppingList() {
+        return shoppingList;
+    }
+
+    public String getInputFiles() {
+        return inputFiles;
+    }
+
+    public void setInputFiles(String inputFiles) {
+        this.inputFiles = inputFiles;
     }
 }

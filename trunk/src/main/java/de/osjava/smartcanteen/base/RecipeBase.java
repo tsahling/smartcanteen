@@ -83,7 +83,7 @@ public class RecipeBase {
 
             for (Recipe recipe : this.recipes) {
 
-                if (recipe.isFishRecipe()) {
+                if (ingredientType.equals(recipe.getIngredientType())) {
                     result.add(recipe);
                 }
             }
@@ -102,9 +102,8 @@ public class RecipeBase {
         Set<Recipe> result = new TreeSet<Recipe>(new Comparator<Recipe>() {
 
             @Override
-            public int compare(Recipe arg0, Recipe arg1) {
-                return Integer.valueOf(arg0.getRank()).compareTo(
-                        Integer.valueOf(arg1.getRank()));
+            public int compare(Recipe r1, Recipe r2) {
+                return Integer.valueOf(r1.getRank()).compareTo(Integer.valueOf(r2.getRank()));
             }
         });
 
@@ -118,6 +117,11 @@ public class RecipeBase {
         return result;
     }
 
+    /**
+     * 
+     * @param ingredientType
+     * @return
+     */
     public Set<Recipe> getRecipesForIngredientTypeSortedByRank(IngredientType ingredientType) {
         return getRecipesSortedByRank(findRecipesByIngredientType(ingredientType));
     }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -55,6 +54,8 @@ public class MenuPlanBuilder {
             .getProperty("planingPeriod.meatMealsPerDay.max"));
     private static final Integer PROP_PLANINGPERIOD_VEGETABLEMEALSPERDAY_MIN = Integer.valueOf(PropertyHelper
             .getProperty("planingPeriod.vegetableMealsPerDay.min"));
+    private static final Integer PROP_PLANINGPERIOD_FISHMEALSPERDAY_MAX = Integer.valueOf(PropertyHelper
+            .getProperty("planingPeriod.fishMealsPerDay.max"));
     private static final Integer PROP_PLANINGPERIOD_WEEKWORKDAYS = Integer.valueOf(PropertyHelper
             .getProperty("planingPeriod.weekWorkdays"));
     private static final Integer PROP_PLANINGPERIOD_WEEKS = Integer.valueOf(PropertyHelper
@@ -121,8 +122,6 @@ public class MenuPlanBuilder {
 
             // Fügt die Rezepte in die Struktur der Planungsperiode ein
             for (Recipe recipe : recipesSortedByRank) {
-
-                canteenContext.setLastRecipe(recipe);
 
                 // Überprüfung ob der Algorithmus vorzeitig beendet werden kann, wenn benötigte Rezepte komplett sind
                 if (canteenContext.getRecipes().size() == PROP_PLANINGPERIOD_TOTALMEALS) {
@@ -292,6 +291,12 @@ public class MenuPlanBuilder {
                 if (validateRecipeBeforeInsertIntoWeekWorkday(planingPeriod, weekAndWorkday, recipe)) {
 
                     if (addRecipeToPlaningPeriod(planingPeriod, weekAndWorkday, recipe)) {
+
+                        Set<Recipe> weekWorkdayRecipes = planingPeriod.get(weekAndWorkday);
+
+                        // Entfernen der benötigten Menge der Zutaten eines Rezepts aus der Gesamtmenge aller Zutaten
+                        removeQuantityFromProviderIngredientQuantities(weekWorkdayRecipes, recipe);
+
                         break;
                     }
                 }
@@ -337,30 +342,29 @@ public class MenuPlanBuilder {
     private boolean isRecipeObtainable(Set<Recipe> weekWorkDayRecipes, Recipe recipe) {
         boolean result = true;
 
-        Integer weekWorkDayPositionOfRecipe = getWeekWorkDayPositionOfRecipe(weekWorkDayRecipes, recipe);
+        Integer weekWorkdayPositionOfRecipe = getWeekWorkdayPositionOfRecipe(weekWorkDayRecipes, recipe);
 
-        if (weekWorkDayPositionOfRecipe != null) {
-            BigDecimal mealMultiplyFactor = BuilderHelper.calculateMealMultiplyFactor(weekWorkDayPositionOfRecipe,
+        if (weekWorkdayPositionOfRecipe != null) {
+
+            BigDecimal mealMultiplyFactor = BuilderHelper.calculateMealMultiplyFactor(weekWorkdayPositionOfRecipe,
                     canteenContext.getTotalMealsForCanteen());
 
             for (IngredientListItem ingredientListItem : recipe.getIngredientList()) {
 
-                if (providerIngredientQuantities.containsKey(ingredientListItem.getIngredient())) {
+                Ingredient ingredient = ingredientListItem.getIngredient();
+                Amount ingredientQuantity = ingredientListItem.getQuantity();
 
-                    Amount providerIngredientQuantity = providerIngredientQuantities.get(ingredientListItem
-                            .getIngredient());
+                if (providerIngredientQuantities.containsKey(ingredient)) {
 
-                    BigDecimal quantityForIngredient = NumberHelper.multiply(ingredientListItem.getQuantity()
-                            .getValue(), mealMultiplyFactor);
+                    Amount providerIngredientQuantity = providerIngredientQuantities.get(ingredient);
 
-                    // Wenn die vorhandene Menge der Zutat größer oder gleich der benötigten Menge ist, muss diese von
-                    // der Gesamtmenge abgezogen werden
-                    if (NumberHelper
-                            .compareGreaterOrEqual(providerIngredientQuantity.getValue(), quantityForIngredient)) {
-                        providerIngredientQuantity.setValue(NumberHelper.subtract(
-                                providerIngredientQuantity.getValue(), quantityForIngredient));
-                    }
-                    else {
+                    BigDecimal quantityForIngredient = NumberHelper.multiply(ingredientQuantity.getValue(),
+                            mealMultiplyFactor);
+
+                    // Wenn die vorhandene Gesamtmenge der Zutat nicht größer ist als die benötigte Menge der Zutat, ist
+                    // das Rezept nicht beschaffbar
+                    if (!NumberHelper.compareGreaterOrEqual(providerIngredientQuantity.getValue(),
+                            quantityForIngredient)) {
                         result = false;
                         break;
                     }
@@ -369,7 +373,6 @@ public class MenuPlanBuilder {
         }
 
         return result;
-
     }
 
     /**
@@ -380,7 +383,7 @@ public class MenuPlanBuilder {
      * @param recipe
      * @return Die Position des {@link Recipe} innerhalb eines {@link WeekWorkday}
      */
-    private Integer getWeekWorkDayPositionOfRecipe(Set<Recipe> weekWorkDayRecipes, Recipe recipe) {
+    private Integer getWeekWorkdayPositionOfRecipe(Set<Recipe> weekWorkDayRecipes, Recipe recipe) {
         Integer result = null;
 
         Iterator<Recipe> iterator = weekWorkDayRecipes.iterator();
@@ -427,6 +430,15 @@ public class MenuPlanBuilder {
                     return false;
                 }
             }
+            // Wenn Rezept ein Fischgericht ist, muss überprüft werden ob bereits die maximale Anzahl an Fischgerichten
+            // für diesen Tag erreicht ist. Diese Abfrage resultiert aus der Anforderung, dass an einem Tag immer
+            // mindestens ein vegetarisches Gericht und ein Fleischgericht angeboten werden müssen
+            else if (recipe.isFishRecipe()) {
+
+                if (countRecipesForWeekWorkdayAndIngredientType(planingPeriod, weekAndWorkday, IngredientType.FISH) == PROP_PLANINGPERIOD_FISHMEALSPERDAY_MAX) {
+                    return false;
+                }
+            }
 
             Set<Recipe> weekWorkdayRecipes = planingPeriod.get(weekAndWorkday);
 
@@ -455,6 +467,7 @@ public class MenuPlanBuilder {
      */
     private boolean validateLastRecipeForWeekWorkday(Map<WeekWorkday, Set<Recipe>> planingPeriod,
             WeekWorkday weekAndWorkday, Recipe recipe) {
+
         if (recipe.isMeatRecipe()) {
 
             // Fleischgericht darf nur eingefügt werden, wenn mindestens ein vegetarisches Gericht vorhanden ist
@@ -508,8 +521,172 @@ public class MenuPlanBuilder {
     }
 
     /**
+     * Zählt die Anzahl der Rezepte für einen übergebenen {@link WeekWorkday} und einen {@link IngredientType}.
+     * 
+     * @param planingPeriod
+     * @param weekAndWorkday
+     * @param ingredientType
+     * @return
+     */
+    private int countRecipesForWeekWorkdayAndIngredientType(Map<WeekWorkday, Set<Recipe>> planingPeriod,
+            WeekWorkday weekAndWorkday, IngredientType ingredientType) {
+        int result = 0;
+
+        for (Entry<WeekWorkday, Set<Recipe>> entry : planingPeriod.entrySet()) {
+
+            if (entry.getKey().equals(weekAndWorkday)) {
+
+                for (Recipe recipe : entry.getValue()) {
+
+                    if (ingredientType.equals(recipe.getIngredientType())) {
+                        result++;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 
+     * @param planingPeriod
+     * @param weekAndWorkday
+     * @param ingredientType
+     * @return
+     */
+    private int countRecipesForIngredientType(Set<Recipe> recipes, IngredientType ingredientType) {
+        int result = 0;
+
+        for (Recipe recipe : recipes) {
+
+            if (ingredientType.equals(recipe.getIngredientType())) {
+                result++;
+            }
+
+        }
+
+        return result;
+    }
+
+    /**
+     * Validiert die Planungsperiode abschließend.
+     * 
+     * @param planingPeriod
+     */
+    private void validatePlaningPeriod(Map<WeekWorkday, Set<Recipe>> planingPeriod) {
+
+        // Wenn nicht mindestens ein Fischgericht jede Woche vorhanden ist, muss dieses nachträglich eingefügt werden
+        Set<Integer> weeksWithoutFishRecipes = getWeeksWithoutFishRecipes(planingPeriod);
+
+        if (weeksWithoutFishRecipes != null && weeksWithoutFishRecipes.size() > 0) {
+            addMissingFishRecipesToPlaningPeriod(planingPeriod, weeksWithoutFishRecipes);
+        }
+
+        // Überprüfung ob genug Menüs für eine Planungsperiode generiert wurden
+        int totalMeals = 0;
+
+        for (Set<Recipe> recipes : planingPeriod.values()) {
+            totalMeals += recipes.size();
+        }
+
+        if (totalMeals != PROP_PLANINGPERIOD_TOTALMEALS) {
+            throw new RuntimeException(PropertyHelper.getProperty("message.notEnoughMealsInPeriod.exception"));
+        }
+    }
+
+    /**
+     * 
+     * @param planingPeriod
+     * @param weeksWithoutFishRecipes
+     */
+    private void addMissingFishRecipesToPlaningPeriod(Map<WeekWorkday, Set<Recipe>> planingPeriod,
+            Set<Integer> weeksWithoutFishRecipes) {
+
+        for (Integer week : weeksWithoutFishRecipes) {
+            boolean fishRecipeForWeekAdded = false;
+
+            Set<WeekWorkday> weekWorkdays = getWeekAndWorkdaysByWeek(planingPeriod, week);
+
+            Set<Recipe> usedFishRecipes = canteenContext.getFishRecipes();
+
+            Set<Recipe> availableFishRecipes = recipeBase
+                    .getRecipesForIngredientTypeSortedByRank(IngredientType.FISH);
+
+            if (availableFishRecipes != null && !availableFishRecipes.isEmpty()) {
+
+                if (usedFishRecipes != null && !usedFishRecipes.isEmpty()) {
+                    availableFishRecipes.removeAll(usedFishRecipes);
+                }
+
+                for (WeekWorkday weekWorkday : weekWorkdays) {
+
+                    Set<Recipe> weekWorkdayRecipes = planingPeriod.get(weekWorkday);
+
+                    int meatRecipes = countRecipesForIngredientType(weekWorkdayRecipes, IngredientType.MEAT);
+                    int vegetableRecipes = countRecipesForIngredientType(weekWorkdayRecipes, IngredientType.VEGETABLE);
+
+                    if (meatRecipes >= PROP_PLANINGPERIOD_MEATMEALSPERDAY_MIN && vegetableRecipes >= PROP_PLANINGPERIOD_VEGETABLEMEALSPERDAY_MIN) {
+
+                        Recipe recipeToRemove;
+
+                        // Wenn es mehr Fleischgerichte als vegetarische Gerichte an dem Tag gibt, wird ein
+                        // Fleischgericht entfernt...
+                        if (meatRecipes > vegetableRecipes) {
+                            recipeToRemove = removeRecipeFromWeekWorkday(weekWorkdayRecipes, IngredientType.MEAT);
+                        }
+                        // ...ansonsten ein vegetarisches Gericht
+                        else {
+                            recipeToRemove = removeRecipeFromWeekWorkday(weekWorkdayRecipes, IngredientType.VEGETABLE);
+                        }
+
+                        for (Recipe fishRecipe : availableFishRecipes) {
+
+                            if (addRecipeToPlaningPeriod(planingPeriod, weekWorkday, fishRecipe)) {
+                                removeQuantityFromProviderIngredientQuantities(weekWorkdayRecipes, fishRecipe);
+                                fishRecipeForWeekAdded = true;
+                                break;
+                            }
+                        }
+
+                        if (fishRecipeForWeekAdded) {
+                            break;
+                        }
+                        else {
+                            undoRemoveRecipeFromWeekWorkday(weekWorkdayRecipes, recipeToRemove);
+                        }
+                    }
+                }
+
+                if (fishRecipeForWeekAdded) {
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Ermittelt die Wochen in denen kein Fischrezept vorhanden ist.
+     * 
+     * @param planingPeriod
+     * @return
+     */
+    private Set<Integer> getWeeksWithoutFishRecipes(Map<WeekWorkday, Set<Recipe>> planingPeriod) {
+        Set<Integer> result = new HashSet<Integer>();
+
+        for (Entry<WeekWorkday, Set<Recipe>> entry : planingPeriod.entrySet()) {
+
+            if (!result.contains(entry.getKey().getWeek()) && !existsFishRecipeInWeek(planingPeriod, entry.getKey())) {
+                result.add(entry.getKey().getWeek());
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Überprüft ob in der übergebenen Planungsperiode und in der übergegebenen Woche bereits ein Fischrezept vorhanden
-     * ist
+     * ist.
      * 
      * @param planingPeriod
      * @param weekAndWorkday
@@ -533,192 +710,148 @@ public class MenuPlanBuilder {
     }
 
     /**
-     * Zählt die Anzahl der Rezepte für einen übergebenen {@link WeekWorkday} und einen {@link IngredientType}.
      * 
      * @param planingPeriod
-     * @param weekAndWorkday
+     * @param week
+     * @return
+     */
+    private Set<WeekWorkday> getWeekAndWorkdaysByWeek(Map<WeekWorkday, Set<Recipe>> planingPeriod, Integer week) {
+        Set<WeekWorkday> result = new HashSet<WeekWorkday>();
+
+        Set<WeekWorkday> keys = planingPeriod.keySet();
+
+        if (keys != null && !keys.isEmpty()) {
+
+            for (WeekWorkday key : keys) {
+
+                if (key.getWeek().equals(week)) {
+                    result.add(key);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 
+     * @param recipes
      * @param ingredientType
-     * @return
      */
-    private int countRecipesForWeekWorkdayAndIngredientType(Map<WeekWorkday, Set<Recipe>> planingPeriod,
-            WeekWorkday weekAndWorkday, IngredientType ingredientType) {
-        int result = 0;
+    private Recipe removeRecipeFromWeekWorkday(Set<Recipe> weekWorkdayRecipes, IngredientType ingredientType) {
+        Recipe result = null;
 
-        for (Entry<WeekWorkday, Set<Recipe>> entry : planingPeriod.entrySet()) {
-
-            if (entry.getKey().equals(weekAndWorkday)) {
-
-                for (Recipe recipe : entry.getValue()) {
-
-                    if (recipe.isMeatRecipe() && ingredientType.equals(IngredientType.MEAT)) {
-                        result++;
-                    }
-                    else if (recipe.isFishRecipe() && ingredientType.equals(IngredientType.FISH)) {
-                        result++;
-                    }
-                    else if (recipe.isVegetableRecipe() && ingredientType.equals(IngredientType.VEGETABLE)) {
-                        result++;
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Zählt die Anzahl der Rezepte für einen übergebenen {@link IngredientType}.
-     * 
-     * @param planingPeriod
-     * @param ingredientType
-     * @return
-     */
-    private int countRecipesForIngredientType(Map<WeekWorkday, Set<Recipe>> planingPeriod, IngredientType ingredientType) {
-        int result = 0;
-
-        for (Entry<WeekWorkday, Set<Recipe>> entry : planingPeriod.entrySet()) {
-
-            for (Recipe recipe : entry.getValue()) {
-
-                if (recipe.isMeatRecipe() && ingredientType.equals(IngredientType.MEAT)) {
-                    result++;
-                }
-                else if (recipe.isFishRecipe() && ingredientType.equals(IngredientType.FISH)) {
-                    result++;
-                }
-                else if (recipe.isVegetableRecipe() && ingredientType.equals(IngredientType.VEGETABLE)) {
-                    result++;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * 
-     * @param planingPeriod
-     * @return
-     */
-    private Map<Integer, Integer> getWeeksWithFishRecipes(Map<WeekWorkday, Set<Recipe>> planingPeriod) {
-        Map<Integer, Integer> result = new HashMap<Integer, Integer>();
-
-        for (Entry<WeekWorkday, Set<Recipe>> entry : planingPeriod.entrySet()) {
-
-            for (Recipe recipe : entry.getValue()) {
-
-                if (recipe.isFishRecipe()) {
-
-                    if (result.containsKey(entry.getKey().getWeek())) {
-                        Integer fishRecipeCounter = result.get(entry.getKey().getWeek());
-
-                        fishRecipeCounter++;
-
-                        result.put(entry.getKey().getWeek(), fishRecipeCounter);
-                    }
-                    else {
-                        result.put(entry.getKey().getWeek(), Integer.valueOf(1));
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * 
-     * @param planingPeriod
-     */
-    private void validatePlaningPeriod(Map<WeekWorkday, Set<Recipe>> planingPeriod) {
-        int totalMeals = 0;
-
-        for (Set<Recipe> recipes : planingPeriod.values()) {
-            totalMeals += recipes.size();
-        }
-
-        if (totalMeals != PROP_PLANINGPERIOD_TOTALMEALS) {
-            throw new RuntimeException(PropertyHelper.getProperty("message.notEnoughMealsInPeriod.exception"));
-        }
-
-        // Wenn nicht mindestens ein Fischgericht jede Woche vorhanden ist, muss dieses nachträglich eingefügt werden
-        Map<Integer, Integer> weeksWithFishRecipes = getWeeksWithFishRecipes(planingPeriod);
-
-        if (weeksWithFishRecipes.size() < PROP_PLANINGPERIOD_WEEKS) {
-
-            while (weeksWithFishRecipes.size() < PROP_PLANINGPERIOD_WEEKS) {
-
-                int tempWeek = 0;
-
-                for (Entry<WeekWorkday, Set<Recipe>> entry : planingPeriod.entrySet()) {
-
-                    Set<Recipe> recipes = null;
-
-                    if (tempWeek == 0 || tempWeek != entry.getKey().getWeek()) {
-                        Set<Recipe> fishRecipes = canteenContext.getFishRecipes();
-
-                        recipes = recipeBase.getRecipesForIngredientTypeSortedByRank(IngredientType.FISH);
-
-                        recipes.removeAll(fishRecipes);
-                    }
-
-                    if (!weeksWithFishRecipes.containsKey(entry.getKey().getWeek())) {
-
-                        Recipe fishRecipe = recipes.iterator().next();
-
-                        WeekWorkday weekAndWorkday = entry.getKey();
-                        Set<Recipe> value = entry.getValue();
-
-                        int meatRecipes = countRecipesForWeekWorkdayAndIngredientType(planingPeriod, weekAndWorkday,
-                                IngredientType.MEAT);
-                        int vegetableRecipes = countRecipesForWeekWorkdayAndIngredientType(planingPeriod,
-                                weekAndWorkday, IngredientType.VEGETABLE);
-
-                        if (meatRecipes >= PROP_PLANINGPERIOD_MEATMEALSPERDAY_MIN && vegetableRecipes >= PROP_PLANINGPERIOD_VEGETABLEMEALSPERDAY_MIN) {
-
-                            if (meatRecipes > vegetableRecipes) {
-                                removeRecipeFromWeekWorkday(value, IngredientType.MEAT);
-                            }
-                            else {
-                                removeRecipeFromWeekWorkday(value, IngredientType.VEGETABLE);
-                            }
-
-                            if (addRecipeToPlaningPeriod(planingPeriod, weekAndWorkday, fishRecipe)) {
-
-                                weeksWithFishRecipes.put(entry.getKey().getWeek(), Integer.valueOf(1));
-                            }
-                        }
-                    }
-
-                    tempWeek = entry.getKey().getWeek();
-                }
-
-            }
-        }
-    }
-
-    private void removeRecipeFromWeekWorkday(Set<Recipe> recipes, IngredientType ingredientType) {
+        // Rezepte für den übergebenen Wochentag werden nach Rang sortiert, allerdings in umgekehrter Reihenfolge
         Set<Recipe> sortedRecipes = new TreeSet<Recipe>(new Comparator<Recipe>() {
 
             @Override
             public int compare(Recipe arg0, Recipe arg1) {
-
                 return Integer.valueOf(arg1.getRank()).compareTo(Integer.valueOf(arg0.getRank()));
             }
         });
 
-        sortedRecipes.addAll(recipes);
+        sortedRecipes.addAll(weekWorkdayRecipes);
 
+        // Das erste Rezept welches für den übergebenen IngredientType gefunden wird, wird aus dem Wochentag entfernt
         for (Recipe recipe : sortedRecipes) {
 
-            if (recipe.isMeatRecipe() && ingredientType.equals(IngredientType.MEAT)) {
-                recipes.remove(recipe);
-            }
-            else if (recipe.isVegetableRecipe() && ingredientType.equals(IngredientType.VEGETABLE)) {
-                recipes.remove(recipe);
+            if (ingredientType.equals(recipe.getIngredientType())) {
+
+                // Hinzufügen der Zutatenmengen des Rezepts in die Gesamtmenge
+                addQuantityToProviderIngredientQuantities(weekWorkdayRecipes, recipe);
+
+                // Entfernen des Rezepts aus dem Wochentag
+                weekWorkdayRecipes.remove(recipe);
+
+                // Entfernen des Rezepts auf dem Kantinenkontext
+                canteenContext.getRecipes().remove(recipe);
+
+                // Rückgabe des gelöschten Rezepts
+                result = recipe;
+                break;
             }
         }
 
+        return result;
+    }
+
+    /**
+     * 
+     * @param weekWorkdayRecipes
+     * @param recipe
+     */
+    private void undoRemoveRecipeFromWeekWorkday(Set<Recipe> weekWorkdayRecipes, Recipe recipe) {
+        // Hinzufügen des Rezepts in den Wochentag
+        weekWorkdayRecipes.add(recipe);
+
+        // Hinzufügen des Rezepts in den Kantinenkontext
+        canteenContext.getRecipes().add(recipe);
+
+        // Entfernen der Zutatenmengen des Rezepts aus der Gesamtmenge
+        removeQuantityFromProviderIngredientQuantities(weekWorkdayRecipes, recipe);
+    }
+
+    /**
+     * 
+     * @param weekWorkdayRecipes
+     * @param recipe
+     */
+    private void addQuantityToProviderIngredientQuantities(Set<Recipe> weekWorkdayRecipes, Recipe recipe) {
+
+        Integer weekWorkdayPositionOfRecipe = getWeekWorkdayPositionOfRecipe(weekWorkdayRecipes, recipe);
+
+        if (weekWorkdayPositionOfRecipe != null) {
+
+            BigDecimal mealMultiplyFactor = BuilderHelper.calculateMealMultiplyFactor(weekWorkdayPositionOfRecipe,
+                    canteenContext.getTotalMealsForCanteen());
+
+            for (IngredientListItem ingredientListItem : recipe.getIngredientList()) {
+
+                Ingredient ingredient = ingredientListItem.getIngredient();
+                Amount ingredientQuantity = ingredientListItem.getQuantity();
+
+                if (providerIngredientQuantities.containsKey(ingredient)) {
+
+                    BigDecimal quantityForIngredient = NumberHelper.multiply(ingredientQuantity.getValue(),
+                            mealMultiplyFactor);
+
+                    providerIngredientQuantities.get(ingredient).add(
+                            new Amount(quantityForIngredient, ingredientQuantity.getUnit()));
+                }
+            }
+        }
+    }
+
+    /**
+     * 
+     * @param weekWorkdayRecipes
+     * @param recipe
+     */
+    private void removeQuantityFromProviderIngredientQuantities(Set<Recipe> weekWorkdayRecipes, Recipe recipe) {
+
+        Integer weekWorkdayPositionOfRecipe = getWeekWorkdayPositionOfRecipe(weekWorkdayRecipes, recipe);
+
+        if (weekWorkdayPositionOfRecipe != null) {
+
+            BigDecimal mealMultiplyFactor = BuilderHelper.calculateMealMultiplyFactor(weekWorkdayPositionOfRecipe,
+                    canteenContext.getTotalMealsForCanteen());
+
+            for (IngredientListItem ingredientListItem : recipe.getIngredientList()) {
+
+                Ingredient ingredient = ingredientListItem.getIngredient();
+                Amount ingredientQuantity = ingredientListItem.getQuantity();
+
+                if (providerIngredientQuantities.containsKey(ingredient)) {
+
+                    BigDecimal quantityForIngredient = NumberHelper.multiply(ingredientQuantity.getValue(),
+                            mealMultiplyFactor);
+
+                    providerIngredientQuantities.get(ingredient).subtract(
+                            new Amount(quantityForIngredient, ingredientQuantity.getUnit()));
+
+                }
+            }
+        }
     }
 
     /**
@@ -801,8 +934,7 @@ public class MenuPlanBuilder {
             int item = new Random().nextInt(size);
             int i = 0;
 
-            for (WeekWorkday weekWorkday : keys)
-            {
+            for (WeekWorkday weekWorkday : keys) {
                 if (i == item) {
                     return weekWorkday;
                 }
@@ -848,22 +980,26 @@ public class MenuPlanBuilder {
     private static final class CanteenContext {
         private Canteen canteen;
         private Set<Recipe> recipes;
-        private Recipe lastRecipe;
         private BigDecimal totalMealsForCanteen;
 
         public CanteenContext(Canteen canteen) {
             this.canteen = canteen;
             this.recipes = new LinkedHashSet<Recipe>();
-            this.lastRecipe = null;
             this.totalMealsForCanteen = BuilderHelper.calculateTotalMealsForCanteen(canteen);
         }
 
+        /**
+         * Ermittelt die zu kochenden Fischrezepte für eine Kantine.
+         * 
+         * @return
+         */
         public Set<Recipe> getFishRecipes() {
             Set<Recipe> result = new HashSet<Recipe>();
 
             if (recipes != null && !recipes.isEmpty()) {
 
                 for (Recipe recipe : recipes) {
+
                     if (recipe.isFishRecipe()) {
                         result.add(recipe);
                     }
@@ -873,16 +1009,12 @@ public class MenuPlanBuilder {
             return result;
         }
 
+        public Canteen getCanteen() {
+            return canteen;
+        }
+
         public Set<Recipe> getRecipes() {
             return recipes;
-        }
-
-        public Recipe getLastRecipe() {
-            return lastRecipe;
-        }
-
-        public void setLastRecipe(Recipe lastRecipe) {
-            this.lastRecipe = lastRecipe;
         }
 
         public BigDecimal getTotalMealsForCanteen() {

@@ -41,6 +41,7 @@ import de.osjava.smartcanteen.application.Application;
  * @author Marcel Baxmann
  */
 public class ApplicationGUI {
+    // TODO (Marcel Baxmann) Hieraus bitte noch Properties machen
     int windowWidth = 800; // Angabe der Breite des Fensters
     int windowHeight = 400; // Angabe der Höhe des Fensters
     // int procentOptionPane = 65;
@@ -54,7 +55,7 @@ public class ApplicationGUI {
      * @param canteens
      * @param shoppingList
      */
-    public ApplicationGUI(final Application application) throws IOException {
+    public ApplicationGUI(final Application application) {
         this.application = application;
     }
 
@@ -68,7 +69,7 @@ public class ApplicationGUI {
         JFrame frame = new JFrame("SmartCanteen");
         frame.setSize(windowWidth, windowHeight);
         frame.setLocation(getDisplayCenter());
-        frame.setDefaultCloseOperation(frame.DO_NOTHING_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new DialogWindowClosingListener());
         frame.setLayout(new GridLayout());
 
@@ -164,19 +165,12 @@ public class ApplicationGUI {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    application.buildMenuePlan();
-                    application.buildShoppingList();
-                    finishedProcess = true;
-                    btnSaveResults.setEnabled(true);
-                    btnStartProcess.setText("Neu berechnen");
-                    System.out.println("Erstellung Plaene erfolgreich");
-                } catch (IOException e1) {
-                    // TODO(Marcel) handle this exception properly
-                    e1.printStackTrace();
-                    System.out.println("Fehler");
-                }
-
+                application.buildMenuPlan();
+                application.buildShoppingList();
+                finishedProcess = true;
+                btnSaveResults.setEnabled(true);
+                btnStartProcess.setText("Neu berechnen");
+                System.out.println("Erstellung Plaene erfolgreich");
             }
         });
 

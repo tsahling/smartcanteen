@@ -42,6 +42,23 @@ public class Recipe {
     }
 
     /**
+     * Ermittelt den Typ des {@link Recipe} auf Basis aller {@link Ingredient} des {@link Recipe}.
+     * 
+     * @return Den Typ des {@link Recipe}
+     */
+    public IngredientType getIngredientType() {
+        if (isMeatRecipe()) {
+            return IngredientType.MEAT;
+        }
+        else if (isFishRecipe()) {
+            return IngredientType.FISH;
+        }
+        else {
+            return IngredientType.VEGETABLE;
+        }
+    }
+
+    /**
      * Methode um abzufragen ob das {@link Recipe} Fleisch enthält.
      * 
      * @return Wenn das Rezept {@link Recipe} Fleisch enthält WAHR sonst FALSCH
