@@ -43,6 +43,12 @@ import de.osjava.smartcanteen.helper.PropertyHelper;
  */
 public class MenuPlanBuilder {
 
+    private static final Integer PROP_CANTEEN_ESSEN_NUMBEROFEMPLOYEES = Integer.valueOf(PropertyHelper
+            .getProperty("canteen.essen.numberOfEmployees"));
+
+    private static final Integer PROP_CANTEEN_MUELHEIM_NUMBEROFEMPLOYEES = Integer.valueOf(PropertyHelper
+            .getProperty("canteen.muelheim.numberOfEmployees"));
+
     private static final String PROP_PLANINGPERIOD_PLANINGMODE = PropertyHelper
             .getProperty("planingPeriod.planingMode");
 
@@ -67,6 +73,9 @@ public class MenuPlanBuilder {
     private static final Integer PROP_PLANINGPERIOD_TOTALWEEKANDWORKDAYS = (PROP_PLANINGPERIOD_WEEKWORKDAYS * PROP_PLANINGPERIOD_WEEKS);
     private static final Integer PROP_PLANINGPERIOD_TOTALMEALS = (PROP_PLANINGPERIOD_MEALSPERDAY * PROP_PLANINGPERIOD_WEEKWORKDAYS * PROP_PLANINGPERIOD_WEEKS);
 
+    private static final String PROP_MESSAGE_NOTENOUGHMEALSINPERIOD_EXCEPTION = PropertyHelper
+            .getProperty("message.notEnoughMealsInPeriod.exception");
+
     private static final String PLANING_MODE_SEQUENTIAL = "sequential";
     private static final String PLANING_MODE_RANDOM = "random";
 
@@ -81,17 +90,14 @@ public class MenuPlanBuilder {
      * Der Standardkonstruktor der {@link MenuPlanBuilder} initialisiert die
      * Klasse beim Erstellen und nimmt einige wichtige Eingangsdaten entgegen.
      * 
-     * @param providerBase
-     *            Die {@link ProviderBase} Verwaltungs- bzw. Containerklasse
-     * @param recipeBase
-     *            Die {@link RecipeBase} Verwaltungs- bzw. Containerklasse
+     * @param providerBase Die {@link ProviderBase} Verwaltungs- bzw. Containerklasse
+     * @param recipeBase Die {@link RecipeBase} Verwaltungs- bzw. Containerklasse
      */
     public MenuPlanBuilder(ProviderBase providerBase, RecipeBase recipeBase) {
         this.providerBase = providerBase;
         this.recipeBase = recipeBase;
-        this.canteens = new Canteen[]{ new Canteen(CanteenLocation.ESSEN, Integer.valueOf(PropertyHelper
-                .getProperty("canteen.essen.numberOfEmployees"))), new Canteen(CanteenLocation.MUELHEIM,
-                Integer.valueOf(PropertyHelper.getProperty("canteen.muelheim.numberOfEmployees"))) };
+        this.canteens = new Canteen[]{ new Canteen(CanteenLocation.ESSEN, PROP_CANTEEN_ESSEN_NUMBEROFEMPLOYEES), new Canteen(
+                CanteenLocation.MUELHEIM, PROP_CANTEEN_MUELHEIM_NUMBEROFEMPLOYEES) };
     }
 
     /**
@@ -105,26 +111,26 @@ public class MenuPlanBuilder {
 
         // Summiert alle Mengen einer Zutat von allen Anbietern um später überprüfen zu können ob ein Rezept in der
         // jeweils benötigten Menge beschaffbar ist
-        providerIngredientQuantities = providerBase.sumIngredientQuantities();
+        this.providerIngredientQuantities = this.providerBase.sumIngredientQuantities();
 
         // Initalisiert die Planungsperiode
         Map<WeekWorkday, Set<Recipe>> planingPeriod = initPlaningPeriod();
 
         // Ermittelt die Rezepte, sortiert nach Rang, um die Zufriedenheit und Leistungsfähigkeit der Mitarbeiter zu
         // steigern
-        Set<Recipe> recipesSortedByRank = recipeBase.getRecipesSortedByRank(null);
+        Set<Recipe> recipesSortedByRank = this.recipeBase.getRecipesSortedByRank(null);
 
         // Um den Kantinen einen größere Individualität zu geben wird der Algorithmus für den optimalen Speiseplan pro
         // Kantine durchlaufen.
-        for (Canteen canteen : canteens) {
+        for (Canteen canteen : this.canteens) {
 
-            canteenContext = new CanteenContext(canteen);
+            this.canteenContext = new CanteenContext(canteen);
 
             // Fügt die Rezepte in die Struktur der Planungsperiode ein
             for (Recipe recipe : recipesSortedByRank) {
 
                 // Überprüfung ob der Algorithmus vorzeitig beendet werden kann, wenn benötigte Rezepte komplett sind
-                if (canteenContext.getRecipes().size() == PROP_PLANINGPERIOD_TOTALMEALS) {
+                if (this.canteenContext.getRecipes().size() == PROP_PLANINGPERIOD_TOTALMEALS) {
                     break;
                 }
 
@@ -155,7 +161,7 @@ public class MenuPlanBuilder {
             clearPlaningPeriod(planingPeriod);
         }
 
-        return canteens;
+        return this.canteens;
     }
 
     /**
@@ -181,7 +187,7 @@ public class MenuPlanBuilder {
         // Gericht nicht bestellt, um die Kosten des Speiseplans ökonomisch sinnvoll zu begrenzen
         for (IngredientListItem ingredientListItem : recipe.getIngredientList()) {
 
-            Amount bestPriceForOneUnitOfIngredient = providerBase
+            Amount bestPriceForOneUnitOfIngredient = this.providerBase
                     .findBestPriceForOneUnitOfIngredient(ingredientListItem.getIngredient());
 
             if (bestPriceForOneUnitOfIngredient != null) {
@@ -193,7 +199,7 @@ public class MenuPlanBuilder {
         }
 
         // Überprüfung ob ein Gericht bereits vorhanden ist
-        if (canteenContext.getRecipes().contains(recipe)) {
+        if (this.canteenContext.getRecipes().contains(recipe)) {
             return false;
         }
 
@@ -322,7 +328,7 @@ public class MenuPlanBuilder {
 
             // Wenn Rezept beschaffbar ist wird es hinzugefügt
             if (isRecipeObtainable(weekWorkDayRecipes, recipe)) {
-                canteenContext.getRecipes().add(recipe);
+                this.canteenContext.getRecipes().add(recipe);
             }
             // Wenn ein Rezept nicht beschaffbar ist, wird es wieder aus dem Wochentag entfernt
             else {
@@ -347,16 +353,16 @@ public class MenuPlanBuilder {
         if (weekWorkdayPositionOfRecipe != null) {
 
             BigDecimal mealMultiplyFactor = BuilderHelper.calculateMealMultiplyFactor(weekWorkdayPositionOfRecipe,
-                    canteenContext.getTotalMealsForCanteen());
+                    this.canteenContext.getTotalMealsForCanteen());
 
             for (IngredientListItem ingredientListItem : recipe.getIngredientList()) {
 
                 Ingredient ingredient = ingredientListItem.getIngredient();
                 Amount ingredientQuantity = ingredientListItem.getQuantity();
 
-                if (providerIngredientQuantities.containsKey(ingredient)) {
+                if (this.providerIngredientQuantities.containsKey(ingredient)) {
 
-                    Amount providerIngredientQuantity = providerIngredientQuantities.get(ingredient);
+                    Amount providerIngredientQuantity = this.providerIngredientQuantities.get(ingredient);
 
                     BigDecimal quantityForIngredient = NumberHelper.multiply(ingredientQuantity.getValue(),
                             mealMultiplyFactor);
@@ -591,7 +597,7 @@ public class MenuPlanBuilder {
         }
 
         if (totalMeals != PROP_PLANINGPERIOD_TOTALMEALS) {
-            throw new RuntimeException(PropertyHelper.getProperty("message.notEnoughMealsInPeriod.exception"));
+            throw new RuntimeException(PROP_MESSAGE_NOTENOUGHMEALSINPERIOD_EXCEPTION);
         }
     }
 
@@ -608,9 +614,9 @@ public class MenuPlanBuilder {
 
             Set<WeekWorkday> weekWorkdays = getWeekAndWorkdaysByWeek(planingPeriod, week);
 
-            Set<Recipe> usedFishRecipes = canteenContext.getFishRecipes();
+            Set<Recipe> usedFishRecipes = this.canteenContext.getFishRecipes();
 
-            Set<Recipe> availableFishRecipes = recipeBase
+            Set<Recipe> availableFishRecipes = this.recipeBase
                     .getRecipesForIngredientTypeSortedByRank(IngredientType.FISH);
 
             if (availableFishRecipes != null && !availableFishRecipes.isEmpty()) {
@@ -741,12 +747,13 @@ public class MenuPlanBuilder {
     private Recipe removeRecipeFromWeekWorkday(Set<Recipe> weekWorkdayRecipes, IngredientType ingredientType) {
         Recipe result = null;
 
-        // Rezepte für den übergebenen Wochentag werden nach Rang sortiert, allerdings in umgekehrter Reihenfolge
+        // Rezepte für den übergebenen Wochentag werden nach Rang sortiert, allerdings in umgekehrter Reihenfolge um
+        // danach das unbeliebteste zu entfernen
         Set<Recipe> sortedRecipes = new TreeSet<Recipe>(new Comparator<Recipe>() {
 
             @Override
-            public int compare(Recipe arg0, Recipe arg1) {
-                return Integer.valueOf(arg1.getRank()).compareTo(Integer.valueOf(arg0.getRank()));
+            public int compare(Recipe r1, Recipe r2) {
+                return Integer.valueOf(r2.getRank()).compareTo(Integer.valueOf(r1.getRank()));
             }
         });
 
@@ -764,7 +771,7 @@ public class MenuPlanBuilder {
                 weekWorkdayRecipes.remove(recipe);
 
                 // Entfernen des Rezepts auf dem Kantinenkontext
-                canteenContext.getRecipes().remove(recipe);
+                this.canteenContext.getRecipes().remove(recipe);
 
                 // Rückgabe des gelöschten Rezepts
                 result = recipe;
@@ -785,7 +792,7 @@ public class MenuPlanBuilder {
         weekWorkdayRecipes.add(recipe);
 
         // Hinzufügen des Rezepts in den Kantinenkontext
-        canteenContext.getRecipes().add(recipe);
+        this.canteenContext.getRecipes().add(recipe);
 
         // Entfernen der Zutatenmengen des Rezepts aus der Gesamtmenge
         removeQuantityFromProviderIngredientQuantities(weekWorkdayRecipes, recipe);
@@ -803,19 +810,19 @@ public class MenuPlanBuilder {
         if (weekWorkdayPositionOfRecipe != null) {
 
             BigDecimal mealMultiplyFactor = BuilderHelper.calculateMealMultiplyFactor(weekWorkdayPositionOfRecipe,
-                    canteenContext.getTotalMealsForCanteen());
+                    this.canteenContext.getTotalMealsForCanteen());
 
             for (IngredientListItem ingredientListItem : recipe.getIngredientList()) {
 
                 Ingredient ingredient = ingredientListItem.getIngredient();
                 Amount ingredientQuantity = ingredientListItem.getQuantity();
 
-                if (providerIngredientQuantities.containsKey(ingredient)) {
+                if (this.providerIngredientQuantities.containsKey(ingredient)) {
 
                     BigDecimal quantityForIngredient = NumberHelper.multiply(ingredientQuantity.getValue(),
                             mealMultiplyFactor);
 
-                    providerIngredientQuantities.get(ingredient).add(
+                    this.providerIngredientQuantities.get(ingredient).add(
                             new Amount(quantityForIngredient, ingredientQuantity.getUnit()));
                 }
             }
@@ -834,19 +841,19 @@ public class MenuPlanBuilder {
         if (weekWorkdayPositionOfRecipe != null) {
 
             BigDecimal mealMultiplyFactor = BuilderHelper.calculateMealMultiplyFactor(weekWorkdayPositionOfRecipe,
-                    canteenContext.getTotalMealsForCanteen());
+                    this.canteenContext.getTotalMealsForCanteen());
 
             for (IngredientListItem ingredientListItem : recipe.getIngredientList()) {
 
                 Ingredient ingredient = ingredientListItem.getIngredient();
                 Amount ingredientQuantity = ingredientListItem.getQuantity();
 
-                if (providerIngredientQuantities.containsKey(ingredient)) {
+                if (this.providerIngredientQuantities.containsKey(ingredient)) {
 
                     BigDecimal quantityForIngredient = NumberHelper.multiply(ingredientQuantity.getValue(),
                             mealMultiplyFactor);
 
-                    providerIngredientQuantities.get(ingredient).subtract(
+                    this.providerIngredientQuantities.get(ingredient).subtract(
                             new Amount(quantityForIngredient, ingredientQuantity.getUnit()));
 
                 }
@@ -962,8 +969,8 @@ public class MenuPlanBuilder {
                 result.put(new WeekWorkday(week, workday), new TreeSet<Recipe>(new Comparator<Recipe>() {
 
                     @Override
-                    public int compare(Recipe arg0, Recipe arg1) {
-                        return Integer.valueOf(arg0.getRank()).compareTo(Integer.valueOf(arg1.getRank()));
+                    public int compare(Recipe r1, Recipe r2) {
+                        return Integer.valueOf(r1.getRank()).compareTo(Integer.valueOf(r2.getRank()));
                     }
                 }));
             }
@@ -996,9 +1003,9 @@ public class MenuPlanBuilder {
         public Set<Recipe> getFishRecipes() {
             Set<Recipe> result = new HashSet<Recipe>();
 
-            if (recipes != null && !recipes.isEmpty()) {
+            if (!this.recipes.isEmpty()) {
 
-                for (Recipe recipe : recipes) {
+                for (Recipe recipe : this.recipes) {
 
                     if (recipe.isFishRecipe()) {
                         result.add(recipe);
