@@ -51,11 +51,9 @@ public class PropertyHelper {
      * zurück. Kann der übergebene Einstellungsname nicht gefunden werden, wird
      * der übergebene Standardwert zurückgegeben.
      * 
-     * @param propertyName
-     *            Der Name der Einstellung die zurückgegeben werden soll
-     * @param defaultValue
-     *            Der Standardwert der zurückgegeben werden soll wenn kein Wert
-     *            für den übergebenen Einstellungsnamen gefunden wird
+     * @param propertyName Der Name der Einstellung die zurückgegeben werden soll
+     * @param defaultValue Der Standardwert der zurückgegeben werden soll wenn kein Wert für den übergebenen
+     *            Einstellungsnamen gefunden wird
      * @return Der Wert der Einstellung oder der Standardwert
      */
     public static String getProperty(String propertyName, String defaultValue) {

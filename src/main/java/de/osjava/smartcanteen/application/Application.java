@@ -1,5 +1,6 @@
 package de.osjava.smartcanteen.application;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
@@ -43,17 +44,43 @@ public class Application {
     private static final String VALUE_SPLIT = ";";
     private static final String EMPTY = "";
 
-    private static final String INPUT_FILENAME_HITLIST = PropertyHelper.getProperty("inputFile.name.hitList");
-    private static final String INPUT_FILENAME_PRICELIST = PropertyHelper.getProperty("inputFile.name.priceList");
-    private static final String INPUT_FILENAME_RECIPELIST = PropertyHelper.getProperty("inputFile.name.recipeList");
+    private static final String PROP_INPUTFILE_NAME_HITLIST = PropertyHelper.getProperty("inputFile.name.hitList");
+    private static final String PROP_INPUTFILE_NAME_PRICELIST = PropertyHelper.getProperty("inputFile.name.priceList");
+    private static final String PROP_INPUTFILE_NAME_RECIPELIST = PropertyHelper
+            .getProperty("inputFile.name.recipeList");
 
-    private static final String PROP_APPLICATION_START_GUI = PropertyHelper.getProperty("application.startGui");
+    private static final String PROP_PARAM_HELP = PropertyHelper.getProperty("param.help");
+    private static final String PROP_PARAM_INPUTFILES = PropertyHelper.getProperty("param.inputFiles");
+    private static final String PROP_PARAM_PROPERTIES = PropertyHelper.getProperty("param.properties");
 
-    // Setze Werte ob beschriebenes Fileformat erzeugt werden soll
-    // Auslesen der Werte aus externer Properties Datei und casten auf Wahrheitswert
-    private static final boolean GENERATE_CSV = Boolean.parseBoolean(PropertyHelper
+    private static final String PROP_APPLICATION_INPUTFILEPATH = PropertyHelper
+            .getProperty("application.inputFilePath");
+    private static final String PROP_APPLICATION_STARTGUI = PropertyHelper.getProperty("application.startGui");
+    private static final String PROP_APPLICATION_USAGEINFO = PropertyHelper.getProperty("application.usageInfo");
+
+    private static final String PROP_MESSAGE_WRONGORMISSINGINPUTFILES_TITLE = PropertyHelper
+            .getProperty("message.wrongOrMissingInputFiles.title");
+    private static final String PROP_MESSAGE_WRONGORMISSINGINPUTFILES_MSG = PropertyHelper
+            .getProperty("message.wrongOrMissingInputFiles.message");
+    private static final String PROP_MESSAGE_WRONGORMISSINGINPUTFILES_EXCEPTION = PropertyHelper
+            .getProperty("message.wrongOrMissingInputFiles.exception");
+
+    private static final String PROP_MESSAGE_APPLICATIONSTART_MSG = PropertyHelper
+            .getProperty("message.applicationStart.message");
+    private static final String PROP_MESSAGE_APPLICATIONSTART_TITLE = PropertyHelper
+            .getProperty("message.applicationStart.title");
+    private static final String PROP_MESSAGE_APPLICATIONSTART_OPTION1 = PropertyHelper
+            .getProperty("message.applicationStart.option1");
+    private static final String PROP_MESSAGE_APPLICATIONSTART_OPTION2 = PropertyHelper
+            .getProperty("message.applicationStart.option2");
+
+    /**
+     * Setze Werte ob beschriebenes Fileformat erzeugt werden soll. Auslesen der Werte aus externer Properties Datei und
+     * casten auf Wahrheitswert
+     */
+    private static final boolean PROP_OUTPUTDATA_GENERATE_CSV = Boolean.parseBoolean(PropertyHelper
             .getProperty("outputData.generateCSV"));
-    private static final boolean GENERATE_HTML = Boolean.parseBoolean(PropertyHelper
+    private static final boolean PROP_OUTPUTDATA_GENERATE_HTML = Boolean.parseBoolean(PropertyHelper
             .getProperty("outputData.generateHTML"));
 
     private HitListBase hitListBase;
@@ -62,7 +89,7 @@ public class Application {
 
     private Canteen[] canteens;
     private ShoppingList shoppingList;
-    private String inputFiles;
+    private String inputFiles = EMPTY;
 
     /**
      * Standardkonstruktor
@@ -77,10 +104,8 @@ public class Application {
      * Applikationsroutine auf.
      * 
      * @author Tim Sahling
-     * @param args
-     *            Aufparameter der Applikation
-     * @throws Exception
-     *             Alle auftretenden Fehler in der Applikation
+     * @param args Aufparameter der Applikation
+     * @throws Exception Alle auftretenden Fehler in der Applikation
      */
     public void bootstrap(final String[] args) throws Exception {
         if (initInput(args)) {
@@ -92,57 +117,65 @@ public class Application {
      * Liest die Eingabedaten ein und füllt die Datenträgerklassen
      * 
      * @param args
-     * @throws IOException
+     * @throws Exception
      */
-    private boolean initInput(final String[] args) throws IOException {
-        inputFiles = EMPTY;
+    private boolean initInput(final String[] args) throws Exception {
 
         if (args.length == 0) {
-            inputFiles = JOptionPane.showInputDialog(null,
-                    PropertyHelper.getProperty("message.wrongOrMissingInputFiles.message"),
-                    PropertyHelper.getProperty("message.wrongOrMissingInputFiles.title"), JOptionPane.QUESTION_MESSAGE);
+            this.inputFiles = JOptionPane.showInputDialog(null, PROP_MESSAGE_WRONGORMISSINGINPUTFILES_MSG,
+                    PROP_MESSAGE_WRONGORMISSINGINPUTFILES_TITLE, JOptionPane.QUESTION_MESSAGE);
         }
-        else if (args.length == 1 && args[0].equals(PropertyHelper.getProperty("param.help"))) {
-            System.out.println(PropertyHelper.getProperty("application.usageInfo"));
+        else if (args.length == 1 && args[0].equals(PROP_PARAM_HELP)) {
+            System.out.println(PROP_APPLICATION_USAGEINFO);
             return false;
         }
         else {
             for (String arg : args) {
 
-                if (arg.contains(PropertyHelper.getProperty("param.inputFiles"))) {
-                    inputFiles = setApplicationInputFilesFromArgs(arg.split(ARG_SPLIT));
+                if (arg.contains(PROP_PARAM_INPUTFILES)) {
+                    this.inputFiles = setApplicationInputFilesFromArgs(arg.split(ARG_SPLIT));
                 }
-                else if (arg.contains(PropertyHelper.getProperty("param.properties"))) {
-                    setApplicationParamsFromArgs(arg
-                            .substring(PropertyHelper.getProperty("param.properties").length() + 1));
+                else if (arg.contains(PROP_PARAM_PROPERTIES)) {
+                    setApplicationParamsFromArgs(arg.substring(PROP_PARAM_PROPERTIES.length() + 1));
                 }
             }
         }
 
         boolean wrongInputFile = false;
 
-        if (inputFiles != null && !inputFiles.equals(EMPTY)) {
-            String[] inputFileSplit = inputFiles.split(VALUE_SPLIT);
+        if (!this.inputFiles.equals(EMPTY)) {
+            String[] inputFileSplit = this.inputFiles.split(VALUE_SPLIT);
 
             if (inputFileSplit.length > 0) {
 
                 for (String inputFile : inputFileSplit) {
 
-                    URL inputFileUrl = ClassLoader.getSystemResource(PropertyHelper
-                            .getProperty("application.inputFilePath") + inputFile);
+                    URL inputFileUrl = null;
+
+                    // Aus dem inputFile String wird versucht eine Datei zu instanziieren. Wenn diese Datei im
+                    // Dateisystem existiert, wird diese als Input genommen. Ansonsten wird versucht anhand des
+                    // übergebenen inputFile String, die Datei aus dem internen Input-Ordner zu lesen.
+                    File file = new File(inputFile);
+
+                    if (file.exists()) {
+                        inputFileUrl = file.toURI().toURL();
+                    }
+                    else {
+                        inputFileUrl = ClassLoader.getSystemResource(PROP_APPLICATION_INPUTFILEPATH + inputFile);
+                    }
 
                     if (inputFileUrl != null) {
 
-                        String file = inputFileUrl.getFile();
+                        String fileName = inputFileUrl.getFile();
 
-                        if (file.contains(INPUT_FILENAME_HITLIST)) {
-                            hitListBase = BaseHelper.readHitlist(inputFileUrl);
+                        if (fileName.contains(PROP_INPUTFILE_NAME_HITLIST)) {
+                            this.hitListBase = BaseHelper.readHitlist(inputFileUrl);
                         }
-                        else if (file.contains(INPUT_FILENAME_PRICELIST)) {
-                            providerBase = BaseHelper.readPriceList(inputFileUrl, providerBase);
+                        else if (fileName.contains(PROP_INPUTFILE_NAME_PRICELIST)) {
+                            this.providerBase = BaseHelper.readPriceList(inputFileUrl, this.providerBase);
                         }
-                        else if (file.contains(INPUT_FILENAME_RECIPELIST)) {
-                            recipeBase = BaseHelper.readRecipeList(inputFileUrl);
+                        else if (fileName.contains(PROP_INPUTFILE_NAME_RECIPELIST)) {
+                            this.recipeBase = BaseHelper.readRecipeList(inputFileUrl);
                         }
                     }
                     else {
@@ -151,15 +184,15 @@ public class Application {
                     }
                 }
 
-                if (!wrongInputFile && (validateHitListBase(hitListBase) && validateRecipeBase(recipeBase) && validateProviderBase(providerBase))) {
-                    BaseHelper.addRankToRecipes(recipeBase, hitListBase);
-                    BaseHelper.addIngredientTypeToIngredientsOfRecipes(recipeBase, providerBase);
+                if (!wrongInputFile && (validateHitListBase(this.hitListBase) && validateRecipeBase(this.recipeBase) && validateProviderBase(this.providerBase))) {
+                    BaseHelper.addRankToRecipes(this.recipeBase, this.hitListBase);
+                    BaseHelper.addIngredientTypeToIngredientsOfRecipes(this.recipeBase, this.providerBase);
                     return true;
                 }
             }
         }
 
-        throw new IllegalArgumentException(PropertyHelper.getProperty("message.wrongOrMissingInputFiles.exception"));
+        throw new IllegalArgumentException(PROP_MESSAGE_WRONGORMISSINGINPUTFILES_EXCEPTION);
     }
 
     private boolean validateHitListBase(HitListBase hitListBase) {
@@ -229,23 +262,16 @@ public class Application {
 
         // Wenn Property für Application GUI Start nicht gesetzt ist, kommt eine Benutzerabfrage, ob die Software in der
         // Konsole ohne User-Interaktion (0) durchlaufen soll oder mit einer GUI (1) gestartet wird
-        if (PROP_APPLICATION_START_GUI == null || PROP_APPLICATION_START_GUI.equals(EMPTY)) {
-            startGui = JOptionPane
-                    .showOptionDialog(
-                            null,
-                            PropertyHelper.getProperty("message.applicationStart.message"),
-                            PropertyHelper.getProperty("message.applicationStart.title"),
-                            JOptionPane.OK_CANCEL_OPTION,
-                            JOptionPane.INFORMATION_MESSAGE,
-                            null,
-                            new String[]{ PropertyHelper.getProperty("message.applicationStart.option1"), PropertyHelper
-                                    .getProperty("message.applicationStart.option2") }, PropertyHelper
-                                    .getProperty("message.applicationStart.option2"));
+        if (PROP_APPLICATION_STARTGUI == null || PROP_APPLICATION_STARTGUI.equals(EMPTY)) {
+            startGui = JOptionPane.showOptionDialog(null, PROP_MESSAGE_APPLICATIONSTART_MSG,
+                    PROP_MESSAGE_APPLICATIONSTART_TITLE, JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                    null, new String[]{ PROP_MESSAGE_APPLICATIONSTART_OPTION1, PROP_MESSAGE_APPLICATIONSTART_OPTION2 },
+                    PROP_MESSAGE_APPLICATIONSTART_OPTION2);
         }
         // Wenn Property für Application GUI Start gesetzt ist, wird dieser Wert verwendet um abzufragen ob Applikation
         // mit GUI oder ohne gestartet werden soll
         else {
-            if (Boolean.parseBoolean(PROP_APPLICATION_START_GUI)) {
+            if (Boolean.parseBoolean(PROP_APPLICATION_STARTGUI)) {
                 startGui = 1;
             }
         }
@@ -269,36 +295,32 @@ public class Application {
     }
 
     /**
-     * Start der Applikationslogik für die Erstellung der Speisepläne für die beiden Kantinen
-     * erstellt ein Objekt der Klasse {@link MenuPLanBuilder} und erhaelt von diesem
-     * das Objekt canteens zurueck
+     * Start der Applikationslogik für die Erstellung der Speisepläne. Erstellt ein Objekt der Klasse
+     * {@link MenuPlanBuilder} und erhält von dieser ein Array von {@link Canteen} zurück.
      * 
      * @param providerBase
      * @param recipeBase
      */
     public void buildMenuPlan() {
-        MenuPlanBuilder mpb = new MenuPlanBuilder(providerBase, recipeBase);
-        canteens = mpb.buildMenuPlan();
+        MenuPlanBuilder mpb = new MenuPlanBuilder(this.providerBase, this.recipeBase);
+        this.canteens = mpb.buildMenuPlan();
     }
 
     /**
-     * Start der Applikationslogik für die Erstellung der Einkaufsliste
-     * Erstellt ein Objekt der Klasse {@link ShoppingListBuilder} und erhaelt von diesem
-     * das Objekt shoppingList zurueck
+     * Start der Applikationslogik für die Erstellung der Einkaufsliste. Erstellt ein Objekt der Klasse
+     * {@link ShoppingListBuilder} und erhält von diesem ein Objekt von {@link ShoppingList} zurück.
      * 
      * @param providerBase
      * @param canteens
-     * @throws IOException
      */
-
     public void buildShoppingList() {
-        ShoppingListBuilder slb = new ShoppingListBuilder(providerBase, canteens);
-        shoppingList = slb.buildShoppingList();
+        ShoppingListBuilder slb = new ShoppingListBuilder(this.providerBase, this.canteens);
+        this.shoppingList = slb.buildShoppingList();
     }
 
     /**
      * Methode in der die Ergebnisse der Builderklassen {@link MenuPLanBuilder} und {@link ShoppingListBuilder}
-     * ausgegeben werden
+     * ausgegeben werden.
      * 
      * @param shoppingList
      * @param canteens
@@ -315,10 +337,10 @@ public class Application {
         // Erstellung Ausgabe-Objekt für HTML-Ausgabe
         HTMLOutput htmlOutput = new HTMLOutput();
 
-        if (GENERATE_CSV) {
+        if (PROP_OUTPUTDATA_GENERATE_CSV) {
             // Aufruf der Methode zum Erzeugen eines Menueplans als CSV je existierender Kantine
             int x = 1;
-            for (Canteen canteen : canteens) {
+            for (Canteen canteen : this.canteens) {
                 LOG.log(Level.INFO, "CSV-Menüplan wird erzeugt für Kantine " + x);
                 fileOutput.outputMenuPlan(canteen);
                 x++;
@@ -326,20 +348,20 @@ public class Application {
 
             // Aufruf der Methode zum Erzeugen einer Einkaufsliste als CSV
             LOG.log(Level.INFO, "CSV-Einkaufsliste wird erzeugt");
-            fileOutput.outputShoppingList(shoppingList);
+            fileOutput.outputShoppingList(this.shoppingList);
 
             // Aufruf der Methode zum Erzeugen einer Kostenuebersicht als CSV
             LOG.log(Level.INFO, "CSV-Kostenuebersicht wird erzeugt");
-            fileOutput.outputTotalCosts(shoppingList);
+            fileOutput.outputTotalCosts(this.shoppingList);
         }
         else {
             LOG.log(Level.INFO, "CSV soll nicht erzeugt werden");
         }
 
-        if (GENERATE_HTML) {
+        if (PROP_OUTPUTDATA_GENERATE_HTML) {
             // Aufruf der Methode zum Erzeugen eines Menueplans als HTML je existierender Kantine
             int x = 1;
-            for (Canteen canteen : canteens) {
+            for (Canteen canteen : this.canteens) {
                 LOG.log(Level.INFO, "HTML-Menüplan wird erzeugt für Kantine " + x);
                 htmlOutput.outputMenuPlan(canteen);
                 x++;
@@ -347,11 +369,11 @@ public class Application {
 
             // Aufruf der Methode zum Erzeugen einer Einkaufsliste als CSV
             LOG.log(Level.INFO, "HTML-Einkaufsliste wird erzeugt");
-            htmlOutput.outputShoppingList(shoppingList);
+            htmlOutput.outputShoppingList(this.shoppingList);
 
             // Aufruf der Methode zum Erzeugen einer Kostenuebersicht als CSV
             LOG.log(Level.INFO, "HTML-Kostenuebersicht wird erzeugt");
-            htmlOutput.outputTotalCosts(shoppingList);
+            htmlOutput.outputTotalCosts(this.shoppingList);
         }
         else {
             LOG.log(Level.INFO, "HTML soll nicht erzeugt werden");
