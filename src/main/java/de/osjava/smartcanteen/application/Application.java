@@ -103,7 +103,6 @@ public class Application {
      * nach erfolgreichem Einlesen der Eingabedaten die Logiken der
      * Applikationsroutine auf.
      * 
-     * @author Tim Sahling
      * @param args Aufparameter der Applikation
      * @throws Exception Alle auftretenden Fehler in der Applikation
      */
@@ -298,8 +297,6 @@ public class Application {
      * Start der Applikationslogik für die Erstellung der Speisepläne. Erstellt ein Objekt der Klasse
      * {@link MenuPlanBuilder} und erhält von dieser ein Array von {@link Canteen} zurück.
      * 
-     * @param providerBase
-     * @param recipeBase
      */
     public void buildMenuPlan() {
         MenuPlanBuilder mpb = new MenuPlanBuilder(this.providerBase, this.recipeBase);
@@ -310,8 +307,6 @@ public class Application {
      * Start der Applikationslogik für die Erstellung der Einkaufsliste. Erstellt ein Objekt der Klasse
      * {@link ShoppingListBuilder} und erhält von diesem ein Objekt von {@link ShoppingList} zurück.
      * 
-     * @param providerBase
-     * @param canteens
      */
     public void buildShoppingList() {
         ShoppingListBuilder slb = new ShoppingListBuilder(this.providerBase, this.canteens);
@@ -319,13 +314,10 @@ public class Application {
     }
 
     /**
-     * Methode in der die Ergebnisse der Builderklassen {@link MenuPLanBuilder} und {@link ShoppingListBuilder}
+     * Methode in der die Ergebnisse der Builderklassen {@link MenuPlanBuilder} und {@link ShoppingListBuilder}
      * ausgegeben werden.
      * 
-     * @param shoppingList
-     * @param canteens
      * @throws IOException
-     * @author Marcel Baxmann
      */
     public void outputApplicationResult() throws IOException {
 
