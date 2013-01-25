@@ -74,15 +74,6 @@ public class Application {
     private static final String PROP_MESSAGE_APPLICATIONSTART_OPTION2 = PropertyHelper
             .getProperty("message.applicationStart.option2");
 
-    /**
-     * Setze Werte ob beschriebenes Fileformat erzeugt werden soll. Auslesen der Werte aus externer Properties Datei und
-     * casten auf Wahrheitswert
-     */
-    private static final boolean PROP_OUTPUTDATA_GENERATE_CSV = Boolean.parseBoolean(PropertyHelper
-            .getProperty("outputData.generateCSV"));
-    private static final boolean PROP_OUTPUTDATA_GENERATE_HTML = Boolean.parseBoolean(PropertyHelper
-            .getProperty("outputData.generateHTML"));
-
     private HitListBase hitListBase;
     private RecipeBase recipeBase;
     private ProviderBase providerBase;
@@ -339,7 +330,7 @@ public class Application {
         // Erstellung Ausgabe-Objekt für HTML-Ausgabe
         HTMLOutput htmlOutput = new HTMLOutput();
 
-        if (PROP_OUTPUTDATA_GENERATE_CSV) {
+        if (Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateCSV"))) {
             // Aufruf der Methode zum Erzeugen eines Menueplans als CSV je existierender Kantine
             int x = 1;
             for (Canteen canteen : this.canteens) {
@@ -360,7 +351,7 @@ public class Application {
             LOG.log(Level.INFO, "CSV soll nicht erzeugt werden");
         }
 
-        if (PROP_OUTPUTDATA_GENERATE_HTML) {
+        if (Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateHTML"))) {
             // Aufruf der Methode zum Erzeugen eines Menueplans als HTML je existierender Kantine
             int x = 1;
             for (Canteen canteen : this.canteens) {

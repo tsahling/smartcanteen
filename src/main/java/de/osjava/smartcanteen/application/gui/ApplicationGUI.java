@@ -7,6 +7,8 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -24,6 +26,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
 import de.osjava.smartcanteen.application.Application;
+import de.osjava.smartcanteen.helper.PropertyHelper;
 
 /**
  * Die {@link AplicationGUI} ist keine Basis-Anforderung an das System. Sie
@@ -42,7 +45,7 @@ import de.osjava.smartcanteen.application.Application;
  */
 public class ApplicationGUI {
     // TODO (Marcel Baxmann) Hieraus bitte noch Properties machen
-    int windowWidth = 800; // Angabe der Breite des Fensters
+    int windowWidth = 400; // Angabe der Breite des Fensters
     int windowHeight = 400; // Angabe der Höhe des Fensters
     // int procentOptionPane = 65;
     // int procentOutputPane = 35;
@@ -69,10 +72,12 @@ public class ApplicationGUI {
         // Anlegen des Rahmens für die Anzeige
         JFrame frame = new JFrame("SmartCanteen");
         frame.setSize(windowWidth, windowHeight);
+        // frame.setMinimumSize(new Dimension(windowWidth, windowHeight));
         frame.setLocation(getDisplayCenter());
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new DialogWindowClosingListener());
-        frame.setLayout(new GridLayout());
+
+        frame.setLayout(new GridLayout(1, 2));
 
         // Aufteilen des Anzeigerahmens in Rechts (Output) und Links (Optionen)
         // Optionsbereichs
@@ -87,12 +92,12 @@ public class ApplicationGUI {
         pnlOutputArea.setBorder(BorderFactory.createTitledBorder("Voransicht:"));
         // Layout to be defined
         pnlOutputArea.setLayout(new GridLayout());
-        frame.add(pnlOutputArea);
+        // frame.add(pnlOutputArea);
 
         JTabbedPane tabPaneOutput = new JTabbedPane();
-        tabPaneOutput.addTab("Menue Plan", null);
-        tabPaneOutput.addTab("Kosten Plan", null);
-        tabPaneOutput.addTab("Einkaufs Plan", null);
+        tabPaneOutput.addTab("Menü-Plan", null);
+        tabPaneOutput.addTab("Kosten-Plan", null);
+        tabPaneOutput.addTab("Einkaufs-Liste", null);
         pnlOutputArea.add(tabPaneOutput);
 
         // Unterteilen des Optionsbereich in die Kategorien Input-Option, Process-Option und Output-Option
@@ -118,7 +123,8 @@ public class ApplicationGUI {
         JLabel lblInputText = new JLabel("Folgende Dateien wurden in das Programm geladen:");
         pnlInputOptionArea.add(lblInputText);
 
-        displayInputFiles = new JTextArea(application.getInputFiles(), 2, 1);
+        final JTextArea displayInputFiles = new JTextArea(application.getInputFiles(), 2, 1);
+
         pnlInputOptionArea.add(displayInputFiles);
         displayInputFiles.setLineWrap(true);
         displayInputFiles.setFocusable(false);
@@ -127,13 +133,19 @@ public class ApplicationGUI {
         JLabel lblProcessText = new JLabel("Verarbeitungs-Art einstellen:");
         pnlProcessOptionArea.add(lblProcessText);
 
-        // TODO (Marcel Baxmman) Radiobuttons mit Funktion versehen
         ButtonGroup rbtnProcessTypeGroup = new ButtonGroup();
         // JPanel rbtnPanel = new JPanel();
         // rbtnPanel.setLayout(new FlowLayout());
 
         JRadioButton rbtnProcessType1 = new JRadioButton("Zufall");
         JRadioButton rbtnProcessType2 = new JRadioButton("Sequentiell");
+        if (PropertyHelper.getProperty("planingPeriod.planingMode").matches("random")) {
+            rbtnProcessType1.setSelected(true);
+        }
+        else {
+            rbtnProcessType2.setSelected(true);
+        }
+
         rbtnProcessTypeGroup.add(rbtnProcessType1);
         rbtnProcessTypeGroup.add(rbtnProcessType2);
         // rbtnPanel.add(rbtnProcessType1);
@@ -147,13 +159,16 @@ public class ApplicationGUI {
         btnStartProcess.setEnabled(true);
         pnlProcessOptionArea.add(btnStartProcess);
 
-        // TODO (Marcel Baxmman) Checkboxen mit Funktion versehen
+        // TODO (Marcel Baxmman) mindestens eine Checkbox muss angeklickt bleiben, da sonst nichts generiert wird
         // Füllen des Bereichs Output-Option mit Content und Einstellmöglichkeiten
         JLabel llbOutputText = new JLabel("Ausgabeformat festlegen:");
         pnlOutputOptionArea.add(llbOutputText);
-        JCheckBox cboxOutputFormat1 = new JCheckBox("CSV:");
+        JCheckBox cboxOutputFormat1 = new JCheckBox("CSV");
+        cboxOutputFormat1.setSelected(Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateCSV")));
         pnlOutputOptionArea.add(cboxOutputFormat1);
-        JCheckBox cboxOutputFormat2 = new JCheckBox("HTML:");
+
+        JCheckBox cboxOutputFormat2 = new JCheckBox("HTML");
+        cboxOutputFormat2.setSelected(Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateHTML")));
         pnlOutputOptionArea.add(cboxOutputFormat2);
 
         // Anlegen eines Buttons für den Start der Dateiausgabe und setzen des Actionlisteners
@@ -161,13 +176,58 @@ public class ApplicationGUI {
         pnlOutputOptionArea.add(btnSaveResults);
         btnSaveResults.setEnabled(false);
 
+        // ********* START DER ACTIONLISTENER *****************
+
+        // Actionlistener für das Setzen der Verarbeitungsmethode "sequential"
+        rbtnProcessType2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                PropertyHelper.setProperty("planingPeriod.planingMode", "sequential");
+            }
+        });
+
+        // Actionlistener für das Setzen der Verarbeitungsmethode "Random"
+        rbtnProcessType1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                PropertyHelper.setProperty("planingPeriod.planingMode", "random");
+            }
+        });
+
+        // Itemlistener für das Setzen der Checkbox für CSV
+        cboxOutputFormat1.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateCSV"))) {
+                    PropertyHelper.setProperty("outputData.generateCSV", "false");
+                }
+                else {
+                    PropertyHelper.setProperty("outputData.generateCSV", "true");
+                }
+            }
+        });
+
+        // Itemlistener für das Setzen der Checkbox für HTML
+        cboxOutputFormat2.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateHTML"))) {
+                    PropertyHelper.setProperty("outputData.generateHTML", "false");
+                }
+                else {
+                    PropertyHelper.setProperty("outputData.generateHTML", "true");
+                }
+            }
+        });
+
         // Actionlistener für die Generierung des MenuPlans und der Einkaufsliste
         btnStartProcess.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                // TODO (Tim Sahling) wenn ich mich nicht täusche hast du das eingebaut, habe das Textfeld erstmal als
+                // eingabemaske deaktiviert, das die Veränderung des Textinhalts nicht in die Varbeitung übernommen wird
                 application.setInputFiles(displayInputFiles.getText());
-
                 try {
                     if (application.fillBases()) {
                         application.buildMenuPlan();
@@ -192,14 +252,21 @@ public class ApplicationGUI {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    application.outputApplicationResult();
-                    System.out.println("ok");
+                if (Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateHTML")) ||
+                        Boolean.parseBoolean(PropertyHelper.getProperty("outputData.generateCSV"))) {
+                    try {
+                        application.outputApplicationResult();
 
-                } catch (IOException e1) {
-                    // TODO(Marcel) handle this exception properly
-                    e1.printStackTrace();
-                    System.out.println("not");
+                    } catch (IOException e1) {
+                        // TODO(Marcel) handle this exception properly
+                        e1.printStackTrace();
+                    }
+                }
+                else {
+                    JOptionPane.showMessageDialog(null,
+                            "Bitte wählen sie mindestens ein Ausgabeformat!", "Kein Ausgabeformat angewählt",
+                            JOptionPane.INFORMATION_MESSAGE);
+
                 }
 
             }
