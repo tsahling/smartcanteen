@@ -48,6 +48,7 @@ public class ApplicationGUI {
     // int procentOutputPane = 35;
     private Application application;
     boolean finishedProcess = false;
+    private JTextArea displayInputFiles;
 
     /**
      * Standardkonstruktor
@@ -117,7 +118,7 @@ public class ApplicationGUI {
         JLabel lblInputText = new JLabel("Folgende Dateien wurden in das Programm geladen:");
         pnlInputOptionArea.add(lblInputText);
 
-        JTextArea displayInputFiles = new JTextArea(application.getInputFiles(), 2, 1);
+        displayInputFiles = new JTextArea(application.getInputFiles(), 2, 1);
         pnlInputOptionArea.add(displayInputFiles);
         displayInputFiles.setLineWrap(true);
         displayInputFiles.setFocusable(false);
@@ -165,12 +166,24 @@ public class ApplicationGUI {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                application.buildMenuPlan();
-                application.buildShoppingList();
-                finishedProcess = true;
-                btnSaveResults.setEnabled(true);
-                btnStartProcess.setText("Neu berechnen");
-                System.out.println("Erstellung Plaene erfolgreich");
+                application.setInputFiles(displayInputFiles.getText());
+
+                try {
+                    if (application.fillBases()) {
+                        application.buildMenuPlan();
+                        application.buildShoppingList();
+                        finishedProcess = true;
+                        btnSaveResults.setEnabled(true);
+                        btnStartProcess.setText("Neu berechnen");
+                        System.out.println("Erstellung Plaene erfolgreich");
+                    }
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                } catch (IllegalArgumentException iae) {
+                    iae.printStackTrace();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
