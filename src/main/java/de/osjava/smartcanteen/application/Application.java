@@ -107,18 +107,21 @@ public class Application {
      * @throws Exception Alle auftretenden Fehler in der Applikation
      */
     public void bootstrap(final String[] args) throws Exception {
-        if (initInput(args)) {
+
+        initInputArgs(args);
+
+        if (fillBases()) {
             startApplication();
         }
     }
 
     /**
-     * Liest die Eingabedaten ein und füllt die Datenträgerklassen
+     * Liest die Eingabedaten ein.
      * 
      * @param args
      * @throws Exception
      */
-    private boolean initInput(final String[] args) throws Exception {
+    private void initInputArgs(final String[] args) {
 
         if (args.length == 0) {
             this.inputFiles = JOptionPane.showInputDialog(null, PROP_MESSAGE_WRONGORMISSINGINPUTFILES_MSG,
@@ -126,7 +129,6 @@ public class Application {
         }
         else if (args.length == 1 && args[0].equals(PROP_PARAM_HELP)) {
             System.out.println(PROP_APPLICATION_USAGEINFO);
-            return false;
         }
         else {
             for (String arg : args) {
@@ -139,7 +141,57 @@ public class Application {
                 }
             }
         }
+    }
 
+    /**
+     * 
+     * @param args
+     * @param result
+     */
+    private String setApplicationInputFilesFromArgs(String[] args) {
+        String result = null;
+
+        if (args != null && args.length > 0) {
+
+            if (args.length > 1) {
+                result = args[1].trim().concat(VALUE_SPLIT);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 
+     * @param args
+     */
+    private void setApplicationParamsFromArgs(String arg) {
+
+        if (arg != null && arg.length() > 0) {
+
+            String[] propertyArgs = arg.split(VALUE_SPLIT);
+
+            if (propertyArgs != null && propertyArgs.length > 0) {
+
+                for (String propertyArg : propertyArgs) {
+
+                    String[] propertyArgSplit = propertyArg.split(ARG_SPLIT);
+
+                    if (propertyArgSplit.length > 1) {
+                        PropertyHelper.setProperty(propertyArgSplit[0], propertyArgSplit[1]);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Füllt die Datenträgerklassen.
+     * 
+     * @return
+     * @throws IOException
+     */
+    public boolean fillBases() throws Exception {
         boolean wrongInputFile = false;
 
         if (!this.inputFiles.equals(EMPTY)) {
@@ -204,48 +256,6 @@ public class Application {
 
     private boolean validateProviderBase(ProviderBase providerBase) {
         return providerBase != null && providerBase.getProvider() != null && !providerBase.getProvider().isEmpty();
-    }
-
-    /**
-     * 
-     * @param args
-     * @param result
-     */
-    private String setApplicationInputFilesFromArgs(String[] args) {
-        String result = null;
-
-        if (args != null && args.length > 0) {
-
-            if (args.length > 1) {
-                result = args[1].trim().concat(VALUE_SPLIT);
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * 
-     * @param args
-     */
-    private void setApplicationParamsFromArgs(String arg) {
-
-        if (arg != null && arg.length() > 0) {
-
-            String[] propertyArgs = arg.split(VALUE_SPLIT);
-
-            if (propertyArgs != null && propertyArgs.length > 0) {
-
-                for (String propertyArg : propertyArgs) {
-
-                    String[] propertyArgSplit = propertyArg.split(ARG_SPLIT);
-
-                    if (propertyArgSplit.length > 1) {
-                        PropertyHelper.setProperty(propertyArgSplit[0], propertyArgSplit[1]);
-                    }
-                }
-            }
-        }
     }
 
     /**
