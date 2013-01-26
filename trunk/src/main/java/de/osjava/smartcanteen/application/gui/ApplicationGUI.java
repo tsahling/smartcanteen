@@ -1,6 +1,7 @@
 package de.osjava.smartcanteen.application.gui;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -35,42 +36,44 @@ import de.osjava.smartcanteen.helper.FileHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 
 /**
- * Die {@link AplicationGUI} ist keine Basis-Anforderung an das System. Sie
- * wurde jedoch vor dem Ziel diese zu implementieren, sofern ausreichend Zeit
- * zur Verfügung steht, in das Klassensystem aufgenommen, um die Einstiegspunkte
- * und Benutzungsbezieheung aufzuzeigen. Die Klasse wird von der Klasse {@link Aplication} verwendet. Sie ist für die
- * Generierung der grafischen
- * Benutzeroberfläche zuständig. Geplant sind eine Steuerungmöglichkeit für den
- * Datei-Import, den Start des Berechnungsvorgangs, Eingabe von Variablen sowie
- * für die Auslösung der Ausgabe der von der Software generierten Daten. Denkbar
- * ist hier eine Voransicht der Daten in Tabellenform in der GUI. Derzeit noch
- * nicht planbar ist, ob weitere Klassen für die Umsetzung der GUI benötigt
- * werden.
+ * Die {@link AplicationGUI} wird von der Klasse {@link Aplication} verwendet.
+ * Sie ist für die Generierung der grafischen Benutzeroberfläche zuständig.
+ * Sie bietet Steuerungmöglichkeitn für den Start des Berechnungsvorgangs,
+ * Eingabe von Variablen für die Verarbeitung als auch die Ausgabe.
+ * In Tabellenform werden exemplarisch für die Ergebnisse der Berechnungsvorgänge
+ * die erstellten Menüpläne sowie als Einzelangabe die Gesamtkosten angezeigt.
+ * Nach einmaliger Generierung der Ergebnisse können erneut Pläne generiert werden,
+ * es erfolgt eine automatische Aktualisierung der Daten in der Voransichgt.
+ * * Weiterhin kann die Ausgabe der aktuell generierten und in der Voransicht
+ * dargestellten Daten in Dateien anstossen.
  * 
  * @author Marcel Baxmann
  */
 public class ApplicationGUI {
-    // TODO (Marcel Baxmann) Hieraus bitte noch Properties machen
-    int windowWidth = 800; // Angabe der Breite des Fensters
-    int windowHeight = 600; // Angabe der Höhe des Fensters
-    private static Application application;
-    boolean finishedProcess = false;
-    private JTextArea displayInputFiles;
-    static JLabel lblPreviewText3;
-    // Abfrage der Anzahl der Gerichte pro Tag und speichern in lokale Variable (geparstes int)
+    // Angabe der Breite des Fensters aus Properties auslesen und speichern in lokale Variable (geparstes int)
+    private static final int PROP_GUI_WINDOWWIDTH = Integer.parseInt(PropertyHelper.getProperty("gui.windowWidth"));
+
+    // Angabe der Höhe des Fensters aus Properties auslesen und speichern in lokale Variable (geparstes int)
+    private static final int PROP_GUI_WINDOWHEIGHT = Integer.parseInt(PropertyHelper.getProperty("gui.windowHeight"));
+
+    // Anzahl der Gerichte pro Tag aus Properties auslesen und speichern in lokale Variable (geparstes int)
     static int mealsPerDay = Integer.parseInt(PropertyHelper.getProperty("planingPeriod.mealsPerDay"));
-    static String[] tablePreviewHeader = new String[mealsPerDay + 2];
-    static String[][] tablePreviewContent = null;
-    private String[][] outputString;
-    static JTable tblMenuPlan;
+
+    private static Application application;
+    private static JLabel lblPreviewText2;
+    private static String[] tablePreviewHeader = new String[mealsPerDay + 2];
+    private static String[][] tablePreviewContent = null;
+    private static JTable tblMenuPlan;
+
+    private JTextArea displayInputFiles;
 
     /**
      * Standardkonstruktor
+     * Übergabe des Objekts application in eine lokale Variable
      * 
-     * @param canteens
-     * @param shoppingList
+     * @param application
      */
-    public ApplicationGUI(final Application application) {
+    public ApplicationGUI(Application application) {
         this.application = application;
     }
 
@@ -82,8 +85,8 @@ public class ApplicationGUI {
     public void initialize() {
         // Anlegen des Rahmens für die Anzeige
         JFrame frame = new JFrame("SmartCanteen");
-        frame.setSize(windowWidth, windowHeight);
-        // frame.setMinimumSize(new Dimension(windowWidth, windowHeight));
+        frame.setSize(PROP_GUI_WINDOWWIDTH, PROP_GUI_WINDOWHEIGHT);
+        frame.setMinimumSize(new Dimension(PROP_GUI_WINDOWWIDTH, PROP_GUI_WINDOWHEIGHT));
         frame.setLocation(getDisplayCenter());
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new DialogWindowClosingListener());
@@ -97,47 +100,40 @@ public class ApplicationGUI {
         pnlOptionArea.setBorder(BorderFactory.createTitledBorder("Optionen"));
         frame.add(pnlOptionArea);
 
-        // TODO (Marcel Baxmman) Entweder die Daten in Tabellen einpflegen oder Pane wieder rausnehmen
-        // Ausagbebereich --> noch zu bauen
+        // Ausagbebereich
         JPanel pnlOutputArea = new JPanel();
         pnlOutputArea.setBorder(BorderFactory.createTitledBorder("Voransicht"));
-        // Layout to be defined
-        pnlOutputArea.setLayout(new GridLayout(4, 1));
+        pnlOutputArea.setLayout(new FlowLayout());
         frame.add(pnlOutputArea);
 
-        // **** GENERIERUNG: VORANSICHT ****
-        // JTabbedPane tabPaneOutput = new JTabbedPane();
-        // tabPaneOutput.addTab("Menü-Plan", null);
-        // tabPaneOutput.addTab("Kosten-Plan", null);
-        // tabPaneOutput.addTab("Einkaufs-Liste", null);
-        // pnlOutputArea.add(tabPaneOutput);
-
-        // Testtabelle
-        JLabel lblPreviewText1 = new JLabel("Erstellter Menüplan:");
+        // Generierung der Tabelle in der Voransicht
+        JLabel lblPreviewText1 = new JLabel("Erstellter Menüplan für alle Kantinen nach Datum:");
         pnlOutputArea.add(lblPreviewText1);
-
+        // Überschrift Spalte der Tabelle generieren
         tablePreviewHeader[0] = "Kantine";
         tablePreviewHeader[1] = "Datum";
         for (int i = 2; i < tablePreviewHeader.length; i++) {
             tablePreviewHeader[i] = "Gericht " + (i - 1);
         }
-
+        // StandardModell mit vorgegebenen Daten füllen
         DefaultTableModel model = new DefaultTableModel(tablePreviewContent, tablePreviewHeader);
+        // Tabelle initalisieren und Modell übergeben
         tblMenuPlan = new JTable(model);
 
+        // Deaktivierung von Interaktionsmäglichkeiten mit der Tabelle
         tblMenuPlan.setCellSelectionEnabled(false);
         tblMenuPlan.setEnabled(false);
         tblMenuPlan.setColumnSelectionAllowed(false);
         tblMenuPlan.setDragEnabled(false);
+        tblMenuPlan.getTableHeader().setReorderingAllowed(false);
 
+        // Tabelle mit Scroll-Balken versehen und dem Panel für die Voransicht hinzufügen
         JScrollPane scrlOutputArea = new JScrollPane(tblMenuPlan);
         pnlOutputArea.add(scrlOutputArea);
 
-        // Label für die Ausgabe der Gesamtkosten
-        JLabel lblPreviewText2 = new JLabel("Gesamtkosten:");
+        // Label für die Ausgabe der Gesamtkosten erstellen dun auf Panel für Voransicht einfügen
+        lblPreviewText2 = new JLabel("Gesamtkosten für den Einkauf: noch nicht berechnet");
         pnlOutputArea.add(lblPreviewText2);
-        lblPreviewText3 = new JLabel("Noch nicht berechnet");
-        pnlOutputArea.add(lblPreviewText3);
 
         // **** LAYOUT: OPTIONSUNTERTEILUNG -- Unterteilen des Optionsbereich in die Kategorien Input-Option,
         // Process-Option und Output-Option ****
@@ -310,7 +306,8 @@ public class ApplicationGUI {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO (Tim Sahling) wenn ich mich nicht täusche hast du das eingebaut, habe das Textfeld erstmal als
+                // TODO (Tim Sahling) bitte nochmal gemeinsam mit mir anschauen! wenn ich mich nicht täusche hast du das
+                // eingebaut, habe das Textfeld erstmal als
                 // eingabemaske deaktiviert, das die Veränderung des Textinhalts nicht in die Varbeitung übernommen wird
                 application.setInputFiles(displayInputFiles.getText());
                 try {
@@ -327,7 +324,6 @@ public class ApplicationGUI {
                     ex.printStackTrace();
                 }
 
-                finishedProcess = true;
                 ApplicationGUI.refreshCostLabel();
                 ApplicationGUI.refreshPreviewTable();
 
@@ -350,7 +346,7 @@ public class ApplicationGUI {
                     try {
                         application.outputApplicationResult();
                         JOptionPane.showMessageDialog(null,
-                                "Die Speichern der Dateien war erfolgreich.", "Speichern erfolgreich",
+                                "Speichern der Dateien erfolgreich.", "Speichern erfolgreich",
                                 JOptionPane.INFORMATION_MESSAGE);
                     } catch (IOException e1) {
                         // TODO(Marcel) handle this exception properly
@@ -372,20 +368,24 @@ public class ApplicationGUI {
         frame.toFront();
     }
 
+    /**
+     * Methode die das den JTable auf mit einem neuen model füllt
+     */
     private static void refreshPreviewTable() {
-        // TODO(Marcel) provide sensible implementation
-        System.out.println("zu implementieren: Tabellenmodell aktualisieren");
         tablePreviewContent = generatePreviewContent();
         DefaultTableModel model = new DefaultTableModel(tablePreviewContent, tablePreviewHeader);
         tblMenuPlan.setModel(model);
     }
 
+    /**
+     * Methode die das Label für die Ausgabe der Gesamtkosten neu setzt
+     */
     private static void refreshCostLabel() {
-        // TODO(Marcel) provide sensible implementation
         Amount calculateTotalPrice = application.getShoppingList().calculateTotalPrice();
 
-        lblPreviewText3.setText(FileHelper.formatBD(calculateTotalPrice.getValue()) + " "
-                + calculateTotalPrice.getUnit().getName());
+        lblPreviewText2.setText("<html>Gesamtkosten für den Einkauf: <u>" + FileHelper.formatBD(calculateTotalPrice
+                .getValue()) + " "
+                + calculateTotalPrice.getUnit().getName() + " </u></html>");
 
     }
 
@@ -397,22 +397,26 @@ public class ApplicationGUI {
      */
     private Point getDisplayCenter() {
 
+        // auslesen der Bildschirmgröße
         Dimension display = Toolkit.getDefaultToolkit().getScreenSize();
 
+        // Erstellung eines Punkt-OBjekts
         Point displayCenter = new Point(0, 0);
-        displayCenter.x = (int) ((display.getWidth() - windowWidth) / 2);
-        displayCenter.y = (int) ((display.getHeight() - windowHeight) / 2);
+        // Berechnung der Bildschrimmitte
+        displayCenter.x = (int) ((display.getWidth() - PROP_GUI_WINDOWWIDTH) / 2);
+        displayCenter.y = (int) ((display.getHeight() - PROP_GUI_WINDOWHEIGHT) / 2);
 
+        // Rückggabe Point-Objekt mit Bildschirmmitte
         return displayCenter;
     }
 
     /**
      * Inner-Class zum Abfragen des Fenster-Schließ-Events
      */
-    public class DialogWindowClosingListener extends WindowAdapter {
+    private class DialogWindowClosingListener extends WindowAdapter {
         @Override
         public void windowClosing(WindowEvent event) {
-
+            // Öffenen eines ABfragedialogs ob die Applikation wirklich beendet werden soll
             int option = JOptionPane.showConfirmDialog(null, "Möchten Sie die Applikation beenden?", "Beenden",
                     JOptionPane.OK_OPTION);
             if (option == JOptionPane.OK_OPTION) {
@@ -421,24 +425,34 @@ public class ApplicationGUI {
         }
     }
 
-    public static String[][] generatePreviewContent() {
+    /**
+     * Methode um auf Basis des aktuellen Objektzustands von application
+     * ein Array zu generieren welches die Daten für die Menüpläne aller
+     * vorhandenen Kantinen enthält
+     * 
+     * @return String[][]
+     *         ein Array mit Daten für die Menüpläne aller
+     *         vorhandenen Kantinen
+     */
+    private static String[][] generatePreviewContent() {
         Canteen[] canteens = application.getCanteens();
         int mealsInList = 0;
-        int counterx = 0;
-        int countery = 0;
+        int aryPosX = 0;
+        int aryPosY = 0;
 
-        // List erstellen, in der die Gerichte nach Datum 1zu1 zugeordnet sind
+        // aufsummieren, wie viele Zeilen das Array für alle Kantinen benötigt
         for (Canteen canteen : canteens) {
             List<Meal> mealsSortedByDate = canteen.getMenuPlan().getMealsSortedByDate();
             mealsInList = mealsInList + (mealsSortedByDate.size() / mealsPerDay);
         }
-        // Erzeugen StringArrays in welches die Ergebnisse geschrieben werden
+        // Erzeugen 2D-StringArray in welches die Ergebnisse geschrieben werden
         String[][] outputString = new String[mealsInList][mealsPerDay + 2];
 
         for (Canteen canteen : canteens) {
             // auslesen des Kantinen-Namens
             String canteenName = canteen.getLocation().getName();
-            countery = 0;
+            // für jede neue Kantine den Spaltenzähler zurücksetzen
+            aryPosY = 0;
 
             // typisieren von Variablen für Datensätze der Gerichte und Datum
             String meal;
@@ -458,44 +472,51 @@ public class ApplicationGUI {
                     // wenn previusDate noch nicht gefüllt ist (null) starte erste Zeile in Ausgabedatei
                     // indem erstes Datum und erstes Gericht in Ausgabepuffer angehangen werden
                     if (previousDate == null) {
-                        outputString[counterx][countery] = canteenName;
-                        countery++;
-                        outputString[counterx][countery] = date;
-                        countery++;
-                        outputString[counterx][countery] = meal;
-                        countery++;
+                        // schreibe Kantinenname in erste Spalte des Arrays und gehe zu nächster Spalte
+                        outputString[aryPosX][aryPosY] = canteenName;
+                        aryPosY++;
+                        // schreibe Datum in zweite Spalte des Arrays und gehe zu nächster Spalte
+                        outputString[aryPosX][aryPosY] = date;
+                        aryPosY++;
+                        // schreibe Gericht in dritte Spalte des Arrays und gehe zu nächster Spalte
+                        outputString[aryPosX][aryPosY] = meal;
+                        aryPosY++;
                         // setze Variable previousDate auf aktuelles Datum
                         previousDate = date;
                     }
                     // wenn previous Date bereits mit einem Datum gefüllt ist rufe folgenden Strang auf
                     else {
-                        // wenn vorhergehendes Datum aktuellem Datum entspricht haenge
-                        // aktuelles Gericht in gleiche Zeile in Ausgabepuffer an
+                        // wenn vorhergehendes Datum aktuellem Datum entspricht
                         if (date.equals(previousDate)) {
-                            outputString[counterx][countery] = meal;
-                            countery++;
+                            // schreibe Gericht in nächste Spalte des Arrays und gehe zu nächster Spalte
+                            outputString[aryPosX][aryPosY] = meal;
+                            aryPosY++;
                         }
                         // ansonsten
                         else {
-                            // haenge neue Zeile an und starte mit neuem Datum und erstem Gericht
-                            counterx++;
-                            countery = 0;
-                            outputString[counterx][countery] = canteenName;
-                            countery++;
-                            outputString[counterx][countery] = date;
-                            countery++;
-                            outputString[counterx][countery] = meal;
-                            countery++;
+                            // haenge wechsele in nächste Zeile und setze Spaltenzähler zurück
+                            aryPosX++;
+                            aryPosY = 0;
+                            // schreibe Kantinenname in erste Spalte des Arrays und gehe zu nächster Spalte
+                            outputString[aryPosX][aryPosY] = canteenName;
+                            aryPosY++;
+                            outputString[aryPosX][aryPosY] = date;
+                            // schreibe Datum in zweite Spalte des Arrays und gehe zu nächster Spalte
+                            aryPosY++;
+                            // schreibe Gericht in dritte Spalte des Arrays und gehe zu nächster Spalte
+                            outputString[aryPosX][aryPosY] = meal;
+                            aryPosY++;
                             // setze Variable previousDate auf aktuelles Datum
                             previousDate = date;
                         }
                     }
                 }
-                counterx++;
+                // wenn alle Daten der Liste einer Kantine durchlaufen sind setze auf näcshte Zeile in Array
+                aryPosX++;
             }
 
         }
-
+        // Liefere das generierte Array zurück
         return outputString;
     }
 
