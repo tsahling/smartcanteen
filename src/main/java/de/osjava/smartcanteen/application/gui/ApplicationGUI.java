@@ -67,6 +67,21 @@ public class ApplicationGUI {
 
     private JTextArea displayInputFiles;
 
+    private static final String PROP_MESSAGE_CLOSEOPERATION_MSG = PropertyHelper
+            .getProperty("message.closeOperation.message");
+    private static final String PROP_MESSAGE_CLOSEOPERATION_TITLE = PropertyHelper
+            .getProperty("message.closeOperation.title");
+
+    private static final String PROP_MESSAGE_SAVEOPERATION_MSG = PropertyHelper
+            .getProperty("message.saveOperation.message");
+    private static final String PROP_MESSAGE_SAVEOPERATION_TITLE = PropertyHelper
+            .getProperty("message.saveOperation.title");
+
+    private static final String PROP_MESSAGE_NOOUTPUTFORMATSELECTED_MSG = PropertyHelper
+            .getProperty("message.noOutputFormatSelected.message");
+    private static final String PROP_MESSAGE_NOOUTPUTFORMATSELECTED_TITLE = PropertyHelper
+            .getProperty("message.noOutputFormatSelected.title");
+
     /**
      * Standardkonstruktor
      * Übergabe des Objekts application in eine lokale Variable
@@ -346,7 +361,7 @@ public class ApplicationGUI {
                     try {
                         application.outputApplicationResult();
                         JOptionPane.showMessageDialog(null,
-                                "Speichern der Dateien erfolgreich.", "Speichern erfolgreich",
+                                PROP_MESSAGE_SAVEOPERATION_MSG, PROP_MESSAGE_SAVEOPERATION_TITLE,
                                 JOptionPane.INFORMATION_MESSAGE);
                     } catch (IOException e1) {
                         // TODO(Marcel) handle this exception properly
@@ -355,7 +370,7 @@ public class ApplicationGUI {
                 }
                 else {
                     JOptionPane.showMessageDialog(null,
-                            "Bitte wählen sie mindestens ein Ausgabeformat!", "Kein Ausgabeformat angewählt",
+                            PROP_MESSAGE_NOOUTPUTFORMATSELECTED_MSG, PROP_MESSAGE_NOOUTPUTFORMATSELECTED_TITLE,
                             JOptionPane.INFORMATION_MESSAGE);
                 }
 
@@ -416,8 +431,9 @@ public class ApplicationGUI {
     private class DialogWindowClosingListener extends WindowAdapter {
         @Override
         public void windowClosing(WindowEvent event) {
-            // Öffenen eines ABfragedialogs ob die Applikation wirklich beendet werden soll
-            int option = JOptionPane.showConfirmDialog(null, "Möchten Sie die Applikation beenden?", "Beenden",
+            // Öffenen eines Abfragedialogs ob die Applikation wirklich beendet werden soll
+            int option = JOptionPane.showConfirmDialog(null, PROP_MESSAGE_CLOSEOPERATION_MSG,
+                    PROP_MESSAGE_CLOSEOPERATION_TITLE,
                     JOptionPane.OK_OPTION);
             if (option == JOptionPane.OK_OPTION) {
                 System.exit(0);
