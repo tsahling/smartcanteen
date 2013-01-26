@@ -26,7 +26,7 @@ import de.osjava.smartcanteen.output.HTMLOutput;
  * Die Klasse {@link Application} versetzt das Programm anhand der übergebenen
  * Aufparameter in einen initialen und konstanten Zustand. Dabei werden zu
  * Beginn die übergebenen Aufparameter (in Form von Dateinamen) validiert und
- * anhand der Klasse {@link CSVTokenizer} eingelesen sowie in die entsprechenden
+ * anhand der Klasse {@link CSVInputHandler} eingelesen sowie in die entsprechenden
  * Containerklassen übergeben.
  * 
  * Nach erfolgreicher Initialisierung startet die Klasse {@link Application} die
