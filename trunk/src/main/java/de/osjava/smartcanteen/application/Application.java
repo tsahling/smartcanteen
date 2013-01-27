@@ -58,6 +58,8 @@ public class Application {
     private static final String PROP_APPLICATION_STARTGUI = PropertyHelper.getProperty("application.startGui");
     private static final String PROP_APPLICATION_USAGEINFO = PropertyHelper.getProperty("application.usageInfo");
 
+    private static final Boolean IS_PROP_APPLICATION_STARTGUI = Boolean.parseBoolean(PROP_APPLICATION_STARTGUI);
+
     private static final String PROP_MESSAGE_WRONGORMISSINGINPUTFILES_TITLE = PropertyHelper
             .getProperty("message.wrongOrMissingInputFiles.title");
     private static final String PROP_MESSAGE_WRONGORMISSINGINPUTFILES_MSG = PropertyHelper
@@ -80,7 +82,7 @@ public class Application {
 
     private Canteen[] canteens;
     private ShoppingList shoppingList;
-    private String inputFiles = EMPTY;
+    private String inputFiles;
 
     /**
      * Standardkonstruktor
@@ -101,9 +103,13 @@ public class Application {
 
         if (initInputArgs(args)) {
 
-            if (fillBases()) {
+            boolean fillBases = fillBases();
 
+            if (fillBases || (!fillBases && IS_PROP_APPLICATION_STARTGUI)) {
                 startApplication();
+            }
+            else {
+                throw new IllegalArgumentException(PROP_MESSAGE_WRONGORMISSINGINPUTFILES_EXCEPTION);
             }
         }
     }
@@ -117,8 +123,10 @@ public class Application {
     private boolean initInputArgs(final String[] args) {
 
         if (args.length == 0) {
-            this.inputFiles = JOptionPane.showInputDialog(null, PROP_MESSAGE_WRONGORMISSINGINPUTFILES_MSG,
-                    PROP_MESSAGE_WRONGORMISSINGINPUTFILES_TITLE, JOptionPane.QUESTION_MESSAGE);
+            if (!IS_PROP_APPLICATION_STARTGUI) {
+                this.inputFiles = JOptionPane.showInputDialog(null, PROP_MESSAGE_WRONGORMISSINGINPUTFILES_MSG,
+                        PROP_MESSAGE_WRONGORMISSINGINPUTFILES_TITLE, JOptionPane.QUESTION_MESSAGE);
+            }
         }
         else if (args.length == 1 && args[0].equals(PROP_PARAM_HELP)) {
             System.out.println(PROP_APPLICATION_USAGEINFO);
@@ -185,6 +193,7 @@ public class Application {
      * Füllt die Datenträgerklassen auf Basis der übergebenen Dateien.
      * 
      * @return
+     * @throws Exception
      * @throws IOException
      */
     public boolean fillBases() throws Exception {
@@ -193,7 +202,7 @@ public class Application {
         // Leeren und löschen aller erzeugten Objekte
         cleanUp();
 
-        if (!this.inputFiles.equals(EMPTY)) {
+        if (this.inputFiles != null && !this.inputFiles.isEmpty()) {
             String[] inputFileSplit = this.inputFiles.split(VALUE_SPLIT);
 
             if (inputFileSplit.length > 0) {
@@ -242,7 +251,7 @@ public class Application {
             }
         }
 
-        throw new IllegalArgumentException(PROP_MESSAGE_WRONGORMISSINGINPUTFILES_EXCEPTION);
+        return false;
     }
 
     /**
@@ -292,7 +301,7 @@ public class Application {
         // Wenn Property für Application GUI Start gesetzt ist, wird dieser Wert verwendet um abzufragen ob Applikation
         // mit GUI oder ohne gestartet werden soll
         else {
-            if (Boolean.parseBoolean(PROP_APPLICATION_STARTGUI)) {
+            if (IS_PROP_APPLICATION_STARTGUI) {
                 startGui = 1;
             }
         }

@@ -19,7 +19,6 @@ erwarteten Ergebnisse. Einige Einstellungen lassen sich über den Parameter --pr
 das Ergebnis der Applikation individualisiert werden kann. Folgende Einstellungen sind verfügbar:
 
 planingPeriod.planingMode=sequential|random
-shoppingList.generationMode=simple|advanced
 
 outputData.LayoutMenuePlan=grouped|single
 outputData.generateCSV=true|false
