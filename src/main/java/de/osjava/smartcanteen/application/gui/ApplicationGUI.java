@@ -32,8 +32,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
-import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
-
 import de.osjava.smartcanteen.application.Application;
 import de.osjava.smartcanteen.builder.result.Meal;
 import de.osjava.smartcanteen.data.Canteen;
@@ -221,14 +219,10 @@ public class ApplicationGUI {
         final JSlider sldPriceForOneUnitMax = new JSlider(JSlider.HORIZONTAL, 50, 1000, Integer.parseInt(PropertyHelper
                 .getProperty("ingredient.priceForOneUnit.max")) * 100);
 
-        // Erstellen eins Tables für die Bezeichnung
-        Hashtable labelTable = new Hashtable();
-        labelTable.put(new Integer(0), new JLabel("min. 0,01"));
-        labelTable.put(new Integer(500), new JLabel("5,00"));
-        labelTable.put(new Integer(1000), new JLabel(" max. 10,00"));
-        // sldPriceForOneUnitMax.setLabelTable(labelTable);
-
-        sldPriceForOneUnitMax.setPaintLabels(true);
+        // Lininen in Slider anzeigen (Major bei jedem 5ten Euro und Minor bei jedem Euro)
+        sldPriceForOneUnitMax.setMajorTickSpacing(500);
+        sldPriceForOneUnitMax.setMinorTickSpacing(100);
+        sldPriceForOneUnitMax.setPaintTicks(true);
 
         pnlProcessOptionArea.add(sldPriceForOneUnitMax);
 
