@@ -60,15 +60,8 @@ public class ApplicationGUI {
     private static final int PROP_GUI_WINDOWHEIGHT = Integer.parseInt(PropertyHelper.getProperty("gui.windowHeight"));
 
     // Anzahl der Gerichte pro Tag aus Properties auslesen und speichern in lokale Variable (geparstes int)
-    static int mealsPerDay = Integer.parseInt(PropertyHelper.getProperty("planingPeriod.mealsPerDay"));
-
-    private static Application application;
-    private static JLabel lblPreviewText2;
-    private static String[] tablePreviewHeader = new String[mealsPerDay + 2];
-    private static String[][] tablePreviewContent = null;
-    private static JTable tblMenuPlan;
-
-    private JTextArea displayInputFiles;
+    private static final int PROP_PLANINGPERIOD_MEALSPERDAY = Integer.parseInt(PropertyHelper
+            .getProperty("planingPeriod.mealsPerDay"));
 
     private static final String PROP_MESSAGE_CLOSEOPERATION_MSG = PropertyHelper
             .getProperty("message.closeOperation.message");
@@ -84,6 +77,12 @@ public class ApplicationGUI {
             .getProperty("message.noOutputFormatSelected.message");
     private static final String PROP_MESSAGE_NOOUTPUTFORMATSELECTED_TITLE = PropertyHelper
             .getProperty("message.noOutputFormatSelected.title");
+
+    private Application application;
+    private JLabel lblPreviewText2;
+    private String[] tablePreviewHeader = new String[PROP_PLANINGPERIOD_MEALSPERDAY + 2];
+    private String[][] tablePreviewContent = null;
+    private JTable tblMenuPlan;
 
     /**
      * Standardkonstruktor
@@ -369,8 +368,8 @@ public class ApplicationGUI {
                     ex.printStackTrace();
                 }
 
-                ApplicationGUI.refreshCostLabel();
-                ApplicationGUI.refreshPreviewTable();
+                refreshCostLabel();
+                refreshPreviewTable();
 
                 if (!btnSaveResults.isEnabled()) {
                     btnSaveResults.setEnabled(true);
@@ -416,7 +415,7 @@ public class ApplicationGUI {
     /**
      * Methode die den JTable auf mit einem neuen model füllt
      */
-    private static void refreshPreviewTable() {
+    private void refreshPreviewTable() {
         tablePreviewContent = generatePreviewContent();
         DefaultTableModel model = new DefaultTableModel(tablePreviewContent, tablePreviewHeader);
         tblMenuPlan.setModel(model);
@@ -425,12 +424,11 @@ public class ApplicationGUI {
     /**
      * Methode die das Label für die Ausgabe der Gesamtkosten neu setzt
      */
-    private static void refreshCostLabel() {
-        Amount calculateTotalPrice = application.getShoppingList().calculateTotalPrice();
+    private void refreshCostLabel() {
+        Amount calculateTotalPrice = this.application.getShoppingList().calculateTotalPrice();
 
         lblPreviewText2.setText("<html>Gesamtkosten für den Einkauf: <u>" + FileHelper.formatBD(calculateTotalPrice
-                .getValue()) + " "
-                + calculateTotalPrice.getUnit().getName() + " </u></html>");
+                .getValue()) + " " + calculateTotalPrice.getUnit().getName() + " </u></html>");
 
     }
 
@@ -480,7 +478,7 @@ public class ApplicationGUI {
      *         ein Array mit Daten für die Menüpläne aller
      *         vorhandenen Kantinen
      */
-    private static String[][] generatePreviewContent() {
+    private String[][] generatePreviewContent() {
         Canteen[] canteens = application.getCanteens();
         int mealsInList = 0;
         int aryPosX = 0;
@@ -489,10 +487,10 @@ public class ApplicationGUI {
         // aufsummieren, wie viele Zeilen das Array für alle Kantinen benötigt
         for (Canteen canteen : canteens) {
             List<Meal> mealsSortedByDate = canteen.getMenuPlan().getMealsSortedByDate();
-            mealsInList = mealsInList + (mealsSortedByDate.size() / mealsPerDay);
+            mealsInList = mealsInList + (mealsSortedByDate.size() / PROP_PLANINGPERIOD_MEALSPERDAY);
         }
         // Erzeugen 2D-StringArray in welches die Ergebnisse geschrieben werden
-        String[][] outputString = new String[mealsInList][mealsPerDay + 2];
+        String[][] outputString = new String[mealsInList][PROP_PLANINGPERIOD_MEALSPERDAY + 2];
 
         for (Canteen canteen : canteens) {
             // auslesen des Kantinen-Namens

@@ -49,9 +49,6 @@ public class MenuPlanBuilder {
     private static final Integer PROP_CANTEEN_MUELHEIM_NUMBEROFEMPLOYEES = Integer.valueOf(PropertyHelper
             .getProperty("canteen.muelheim.numberOfEmployees"));
 
-    private static final String PROP_PLANINGPERIOD_PLANINGMODE = PropertyHelper
-            .getProperty("planingPeriod.planingMode");
-
     private static final Integer PROP_PLANINGPERIOD_MEALSPERDAY = Integer.valueOf(PropertyHelper
             .getProperty("planingPeriod.mealsPerDay"));
     private static final Integer PROP_PLANINGPERIOD_MEATMEALSPERDAY_MIN = Integer.valueOf(PropertyHelper
@@ -66,9 +63,6 @@ public class MenuPlanBuilder {
             .getProperty("planingPeriod.weekWorkdays"));
     private static final Integer PROP_PLANINGPERIOD_WEEKS = Integer.valueOf(PropertyHelper
             .getProperty("planingPeriod.weeks"));
-
-    private static final BigDecimal PROP_INGREDIENT_PRICEFORONEUNIT_MAX = new BigDecimal(
-            PropertyHelper.getProperty("ingredient.priceForOneUnit.max"));
 
     private static final Integer PROP_PLANINGPERIOD_TOTALWEEKANDWORKDAYS = (PROP_PLANINGPERIOD_WEEKWORKDAYS * PROP_PLANINGPERIOD_WEEKS);
     private static final Integer PROP_PLANINGPERIOD_TOTALMEALS = (PROP_PLANINGPERIOD_MEALSPERDAY * PROP_PLANINGPERIOD_WEEKWORKDAYS * PROP_PLANINGPERIOD_WEEKS);
@@ -183,6 +177,9 @@ public class MenuPlanBuilder {
             }
         }
 
+        BigDecimal propIngredientPriceForOneUnitMax = new BigDecimal(
+                PropertyHelper.getProperty("ingredient.priceForOneUnit.max"));
+
         // Überprüfung ob eine Zutat eines Gerichts über einem festgelegten Maximalwert liegt. Wenn ja, wird dieses
         // Gericht nicht bestellt, um die Kosten des Speiseplans ökonomisch sinnvoll zu begrenzen
         for (IngredientListItem ingredientListItem : recipe.getIngredientList()) {
@@ -192,7 +189,7 @@ public class MenuPlanBuilder {
 
             if (bestPriceForOneUnitOfIngredient != null) {
                 if (NumberHelper.compareGreaterOrEqual(bestPriceForOneUnitOfIngredient.getValue(),
-                        PROP_INGREDIENT_PRICEFORONEUNIT_MAX)) {
+                        propIngredientPriceForOneUnitMax)) {
                     return false;
                 }
             }
@@ -874,10 +871,12 @@ public class MenuPlanBuilder {
      */
     public WeekWorkday getWeekAndWorkday(Map<WeekWorkday, Set<Recipe>> planingPeriod, Set<WeekWorkday> weekWorkdays) {
 
-        if (PROP_PLANINGPERIOD_PLANINGMODE.equals("") || PROP_PLANINGPERIOD_PLANINGMODE.equals(PLANING_MODE_SEQUENTIAL)) {
+        String propPlaningPeriodPlaningMode = PropertyHelper.getProperty("planingPeriod.planingMode");
+
+        if (propPlaningPeriodPlaningMode.equals("") || propPlaningPeriodPlaningMode.equals(PLANING_MODE_SEQUENTIAL)) {
             return getSequentialWeekAndWorkday(planingPeriod, weekWorkdays);
         }
-        else if (PROP_PLANINGPERIOD_PLANINGMODE.equals(PLANING_MODE_RANDOM)) {
+        else if (propPlaningPeriodPlaningMode.equals(PLANING_MODE_RANDOM)) {
             return getRandomWeekAndWorkday(planingPeriod, weekWorkdays);
         }
 
