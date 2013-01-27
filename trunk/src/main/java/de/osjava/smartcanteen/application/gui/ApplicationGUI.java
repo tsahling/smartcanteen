@@ -12,6 +12,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -30,6 +31,8 @@ import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
+
+import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
 
 import de.osjava.smartcanteen.application.Application;
 import de.osjava.smartcanteen.builder.result.Meal;
@@ -80,6 +83,7 @@ public class ApplicationGUI {
 
     private Application application;
     private JLabel lblPreviewText2;
+    private JLabel lbProcessText4;
     private String[] tablePreviewHeader = new String[PROP_PLANINGPERIOD_MEALSPERDAY + 2];
     private String[][] tablePreviewContent = null;
     private JTable tblMenuPlan;
@@ -211,19 +215,27 @@ public class ApplicationGUI {
         pnlProcessOptionArea.add(rbtnProcessType2);
 
         // generieren JSlider für das Setzen des Wertes maximale Kosten je Position 1G
-        JLabel lbOutputText3 = new JLabel("max. Kosten (Eur) je Gr:");
-        pnlProcessOptionArea.add(lbOutputText3);
+        JLabel lbProcessText3 = new JLabel("max. Kosten (Eur) je Gr:");
+        pnlProcessOptionArea.add(lbProcessText3);
 
-        final JSlider sldPriceForOneUnitMax = new JSlider(JSlider.HORIZONTAL, 0, 10, Integer.parseInt(PropertyHelper
-                .getProperty("ingredient.priceForOneUnit.max")));
+        final JSlider sldPriceForOneUnitMax = new JSlider(JSlider.HORIZONTAL, 50, 1000, Integer.parseInt(PropertyHelper
+                .getProperty("ingredient.priceForOneUnit.max")) * 100);
 
-        // Turn on labels at major tick marks.
-        sldPriceForOneUnitMax.setMajorTickSpacing(5);
-        sldPriceForOneUnitMax.setMinorTickSpacing(1);
-        sldPriceForOneUnitMax.setPaintTicks(true);
+        // Erstellen eins Tables für die Bezeichnung
+        Hashtable labelTable = new Hashtable();
+        labelTable.put(new Integer(0), new JLabel("min. 0,01"));
+        labelTable.put(new Integer(500), new JLabel("5,00"));
+        labelTable.put(new Integer(1000), new JLabel(" max. 10,00"));
+        // sldPriceForOneUnitMax.setLabelTable(labelTable);
+
         sldPriceForOneUnitMax.setPaintLabels(true);
 
         pnlProcessOptionArea.add(sldPriceForOneUnitMax);
+
+        // generieren Label für gesetzten Wert in Euro
+        lbProcessText4 = new JLabel(FileHelper.formatBD(new BigDecimal(PropertyHelper
+                .getProperty("ingredient.priceForOneUnit.max"))) + " Euro");
+        pnlProcessOptionArea.add(lbProcessText4);
 
         // Anlegen eines Buttons für den Start der Verarbeitung
         final JButton btnStartProcess = new JButton("Verarbeitung starten");
@@ -275,11 +287,11 @@ public class ApplicationGUI {
         sldPriceForOneUnitMax.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent arg0) {
-                int value = sldPriceForOneUnitMax.getValue();
-                String strValue = Integer.valueOf(value).toString();
-
-                System.out.println(value);
-                PropertyHelper.setProperty("ingredient.priceForOneUnit.max", strValue);
+                int value = (sldPriceForOneUnitMax.getValue());
+                BigDecimal bgValue = new BigDecimal(value);
+                bgValue = bgValue.divide(new BigDecimal(100), 2, BigDecimal.ROUND_DOWN);
+                lbProcessText4.setText(FileHelper.formatBD(bgValue) + " Euro");
+                PropertyHelper.setProperty("ingredient.priceForOneUnit.max", bgValue.toString());
             }
         });
 
