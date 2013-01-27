@@ -12,7 +12,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
 
-import de.osjava.smartcanteen.application.CSVTokenizer;
+import de.osjava.smartcanteen.application.InputFileHandler;
 import de.osjava.smartcanteen.base.HitListBase;
 import de.osjava.smartcanteen.base.ProviderBase;
 import de.osjava.smartcanteen.base.RecipeBase;
@@ -32,7 +32,7 @@ import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
  * TODO(Francesco Luciano) Dokumentieren
  * TODO(Francesco Luciano) Klassenbeschreibung JavaDoc
  * TODO(Francesco Luciano) Methodenbeschreibung JavaDoc
- * TODO(Francesco Luciano) Bitte Kommentare in den Methoden mit // machen. Über Methoden mit /**. Aber nicht mit /*
+ * TODO(Francesco Luciano) Bitte Kommentare in den Methoden mit // machen. √úber Methoden mit /**. Aber nicht mit /*
  * 
  */
 
@@ -42,7 +42,7 @@ import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
  */
 public class BaseHelper {
 
-    /* Hier werden feste Werte aus einer externen Properties Datei ausgelesen und auf String Variablen gespeichert */
+    // Feste Werte aus Properties Datei auslesen und String Variablen zuweisen
 
     private static final String INPUT_DATA_FISH = PropertyHelper.getProperty("inputData.ingredientType.fish");
     private static final String INPUT_DATA_MEAT = PropertyHelper.getProperty("inputData.ingredientType.meat");
@@ -59,7 +59,7 @@ public class BaseHelper {
             .getProperty("inputData.typeOfTrader.farmer");
 
     /**
-     * Methode um die Liste der beliebtesten Gerichte aus einer übergebenen Datei einzulesen.
+     * Diese Methode liest die beliebtesten Gerichte der Input Datei HitList
      * 
      * @param inputFileURL Url der einzulesenden Datei
      * 
@@ -69,35 +69,59 @@ public class BaseHelper {
      */
     public static HitListBase readHitlist(URL inputFileURL) throws IOException {
 
+        /* Die Klasse Vector ist eine der Traditionellen Java Collections die seit dem JDK 1.0 vorhanden sind.
+         * Ein Vector ist eine Java-Repraesentation einer linearen Liste. Die Liste kann Elemente beliebigen
+         * Typs enthalten, und ihre Laenge ist zur Laufzeit veraenderbar.
+         * Vector erlaubt das Einfuegen von Elementen an beliebiger Stelle und bietet sowohl sequentiellen
+         * als auch wahlfreien Zugriff auf die Elemente.
+         * 
+         * List, Vector erlauben duplikate
+         * 
+         * Das JDK realisiert einen Vector als Array von Elementen des Typs Object.
+         * Daher sind Zugriffe auf vorhandene Elemente und das Durchlaufen der Liste schnelle Operationen.
+         * Loeschungen und Einfuegungen, die die interne Kapazitaet des Arrays ueberschreiten, sind dagegen relativ
+         * langsam,
+         * weil Teile des Arrays umkopiert werden muessen. */
+
+        // Die Variable lines ist vom Typ vector der ein Array von Strings speichert
+        // Die Variable wird verwendet um die eingelesenen Zeilen in Ihren Einzelteilen zu Speichern
         Vector<String[]> lines = new Vector<String[]>();
 
-        /* Variable vom Typ HitListBase um die Gerichte abzuspeichern */
+        // Die Variable hitlist ist vom Typ HitListBase
+        // HitListBase ist eine Datentraegerklasse welche die komplette einzulesenden Datei
+        // der beliebtesten Gerichte repraesentiert.
         HitListBase hitlist = new HitListBase();
 
-        /* Variable die den Rang des Gerichtes speichert */
+        // Die Variable mealplacement speichert den Rang des Gericht
         Integer mealPlacement = null;
-        /* Variable des den Namen des Gerichtes speichert */
+        // Die Variable mealName speichert den Namen des Gericht
         String mealName = null;
 
-        /* Instanz vom Typ CSVTokenizer um die Datei einzulesen und zu verarbeiten */
-        CSVTokenizer csv = new CSVTokenizer(inputFileURL, ',');
+        // Instanz vom Typ CSVTokenizer um die Datei einzulesen und zu verarbeiten
+        InputFileHandler csv = new InputFileHandler(inputFileURL, ',');
 
-        /* Solange es Zeilen in der Datei gibt, werden diese in den Vector lines gespeichert */
+        // Solange es Zeilen in der Datei gibt, werden diese in den Vector lines gespeichert
         while (csv.hasMoreLines()) {
             lines.add(csv.nextLine());
         }
 
-        /* Iteration durch den Vector */
+        // Wenn keine Zeile mehr in der einzulesenden Datei vorhanden sind,
+        // wird durch den gefuellten Vector iteriert.
+        // Die Laufvariable i laeuft die Elemnte des Vectors ab
+        // Jedes Element ist ein String[] mit zwei Feldern
+        // Das 0 Feld beinhaltet des Rang des Gericht
+        // Das 1 Feld beinhaltet desn Namen des Gericht
+        // Die Werte aus dem String[] werden den vorher deklarierten Variablen gespeichert
+
+        // Mithilfe dieser Variablen wird eine HitListItem erzeugt. Ein HitListItem ist eine
+        // Datentraegerklasse die EIN Gericht der HitList Klasse repraesentiert.
+        // Das erzeugte HitListItem wird der hitlist hinzugefuegt.
 
         for (int i = 0; i <= lines.size() - 1; i++) {
 
-            /* Der Rang des Gericht wird gesetzt */
             mealPlacement = Integer.valueOf(lines.get(i)[0]);
-            /* Name des Gericht wird gesetzt */
             mealName = lines.get(i)[1];
-            /* Neues HitlistItem wird erzeugt mit den vorher eingelesenen werten */
             HitListItem oneHitListItem = new HitListItem(mealName, mealPlacement);
-            /* HitListItem wird der HitListBase hinzugefügt */
             hitlist.addHitListItem(oneHitListItem);
         }
 
@@ -114,117 +138,124 @@ public class BaseHelper {
      */
     public static ProviderBase readPriceList(URL inputFileURL, ProviderBase providerBase) throws IOException {
 
+        // s.o.
         Vector<String[]> lines = new Vector<String[]>();
 
-        /* Deklaration eines Händlers */
+        // TODO(Francesco Luciano) Tim Fragen was hier passiert!
         if (providerBase == null) {
             providerBase = new ProviderBase();
         }
 
-        /* Typ des Händler zu speichern (Bauer oder Grosshändler) */
+        // Die Variable typeOfTrader speichert den Typ eines Haendler ab.
         String typeOfTrader = null;
-        /* Name des Händler */
+        // Die Variable nameOfTrader speichert den Namen eines Haendler ab.
         String nameOfTrader = null;
-        /* Bei Großhändlern die Transportkosten und bei Bauern die Entfernung */
+        // Die Variable transportCost speichert die Transportkosten eines Haendler ab.
         String transportCost = null;
+        // Die Variable transportCostBD speichert die Transportkosten eines Haendler als BigDecimal ab.
         BigDecimal transportCostBD = null;
 
-        /* Deklaration eines Lebensmittel */
-
-        /* Größe des Gebindes als BigDecimal */
         BigDecimal sizeOfItemBundleBD = null;
-        /* Größe des Gebindes mit Einheit */
-        Amount size = null;
-        /* Einheit des Gebindes (Gramm, Stück oder Liter) */
         String unitOfItemBundle = null;
-        /* Name des Lebensmittel (Gramm, Stück oder Liter) */
+        // Die Variable size ist eine vom Typ Amount, die Klasse Amount ist eine Datentraegerklasse die eine Groeße
+        // repraesentiert.
+        // Ein Amount fuer einen Mengenangabe setzt dich aus der Mengenangabe als BigDecimal und einer Einheit zusammen.
+        Amount size = null;
+
+        // Die Variable nameOfIngredient speichert den Namen eines Lebensmittel ab.
         String nameOfIngredient = null;
-        /* Typ des Lebensmittel als String */
+        // Die Variable typeOfIngredient speichert den Typ (Fleisch, Fisch, Gemuese) eines Lebensmittel ab.
         String typeOfIngredient = null;
-        /* Preis des Lebensmittel als String */
+
         String priceOfIngredient = null;
-        /* Preis des Lebensmittel als Big Dicimal */
         BigDecimal priceOfIngredientBD = null;
-        /* Einheit des Preises */
+        // Die Variable price ist eine vom Typ Amount, die Klasse Amount ist eine Datentraegerklasse die Groeße
+        // repraesentiert.
+        // Ein Amount fuer einen Preis setzt dich aus der Einkauspreis als BigDecimal und einer Einheit zusammen.
         Amount price = null;
-        /* Vorhandene Menge des Lebensmittel */
+
+        // Variable availableQuantityOfIngredient repraesentiert die vroahndene Menge eines Gebeindes/Lebensmittel
         BigDecimal availableQuantityOfIngredient = null;
 
-        /* Instanz der Klasse Lebensmittel */
+        // Instanz der Datentraegerklasse Ingredient, die ein Lebensmittel repraesentiert
         Ingredient ingredient = null;
-        /* Instanz der Klasse PriceListItem */
+        // Instanz der Datentraegerklasse PriceListItem, die ein Element in einer Preisliste repraesentiert
         PriceListItem priceListItem = null;
-        /* Set um die Positionen der Preisliste zu speichern */
+        // Java Set um die Positionen der Preisliste zu speichern
         Set<PriceListItem> priceList = new HashSet<PriceListItem>();
 
-        CSVTokenizer csv = new CSVTokenizer(inputFileURL, ',');
-
+        // s.o
+        InputFileHandler csv = new InputFileHandler(inputFileURL, ',');
+        // Solange hasMoreLines() == true in der Schleife bleiben
         while (csv.hasMoreLines()) {
-            // Zeile, einlesen
+            // String[] in lines hinzufügen
             lines.add(csv.nextLine());
         }
 
-        /* Erste Zeile der CSV Datei einlesen */
+        // Kopfzeile der Preisliste auslesen
 
-        /* Typ des Händlers auslesen */
+        // Typ des Haendlers (Bauer, Großhaendler)
         typeOfTrader = lines.get(0)[0];
-        /* Name des Händler einlesen */
+        // Name des Haendler
         nameOfTrader = lines.get(0)[1];
-        /* Transportkosten oder Entfernung Einlesen */
+        // Transportkosten des Haendler
         transportCost = lines.get(0)[2].replace(",", ".");
-        /* String in BigDecimal Konvertieren */
+        // Transportkosten von String in BigDecimal umgewandelt
         transportCostBD = new BigDecimal(transportCost);
 
-        /* Bei Zeile 2 Anfangen Lebensmittel auf Variablen aufteilen */
+        // Iteration des Vector faengt bei Element 1 an, da 0 die Kopfzeile ist.
+        // Die Laufvariable i laeuft die Elemnte des Vectors ab
+        // Jedes Element ist ein String[] mit fuenf Feldern
+        // Das 0 Feld beinhaltet die Groeße des Gebindes
+        // Das 1 Feld beinhaltet die Mengenangabe (Stueck, g, kg) des Lebensmittel
+        // Das 2 Feld beinhaltet den Typ des Lebensmittel (Fleisch, Fisch, Gemuese)
+        // Das 3 Feld beinhaltet den Preis des Gebindes
+        // Das 4 Feld beinhaltet die vorhandene Menge des Haendlers
+
         for (int i = 1; i <= lines.size() - 1; i++) {
 
-            /* Größe des Gebinde */
+            // Der String wird in einen BigDecimal umgewandelt
             sizeOfItemBundleBD = new BigDecimal(lines.get(i)[0]);
-            /* Art der Einheit */
             unitOfItemBundle = lines.get(i)[1];
-            /* Name des Lebensmittel */
             nameOfIngredient = lines.get(i)[2];
-            /* Typ des Lebensmittel */
             typeOfIngredient = lines.get(i)[3];
-            /* Preis des Lebensmittel */
+            // Komma werden zu Punkten, da Kommazahlen in Java mit Punkten getrennt werden
             priceOfIngredient = lines.get(i)[4].replace(",", ".");
-            /* Preis in Big Decimal Konvertieren */
+            // Der String wird zu einem BigDecimal umgewandelt
             priceOfIngredientBD = new BigDecimal(priceOfIngredient);
-            /* Vorhandene Menge */
             availableQuantityOfIngredient = new BigDecimal(lines.get(i)[5]);
 
+            // Price wird erzeugt mit der Einheit Euro
             price = new Amount(priceOfIngredientBD, UnitOfMeasurement.EUR);
 
-            /* Abfrage um was für ein Lebensmittel es sich handelt um den dazugehörigen IngredientType zu setzen */
-            /* Erzeugung eines Lebensmittel vom Typ Ingredient mit dem dazugehörigen IngredientType */
-
+            // Variable ignt ist vom Typ IngredientType, diese repraesentiert den Typ eines Lebensmittel
             IngredientType ingt = null;
-
+            // Aufruf der Klassenmethode typeOfIngredient um den richtigen Lebensmittel Typ zu setzen
             ingt = typeOfIngredient(typeOfIngredient);
-
+            // Erzeugen eines Lebensmittel mit dazugehoerigen Lebensmitteltyp
             ingredient = new Ingredient(nameOfIngredient, ingt);
 
-            /* Abfrage um was für eine Maßeinheit es sich handelt */
-            /* Erzeugung einer Preislisten Position vom Typ PriceListItem */
-
+            // Aufruf der Klassenmethode unitOfMeasurement um den korekten Mengenanagben Typ zu setzen
             UnitOfMeasurement uom = unitOfMeasurement(unitOfItemBundle);
-
+            // Size wird erzeugt mit der dazugehoerigen Mengeneinheit
             size = new Amount(sizeOfItemBundleBD, uom);
 
+            // Eine Preislistenposition wird erzeugt
             priceListItem = new PriceListItem(size, ingredient, price, availableQuantityOfIngredient);
 
-            /* Set mit Preislisten Positionen füllen */
+            // Die erzeugte Preislistenposition dem Set hinzufuegen
             priceList.add(priceListItem);
         }
 
-        /* Abfragen um was für einen Typ von Händler es sich handelt */
-        /* Wenn es ein Grosshändler ist wird ein Wholesaler erzeugt */
+        // TODO(Francesco Luciano) Variable Transportkosten ist nicht richtig anders benennen!
+        // Abfragen um was fuer eine Art Haendler es sich Handelt um Einheit der TransportKosten zu setzen
+        // Einen Haendler erzeugen mit Name, der Preisliste und den Transportkosten
+
         if (typeOfTrader.equals(INPUT_DATA_TYPE_OF_TRADER_WHOLESALER)) {
             Amount transportFee = new Amount(transportCostBD, UnitOfMeasurement.EUR);
             Wholesaler wholesaler = new Wholesaler(nameOfTrader, priceList, transportFee);
             providerBase.addProvider(wholesaler);
         }
-        /* Wenn es ein Bauer ist wird ein Farmer erzeugt */
         else if (typeOfTrader.equals(INPUT_DATA_TYPE_OF_TRADER_FARMER)) {
             Amount totalDistance = new Amount(transportCostBD, UnitOfMeasurement.KMR);
             Farmer farmer = new Farmer(nameOfTrader, priceList, totalDistance);
@@ -245,57 +276,65 @@ public class BaseHelper {
 
     public static RecipeBase readRecipeList(URL inputFileURL) throws IOException {
 
+        // s.o
         Vector<String[]> lines = new Vector<String[]>();
 
-        /* Name des Rezeptes -analog auch Name des Gericht- */
+        // Die Variable nameOfRecipe speichert den Namen des Rezept
         String nameOfRecipe = null;
-        /* Menge des Lebensmittel */
+        // Die Variable quantityOfIngredient speichert die Menge des Lebensmittel
         String quantityOfIngredient = null;
-        /* Masseinheit der Menge */
+        // Die Variable unitOfQuantityFromIngredient speichert die Einheit der Menge des Lebensmittel
         String unitOfQuantityFromIngredient = null;
-        /* Namen des Lebensmittel */
+        // Die Variable nameOfIngredient speichert den Namen des Lebensmittel
         String nameOfIngredient = null;
 
-        /* Instanz von der Datenträgerklasse RecipeBase um die Rezepte abzulegen */
+        // Instanz der Datentraegerklasse RecipeBase
         RecipeBase recipeBase = new RecipeBase();
 
-        /* Eine Map um die eingelesenen Zeilen nach Namen zu gruppieren */
-        /* Die Hashmap wird mit einem String und einem Objekt vom Typ RecipeListItem gefüllt */
+        /* Eine Map enthaelt Objekte in einer strukturierten Form. Eine Map ist wie ein Woerterbuch aufgebaut.
+         * Jeder Eintrag besteht aus einem Schluessel (key) und dem zugehoerigen Wert (value).
+         * Es koennen beliebige Objekte hinzugefuegt oder entfernt werden.
+         * Jeder Schluessel darf in einer Map nur genau einmal vorhanden sein,
+         * wodurch jedes Schluessel-Wert-Paar einzigartig ist. */
+
+        // Die Map wird hier als Rezeptbuch benutzt, der einzigartige Key ist der Name des Rezept
+        // der Value ist eine Liste von Positionen des Rezept
+
+        // TODO(Francesco Luciano) Bezeichner grouping schlecht gewaehlt evt. recipeMap
         Map<String, List<RecipeListItem>> grouping = new HashMap<String, List<RecipeListItem>>();
 
-        CSVTokenizer csv = new CSVTokenizer(inputFileURL, ',');
-
+        // s.o
+        InputFileHandler csv = new InputFileHandler(inputFileURL, ',');
         while (csv.hasMoreLines()) {
-            // Zeile, einlesen
             lines.add(csv.nextLine());
         }
 
-        /* Iteration durch den Vector der die eingelesenen Zeilen enthält */
+        // Die Laufvariable i laeuft die Elemnte des Vectors ab
+        // Jedes Element ist ein String[] mit vier Feldern
+        // Das 0 Feld beinhaltet den Namen des Rezept
+        // Das 1 Feld beinhaltet die Mengenangabe des Lebensmittel
+        // Das 2 Feld beinhaltet die Einheit der Mengenanabe (Stueck, g,)
+        // Das 3 Feld beinhaltet den Namen des Lebensmittel
+
         for (int i = 0; i <= lines.size() - 1; i++) {
-            /* Name des Rezept wird aus dem Array ausgelesen und auf die Variable geschrieben */
             nameOfRecipe = lines.get(i)[0];
-            /* Menge des Lebensmittel wird aus dem Array ausgelesen und auf die Variable geschrieben */
+            // Komma werden zu Punkten, da Kommazahlen in Java mit Punkten getrennt werden
             quantityOfIngredient = lines.get(i)[1].replace(",", ".");
-            /* Masseinheit des Lebensmittel wird aus dem Array ausgelesen und auf die Variable geschrieben */
             unitOfQuantityFromIngredient = lines.get(i)[2];
-            /* Name des Lebensmittel wird aus dem Array ausgelesen und auf die Variable geschrieben */
             nameOfIngredient = lines.get(i)[3];
 
-            /* Wenn es in der Hashmap bereits ein Key mit dem Wert nameOfRecipe gibt,
-             * dann hohle dir genau das Objekt und füge der Liste ein neues RecipeListItem hinzu. */
+            // Die Implmentierung der Map wird hier benutzt um keine doppelten Rezepte abzuspeicher
+            // und die Lebensmittel dem Rezept zuzuordnen.
+            // Wenn die Map bereits einen Schluessel mit dem Namen des Rezept hat
+            // wird der Liste eine neue Rezept Position hinzugefuegt.
             if (grouping.containsKey(nameOfRecipe)) {
                 grouping.get(nameOfRecipe).add(
                         new RecipeListItem(quantityOfIngredient, unitOfQuantityFromIngredient, nameOfIngredient));
             }
 
-            /* Wenn die HashMap noch keinen Key mit dem Wert von nameOfRecipe besitzt,
-             * also ein neues Rezept in der Datei anfängt. Dann erzeuge eine neue Java Liste die RecipeListItem
-             * aufnimmt.
-             * Erzeuge ein RecipeListItem mit den ausgelesenen Werten zu Mengenangaben, Masseinheiten und Namen des
-             * Lebensmittel
-             * und füge es der ebend erzeugten Liste zu.
-             * Füge zur Hashmap grouping ein Element mit dem Key nameOfRecipe und der ebend erzeugten Liste mit
-             * Inhalt RecipeListItem hinzu. */
+            // Wenn die Map noch keinen Schluessel mit dem Namen des Rezept hat
+            // wird eine neue Liste um die Rezeptpositionen abzulegen erzeugt.
+            // Rezeptposition wird der Liste hinzugefuegt
             else {
                 List<RecipeListItem> list = new ArrayList<RecipeListItem>();
                 list.add(new RecipeListItem(quantityOfIngredient, unitOfQuantityFromIngredient, nameOfIngredient));
@@ -303,40 +342,36 @@ public class BaseHelper {
             }
         }
 
-        /* links vom Doppelpunkt vom erweiterten for deklaration einer Variable vom Typ
-         * Map.Entry-Objekt welche die Werte String und eine Liste mit RecipeListItem aufnehmen kann.
-         * rechts vom doppelpunkt vom erweiterten for Aufruf der Map eigenen Methode entryset()
-         * die ein Set mit Entry-Objekten zurückgibt, die Schlüssel sowie Wert gleichzeitig enthalten. */
+        // Erweitertes for um duch die Map zu iterieren
+        // Variable vom typ entry vom Typ Entry speicher eine Map Element ab
+        // Mit der Map Methode entrySet() wird ein Map Element zurueckgegeben
         for (Entry<String, List<RecipeListItem>> entry : grouping.entrySet()) {
 
-            /* Erzeugen eines neuen Rezept vom Typ Recipe */
-            /* Setzen des Namen des Rezeptes durch entry.getKey() */
-            /* Standartkonstruktor erwartet als zweiten Parameter den Rang des Gerichtes, zu diesem Zeitpunkt setzen
-             * wir den Rang auf 0. */
+            // Erzeugung eines Rezept mit dem Namen des Rezept (Key des Map Element)
             Recipe recipe = new Recipe(entry.getKey());
-            /* Eine HashSet erzeugen und dem Objekt vom Typ Recipe übergeben */
-            /* TODO(Francesco Luciano) Diese Zeile Code von Tim erklären lassen */
+
+            // TODO(Francesco Luciano) Diese Zeile Code von Tim erklaeren lassen
             recipe.setIngredientList(new HashSet<IngredientListItem>());
 
-            /* Durch die Liste iterieren welche die Lebensmittel speichert */
+            // Erweitertes for um duch die Liste zu iterieren
+            // Mit der Map Methode getValue() wird ein der Value des Map Element zurueckgegeben
             for (RecipeListItem recipeListItem : entry.getValue()) {
 
-                /* Variable zum um ide Masseinheit der Mengenangabe zu speichern */
+                // Diese Varaible speichert die Einheit der Mengenangabe als UnitOfMeasurement
                 UnitOfMeasurement uom = null;
-                /* Variable um die Menge des Lebensmittel als BigDecimal zu speichern */
+                // Menge des Lebensmittel abfragen und als BigDecimal in der Variable value speichern
                 BigDecimal value = new BigDecimal(recipeListItem.getQuantityOfIntredient());
 
-                /* Aufruf der Helfermethode unitOfMeasurement, der innere Methodenaufruf ist der eingelesene String
-                 * der Masseinheit */
+                // Aufruf der Klassenmethode unitOfMeasurement um den Typ der Masseinheit abzufragen
                 uom = unitOfMeasurement(recipeListItem.getUnit());
 
-                /* Erzeugung eines Objekt vom Typ IngredientListItem und hinzufügen zu der Liste */
+                // Erzeugen eines Lebensmittel fuer ein Rezept und hinzufuegen zur Liste
                 recipe.getIngredientList().add(
                         new IngredientListItem(new Ingredient(recipeListItem.getNameOfIngredient()), new Amount(value,
                                 uom)));
             }
 
-            /* Das Rezept der RecipeBase hinzufügen */
+            // Rezept in Datentraegerklasse speichern
             recipeBase.addRecipe(recipe);
 
         }
@@ -345,14 +380,14 @@ public class BaseHelper {
     }
 
     /**
-     * Methode die ein Rezept mit dem Rang aus der Hitliste bestückt.
+     * Methode die ein Rezept mit dem Rang aus der Hitliste setzt
      * 
      * @param recipeBase sind die eingelesenen Rezepte
      * @param hitListBase sind die eigelesenen Gerichte der Hitliste
      */
     public static void addRankToRecipes(RecipeBase recipeBase, HitListBase hitListBase) {
 
-        // Iteartion durch das Set welches die eingelesenen Rezpte enthält
+        // Iteartion durch das Set welches die eingelesenen Rezpte enthaelt
         for (Recipe r : recipeBase.getRecipes()) {
 
             // Gericht in der HitListBase finden das den selben Namen wie das aktuelle Gericht in der RecipeBase hat.
@@ -361,7 +396,7 @@ public class BaseHelper {
             HitListItem hitListItem = hitListBase.findHitListItemByName(r.getName());
 
             // Innere KLassen-Methode von HitListItem ruft den Rang von dem zwischengespeicherten Gericht aus der
-            // HitListBase ab -> Result ist ein int. Äußere Methode verarbeitet das Ergebnis (int) direkt um mit der
+            // HitListBase ab -> Result ist ein int. Das Ergebnis (int) direkt mit der
             // Klassen-Methode setRank von Recipe den Rang des Rezept zu setzen */
             if (hitListItem != null) {
                 r.setRank(hitListItem.getRank());
@@ -370,7 +405,7 @@ public class BaseHelper {
     }
 
     /**
-     * Methode die alle {@link Recipe} sowie deren {@link IngredientListItem}s durchläuft und danach in der
+     * Methode die alle {@link Recipe} sowie deren {@link IngredientListItem} durchlaeuft und danach in der
      * {@link ProviderBase} nach dem entsprechenden {@link Ingredient} sucht, um den {@link IngredientType} zu
      * ermitteln. Danach wird der gefundene {@link IngredientType} in das {@link IngredientListItem} des {@link Recipe}
      * gesetzt. Dies muss erfolgen, da in der Rezepte Eingangsdatei keine Typen definiert sind, sondern nur in den
@@ -400,26 +435,22 @@ public class BaseHelper {
      */
     private static UnitOfMeasurement unitOfMeasurement(String inputUnit) {
 
-        // Variablen deklaration
         UnitOfMeasurement uom = null;
 
-        // Vergleich ob der die übergebene Variable gleich dem Inhalt der Konstante INPUT_DATA_UNIT_TYPE_GRAMM ist. Wenn
-        // der Vergleich TRUE ist wird der Variable uom der ENUM Typ GRM zugeordnet
+        // Vergleich des String um die richtige Einheit zu setzen
+
         if (inputUnit.equals(INPUT_DATA_UNIT_TYPE_GRAMM)) {
             uom = UnitOfMeasurement.GRM;
         }
-        // Vergleich ob der die übergebene Variable gleich dem Inhalt der Konstante INPUT_DATA_UNIT_TYPE_LITER ist. Wenn
-        // der Vergleich TRUE ist wird der Variable uom der ENUM Typ LTR zugeordnet
+
         else if (inputUnit.equals(INPUT_DATA_UNIT_TYPE_LITER)) {
             uom = UnitOfMeasurement.LTR;
         }
-        // Vergleich ob der die übergebene Variable gleich dem Inhalt der Konstante INPUT_DATA_UNIT_TYPE_PICES ist. Wenn
-        // der Vergleich TRUE ist wird der Variable uom der ENUM Typ STK zugeordnet.
+
         else if (inputUnit.equals(INPUT_DATA_UNIT_TYPE_PICES)) {
             uom = UnitOfMeasurement.STK;
         }
 
-        // Rückgabe der Variablen
         return uom;
     }
 
@@ -434,23 +465,17 @@ public class BaseHelper {
      */
     private static IngredientType typeOfIngredient(String typeOfIngredient) {
 
-        // Variablen deklaration
         IngredientType ingt = null;
 
-        // Vergleich ob der die übergebene Variable gleich dem Inhalt der Konstante INPUT_DATA_MEAT ist. Wenn der
-        // Vergleich TRUE ist wird der Variable uom der ENUM Typ MEAT zugeordnet
+        // Vergleich des String um die richtige Typ zu setzen
         if (typeOfIngredient.equals(INPUT_DATA_MEAT)) {
             ingt = IngredientType.MEAT;
         }
 
-        // Vergleich ob der die übergebene Variable gleich dem Inhalt der Konstante INPUT_DATA_FISH ist. Wenn der
-        // Vergleich TRUE ist wird der Variable uom der ENUM Typ FISH zugeordnet
         else if (typeOfIngredient.equals(INPUT_DATA_FISH)) {
             ingt = IngredientType.FISH;
         }
 
-        // Vergleich ob der die übergebene Variable gleich dem Inhalt der Konstante INPUT_DATA_VEGETERIAN ist. Wenn der
-        // Vergleich TRUE ist wird der Variable uom der ENUM Typ VEGETABLE zugeordnet
         else if (typeOfIngredient.equals(INPUT_DATA_VEGETERIAN)) {
             ingt = IngredientType.VEGETABLE;
         }
@@ -459,8 +484,8 @@ public class BaseHelper {
     }
 
     /**
-     * Eingebettete Klasse RecipeListItem ist eine Datenträgerklasse die eine Zeile aus der Datei der Rezepte
-     * repräsentiert. Sie wird nur als zwischenspeicher gebraucht um ein Object vom Typ Recipe zu füllen.
+     * Eingebettete Klasse RecipeListItem ist eine Datentraegerklasse die eine Zeile aus der Datei der Rezepte
+     * repraesentiert. Sie wird nur als zwischenspeicher gebraucht um ein Object vom Typ Recipe zu fuellen.
      * 
      * @author Francesco Luciano
      */
