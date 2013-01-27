@@ -142,9 +142,9 @@ public class BaseHelper {
         // Die Variable nameOfTrader speichert den Namen eines Haendler ab.
         String nameOfTrader = null;
         // Die Variable transportCost speichert die Transportkosten eines Haendler ab.
-        String transportCost = null;
+        String transportUnit = null;
         // Die Variable transportCostBD speichert die Transportkosten eines Haendler als BigDecimal ab.
-        BigDecimal transportCostBD = null;
+        BigDecimal transportUnitBD = null;
 
         BigDecimal sizeOfItemBundleBD = null;
         String unitOfItemBundle = null;
@@ -190,9 +190,9 @@ public class BaseHelper {
         // Name des Haendler
         nameOfTrader = lines.get(0)[1];
         // Transportkosten des Haendler
-        transportCost = lines.get(0)[2].replace(",", ".");
+        transportUnit = lines.get(0)[2].replace(",", ".");
         // Transportkosten von String in BigDecimal umgewandelt
-        transportCostBD = new BigDecimal(transportCost);
+        transportUnitBD = new BigDecimal(transportUnit);
 
         // Iteration des Vector faengt bei Element 1 an, da 0 die Kopfzeile ist.
         // Die Laufvariable i laeuft die Elemnte des Vectors ab
@@ -238,17 +238,16 @@ public class BaseHelper {
             priceList.add(priceListItem);
         }
 
-        // TODO(Francesco Luciano) Variable Transportkosten ist nicht richtig anders benennen!
-        // Abfragen um was fuer eine Art Haendler es sich Handelt um Einheit der TransportKosten zu setzen
+        // Abfragen um was fuer eine Art Haendler es sich handelt um die Einheit des Transport zu setzen
         // Einen Haendler erzeugen mit Name, der Preisliste und den Transportkosten
 
         if (typeOfTrader.equals(INPUT_DATA_TYPE_OF_TRADER_WHOLESALER)) {
-            Amount transportFee = new Amount(transportCostBD, UnitOfMeasurement.EUR);
+            Amount transportFee = new Amount(transportUnitBD, UnitOfMeasurement.EUR);
             Wholesaler wholesaler = new Wholesaler(nameOfTrader, priceList, transportFee);
             providerBase.addProvider(wholesaler);
         }
         else if (typeOfTrader.equals(INPUT_DATA_TYPE_OF_TRADER_FARMER)) {
-            Amount totalDistance = new Amount(transportCostBD, UnitOfMeasurement.KMR);
+            Amount totalDistance = new Amount(transportUnitBD, UnitOfMeasurement.KMR);
             Farmer farmer = new Farmer(nameOfTrader, priceList, totalDistance);
             providerBase.addProvider(farmer);
         }
@@ -291,8 +290,7 @@ public class BaseHelper {
         // Die Map wird hier als Rezeptbuch benutzt, der einzigartige Key ist der Name des Rezept
         // der Value ist eine Liste von Positionen des Rezept
 
-        // TODO(Francesco Luciano) Bezeichner grouping schlecht gewaehlt evt. recipeMap
-        Map<String, List<RecipeListItem>> grouping = new HashMap<String, List<RecipeListItem>>();
+        Map<String, List<RecipeListItem>> recipeGroupingMap = new HashMap<String, List<RecipeListItem>>();
 
         // s.o
         InputFileHandler csv = new InputFileHandler(inputFileURL, ',');
@@ -318,8 +316,8 @@ public class BaseHelper {
             // und die Lebensmittel dem Rezept zuzuordnen.
             // Wenn die Map bereits einen Schluessel mit dem Namen des Rezept hat
             // wird der Liste eine neue Rezept Position hinzugefuegt.
-            if (grouping.containsKey(nameOfRecipe)) {
-                grouping.get(nameOfRecipe).add(
+            if (recipeGroupingMap.containsKey(nameOfRecipe)) {
+                recipeGroupingMap.get(nameOfRecipe).add(
                         new RecipeListItem(quantityOfIngredient, unitOfQuantityFromIngredient, nameOfIngredient));
             }
 
@@ -329,14 +327,14 @@ public class BaseHelper {
             else {
                 List<RecipeListItem> list = new ArrayList<RecipeListItem>();
                 list.add(new RecipeListItem(quantityOfIngredient, unitOfQuantityFromIngredient, nameOfIngredient));
-                grouping.put(nameOfRecipe, list);
+                recipeGroupingMap.put(nameOfRecipe, list);
             }
         }
 
         // Erweitertes for um duch die Map zu iterieren
         // Variable vom typ entry vom Typ Entry speicher eine Map Element ab
         // Mit der Map Methode entrySet() wird ein Map Element zurueckgegeben
-        for (Entry<String, List<RecipeListItem>> entry : grouping.entrySet()) {
+        for (Entry<String, List<RecipeListItem>> entry : recipeGroupingMap.entrySet()) {
 
             // Erzeugung eines Rezept mit dem Namen des Rezept (Key des Map Element)
             Recipe recipe = new Recipe(entry.getKey());
@@ -357,6 +355,7 @@ public class BaseHelper {
                 uom = unitOfMeasurement(recipeListItem.getUnit());
 
                 // Erzeugen eines Lebensmittel fuer ein Rezept und hinzufuegen zur Liste
+                // TODO(Francesco Luciano) Diese Zeile Code von Tim erklaeren lassen
                 recipe.getIngredientList().add(
                         new IngredientListItem(new Ingredient(recipeListItem.getNameOfIngredient()), new Amount(value,
                                 uom)));
