@@ -1,14 +1,14 @@
 package de.osjava.smartcanteen.data.item;
 
 import de.osjava.smartcanteen.application.Application;
-import de.osjava.smartcanteen.application.CSVInputHandler;
+import de.osjava.smartcanteen.application.CSVTokenizer;
 import de.osjava.smartcanteen.data.Recipe;
 
 /**
  * Die Klasse {@link HitListItem} stellt ein Gericht {@link Recipe} anhand des
  * Namens in der Datenträgerklasse (@link HitListBase) dar. Die HitListdatei
  * wird der Klasse {@link Application} als Aufrufparameter übergeben und von der
- * Klasse {@link CSVInputHandler} verarbeitet und in ihre Datenfelder zerlegt. Die
+ * Klasse {@link CSVTokenizer} verarbeitet und in ihre Datenfelder zerlegt. Die
  * Klasse {@link HitListItem} enthält ein Attribut für den Namen des Gerichts
  * und den Rang des Gerichts.
  * 
