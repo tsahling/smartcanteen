@@ -12,7 +12,7 @@ import de.osjava.smartcanteen.helper.NumberHelper;
  * enthält einen Verweis auf das jeweilige Lebensmittel ({@link Ingredient}) den
  * Preis und die verfügbare Menge.
  * 
- * @author Francesco Luciano
+ * @author Tim Sahling
  */
 public class PriceListItem {
 

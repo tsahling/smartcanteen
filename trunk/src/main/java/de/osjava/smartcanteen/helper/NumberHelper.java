@@ -2,6 +2,10 @@ package de.osjava.smartcanteen.helper;
 
 import java.math.BigDecimal;
 
+/**
+ * 
+ * @author Tim Sahling
+ */
 public class NumberHelper {
 
     /**
