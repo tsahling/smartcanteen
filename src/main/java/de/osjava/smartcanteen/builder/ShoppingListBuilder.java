@@ -27,7 +27,6 @@ import de.osjava.smartcanteen.data.item.IngredientListItem;
 import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.helper.BuilderHelper;
 import de.osjava.smartcanteen.helper.NumberHelper;
-import de.osjava.smartcanteen.helper.PropertyHelper;
 
 /**
  * Die Klasse {@link ShoppingListBuilder} ist eine der Geschäftslogikklassen und
@@ -39,12 +38,6 @@ import de.osjava.smartcanteen.helper.PropertyHelper;
  * @author Tim Sahling
  */
 public class ShoppingListBuilder {
-
-    private static final String PROP_SHOPPINGLIST_GENERATIONMODE = PropertyHelper
-            .getProperty("shoppingList.generationMode");
-
-    private static final String GENERATION_MODE_SIMPLE = "simple";
-    private static final String GENERATION_MODE_ADVANCED = "advanced";
 
     private ProviderBase providerBase;
     private Canteen[] canteens;
@@ -75,89 +68,25 @@ public class ShoppingListBuilder {
         // Summieren der Mengen aller für die Speisepläne benötigten Zutaten
         Map<Ingredient, Amount> ingredientQuantities = sumMenuPlanIngredientQuantities();
 
-        if (PROP_SHOPPINGLIST_GENERATIONMODE.equals("") || PROP_SHOPPINGLIST_GENERATIONMODE
-                .equals(GENERATION_MODE_SIMPLE)) {
-            // Ermitteln bei welchem Anbieter, welche Konstellationen von Zutaten am günstigsten eingekauft werden
-            // können
-            Map<AbstractProvider, Set<IngredientQuantity>> bestPriceProviders = determineBestPriceProviders(ingredientQuantities);
+        // Ermitteln bei welchem Anbieter, welche Konstellationen von Zutaten am günstigsten eingekauft werden
+        // können
+        Map<AbstractProvider, Set<IngredientQuantity>> bestPriceProviders = determineBestPriceProviders(ingredientQuantities);
 
-            // Erstellen der Einkaufslistenpositionen
-            List<ShoppingListItem> shoppingListItems = new ArrayList<ShoppingListItem>();
+        // Erstellen der Einkaufslistenpositionen
+        List<ShoppingListItem> shoppingListItems = new ArrayList<ShoppingListItem>();
 
-            for (Entry<AbstractProvider, Set<IngredientQuantity>> entry : bestPriceProviders.entrySet()) {
+        for (Entry<AbstractProvider, Set<IngredientQuantity>> entry : bestPriceProviders.entrySet()) {
 
-                for (IngredientQuantity ingredientQuantity : entry.getValue()) {
-                    shoppingListItems.add(createShoppingListItem(entry.getKey(), ingredientQuantity));
-                }
-            }
-
-            if (!shoppingListItems.isEmpty()) {
-                result.setShoppingListItems(shoppingListItems);
+            for (IngredientQuantity ingredientQuantity : entry.getValue()) {
+                shoppingListItems.add(createShoppingListItem(entry.getKey(), ingredientQuantity));
             }
         }
-        else if (PROP_SHOPPINGLIST_GENERATIONMODE.equals(GENERATION_MODE_ADVANCED)) {
-            result = determineBestPriceShoppingList(ingredientQuantities);
+
+        if (!shoppingListItems.isEmpty()) {
+            result.setShoppingListItems(shoppingListItems);
         }
 
         return result;
-    }
-
-    /**
-     * 
-     * @param ingredientQuantities
-     * @return
-     */
-    private ShoppingList determineBestPriceShoppingList(Map<Ingredient, Amount> ingredientQuantities) {
-        List<ShoppingList> shoppingLists = new ArrayList<ShoppingList>();
-
-        Map<IngredientQuantity, Map<AbstractProvider, List<Amount>>> tempMap = new HashMap<IngredientQuantity, Map<AbstractProvider, List<Amount>>>();
-
-        for (Entry<Ingredient, Amount> entry : ingredientQuantities.entrySet()) {
-
-            Ingredient ingredient = entry.getKey();
-            Amount quantity = entry.getValue();
-
-            Map<AbstractProvider, List<Amount>> distributedIngredientQuantityOfProviders = providerBase
-                    .distributeQuantityOfIngredientToProviders(ingredient, quantity);
-
-            Set<AbstractProvider> keySet = distributedIngredientQuantityOfProviders.keySet();
-
-            distributedIngredientQuantityOfProviders.values();
-
-            for (Entry<AbstractProvider, List<Amount>> diqop : distributedIngredientQuantityOfProviders.entrySet()) {
-
-            }
-
-            IngredientQuantity ingredientQuantity = new IngredientQuantity(ingredient, quantity);
-
-            if (!tempMap.containsKey(ingredientQuantity)) {
-                tempMap.put(ingredientQuantity, distributedIngredientQuantityOfProviders);
-            }
-        }
-
-        for (Entry<IngredientQuantity, Map<AbstractProvider, List<Amount>>> outerEntry : tempMap.entrySet()) {
-
-            // System.out.println(outerEntry.getKey());
-
-            for (Entry<AbstractProvider, List<Amount>> innerEntry : outerEntry.getValue().entrySet()) {
-                System.out.println(innerEntry.getKey());
-
-                for (Amount amount : innerEntry.getValue()) {
-                    System.out.println(amount);
-                }
-            }
-        }
-
-        // Sortierung der temporären Einkaufslisten nach dem besten (günstigsten) Preis
-        Collections.sort(shoppingLists, new Comparator<ShoppingList>() {
-
-            @Override
-            public int compare(ShoppingList sl1, ShoppingList sl2) {
-                return sl1.calculateTotalPrice().compareTo(sl2.calculateTotalPrice());
-            }
-        });
-
-        return shoppingLists.iterator().next();
     }
 
     /**
@@ -365,7 +294,6 @@ public class ShoppingListBuilder {
                     else {
                         break;
                     }
-
                 }
                 else {
                     break;
