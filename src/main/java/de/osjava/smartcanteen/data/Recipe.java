@@ -13,7 +13,7 @@ import de.osjava.smartcanteen.datatype.IngredientType;
  * übergeben und von der Klasse {@link InputFileHandler} verarbeitet und in ihre Datenfelder zerlegt. Sie enthält
  * den Namen des Rezepts, eine Liste von Zutaten und den Rang des dazugehörigen Gerichts.
  * 
- * @author Francesco Luciano und Tim Sahling
+ * @author Francesco Luciano
  */
 public class Recipe {
 
@@ -94,7 +94,6 @@ public class Recipe {
      * 
      * @param ingredientType Der zu überprüfende {@link IngredientType}
      * @return
-     * @author Tim Sahling
      */
     private boolean checkTypeOfIngredients(IngredientType ingredientType) {
         if (ingredientList == null || (ingredientList != null && ingredientList.isEmpty())) {

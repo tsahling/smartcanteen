@@ -5,6 +5,10 @@ import java.math.RoundingMode;
 
 import de.osjava.smartcanteen.data.Canteen;
 
+/**
+ * 
+ * @author Tim Sahling
+ */
 public class BuilderHelper {
 
     private static final BigDecimal PROP_CANTEEN_MOREMEALSTHANEMPLOYEESFACTOR = new BigDecimal(

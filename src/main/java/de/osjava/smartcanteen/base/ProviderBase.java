@@ -22,7 +22,7 @@ import de.osjava.smartcanteen.helper.NumberHelper;
  * Die Klasse {@link ProviderBase} ist eine Datenträgerklasse die in einem Set
  * die Datenobjekte eines Lebensmittelanbieters {@link AbstractProvider} speichert.
  * 
- * @author Francesco Luciano und Tim Sahling
+ * @author Francesco Luciano
  */
 public class ProviderBase {
 
