@@ -214,7 +214,7 @@ public class ApplicationGUI {
         pnlProcessOptionArea.add(rbtnProcessType2);
 
         // generieren JSlider für das Setzen des Wertes maximale Kosten je Position 1G
-        JLabel lbProcessText3 = new JLabel("max. Kosten (Eur) pro Gramm:");
+        JLabel lbProcessText3 = new JLabel("max. Kosten pro Gramm:");
         pnlProcessOptionArea.add(lbProcessText3);
 
         BigDecimal priceForOneUnit = NumberHelper.multiply(
