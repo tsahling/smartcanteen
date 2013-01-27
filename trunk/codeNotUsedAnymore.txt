@@ -1,14 +1,393 @@
+    private static final String PROP_SHOPPINGLIST_GENERATIONMODE = PropertyHelper
+            .getProperty("shoppingList.generationMode");
+
+    private static final String GENERATION_MODE_SIMPLE = "simple";
+    private static final String GENERATION_MODE_ADVANCED = "advanced";
 
 
 
 
 
 
+        if (PROP_SHOPPINGLIST_GENERATIONMODE.equals("") || PROP_SHOPPINGLIST_GENERATIONMODE
+                .equals(GENERATION_MODE_SIMPLE)) {
+            // Ermitteln bei welchem Anbieter, welche Konstellationen von Zutaten am günstigsten eingekauft werden
+            // können
+            Map<AbstractProvider, Set<IngredientQuantity>> bestPriceProviders = determineBestPriceProviders(ingredientQuantities);
+
+            // Erstellen der Einkaufslistenpositionen
+            List<ShoppingListItem> shoppingListItems = new ArrayList<ShoppingListItem>();
+
+            for (Entry<AbstractProvider, Set<IngredientQuantity>> entry : bestPriceProviders.entrySet()) {
+
+                for (IngredientQuantity ingredientQuantity : entry.getValue()) {
+                    shoppingListItems.add(createShoppingListItem(entry.getKey(), ingredientQuantity));
+                }
+            }
+
+            if (!shoppingListItems.isEmpty()) {
+                result.setShoppingListItems(shoppingListItems);
+            }
+        }
+        else if (PROP_SHOPPINGLIST_GENERATIONMODE.equals(GENERATION_MODE_ADVANCED)) {
+            result = determineBestPriceShoppingList(ingredientQuantities);
+        }
 
 
 
+   /**
+     * 
+     * @param ingredientQuantities
+     * @return
+     */
+    private ShoppingList determineBestPriceShoppingList(Map<Ingredient, Amount> ingredientQuantities) {
+        List<ShoppingList> shoppingLists = new ArrayList<ShoppingList>();
 
+        Map<Ingredient, Set<Set<ShoppingListItem>>> ingredientShoppingListItems = new HashMap<Ingredient, Set<Set<ShoppingListItem>>>();
 
+        Set<Set<ShoppingListItem>> all = new HashSet<Set<ShoppingListItem>>();
+
+        Map<Set<ShoppingList>, Set<Set<ShoppingListItem>>> graph2 = new HashMap<Set<ShoppingList>, Set<Set<ShoppingListItem>>>();
+
+        for (Entry<Ingredient, Amount> entry : ingredientQuantities.entrySet()) {
+
+            Ingredient ingredient = entry.getKey();
+            Amount quantity = entry.getValue();
+
+            Set<Set<ShoppingListItem>> distributedIngredientQuantityOfProviders = distributeQuantityOfIngredientToProviders(
+                    ingredient, quantity);
+
+            all.addAll(distributedIngredientQuantityOfProviders);
+
+            ingredientShoppingListItems.put(ingredient, distributedIngredientQuantityOfProviders);
+
+            System.out.println(distributedIngredientQuantityOfProviders.size());
+
+        }
+
+        for (Entry<Ingredient, Set<Set<ShoppingListItem>>> entry : ingredientShoppingListItems.entrySet()) {
+
+            for (Set<ShoppingListItem> set : entry.getValue()) {
+
+                fillGraph(graph2, entry, set, ingredientShoppingListItems);
+
+            }
+        }
+
+        for (Entry<Ingredient, Set<Set<ShoppingListItem>>> entry : ingredientShoppingListItems.entrySet()) {
+
+            for (Set<ShoppingListItem> set : entry.getValue()) {
+
+                Set<Entry<Ingredient, Set<Set<ShoppingListItem>>>> entrySet = new HashSet<Entry<Ingredient, Set<Set<ShoppingListItem>>>>(
+                        ingredientShoppingListItems.entrySet());
+
+                entrySet.remove(entry);
+
+                for (Entry<Ingredient, Set<Set<ShoppingListItem>>> innerEntry : entrySet) {
+
+                    for (Set<ShoppingListItem> test : innerEntry.getValue()) {
+
+                        ShoppingList tempShoppingList = new ShoppingList();
+
+                        tempShoppingList.setShoppingListItems(new ArrayList<ShoppingListItem>(set));
+
+                        for (ShoppingListItem item : test) {
+
+                            tempShoppingList.getShoppingListItems().add(item);
+                        }
+
+                    }
+                }
+
+            }
+
+        }
+
+        // Sortierung der temporären Einkaufslisten nach dem besten (günstigsten) Preis
+        Collections.sort(shoppingLists, new Comparator<ShoppingList>() {
+
+            @Override
+            public int compare(ShoppingList sl1, ShoppingList sl2) {
+                return sl1.calculateTotalPrice().compareTo(sl2.calculateTotalPrice());
+            }
+        });
+
+        return shoppingLists.iterator().next();
+    }
+    
+    
+    
+    
+      private void fillGraph(Map<Set<ShoppingList>, Set<Set<ShoppingListItem>>> graph2,
+            Entry<Ingredient, Set<Set<ShoppingListItem>>> entry, Set<ShoppingListItem> set,
+            Map<Ingredient, Set<Set<ShoppingListItem>>> ingredientShoppingListItems) {
+        // TODO(tsahling) provide sensible implementation
+
+        // Set<Entry<Ingredient, Set<Set<ShoppingListItem>>>> entrySet = new HashSet<Entry<Ingredient,
+        // Set<Set<ShoppingListItem>>>>(
+        // ingredientShoppingListItems.entrySet());
+        //
+        // entrySet.remove(entry);
+        //
+        //
+        //
+        // for (Entry<Ingredient, Set<Set<ShoppingListItem>>> newEntry : ingredientShoppingListItems.entrySet()) {
+        //
+        // for (Set<ShoppingListItem> newSet : entry.getValue()) {
+        //
+        // if(graph2.containsKey(set)) {
+        // graph2.get(set).addAll((Sets.newHashSet(newSet));
+        // } else {
+        // graph2.put(set, newSet);
+        // }
+        //
+        //
+        //
+        //
+        // }
+        // }
+        //
+        // fillGraph(graph2, entry, set, entrySet);
+        //
+    }
+
+    /**
+     * Methode um die benötigte {@link Amount} einer {@link Ingredient} in allen Konstellationen auf die
+     * {@link AbstractProvider} zu verteilen, bei denen die {@link Ingredient} beschaffbar ist.
+     * 
+     * @param ingredient
+     * @param quantity
+     * @return
+     */
+    private Set<Set<ShoppingListItem>> distributeQuantityOfIngredientToProviders(Ingredient ingredient, Amount quantity) {
+
+        Set<Set<ShoppingListItem>> result = new LinkedHashSet<Set<ShoppingListItem>>();
+
+        // Sucht alle Anbieter bei denen die Zutat beschaffbar ist
+        Set<AbstractProvider> ingredientProviders = providerBase.findProvidersByIngredient(ingredient);
+
+        // Erstellt alle möglichen Anbieterkombinationen
+        List<List<AbstractProvider>> ingredientProviderCombinations = createIngredientProviderCombinations(ingredientProviders);
+
+        if (ingredientProviderCombinations != null && !ingredientProviderCombinations.isEmpty()) {
+
+            for (List<AbstractProvider> ingredientProviderCombination : ingredientProviderCombinations) {
+
+                Set<ShoppingListItem> shoppingListItems = new LinkedHashSet<ShoppingListItem>();
+
+                if (ingredientProviderCombination.size() == 1) {
+
+                    AbstractProvider provider = ingredientProviderCombination.iterator().next();
+
+                    // Nur wenn bei einem einzelnen Anbieter die Zutat vollständig beschaffbar ist, kommt dieser in das
+                    // Ergebnis.
+                    if (provider.hasIngredientWithQuantity(ingredient, quantity)) {
+                        Amount quantityToOrder = provider.calculateQuantityFromIngredientAndQuantity(ingredient,
+                                quantity);
+                        // Fügt eine temporäre Einkaufslistenposition in ein Kombinationsset ein
+                        shoppingListItems.add(createTempShoppingListItem(ingredient, quantityToOrder, provider));
+                        // Fügt das Kombinationsset in das Ergebnis ein
+                        result.add(shoppingListItems);
+                    }
+                }
+                else {
+                    Amount quantityToDistribute = new Amount(quantity);
+
+                    Amount quantityToDistributeForEachProvider = new Amount(NumberHelper.divide(quantity.getValue(),
+                            BigDecimal.valueOf(ingredientProviderCombination.size()), 0, RoundingMode.HALF_UP),
+                            quantity.getUnit());
+
+                    if (haveProvidersQuantityToDistribute(ingredientProviderCombination, ingredient,
+                            quantityToDistributeForEachProvider)) {
+
+                        for (AbstractProvider provider : ingredientProviderCombination) {
+                            // Sucht die Menge einer Zutat von einem Anbieter
+                            Amount ingredientProviderQuantity = provider.calculateQuantityFromIngredientAndQuantity(
+                                    ingredient, quantityToDistributeForEachProvider);
+                            // Fügt eine temporäre Einkaufslistenposition in ein Kombinationsset ein
+                            shoppingListItems.add(createTempShoppingListItem(ingredient, ingredientProviderQuantity,
+                                    provider));
+                            // Subtrahiert von der Gesamtmenge der Zutat die Menge der Zutat des Anbieters ab
+                            quantityToDistribute = new Amount(quantityToDistribute)
+                                    .subtract(ingredientProviderQuantity);
+                        }
+                    }
+                    else {
+                        boolean bla = true;
+
+                        if (bla) {
+
+                        }
+                    }
+
+                    // Fügt das Kombinationsset in das Ergebnis ein
+                    result.add(shoppingListItems);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Methode zum Erstellen aller möglichen Anbieterkombinationen auf Basis der übergebenen {@link AbstractProvider}.
+     * 
+     * Als erstes wird mit Hilfe der Google Guava Library ein PowerSet erstellt, welches alle möglichen Kombinationen
+     * der
+     * übergebenen {@link AbstractProvider} enthält.
+     * 
+     * Beispiel: ImmutableSet.of(1, 2) => {{}, {1}, {2}, {1, 2}}
+     * 
+     * Danach wird der leere Eintrag aus dem PowerSet entfernt, da dieser später nicht mehr benötigt wird.
+     * 
+     * Enthält ein Subset des PowerSet mehr als einen Eintrag, müssen alle Permutationen des Subsets zusätzlich mit
+     * Hilfe Google Guava Library erstellt werden und im Ergebnis gespeichert werden. Die Aufteilung einer
+     * {@link Ingredient} müssen passieren, da diese abhängig ist von der Reihenfolge der {@link AbstractProvider} und
+     * der Verfügbarkeit der {@link Ingredient}.
+     * 
+     * @param ingredientProviders Das Set mit übergebenen {@link AbstractProvider}
+     * @return Eine Liste von Listen mit allen Kombinationen von {@link AbstractProvider}
+     */
+    private List<List<AbstractProvider>> createIngredientProviderCombinations(Set<AbstractProvider> ingredientProviders) {
+        List<List<AbstractProvider>> result = new LinkedList<List<AbstractProvider>>();
+
+        if (ingredientProviders != null && !ingredientProviders.isEmpty()) {
+            // Erstellung des PowerSet mit allen Anbieterkombinationen
+            Set<Set<AbstractProvider>> powerSet = Sets.powerSet(ingredientProviders);
+
+            for (Set<AbstractProvider> providers : powerSet) {
+
+                if (!providers.isEmpty()) {
+
+                    if (providers.size() == 1) {
+                        result.add(Lists.newLinkedList(providers));
+                    }
+                    else {
+                        // Erstellen aller Permutationen (Anordnungsmöglichkeiten) der Anbieter
+                        Collection<List<AbstractProvider>> permutations = Collections2.permutations(providers);
+
+                        for (List<AbstractProvider> perm : permutations) {
+                            if (!perm.isEmpty()) {
+                                result.add(Lists.newLinkedList(perm));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 
+     * @param providers
+     * @param ingredient
+     * @param quantityToDistribute
+     * @return
+     */
+    private boolean haveProvidersQuantityToDistribute(List<AbstractProvider> providers, Ingredient ingredient,
+            Amount quantityToDistribute) {
+
+        for (AbstractProvider provider : providers) {
+
+            if (!provider.hasIngredientWithQuantity(ingredient, quantityToDistribute)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    
+    
+    
+    
+      /**
+     * Methode um mehrere {@link AbstractProvider} mit einer {@link Amount} ins Ergebnis zu übernehmen.
+     * 
+     * @param result
+     * @param providers
+     * @param quantity
+     */
+    private void putProvidersWithQuantityToResultMap(Map<AbstractProvider, List<Amount>> result,
+            Set<AbstractProvider> providers, Amount quantity) {
+
+        if (providers != null && !providers.isEmpty()) {
+
+            for (AbstractProvider provider : providers) {
+                putToResultMap(result, provider, quantity);
+            }
+        }
+    }
+
+    /**
+     * Methode um die letzte {@link Amount} der übergebenen {@link AbstractProvider} zu entfernen.
+     * 
+     * @param result
+     * @param providers
+     */
+    private void removeLastQuantityFromResultMap(Map<AbstractProvider, List<Amount>> result,
+            List<AbstractProvider> providers) {
+
+        if (result != null && !result.isEmpty() && providers != null && !providers.isEmpty()) {
+
+            for (Entry<AbstractProvider, List<Amount>> entry : result.entrySet()) {
+
+                if (providers.contains(entry.getKey())) {
+                    Amount lastQuantity = (Amount) ((LinkedList<Amount>) entry.getValue()).getLast();
+                    entry.getValue().remove(lastQuantity);
+                }
+            }
+        }
+    }
+
+    /**
+     * 
+     * @param ingredient
+     * @param quantity
+     * @param provider
+     * @return
+     */
+    private ShoppingListItem createTempShoppingListItem(Ingredient ingredient, Amount quantity,
+            AbstractProvider provider) {
+        return new ShoppingListItem(ingredient, quantity, provider);
+    }
+    
+    
+        /**
+     * Methode um einen {@link AbstractProvider} und einen {@link Amount} ins Ergebnis zu übernehmen.
+     * 
+     * @param result
+     * @param key
+     * @param value
+     */
+    private void putToResultMap(Map<AbstractProvider, List<Amount>> result, AbstractProvider key, Amount value) {
+        if (result.containsKey(key)) {
+            result.get(key).add(new Amount(value));
+        }
+        else {
+            result.put(key, Lists.newLinkedList(Arrays.asList(new Amount(value))));
+        }
+    }
+    
+    
+    
+        /**
+     * 
+     * @param value1
+     * @param value2
+     * @param scale
+     * @param roundingMode
+     * @return
+     */
+    public static BigDecimal divide(BigDecimal value1, BigDecimal value2, int scale, RoundingMode roundingMode) {
+        return value1.divide(value2, scale, roundingMode);
+    }
+    
+    
+    # Einkaufsliste
+shoppingList.generationMode=simple
 
         // if (providerGraph != null && !providerGraph.isEmpty()) {
         //
