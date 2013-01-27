@@ -41,35 +41,6 @@ public class RecipeBase {
     }
 
     /**
-     * Methode um ein bestehendes Datenobjekt {@link Recipe} im Set zu
-     * verändern.
-     * 
-     * @return Das aktualisierte Rezept {@link Recipe}
-     */
-    public Recipe updateRecipe(Recipe recipe) {
-        return null;
-    }
-
-    /**
-     * Methode um ein bestehendes Datenobjekt {@link Recipe} aus dem Set zu
-     * löschen.
-     */
-    public void removeRecipe(Recipe recipe) {
-    }
-
-    /**
-     * Methode um ein bestimmtes Datenobjekt {@link Recipe} in dem Set zu
-     * suchen.
-     * 
-     * @param name
-     *            Name des Datenobjekts {@link Recipe}
-     * @return Das gefundene Datenobjekt {@link Recipe}
-     */
-    public Recipe findRecipeByName(String name) {
-        return null;
-    }
-
-    /**
      * Methode um im Set eine Menge von Datenobjekten {@link Recipe} anhand ihres Typs {@link IngredientType} zu suchen.
      * 
      * @param ingredientType Typ {@link IngredientType} des Rezepts
@@ -127,39 +98,6 @@ public class RecipeBase {
     }
 
     /**
-     * Methode um nach einem Datenobjekt {@link Recipe} eines Gerichts anhand
-     * des Rangs zu suchen.
-     * 
-     * @param rank
-     *            Rang des Gerichts
-     * @return {@link Recipe} welches zu dem Gericht gehört welches den
-     *         übergebenden Rang besitzt
-     */
-    public Recipe findRecipeByRank(int rank) {
-        return null;
-    }
-
-    /**
-     * Methode um das Datenobjekt {@link Recipe} mit dem höchsten Rang zu
-     * ermitteln
-     * 
-     * @return Datenobjekt {@link Recipe} des beliebstesten Gerichts
-     */
-    public Recipe findHighestRankRecipe() {
-        return null;
-    }
-
-    /**
-     * Methode um das Datenobjekt {@link Recipe} mit dem niedrigsten Rang zu
-     * ermitteln
-     * 
-     * @return Datenobjekt {@link Recipe} des unbeliebstesten Gerichts
-     */
-    public Recipe findLowestRankRecipe() {
-        return null;
-    }
-
-    /**
      * Methode um alle Datenobjekte aus dem Set zu ermitteln
      * 
      * @return Set {@link Recipe}
@@ -187,5 +125,4 @@ public class RecipeBase {
     public String toString() {
         return "RecipeBase [recipes=" + recipes + "]";
     }
-
 }

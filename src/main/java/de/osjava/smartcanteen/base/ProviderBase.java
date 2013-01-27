@@ -32,6 +32,7 @@ public class ProviderBase {
      * Standardkonstruktor
      */
     public ProviderBase() {
+
     }
 
     /**
@@ -48,27 +49,6 @@ public class ProviderBase {
         }
         providers.add(provider);
         return provider;
-    }
-
-    /**
-     * Methode un einen Lebensmittel Anbieter {@link AbstractProvider} in dem
-     * Set zu verändern
-     * 
-     * @param provider
-     *            Der zu bearbeitende Anbieter
-     * @return Aktualiserter Anbieter {@link AbstractProvider}
-     */
-    public AbstractProvider updateProvider(AbstractProvider provider) {
-        return null;
-    }
-
-    /**
-     * Methode um einen Anbieter {@link AbstractProvider} aus dem Set zu löschen
-     * 
-     * @param provider
-     *            Der zu löschende Anbieter
-     */
-    public void removeProvider(AbstractProvider provider) {
     }
 
     /**
@@ -406,18 +386,6 @@ public class ProviderBase {
         }
 
         return 0;
-    }
-
-    /**
-     * Methode um einen Lebensmittelanbieter {@link AbstractProvider} anhand
-     * seines Namens in dem Set zu finden
-     * 
-     * @param name
-     *            Name des Lebensmittelanbieters {@link AbstractProvider}
-     * @return Der Lebensmittelanbieter {@link AbstractProvider}
-     */
-    public AbstractProvider findProviderByName(String name) {
-        return null;
     }
 
     /**

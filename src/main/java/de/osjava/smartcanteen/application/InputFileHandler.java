@@ -80,22 +80,10 @@ public class InputFileHandler {
 
             while ((nextLine = reader.readLine()) != null) {
                 // Die Leerzeichen aus der Variable nextline werden durch .trim() entfernt
+                nextLine = nextLine.trim();
 
                 // Sonderzeichen ersetzen
-
-                if (nextLine.contains("ö".replace("ö", "oe"))) {
-
-                }
-
-                if (nextLine.contains("ä".replace("ä", "ae"))) {
-
-                }
-
-                if (nextLine.contains("ü".replace("ü", "ue"))) {
-
-                }
-
-                nextLine = nextLine.trim();
+                nextLine = nextLine.replace((char) 8211, (char) '-');
 
                 // Das Array fields wird mithilfe der Methode splitline mit dem Inhalt der Zeile gefuellt
                 lineInFields = splitLine(nextLine, delimiter);

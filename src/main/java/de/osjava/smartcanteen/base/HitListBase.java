@@ -6,14 +6,14 @@ import java.util.List;
 import de.osjava.smartcanteen.data.item.HitListItem;
 
 /**
- * Die Klasse {@link HitListBase} ist eine Datenträgerklasse die in einer Liste
- * die Datenobjekte {@link HitListItem} speichert.
+ * Die Klasse {@link HitListBase} ist eine Datenträgerklasse die in einer Liste die Datenobjekte {@link HitListItem}
+ * speichert.
  * 
  * @author Francesco Luciano
  */
 public class HitListBase {
 
-    List<HitListItem> hitListItems;
+    private List<HitListItem> hitListItems;
 
     /**
      * Standardkonstruktor
@@ -37,23 +37,6 @@ public class HitListBase {
     }
 
     /**
-     * Methode um ein bestehendes Datenobjekt in der Liste zu verändern.
-     * 
-     * @return Das aktualisierte Datenobjekt
-     */
-    public HitListItem updateHitListItem(HitListItem hitListItem) {
-        return null;
-    }
-
-    /**
-     * Methode um ein Datenobjekt aus der Liste zu löschen.
-     * 
-     * @param hitListItem Das zu löschende Datenobjekt
-     */
-    public void removeHitListItem(HitListItem hitListItem) {
-    }
-
-    /**
      * Methode um ein bestimmtes Datenobjekt in der Liste nach Namen zu suchen.
      * 
      * @param name Name des Datenobjekts
@@ -67,17 +50,6 @@ public class HitListBase {
                 return hitlistitem;
             }
         }
-        return null;
-    }
-
-    /**
-     * Methode um ein Datenobjekt anhand seines Rangs in der Liste zu suchen.
-     * 
-     * @param rank
-     *            Rang des Gerichts
-     * @return Das gefundene Datenobjekt wird zurückgeben
-     */
-    public HitListItem findHitListItemByRank(int rank) {
         return null;
     }
 
