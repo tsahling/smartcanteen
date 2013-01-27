@@ -14,9 +14,14 @@ AUTHORS:
 Marcel Baxmann, Francesco Luciano und Tim Sahling
 
 USER INSTRUCTIONS:
+
 Die Applikation SmartCanteen läuft grundsätzlich vollständig automatisch ab und generiert, bei übergebenen Eingabedaten, die 
 erwarteten Ergebnisse. Einige Einstellungen lassen sich über den Parameter --props von außen in die Applikation übergeben, wodurch
 das Ergebnis der Applikation individualisiert werden kann. Folgende Einstellungen sind verfügbar:
+
+Konsolenanwendung:
+
+Tim hier schreiben
 
 planingPeriod.planingMode=sequential|random
 
@@ -25,9 +30,12 @@ outputData.generateCSV=true|false
 outputData.generateHTML=true|false
 outputData.dataSetSeperator=;|,
 
+GUI-Anwendung:
 
+Marcel hier schreiben
 
 FEATURELISTE (über Standardanforderungen hinaus):
+
 Auf folgende Features der Applikation, die über die Standardanforderungen hinausgehen, möchten wir an dieser Stelle 
 separat hinweisen:
 
@@ -35,6 +43,8 @@ separat hinweisen:
 - HTML-Dateien für Einkaufsliste und Kostenuebersicht mit zusaetzlichen Datenaufbereitungen und Inhaltsverzeichnis
 - Prüfung vor Überschreibung von Dateien (automatische Anpassung des Dateinamens -> Vorbeugung vor Datenverlust)
 - Zwei Varianten für die Ausgabe des Menüplans (nach Datum gruppiert oder zweispaltig)
+- GUI bitte beschreiben
 
-
+Wer hat welche Programmbereiche implementiert:
  
+ Francesco hier schreiben
