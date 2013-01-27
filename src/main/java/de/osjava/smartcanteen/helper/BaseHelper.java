@@ -28,15 +28,6 @@ import de.osjava.smartcanteen.datatype.IngredientType;
 import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
 
 /**
- * 
- * TODO(Francesco Luciano) Dokumentieren
- * TODO(Francesco Luciano) Klassenbeschreibung JavaDoc
- * TODO(Francesco Luciano) Methodenbeschreibung JavaDoc
- * TODO(Francesco Luciano) Bitte Kommentare in den Methoden mit // machen. √úber Methoden mit /**. Aber nicht mit /*
- * 
- */
-
-/**
  * @author Francesco Luciano
  * 
  */
