@@ -367,6 +367,7 @@ public class ApplicationGUI {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                // auslesen des Textfelds
                 String inputFilesFromGui = displayInputFiles.getText();
 
                 if (inputFilesFromGui != null && !inputFilesFromGui.isEmpty()) {
@@ -376,7 +377,9 @@ public class ApplicationGUI {
                         if (application.fillBases()) {
                             application.buildMenuPlan();
                             application.buildShoppingList();
-
+                        }
+                        else {
+                            wrongFilesDialog();
                         }
                     } catch (IOException ioe) {
                         ioe.printStackTrace();
@@ -395,11 +398,15 @@ public class ApplicationGUI {
                     }
                 }
                 else {
-                    JOptionPane.showMessageDialog(null,
-                            PROP_MESSAGE_WRONGORMISSINGINPUTFILES_MESSAGE, PROP_MESSAGE_WRONGORMISSINGINPUTFILES_TITLE,
-                            JOptionPane.ERROR_MESSAGE);
+                    wrongFilesDialog();
                 }
 
+            }
+
+            private void wrongFilesDialog() {
+                JOptionPane.showMessageDialog(null,
+                        PROP_MESSAGE_WRONGORMISSINGINPUTFILES_MESSAGE, PROP_MESSAGE_WRONGORMISSINGINPUTFILES_TITLE,
+                        JOptionPane.ERROR_MESSAGE);
             }
 
         });
