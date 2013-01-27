@@ -106,6 +106,16 @@ public class Application {
         }
     }
 
+    private void cleanUp() {
+
+        this.hitListBase = null;
+        this.providerBase = null;
+        this.recipeBase = null;
+
+        this.canteens = null;
+        this.shoppingList = null;
+    }
+
     /**
      * Liest die Eingabedaten ein.
      * 
@@ -184,6 +194,9 @@ public class Application {
      */
     public boolean fillBases() throws Exception {
         boolean wrongInputFile = false;
+
+        // Leeren und löschen aller erzeugten Objekte
+        cleanUp();
 
         if (!this.inputFiles.equals(EMPTY)) {
             String[] inputFileSplit = this.inputFiles.split(VALUE_SPLIT);
