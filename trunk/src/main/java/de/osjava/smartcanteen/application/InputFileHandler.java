@@ -4,7 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Die zur Verfuegung gestellten CSV-Dateien werden mit Hilfe der Klasse {@link CSVInputHandler} eingelesen. Die Klasse
@@ -153,7 +154,7 @@ public class InputFileHandler {
      * @return Ein Array mit Zeilenelementen
      */
     private String[] splitLine(String line, char delimiter) {
-        Vector<String> fields = new Vector<String>();
+        List<String> fields = new ArrayList<String>();
 
         // Anzahl Zeichen in Zeile
         int numberOfCharacterInLine = line.length();
@@ -234,7 +235,7 @@ public class InputFileHandler {
         if (line.charAt(line.length() - 1) == delimiter)
             fields.add("");
 
-        // Vector-Collection als String-Array zurueckliefern
+        // List-Collection als String-Array zurueckliefern
         String[] type = new String[0];
         return fields.toArray(type);
 
