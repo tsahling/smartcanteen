@@ -67,7 +67,7 @@ public class HTMLOutput implements IOutput {
         int mealsPerDay = Integer.parseInt(PropertyHelper.getProperty("planingPeriod.mealsPerDay"));
 
         // HTML-Ausgabe Generierung Kopfdaten des Dokuemnts und anhaengen in Puffer
-        outputBuffer.append(generateHTMLHeader("Menüplan ab dem " + startDate + " - Kantine " + canteenName));
+        outputBuffer.append(generateHTMLHeader("Menueplan ab dem " + startDate + " - Kantine " + canteenName));
 
         // HTML-Ausgabe Start Tabelle
         outputBuffer.append("<table border=\"1\">" + lineSeparator + "<tr>");
@@ -130,7 +130,7 @@ public class HTMLOutput implements IOutput {
                 "</html>");
 
         // sind alle Gerichte ausgelesen wird der Dateiname generiert
-        String filename = FileHelper.generateFilename("Menüplan ab " + startDate + " - " + canteenName, fileExt);
+        String filename = FileHelper.generateFilename("Menueplan ab " + startDate + " - " + canteenName, fileExt);
 
         // der Ausgabepuffer und der Dateiname werden an die Methode zum Schreiben in eine Datei übergeben
         FileHelper.ausgebenInDatei(outputBuffer.toString(), filename, true);
@@ -160,7 +160,7 @@ public class HTMLOutput implements IOutput {
         outputBuffer.append(generateHTMLHeader("Einkaufsliste je Lieferant"));
 
         // Generiere Übersicht mit Links auf Anker der einzelnen Tabellen
-        outputBuffer.append("Einkaufslisten für folgende Lieferanten wurden " +
+        outputBuffer.append("Einkaufslisten fuer folgende Lieferanten wurden " +
                 "generiert (anklicken zum anzeigen):<ul>" + lineSeparator);
 
         // Alagen lokale Variable für die Positionbestimmung des Distributors (Distributor-ID)
@@ -190,7 +190,7 @@ public class HTMLOutput implements IOutput {
                 // HTML-Ausgabe Ueberschrift Lieferant mit HTML-Name Tag,
                 // so dass ueber die erstellte Liste direktzum Anbieter gesprungen werden kann
                 outputBuffer.append("<h3><a name=\"" + numberDistributor +
-                        "\">Einkaufsliste für Lieferant: " + name + "</a></h2>");
+                        "\">Einkaufsliste fuer Lieferant: " + name + "</a></h2>");
 
                 // HTML-Ausgabe Start Tabelle
                 outputBuffer.append("<table border=\"1\">" + lineSeparator + "<tr>");
@@ -223,7 +223,7 @@ public class HTMLOutput implements IOutput {
                 }
                 // HTML-Ausgabe Ende Tabelle mit Link zum Seitenbeginn
                 outputBuffer.append("</table>" + lineSeparator + "<a href=\"#top\">" +
-                        " zurück zur Übersicht</a>" + lineSeparator);
+                        " zurueck zur Uebersicht</a>" + lineSeparator);
                 // zum nächsten Distributor hochzaehlen (Distributor-ID)
                 numberDistributor++;
             }
@@ -264,12 +264,12 @@ public class HTMLOutput implements IOutput {
         String dataOverview[][] = new String[elements][2];
 
         // HTML-Ausgabe Generierung Kopfdaten des Dokuemnts und anhaengen in Puffer
-        outputBuffer.append(generateHTMLHeader("Kostenübersicht"));
+        outputBuffer.append(generateHTMLHeader("Kostenubersicht"));
 
         // Generiere Übersicht mit Links auf Anker der einzelnen Tabellen
         outputBuffer
-                .append("Die Darstellung enthält Kostenübersichten mit Einzelposition je Lieferant<br>" +
-                        "sowie eine Gesamtkostenübersicht (anklicken zum anzeigen):<ul>" + lineSeparator);
+                .append("Die Darstellung enhaelt Kostenuebersichten mit Einzelposition je Lieferant<br>" +
+                        "sowie eine Gesamtkostenuebersicht (anklicken zum anzeigen):<ul>" + lineSeparator);
 
         // Zaehler für die Positionbestimmung des Distributors (Distributor-ID) zuruecksetzen, da neue Schleife
         int numberDistributor = 0;
@@ -284,12 +284,12 @@ public class HTMLOutput implements IOutput {
         // lokale Variable zum Speichern der Ankernummer der Gesamtkostenuebersicht
         int positionCostOverview = numberDistributor;
         outputBuffer
-                .append("<li><a href=\"#" + positionCostOverview + "\">Gesamtkostenübersicht</a></li>" + lineSeparator);
+                .append("<li><a href=\"#" + positionCostOverview + "\">Gesamtkostenuebersicht</a></li>" + lineSeparator);
         // Aufzaehlung beenden
         outputBuffer.append("</ul>" + lineSeparator + lineSeparator);
 
         // Beginn Ausgabe Kostenuebersichten mit Einzelposition je Lieferant
-        outputBuffer.append("<h2> Kostenübersichten mit Einzelposition je Lieferant</h2>" + lineSeparator);
+        outputBuffer.append("<h2> Kostenuebersichten mit Einzelposition je Lieferant</h2>" + lineSeparator);
         // Zaehler für die Positionbestimmung des Distributors (Dristributor-ID) zuruecksetzen, da neue Schleife
         numberDistributor = 0;
         // prüfen, dass Objekt nicht null ist
@@ -305,14 +305,14 @@ public class HTMLOutput implements IOutput {
                 // HTML-Ausgabe Ueberschrift Lieferant mit HTML-Name Tag,
                 // so dass ueber die erstellte Liste direktzum Anbieter gesprungen werden kann
                 outputBuffer.append("<h3><a name=\"" + numberDistributor +
-                        "\">Einkaufsliste für Lieferant: " + name + "</a></h2>");
+                        "\">Einkaufsliste fuer Lieferant: " + name + "</a></h2>");
 
                 // HTML-Ausgabe Start Tabelle
                 outputBuffer.append("<table border=\"1\">" + lineSeparator + "<tr>");
 
                 // HTML-Ausgabe Beginn Überschriftzeile der Tabelle
                 outputBuffer.append("<th>Lieferant</th><th>Zutat</th>" +
-                        "<th>Menge</th><th>Wert</th><th>Währung</th><th>Kosten in Euro</th></tr>");
+                        "<th>Menge</th><th>Wert</th><th>Waehrung</th><th>Kosten in Euro</th></tr>");
 
                 // Liste mit Shoppinglist Items auslesen und in lokale Variable speichern
                 List<ShoppingListItem> value = entry.getValue();
@@ -356,20 +356,20 @@ public class HTMLOutput implements IOutput {
                 }
 
                 // Ausgabe formatierte Gesamtkosten pro Provider
-                outputBuffer.append("<tr><td colspan=\"5\" align=\"right\"> Kosten für " +
+                outputBuffer.append("<tr><td colspan=\"5\" align=\"right\"> Kosten fuer " +
                         name + ":</td><td>" + FileHelper.formatBD(costPerDistributor) +
                         " Euro</td></tr>" + lineSeparator);
 
                 // HTML-Ausgabe Ende Tabelle mit Link zum Seitenbeginn-Anker
                 outputBuffer
-                        .append("</table>" + lineSeparator + "<a href=\"#top\"> zurück zur Übersicht</a>" + lineSeparator);
+                        .append("</table>" + lineSeparator + "<a href=\"#top\"> zurueck zur Uebersicht</a>" + lineSeparator);
                 numberDistributor++;
             }
         }
 
         // Beginn Ausgabe Gesamtkostenuebersicht
         outputBuffer.append("<h2><a name=\"" + positionCostOverview + "\">" +
-                "Gesamtkostenübersicht</a></h2>" + lineSeparator);
+                "Gesamtkostenuebersicht</a></h2>" + lineSeparator);
         // HTML-Ausgabe Start Tabelle
         outputBuffer.append("<table border=\"1\">" + lineSeparator + "<tr>");
         // Ueberschriftzeile für Tabelle
@@ -388,14 +388,14 @@ public class HTMLOutput implements IOutput {
 
         // HTML-Ausgabe Ende Tabelle mit Link zum Seitenbeginn-Anker
         outputBuffer
-                .append("</table>" + lineSeparator + "<a href=\"#top\"> zurück zur Übersicht</a>" + lineSeparator);
+                .append("</table>" + lineSeparator + "<a href=\"#top\"> zurueck zur Uebersicht</a>" + lineSeparator);
         numberDistributor++;
 
         // HTML-Ausgabe Ende Tabelle und HTML-Dokument
         outputBuffer.append("</body>" + lineSeparator + "</html>");
 
         // sind alle Gerichte ausgelesen wird der Dateiname generiert
-        String filename = FileHelper.generateFilename("Kostenübersicht", fileExt);
+        String filename = FileHelper.generateFilename("Kostenuebersicht", fileExt);
 
         // der Ausgabepuffer und der Dateiname werden an die Methode zum Schreiben in eine Datei übergeben
         FileHelper.ausgebenInDatei(outputBuffer.toString(), filename, true);
@@ -419,12 +419,13 @@ public class HTMLOutput implements IOutput {
         // vordefinierte Bildergrößte wird aus Properties ausgelesen
         int size = Integer.parseInt(PropertyHelper.getProperty("outputData.picSize"));
         // auslesen der Pfadangabe
+        String outputPath = PropertyHelper.getProperty("outputData.saveTo");
         String picPath = PropertyHelper.getProperty("outputData.picSaveTo");
 
         // Prüfe ob zu verwendendes Bild im Zielordner ist
-        boolean existFishPic = FileHelper.foundPicture(picPath + "fish.jpg");
-        boolean existMeatPic = FileHelper.foundPicture(picPath + "meat.jpg");
-        boolean existVeggiePic = FileHelper.foundPicture(picPath + "veggie.jpg");
+        boolean existFishPic = FileHelper.foundPicture(outputPath + picPath + "fish.jpg");
+        boolean existMeatPic = FileHelper.foundPicture(outputPath + picPath + "meat.jpg");
+        boolean existVeggiePic = FileHelper.foundPicture(outputPath + picPath + "veggie.jpg");
 
         // initalisieren des Rückgabewerts
         String picture = "";
@@ -466,7 +467,6 @@ public class HTMLOutput implements IOutput {
         // HTML-Ausgabe Startsequenz
         buffer.append("<html>" + lineSeparator +
                 "<head>" + lineSeparator +
-                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />" + lineSeparator +
                 "<title>" + title +
                 "</title>" + lineSeparator +
                 "</head>" + lineSeparator +

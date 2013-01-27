@@ -214,13 +214,10 @@ public class Application {
                     // Aus dem inputFile String wird versucht eine Datei zu instanziieren. Wenn diese Datei im
                     // Dateisystem existiert, wird diese als Input genommen. Ansonsten wird versucht anhand des
                     // übergebenen inputFile String, die Datei aus dem internen Input-Ordner zu lesen.
-                    File file = new File(inputFile);
+                    File file = new File(PROP_APPLICATION_INPUTFILEPATH + inputFile);
 
                     if (file.exists()) {
                         inputFileUrl = file.toURI().toURL();
-                    }
-                    else {
-                        inputFileUrl = ClassLoader.getSystemResource(PROP_APPLICATION_INPUTFILEPATH + inputFile);
                     }
 
                     if (inputFileUrl != null) {
