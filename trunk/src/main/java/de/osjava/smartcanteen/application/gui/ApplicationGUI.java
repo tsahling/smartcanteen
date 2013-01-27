@@ -37,6 +37,7 @@ import de.osjava.smartcanteen.builder.result.Meal;
 import de.osjava.smartcanteen.data.Canteen;
 import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.helper.FileHelper;
+import de.osjava.smartcanteen.helper.NumberHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 
 /**
@@ -213,11 +214,13 @@ public class ApplicationGUI {
         pnlProcessOptionArea.add(rbtnProcessType2);
 
         // generieren JSlider für das Setzen des Wertes maximale Kosten je Position 1G
-        JLabel lbProcessText3 = new JLabel("max. Kosten (Eur) je Gr:");
+        JLabel lbProcessText3 = new JLabel("max. Kosten (Eur) pro Gramm:");
         pnlProcessOptionArea.add(lbProcessText3);
 
-        final JSlider sldPriceForOneUnitMax = new JSlider(JSlider.HORIZONTAL, 50, 1000, Integer.parseInt(PropertyHelper
-                .getProperty("ingredient.priceForOneUnit.max")) * 100);
+        BigDecimal priceForOneUnit = NumberHelper.multiply(
+                new BigDecimal(PropertyHelper.getProperty("ingredient.priceForOneUnit.max")), BigDecimal.valueOf(100));
+
+        final JSlider sldPriceForOneUnitMax = new JSlider(JSlider.HORIZONTAL, 50, 1000, priceForOneUnit.intValue());
 
         // Lininen in Slider anzeigen (Major bei jedem 5ten Euro und Minor bei jedem Euro)
         sldPriceForOneUnitMax.setMajorTickSpacing(500);
@@ -281,9 +284,9 @@ public class ApplicationGUI {
         sldPriceForOneUnitMax.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent arg0) {
-                int value = (sldPriceForOneUnitMax.getValue());
-                BigDecimal bgValue = new BigDecimal(value);
-                bgValue = bgValue.divide(new BigDecimal(100), 2, BigDecimal.ROUND_DOWN);
+                int value = sldPriceForOneUnitMax.getValue();
+                BigDecimal bgValue = BigDecimal.valueOf(value);
+                bgValue = bgValue.divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_DOWN);
                 lbProcessText4.setText(FileHelper.formatBD(bgValue) + " Euro");
                 PropertyHelper.setProperty("ingredient.priceForOneUnit.max", bgValue.toString());
             }
