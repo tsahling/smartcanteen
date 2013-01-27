@@ -80,6 +80,11 @@ public class ApplicationGUI {
     private static final String PROP_MESSAGE_NOOUTPUTFORMATSELECTED_TITLE = PropertyHelper
             .getProperty("message.noOutputFormatSelected.title");
 
+    private static final String PROP_MESSAGE_WRONGORMISSINGINPUTFILES_MESSAGE = PropertyHelper
+            .getProperty("message.wrongOrMissingInputFiles.message");
+    private static final String PROP_MESSAGE_WRONGORMISSINGINPUTFILES_TITLE = PropertyHelper
+            .getProperty("message.wrongOrMissingInputFiles.title");
+
     private Application application;
     private JLabel lblPreviewText2;
     private JLabel lbProcessText4;
@@ -182,7 +187,9 @@ public class ApplicationGUI {
         pnlOptionArea.add(pnlControlOptionArea);
 
         // **** GENERIERUNG: OPTION-INPUT -- Füllen des Bereichs Input-Option mit Einstellmöglichkeiten ****
-        JLabel lblInputText = new JLabel("Folgende Dateien wurden in das Programm geladen:");
+        JLabel lblInputText = new JLabel(
+                "<html>Bitte geben Sie die Eingabedateien, die für die<br> Datenverarbeitung herangezogen werden sollen, wie folgt ein: " +
+                        "ABC.csv;DEF.csv;XYZ.csv;</html>");
         pnlInputOptionArea.add(lblInputText);
 
         final JTextArea displayInputFiles = new JTextArea(application.getInputFiles(), 2, 1);
@@ -194,7 +201,7 @@ public class ApplicationGUI {
         // **** GENERIERUNG: OPTION-PROCESS -- Füllen des Bereichs Process-Option mit Einstellmöglichkeiten ****
 
         // Verarbeitungsmethode: RadioButton für Abfragegenerieren
-        JLabel lblProcessText = new JLabel("Verarbeitungs-Art:");
+        JLabel lblProcessText = new JLabel("<html>Menü-Verteilung auf Tage:</html>");
         pnlProcessOptionArea.add(lblProcessText);
 
         JRadioButton rbtnProcessType1 = new JRadioButton("Zufall");
@@ -214,7 +221,8 @@ public class ApplicationGUI {
         pnlProcessOptionArea.add(rbtnProcessType2);
 
         // generieren JSlider für das Setzen des Wertes maximale Kosten je Position 1G
-        JLabel lbProcessText3 = new JLabel("max. Kosten pro Gramm:");
+        JLabel lbProcessText3 = new JLabel(
+                "<html>max. Kosten <br>pro Gramm je Zutat:<br>(z.B. Filterung Safran)</html>");
         pnlProcessOptionArea.add(lbProcessText3);
 
         BigDecimal priceForOneUnit = NumberHelper.multiply(
@@ -359,30 +367,37 @@ public class ApplicationGUI {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO (Tim Sahling) bitte nochmal gemeinsam mit mir anschauen! wenn ich mich nicht täusche hast du das
-                // eingebaut, habe das Textfeld erstmal als
-                // eingabemaske deaktiviert, das die Veränderung des Textinhalts nicht in die Varbeitung übernommen wird
-                application.setInputFiles(displayInputFiles.getText());
-                try {
-                    if (application.fillBases()) {
-                        application.buildMenuPlan();
-                        application.buildShoppingList();
+                String inputFilesFromGui = displayInputFiles.getText();
 
+                if (inputFilesFromGui != null && !inputFilesFromGui.isEmpty()) {
+                    application.setInputFiles(inputFilesFromGui);
+
+                    try {
+                        if (application.fillBases()) {
+                            application.buildMenuPlan();
+                            application.buildShoppingList();
+
+                        }
+                    } catch (IOException ioe) {
+                        ioe.printStackTrace();
+                    } catch (IllegalArgumentException iae) {
+                        iae.printStackTrace();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                } catch (IllegalArgumentException iae) {
-                    iae.printStackTrace();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+
+                    refreshCostLabel();
+                    refreshPreviewTable();
+
+                    if (!btnSaveResults.isEnabled()) {
+                        btnSaveResults.setEnabled(true);
+                        btnStartProcess.setText("Neu berechnen");
+                    }
                 }
-
-                refreshCostLabel();
-                refreshPreviewTable();
-
-                if (!btnSaveResults.isEnabled()) {
-                    btnSaveResults.setEnabled(true);
-                    btnStartProcess.setText("Neu berechnen");
+                else {
+                    JOptionPane.showMessageDialog(null,
+                            PROP_MESSAGE_WRONGORMISSINGINPUTFILES_MESSAGE, PROP_MESSAGE_WRONGORMISSINGINPUTFILES_TITLE,
+                            JOptionPane.ERROR_MESSAGE);
                 }
 
             }
