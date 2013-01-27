@@ -367,17 +367,30 @@ public class ApplicationGUI {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // auslesen des Textfelds
+                // auslesen des Textfelds von der GUI
                 String inputFilesFromGui = displayInputFiles.getText();
 
+                // wenn das Textfeld leer oder null ist wird eine Fehlermeldung als Dialog ausgegeben
                 if (inputFilesFromGui != null && !inputFilesFromGui.isEmpty()) {
+                    // wenn Daten in Textefeld sind werden diese als Eingabeparameter an das Objekt Application
+                    // übergeben
                     application.setInputFiles(inputFilesFromGui);
 
+                    // es wird FillBases ausgeführt (Verarbeitung der Eingabeparameter)
+                    // wenn korrekt verarbeitet wird True zurückgeliefert und die Bearbeitung gestartet
                     try {
                         if (application.fillBases()) {
                             application.buildMenuPlan();
                             application.buildShoppingList();
+                            refreshCostLabel();
+                            refreshPreviewTable();
+
+                            if (!btnSaveResults.isEnabled()) {
+                                btnSaveResults.setEnabled(true);
+                                btnStartProcess.setText("Neu berechnen");
+                            }
                         }
+                        // wenn nicht wird Fehler-Dialog ausgegeben
                         else {
                             wrongFilesDialog();
                         }
@@ -387,14 +400,6 @@ public class ApplicationGUI {
                         iae.printStackTrace();
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                    }
-
-                    refreshCostLabel();
-                    refreshPreviewTable();
-
-                    if (!btnSaveResults.isEnabled()) {
-                        btnSaveResults.setEnabled(true);
-                        btnStartProcess.setText("Neu berechnen");
                     }
                 }
                 else {
