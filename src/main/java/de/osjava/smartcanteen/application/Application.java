@@ -99,21 +99,13 @@ public class Application {
      */
     public void bootstrap(final String[] args) throws Exception {
 
-        initInputArgs(args);
+        if (initInputArgs(args)) {
 
-        if (fillBases()) {
-            startApplication();
+            if (fillBases()) {
+
+                startApplication();
+            }
         }
-    }
-
-    private void cleanUp() {
-
-        this.hitListBase = null;
-        this.providerBase = null;
-        this.recipeBase = null;
-
-        this.canteens = null;
-        this.shoppingList = null;
     }
 
     /**
@@ -122,7 +114,7 @@ public class Application {
      * @param args
      * @throws Exception
      */
-    private void initInputArgs(final String[] args) {
+    private boolean initInputArgs(final String[] args) {
 
         if (args.length == 0) {
             this.inputFiles = JOptionPane.showInputDialog(null, PROP_MESSAGE_WRONGORMISSINGINPUTFILES_MSG,
@@ -130,6 +122,7 @@ public class Application {
         }
         else if (args.length == 1 && args[0].equals(PROP_PARAM_HELP)) {
             System.out.println(PROP_APPLICATION_USAGEINFO);
+            return false;
         }
         else {
             for (String arg : args) {
@@ -142,6 +135,8 @@ public class Application {
                 }
             }
         }
+
+        return true;
     }
 
     /**
@@ -187,7 +182,7 @@ public class Application {
     }
 
     /**
-     * Füllt die Datenträgerklassen.
+     * Füllt die Datenträgerklassen auf Basis der übergebenen Dateien.
      * 
      * @return
      * @throws IOException
@@ -248,6 +243,19 @@ public class Application {
         }
 
         throw new IllegalArgumentException(PROP_MESSAGE_WRONGORMISSINGINPUTFILES_EXCEPTION);
+    }
+
+    /**
+     * Leeren, löschen und deinstanzieren aller erzeugten Objekte.
+     * 
+     */
+    private void cleanUp() {
+        this.hitListBase = null;
+        this.providerBase = null;
+        this.recipeBase = null;
+
+        this.canteens = null;
+        this.shoppingList = null;
     }
 
     private boolean validateHitListBase(HitListBase hitListBase) {
