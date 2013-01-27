@@ -3,14 +3,14 @@ package de.osjava.smartcanteen.data;
 import java.util.Set;
 
 import de.osjava.smartcanteen.application.Application;
-import de.osjava.smartcanteen.application.CSVTokenizer;
+import de.osjava.smartcanteen.application.InputFileHandler;
 import de.osjava.smartcanteen.data.item.IngredientListItem;
 import de.osjava.smartcanteen.datatype.IngredientType;
 
 /**
  * Die Klasse {@link Recipe} stellt ein Datenobjekt eines speziellen Rezepts aus
  * der eingelesenen Datei Rezepte dar. Die Rezeptedatei wird der Klasse {@link Application} als Aufrufparameter
- * übergeben und von der Klasse {@link CSVTokenizer} verarbeitet und in ihre Datenfelder zerlegt. Sie enthält
+ * übergeben und von der Klasse {@link InputFileHandler} verarbeitet und in ihre Datenfelder zerlegt. Sie enthält
  * den Namen des Rezepts, eine Liste von Zutaten und den Rang des dazugehörigen Gerichts.
  * 
  * @author Francesco Luciano und Tim Sahling
