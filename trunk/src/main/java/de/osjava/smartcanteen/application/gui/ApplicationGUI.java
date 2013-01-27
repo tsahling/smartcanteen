@@ -24,8 +24,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 import de.osjava.smartcanteen.application.Application;
@@ -160,7 +163,7 @@ public class ApplicationGUI {
 
         // Process-Option
         JPanel pnlProcessOptionArea = new JPanel();
-        pnlProcessOptionArea.setLayout(new GridLayout(1, 3));
+        pnlProcessOptionArea.setLayout(new GridLayout(2, 3));
         pnlProcessOptionArea.setBorder(BorderFactory.createTitledBorder("Verarbeitungs-Einstellungen"));
         pnlOptionArea.add(pnlProcessOptionArea);
 
@@ -184,7 +187,7 @@ public class ApplicationGUI {
 
         pnlInputOptionArea.add(displayInputFiles);
         displayInputFiles.setLineWrap(true);
-        displayInputFiles.setFocusable(false);
+        displayInputFiles.setFocusable(true);
 
         // **** GENERIERUNG: OPTION-PROCESS -- Füllen des Bereichs Process-Option mit Einstellmöglichkeiten ****
 
@@ -207,6 +210,21 @@ public class ApplicationGUI {
         rbtnProcessTypeGroup.add(rbtnProcessType2);
         pnlProcessOptionArea.add(rbtnProcessType1);
         pnlProcessOptionArea.add(rbtnProcessType2);
+
+        // generieren JSlider für das Setzen des Wertes maximale Kosten je Position 1G
+        JLabel lbOutputText3 = new JLabel("max. Kosten (Eur) je Gr:");
+        pnlProcessOptionArea.add(lbOutputText3);
+
+        final JSlider sldPriceForOneUnitMax = new JSlider(JSlider.HORIZONTAL, 0, 10, Integer.parseInt(PropertyHelper
+                .getProperty("ingredient.priceForOneUnit.max")));
+
+        // Turn on labels at major tick marks.
+        sldPriceForOneUnitMax.setMajorTickSpacing(5);
+        sldPriceForOneUnitMax.setMinorTickSpacing(1);
+        sldPriceForOneUnitMax.setPaintTicks(true);
+        sldPriceForOneUnitMax.setPaintLabels(true);
+
+        pnlProcessOptionArea.add(sldPriceForOneUnitMax);
 
         // Anlegen eines Buttons für den Start der Verarbeitung
         final JButton btnStartProcess = new JButton("Verarbeitung starten");
@@ -253,6 +271,18 @@ public class ApplicationGUI {
         pnlControlOptionArea.add(btnSaveResults);
 
         // ********* START DER LISTENER **************
+
+        // ChangeListener für den Slider
+        sldPriceForOneUnitMax.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent arg0) {
+                int value = sldPriceForOneUnitMax.getValue();
+                String strValue = Integer.valueOf(value).toString();
+
+                System.out.println(value);
+                PropertyHelper.setProperty("ingredient.priceForOneUnit.max", strValue);
+            }
+        });
 
         // Actionlistener für das Setzen der Verarbeitungsmethode "sequential"
         rbtnProcessType2.addActionListener(new ActionListener() {
@@ -384,7 +414,7 @@ public class ApplicationGUI {
     }
 
     /**
-     * Methode die das den JTable auf mit einem neuen model füllt
+     * Methode die den JTable auf mit einem neuen model füllt
      */
     private static void refreshPreviewTable() {
         tablePreviewContent = generatePreviewContent();
