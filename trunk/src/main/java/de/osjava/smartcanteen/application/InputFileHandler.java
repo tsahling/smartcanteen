@@ -146,7 +146,7 @@ public class InputFileHandler {
      * Trennzeichen, die innerhalb von Anfuehrungszeichen stehen, werden ignoriert.
      * Endet die Zeile mit einem Trennzeichen, wird nach Durchlaufen der Zeile
      * noch ein leerer String fuer das letzte Feld angehaengt. Die Teilstrings fuer die Felder
-     * werden in einer Vector-Collection gesammelt und zum Schluss in ein String-Array umgewandelt und zurueckgeliefert.
+     * werden in einer List-Collection gesammelt und zum Schluss in ein String-Array umgewandelt und zurueckgeliefert.
      * 
      * 
      * @param line Eine Zeile die zerlegt werden soll
@@ -165,7 +165,7 @@ public class InputFileHandler {
         // Anfang und Ende des aktuellen Feldes
         int start, end;
         // Delimiter in Anfuehrungszeichen
-        boolean quote;
+        boolean insideQuote;
 
         // Solange die Variable pointer kleiner ist als die Variable numberOfCharacterInLine
         // die Schleife nicht verlassen
@@ -175,10 +175,10 @@ public class InputFileHandler {
             start = pointer;
 
             // Variable um zu pruefen ob man in einem Feld ist
-            quote = false;
+            insideQuote = false;
 
             // In dieser Schleife wird der Bereich eines Wertfeldes geprueft
-            // Die Schleife wird erst verlassen wenn die Variable quote== false (nicht mehr im Feld) und
+            // Die Schleife wird erst verlassen wenn die Variable insideQuote== false (nicht mehr im Feld) und
             // currentCharacter == delimiter ist
             // Dieser Bereich wird gebraucht damit mit der Methode substring der String beschnitten werden kann
             while (pointer < numberOfCharacterInLine) {
@@ -190,19 +190,19 @@ public class InputFileHandler {
 
                 // Innerhalb von CSV Datein werden Werte in Anfuehrungszeichen gesetzt.
                 // Wenn ein Anfuehrungszeichen entdeckt wird, bedeutet das ein Feld anfaengt oder aufhaert
-                // Wenn die Variable quote=true ist ein Feld angefangen
-                // Wenn die Variable quote=false ist ein Feld aufgehoert
+                // Wenn die Variable insideQuote=true ist ein Feld angefangen
+                // Wenn die Variable insideQuote=false ist ein Feld aufgehoert
                 // Es ist wichtig das geprueft wird ob man gerade in einem Feld ist, da es vorkommt das Trennzeichen
                 // in einem Wert vorkommen, die sollen aber als Zeichen behandelt werden und nicht als Trennzeichen
                 if (currentCharacter == '"')
-                    quote = !quote;
+                    insideQuote = !insideQuote;
 
-                // Wenn currentCharacter gleich dem Trennzeichen und Variable quote== false
+                // Wenn currentCharacter gleich dem Trennzeichen und Variable insideQuote== false
                 // innere Schleife verlassen
-                // Wenn currentCharacter ungleich dem Trennzeichen oder Variable quote== true
+                // Wenn currentCharacter ungleich dem Trennzeichen oder Variable insideQuote== true
                 // pointer incrementieren
 
-                if (currentCharacter == delimiter && quote == false) {
+                if (currentCharacter == delimiter && insideQuote == false) {
                     break;
                 }
                 else {
@@ -236,6 +236,9 @@ public class InputFileHandler {
             fields.add("");
 
         // List-Collection als String-Array zurueckliefern
+        // In der Liste fields stehen nur Strings.
+        // Nach JavaDoc List ist dies das vorgehen,
+        // um die Liste in einem neu zugewiesenen Array von String umzuwandeln.
         String[] type = new String[0];
         return fields.toArray(type);
 
