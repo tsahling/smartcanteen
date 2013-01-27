@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.Vector;
 
 import de.osjava.smartcanteen.application.InputFileHandler;
 import de.osjava.smartcanteen.base.HitListBase;
@@ -60,23 +59,15 @@ public class BaseHelper {
      */
     public static HitListBase readHitlist(URL inputFileURL) throws IOException {
 
-        /* Die Klasse Vector ist eine der Traditionellen Java Collections die seit dem JDK 1.0 vorhanden sind.
-         * Ein Vector ist eine Java-Repraesentation einer linearen Liste. Die Liste kann Elemente beliebigen
+        /* Die Klasse List ist eine der Java Collections.
+         * Eine Liste ist eine Java-Repraesentation einer linearen Liste. Die Liste kann Elemente beliebigen
          * Typs enthalten, und ihre Laenge ist zur Laufzeit veraenderbar.
-         * Vector erlaubt das Einfuegen von Elementen an beliebiger Stelle und bietet sowohl sequentiellen
-         * als auch wahlfreien Zugriff auf die Elemente.
          * 
-         * List, Vector erlauben duplikate
-         * 
-         * Das JDK realisiert einen Vector als Array von Elementen des Typs Object.
-         * Daher sind Zugriffe auf vorhandene Elemente und das Durchlaufen der Liste schnelle Operationen.
-         * Loeschungen und Einfuegungen, die die interne Kapazitaet des Arrays ueberschreiten, sind dagegen relativ
-         * langsam,
-         * weil Teile des Arrays umkopiert werden muessen. */
+         * List erlauben duplikate */
 
-        // Die Variable lines ist vom Typ vector der ein Array von Strings speichert
+        // Die Variable lines ist vom Typ List der ein Array von Strings speichert
         // Die Variable wird verwendet um die eingelesenen Zeilen in Ihren Einzelteilen zu Speichern
-        Vector<String[]> lines = new Vector<String[]>();
+        List<String[]> lines = new ArrayList<String[]>();
 
         // Die Variable hitlist ist vom Typ HitListBase
         // HitListBase ist eine Datentraegerklasse welche die komplette einzulesenden Datei
@@ -91,14 +82,14 @@ public class BaseHelper {
         // Instanz vom Typ CSVTokenizer um die Datei einzulesen und zu verarbeiten
         InputFileHandler csv = new InputFileHandler(inputFileURL, ',');
 
-        // Solange es Zeilen in der Datei gibt, werden diese in den Vector lines gespeichert
+        // Solange es Zeilen in der Datei gibt, werden diese in den List lines gespeichert
         while (csv.hasMoreLines()) {
             lines.add(csv.nextLine());
         }
 
         // Wenn keine Zeile mehr in der einzulesenden Datei vorhanden sind,
-        // wird durch den gefuellten Vector iteriert.
-        // Die Laufvariable i laeuft die Elemnte des Vectors ab
+        // wird durch den gefuellten List iteriert.
+        // Die Laufvariable i laeuft die Elemnte des Lists ab
         // Jedes Element ist ein String[] mit zwei Feldern
         // Das 0 Feld beinhaltet des Rang des Gericht
         // Das 1 Feld beinhaltet desn Namen des Gericht
@@ -130,7 +121,7 @@ public class BaseHelper {
     public static ProviderBase readPriceList(URL inputFileURL, ProviderBase providerBase) throws IOException {
 
         // s.o.
-        Vector<String[]> lines = new Vector<String[]>();
+        List<String[]> lines = new ArrayList<String[]>();
 
         // TODO(Francesco Luciano) Tim Fragen was hier passiert!
         if (providerBase == null) {
@@ -194,8 +185,8 @@ public class BaseHelper {
         // Transportkosten von String in BigDecimal umgewandelt
         transportUnitBD = new BigDecimal(transportUnit);
 
-        // Iteration des Vector faengt bei Element 1 an, da 0 die Kopfzeile ist.
-        // Die Laufvariable i laeuft die Elemnte des Vectors ab
+        // Iteration des List faengt bei Element 1 an, da 0 die Kopfzeile ist.
+        // Die Laufvariable i laeuft die Elemnte des Lists ab
         // Jedes Element ist ein String[] mit fuenf Feldern
         // Das 0 Feld beinhaltet die Groeße des Gebindes
         // Das 1 Feld beinhaltet die Mengenangabe (Stueck, g, kg) des Lebensmittel
@@ -267,7 +258,7 @@ public class BaseHelper {
     public static RecipeBase readRecipeList(URL inputFileURL) throws IOException {
 
         // s.o
-        Vector<String[]> lines = new Vector<String[]>();
+        List<String[]> lines = new ArrayList<String[]>();
 
         // Die Variable nameOfRecipe speichert den Namen des Rezept
         String nameOfRecipe = null;
@@ -298,7 +289,7 @@ public class BaseHelper {
             lines.add(csv.nextLine());
         }
 
-        // Die Laufvariable i laeuft die Elemnte des Vectors ab
+        // Die Laufvariable i laeuft die Elemnte des Lists ab
         // Jedes Element ist ein String[] mit vier Feldern
         // Das 0 Feld beinhaltet den Namen des Rezept
         // Das 1 Feld beinhaltet die Mengenangabe des Lebensmittel
