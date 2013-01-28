@@ -2,6 +2,7 @@ package de.osjava.smartcanteen.helper;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -160,5 +161,40 @@ public class FileHelper {
 
         // Rueckgabe des Wahrheitswerts
         return foundPicture;
+    }
+
+    /**
+     * Die Methode liest die Dateinamen der CSV-Dateien aus dem Input-Ordner aus
+     * *
+     * 
+     * @return String
+     *         der Dateinamen der CSV-Dateiem im Input-Ordner
+     * @author Marcel Baxmann
+     */
+    public static String lookupInputFiles() {
+        // StringBuilder wird erzeugt
+        StringBuilder inputFiles = new StringBuilder();
+
+        // neues Fileobjekt erzeugen
+        File test = new File(PropertyHelper.getProperty("application.inputFilePath"));
+
+        // String Array mit einer Auflistung der Datein im Ordner
+        String[] fileList = test.list(new FilenameFilter() {
+            // Nur Dateien filtern die mit .csv enden
+            @Override
+            public boolean accept(File test, String name) {
+                return name.endsWith(".csv");
+            }
+        });
+
+        // Null Prüfung und Übergabe Daten aus Arraay in StringBuilder
+        if (fileList != null) {
+            for (int i = 0; i < fileList.length; i++) {
+                inputFiles.append(fileList[i] + ";");
+            }
+        }
+
+        // Rueckgabe des Strings
+        return inputFiles.toString();
     }
 }
