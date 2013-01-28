@@ -1,0 +1,20 @@
+#BlueJ class context
+comment0.params=code\ name\ shortName\ latitude\ longitude
+comment0.target=CanteenLocation(java.lang.String,\ java.lang.String,\ java.lang.String,\ double,\ double)
+comment0.text=\r\n\ Im\ Standardkonstruktor\ werden\ dem\ \ Enum\ {@link\ CanteenLocation}\ Variablen\ \r\n\ uebergeben,\ die\ final\ gespeichert\ werden.\r\n\ \r\n\ @param\ code\ Deklaration\ des\ ENUM\ z.B.\ ESSEN\r\n\ @param\ name\ Beschreibung\ des\ ENUM\ z.B.\ Stadt\ Essen\r\n\ @param\ shortName\ Kurzbeschreibung\ des\ ENUM\ z.B.\ Essen\r\n\ @param\ latitude\ Breitengrad\ der\ Ortes\r\n\ @param\ longitude\ Laengengrad\ des\ Ortes\r\n
+comment1.params=
+comment1.target=java.lang.String\ getCode()
+comment1.text=\r\n\ Methode\ zum\ Abrufen\ des\ Werts\ Code\r\n\ \r\n\ @return\ code\ Deklaration\ \r\n
+comment2.params=
+comment2.target=java.lang.String\ getName()
+comment2.text=\r\n\ Methode\ zum\ Abrufen\ des\ Werts\ Name\r\n\ \r\n\ @return\ name\ Beschreibung\r\n
+comment3.params=
+comment3.target=java.lang.String\ getShortName()
+comment3.text=\r\n\ Methode\ zum\ Abrufen\ des\ Werts\ ShortName\r\n\ \r\n\ @return\ shortName\ Kurzbeschreibung\ \r\n
+comment4.params=
+comment4.target=double\ getLatitude()
+comment4.text=\r\n\ Methode\ zum\ Abrufen\ des\ Werts\ Latitude\r\n\ \r\n\ @return\ latitude\ Breitengrad\ \r\n
+comment5.params=
+comment5.target=double\ getLongitude()
+comment5.text=\r\n\ Methode\ zum\ Abrufen\ des\ Werts\ Longitude\r\n\ \r\n\ @return\ longitude\ Laengengrad\ \r\n
+numComments=6
