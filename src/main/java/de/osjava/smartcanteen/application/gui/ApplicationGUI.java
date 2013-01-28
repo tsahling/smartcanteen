@@ -14,6 +14,8 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -33,10 +35,12 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 import de.osjava.smartcanteen.application.Application;
+import de.osjava.smartcanteen.application.SmartCanteen;
 import de.osjava.smartcanteen.builder.result.Meal;
 import de.osjava.smartcanteen.data.Canteen;
 import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.helper.FileHelper;
+import de.osjava.smartcanteen.helper.LogHelper;
 import de.osjava.smartcanteen.helper.NumberHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 
@@ -55,6 +59,9 @@ import de.osjava.smartcanteen.helper.PropertyHelper;
  * @author Marcel Baxmann
  */
 public class ApplicationGUI {
+	
+    private static final Logger LOG = LogHelper.getLogger(ApplicationGUI.class.getName());
+    
     // Angabe der Breite des Fensters aus Properties auslesen und speichern in lokale Variable (geparstes int)
     private static final int PROP_GUI_WINDOWWIDTH = Integer.parseInt(PropertyHelper.getProperty("gui.windowWidth"));
 
@@ -424,17 +431,16 @@ public class ApplicationGUI {
                             wrongFilesDialog();
                         }
                     } catch (IOException ioe) {
-                        ioe.printStackTrace();
+                        LOG.log(Level.SEVERE, ioe.getMessage(), ioe);
                     } catch (IllegalArgumentException iae) {
-                        iae.printStackTrace();
+                    	LOG.log(Level.SEVERE, iae.getMessage(), iae);
                     } catch (Exception ex) {
-                        ex.printStackTrace();
+                    	LOG.log(Level.SEVERE, ex.getMessage(), ex);
                     }
                 }
                 else {
                     wrongFilesDialog();
                 }
-
             }
 
             private void wrongFilesDialog() {
@@ -457,9 +463,8 @@ public class ApplicationGUI {
                         JOptionPane.showMessageDialog(null,
                                 PROP_MESSAGE_SAVEOPERATION_MSG, PROP_MESSAGE_SAVEOPERATION_TITLE,
                                 JOptionPane.INFORMATION_MESSAGE);
-                    } catch (IOException e1) {
-                        // TODO(Marcel) handle this exception properly
-                        e1.printStackTrace();
+                    } catch (IOException ioe) {
+                    	LOG.log(Level.SEVERE, ioe.getMessage(), ioe);
                     }
                 }
                 else {
