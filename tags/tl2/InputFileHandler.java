@@ -9,12 +9,12 @@
  * 
  * @author Francesco Luciano
  */
-public class CSVTokenizer
+public class InputFileHandler
 {
     /**
      * Standardkonstruktor
      */
-    public CSVTokenizer()
+    public InputFileHandler()
     {
     }
     
