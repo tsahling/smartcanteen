@@ -1,137 +1,136 @@
 Lieferant;Zutat;Menge;Wert;Waehrung;Kosten in Euro;
-Biohof Maier - direkt an der A40;Kopfsalat;31000 Gramm;53,01;Euro;53,01 Euro
-;;;;Kosten fuer Biohof Maier - direkt an der A40:;53,01 Euro
-
-Metri AG;Penne;263000 Gramm;462,88;Euro;462,88 Euro
-Metri AG;Vollmilchschokolade;98000 Gramm;632,10;Euro;632,10 Euro
-Metri AG;Mayonnaise;16000 Gramm;45,60;Euro;45,60 Euro
-Metri AG;Emmentaler;22000 Gramm;112,86;Euro;112,86 Euro
-Metri AG;Erdbeeren;49000 Gramm;278,81;Euro;278,81 Euro
-Metri AG;Broccoli;31000 Gramm;116,56;Euro;116,56 Euro
-Metri AG;Parmesan;14000 Gramm;60,76;Euro;60,76 Euro
-Metri AG;Pangasius;98000 Gramm;906,50;Euro;906,50 Euro
-Metri AG;Ringli;53000 Gramm;105,47;Euro;105,47 Euro
-Metri AG;Rotkohl;90000 Gramm;359,10;Euro;359,10 Euro
-Metri AG;Tomatenmark;2000 Gramm;8,74;Euro;8,74 Euro
-Metri AG;Zaziki;31000 Gramm;123,38;Euro;123,38 Euro
-Metri AG;Lorbeerblatt;600 Stueck;130,80;Euro;130,80 Euro
-Metri AG;Reis;211000 Gramm;694,19;Euro;694,19 Euro
-Metri AG;Spinat;120000 Gramm;708,00;Euro;708,00 Euro
-Metri AG;Pflanzenoel;143000 Gramm;191,62;Euro;191,62 Euro
-Metri AG;Sojasprossen;37000 Gramm;224,22;Euro;224,22 Euro
-Metri AG;Basilikum;13000 Gramm;78,78;Euro;78,78 Euro
-Metri AG;Tomaten;5000 Stueck;1.820,00;Euro;1.820,00 Euro
-Metri AG;Cocktailsauce;31 Liter;142,60;Euro;142,60 Euro
-Metri AG;Rinderroulade;1200 Stueck;1.195,20;Euro;1.195,20 Euro
-Metri AG;Olivenoel;16000 Gramm;16,16;Euro;16,16 Euro
-Metri AG;Banane;490 Stueck;296,94;Euro;296,94 Euro
-Metri AG;Ei;4210 Stueck;408,37;Euro;408,37 Euro
-Metri AG;Garnelenaroma;2000 Gramm;9,34;Euro;9,34 Euro
-Metri AG;Buttergemuese TK;31000 Gramm;155,62;Euro;155,62 Euro
-Metri AG;Schweinefilet;46000 Gramm;633,88;Euro;633,88 Euro
-Metri AG;Burgerbroetchen;310 Stueck;183,21;Euro;183,21 Euro
-Metri AG;Paprika;2080 Stueck;2.028,00;Euro;2.028,00 Euro
-Metri AG;Zwiebel;3240 Stueck;281,88;Euro;281,88 Euro
-Metri AG;Pfeffer;37000 Gramm;282,31;Euro;282,31 Euro
-Metri AG;Kochschinken;72000 Gramm;314,64;Euro;314,64 Euro
-Metri AG;Gouda;31000 Gramm;153,45;Euro;153,45 Euro
-Metri AG;Salbei;4000 Gramm;28,32;Euro;28,32 Euro
-Metri AG;Mascarpone;7000 Gramm;35,84;Euro;35,84 Euro
-Metri AG;Halbbitterschokolade;98000 Gramm;882,98;Euro;882,98 Euro
-Metri AG;Passierte Tomaten;61000 Gramm;143,96;Euro;143,96 Euro
-Metri AG;Muskat;13000 Gramm;85,41;Euro;85,41 Euro
-Metri AG;MensaFix fuer braune Pampe;25000 Gramm;23,75;Euro;23,75 Euro
-Metri AG;Grundsauce Dunkel;9000 Gramm;98,55;Euro;98,55 Euro
-Metri AG;Spaghetti;38000 Gramm;73,72;Euro;73,72 Euro
-Metri AG;Seelachs;120000 Gramm;927,60;Euro;927,60 Euro
-Metri AG;Hokkaido-Kuerbis;91000 Gramm;174,72;Euro;174,72 Euro
-Metri AG;Feta;64000 Gramm;340,48;Euro;340,48 Euro
-Metri AG;Gemuesebratling;310 Stueck;280,86;Euro;280,86 Euro
-Metri AG;Scheiblettenkaese;53000 Gramm;199,28;Euro;199,28 Euro
-Metri AG;Pizzateig vorgebacken;310 Stueck;269,08;Euro;269,08 Euro
-Metri AG;Forelle;104000 Gramm;1.520,48;Euro;1.520,48 Euro
-Metri AG;Karotten;136000 Gramm;480,08;Euro;480,08 Euro
-Metri AG;Sahne;230000 Gramm;503,70;Euro;503,70 Euro
-Metri AG;Raclettekaese;132000 Gramm;1.211,76;Euro;1.211,76 Euro
-Metri AG;Basmatireis;166000 Gramm;620,84;Euro;620,84 Euro
-Metri AG;Mehl;150000 Gramm;201,00;Euro;201,00 Euro
-Metri AG;Joghurt;30000 Gramm;61,80;Euro;61,80 Euro
-Metri AG;Kokosmilch;267 Liter;923,82;Euro;923,82 Euro
-Metri AG;Zucchini;141000 Gramm;363,78;Euro;363,78 Euro
-Metri AG;Kugelfisch-Muskelfleisch;98000 Gramm;11.623,78;Euro;11.623,78 Euro
-Metri AG;Dill;17000 Gramm;112,20;Euro;112,20 Euro
-Metri AG;Toastbrot;125000 Gramm;296,25;Euro;296,25 Euro
-Metri AG;Weissweinverschnitt;151 Liter;110,23;Euro;110,23 Euro
-Metri AG;Analogkaese;31000 Gramm;81,84;Euro;81,84 Euro
-Metri AG;Kirschen;169000 Gramm;1.069,77;Euro;1.069,77 Euro
-Metri AG;Eiweissrohmasse;76000 Gramm;148,20;Euro;148,20 Euro
-Metri AG;Ketchup;49000 Gramm;161,70;Euro;161,70 Euro
-Metri AG;Lebensmittelfarbe rot;31 Liter;54,25;Euro;54,25 Euro
-Metri AG;Salz;64000 Gramm;48,00;Euro;48,00 Euro
-Metri AG;Birnen;155000 Gramm;813,75;Euro;813,75 Euro
-Metri AG;Oregano;13000 Gramm;108,03;Euro;108,03 Euro
-Metri AG;Ingwer;7000 Gramm;63,49;Euro;63,49 Euro
-Metri AG;Raeuchertofu;132000 Gramm;1.690,92;Euro;1.690,92 Euro
-Metri AG;Auberginen;108000 Gramm;368,28;Euro;368,28 Euro
-Metri AG;Salami;12000 Gramm;52,80;Euro;52,80 Euro
-Metri AG;Rotwein;31 Liter;34,72;Euro;34,72 Euro
-Metri AG;Schnittlauch;13000 Gramm;90,61;Euro;90,61 Euro
-Metri AG;Butter;127000 Gramm;419,10;Euro;419,10 Euro
-Metri AG;Pesto Rosso;25000 Gramm;441,25;Euro;441,25 Euro
-Metri AG;Petersilie;16000 Gramm;109,92;Euro;109,92 Euro
-Metri AG;Milch;390 Liter;315,90;Euro;315,90 Euro
-Metri AG;Italienische Gewuerzmischung;2000 Gramm;10,52;Euro;10,52 Euro
-Metri AG;Pesto Verde;16000 Gramm;385,28;Euro;385,28 Euro
-Metri AG;Pommes Frites TK;87000 Gramm;183,57;Euro;183,57 Euro
-Metri AG;Kidneybohnen;91000 Gramm;561,47;Euro;561,47 Euro
-;;;;Kosten fuer Metri AG:;41.969,61 Euro
-
-Naturschlachterei Hackebeil;Rindfleisch;46000 Gramm;276,00;Euro;276,00 Euro
-Naturschlachterei Hackebeil;Haehnchenbrustfilet;219000 Gramm;1.092,81;Euro;1.092,81 Euro
-Naturschlachterei Hackebeil;Truthahnfilet;106000 Gramm;640,24;Euro;640,24 Euro
-;;;;Kosten fuer Naturschlachterei Hackebeil:;2.009,05 Euro
-
+Metzgerfachhandel Schneider;Hackfleisch halb und halb;55000 Gramm;183,15;Euro;183,15 Euro
+Metzgerfachhandel Schneider;Speck;40000 Gramm;178,80;Euro;178,80 Euro
+Metzgerfachhandel Schneider;Rinderhack;67000 Gramm;533,32;Euro;533,32 Euro
 Metzgerfachhandel Schneider;Elchfleisch;76000 Gramm;729,60;Euro;729,60 Euro
-Metzgerfachhandel Schneider;Gyrosfleisch Vorgewuerzt;46000 Gramm;328,90;Euro;328,90 Euro
-Metzgerfachhandel Schneider;Rindersalami;17000 Gramm;97,41;Euro;97,41 Euro
-Metzgerfachhandel Schneider;Rinderhack;49000 Gramm;390,04;Euro;390,04 Euro
-Metzgerfachhandel Schneider;Hackfleisch halb und halb;85000 Gramm;283,05;Euro;283,05 Euro
-Metzgerfachhandel Schneider;Speck;36000 Gramm;160,92;Euro;160,92 Euro
 Metzgerfachhandel Schneider;Cordon Bleu TK;310 Stueck;222,58;Euro;222,58 Euro
-;;;;Kosten fuer Metzgerfachhandel Schneider:;2.212,50 Euro
+Metzgerfachhandel Schneider;Gyrosfleisch Vorgewuerzt;46000 Gramm;328,90;Euro;328,90 Euro
+Metzgerfachhandel Schneider;Rindfleisch;46000 Gramm;218,04;Euro;218,04 Euro
+Metzgerfachhandel Schneider;Rindersalami;20000 Gramm;114,60;Euro;114,60 Euro
+;;;;Kosten fuer Metzgerfachhandel Schneider:;2.508,99 Euro
 
-Carrefar S.A.;Essig;30000 Gramm;35,40;Euro;35,40 Euro
-Carrefar S.A.;Rundkornreis;38000 Gramm;120,08;Euro;120,08 Euro
+Biohof Maier - direkt an der A40;Karotten;106000 Gramm;259,70;Euro;259,70 Euro
+Biohof Maier - direkt an der A40;Kopfsalat;40000 Gramm;68,40;Euro;68,40 Euro
+;;;;Kosten fuer Biohof Maier - direkt an der A40:;328,10 Euro
+
+Carrefar S.A.;Thymian;8000 Gramm;62,64;Euro;62,64 Euro
+Carrefar S.A.;Hollandaise;49000 Gramm;126,91;Euro;126,91 Euro
+Carrefar S.A.;Gouda;21000 Gramm;89,04;Euro;89,04 Euro
+Carrefar S.A.;Rundkornreis;52000 Gramm;164,32;Euro;164,32 Euro
 Carrefar S.A.;Erbsen;16000 Gramm;68,48;Euro;68,48 Euro
-Carrefar S.A.;Kreuzkuemmel;5000 Gramm;29,90;Euro;29,90 Euro
-Carrefar S.A.;Lauch;63000 Gramm;214,83;Euro;214,83 Euro
-Carrefar S.A.;Vanillinzucker;23000 Gramm;59,34;Euro;59,34 Euro
-Carrefar S.A.;Dosenmais;61000 Gramm;175,07;Euro;175,07 Euro
-Carrefar S.A.;Kartoffeln;800000 Gramm;1.640,00;Euro;1.640,00 Euro
-Carrefar S.A.;Estragon;2000 Gramm;12,38;Euro;12,38 Euro
-Carrefar S.A.;Kurkuma;16000 Gramm;121,12;Euro;121,12 Euro
-Carrefar S.A.;Knoblauchpulver;34000 Gramm;213,86;Euro;213,86 Euro
-Carrefar S.A.;Blumenkohl;46000 Gramm;120,52;Euro;120,52 Euro
-Carrefar S.A.;Gorgonzola;31000 Gramm;155,93;Euro;155,93 Euro
-Carrefar S.A.;Backpulver;15000 Gramm;66,30;Euro;66,30 Euro
-Carrefar S.A.;Wildlachs;120000 Gramm;1.285,20;Euro;1.285,20 Euro
-Carrefar S.A.;Zitrone;580 Stueck;197,20;Euro;197,20 Euro
-Carrefar S.A.;Thymian;7000 Gramm;54,81;Euro;54,81 Euro
-Carrefar S.A.;Currypulver;28000 Gramm;190,96;Euro;190,96 Euro
-Carrefar S.A.;Remoulade;4000 Gramm;8,60;Euro;8,60 Euro
-Carrefar S.A.;Gemuesebruehe;36000 Gramm;181,44;Euro;181,44 Euro
-Carrefar S.A.;Gnocchi;55000 Gramm;211,20;Euro;211,20 Euro
-Carrefar S.A.;Zucker;55000 Gramm;47,30;Euro;47,30 Euro
-Carrefar S.A.;Grundsauce Hell;4000 Gramm;42,84;Euro;42,84 Euro
-Carrefar S.A.;Zimt;4000 Gramm;24,48;Euro;24,48 Euro
-Carrefar S.A.;Mononatriumglutamat;29000 Gramm;30,74;Euro;30,74 Euro
-Carrefar S.A.;Dosenananas;105000 Gramm;551,25;Euro;551,25 Euro
-Carrefar S.A.;Mozzarellakugeln;46000 Gramm;233,68;Euro;233,68 Euro
 Carrefar S.A.;Semmelbroesel;9000 Gramm;24,84;Euro;24,84 Euro
-Carrefar S.A.;Hollandaise;31000 Gramm;80,29;Euro;80,29 Euro
-Carrefar S.A.;Chilipulver;38000 Gramm;247,76;Euro;247,76 Euro
+Carrefar S.A.;Kartoffeln;700000 Gramm;1.435,00;Euro;1.435,00 Euro
+Carrefar S.A.;Wildlachs;98000 Gramm;1.049,58;Euro;1.049,58 Euro
+Carrefar S.A.;Essig;25000 Gramm;29,50;Euro;29,50 Euro
+Carrefar S.A.;Remoulade;5000 Gramm;10,75;Euro;10,75 Euro
+Carrefar S.A.;Gorgonzola;31000 Gramm;155,93;Euro;155,93 Euro
+Carrefar S.A.;Kreuzkuemmel;5000 Gramm;29,90;Euro;29,90 Euro
 Carrefar S.A.;Sellerie;30000 Gramm;54,90;Euro;54,90 Euro
-Carrefar S.A.;Pilzravioli Convenience;46000 Gramm;405,72;Euro;405,72 Euro
-;;;;Kosten fuer Carrefar S.A.:;6.906,42 Euro
+Carrefar S.A.;Auberginen;55000 Gramm;178,75;Euro;178,75 Euro
+Carrefar S.A.;Gnocchi;55000 Gramm;211,20;Euro;211,20 Euro
+Carrefar S.A.;Estragon;2000 Gramm;12,38;Euro;12,38 Euro
+Carrefar S.A.;Grundsauce Hell;4000 Gramm;42,84;Euro;42,84 Euro
+Carrefar S.A.;Zucker;61000 Gramm;52,46;Euro;52,46 Euro
+Carrefar S.A.;Knoblauchpulver;36000 Gramm;226,44;Euro;226,44 Euro
+Carrefar S.A.;Zimt;5000 Gramm;30,60;Euro;30,60 Euro
+Carrefar S.A.;Zitrone;580 Stueck;197,20;Euro;197,20 Euro
+Carrefar S.A.;Mozzarellakugeln;46000 Gramm;233,68;Euro;233,68 Euro
+Carrefar S.A.;Mononatriumglutamat;28000 Gramm;29,68;Euro;29,68 Euro
+Carrefar S.A.;Lauch;61000 Gramm;208,01;Euro;208,01 Euro
+Carrefar S.A.;Chilipulver;37000 Gramm;241,24;Euro;241,24 Euro
+Carrefar S.A.;Blumenkohl;46000 Gramm;120,52;Euro;120,52 Euro
+Carrefar S.A.;Kurkuma;15000 Gramm;113,55;Euro;113,55 Euro
+Carrefar S.A.;Dosenananas;105000 Gramm;551,25;Euro;551,25 Euro
+Carrefar S.A.;Pilzravioli Convenience;74000 Gramm;652,68;Euro;652,68 Euro
+Carrefar S.A.;Vanillinzucker;26000 Gramm;67,08;Euro;67,08 Euro
+Carrefar S.A.;Gemuesebruehe;37000 Gramm;186,48;Euro;186,48 Euro
+Carrefar S.A.;Backpulver;15000 Gramm;66,30;Euro;66,30 Euro
+Carrefar S.A.;Currypulver;26000 Gramm;177,32;Euro;177,32 Euro
+;;;;Kosten fuer Carrefar S.A.:;6.901,45 Euro
 
-;;;;Gesamtkosten:;53.312,29 Euro
+Metri AG;Lorbeerblatt;310 Stueck;67,58;Euro;67,58 Euro
+Metri AG;Feta;51000 Gramm;271,32;Euro;271,32 Euro
+Metri AG;Mayonnaise;10000 Gramm;28,50;Euro;28,50 Euro
+Metri AG;Mascarpone;7000 Gramm;35,84;Euro;35,84 Euro
+Metri AG;Raclettekaese;132000 Gramm;1.211,76;Euro;1.211,76 Euro
+Metri AG;Burgerbroetchen;490 Stueck;289,59;Euro;289,59 Euro
+Metri AG;Basilikum;13000 Gramm;78,78;Euro;78,78 Euro
+Metri AG;Sahne;241000 Gramm;527,79;Euro;527,79 Euro
+Metri AG;Pangasius;98000 Gramm;906,50;Euro;906,50 Euro
+Metri AG;Reis;235000 Gramm;773,15;Euro;773,15 Euro
+Metri AG;Muskat;11000 Gramm;72,27;Euro;72,27 Euro
+Metri AG;Rotwein;31 Liter;34,72;Euro;34,72 Euro
+Metri AG;Tomaten;5360 Stueck;1.951,04;Euro;1.951,04 Euro
+Metri AG;Olivenoel;17000 Gramm;17,17;Euro;17,17 Euro
+Metri AG;Kugelfisch-Muskelfleisch;98000 Gramm;11.623,78;Euro;11.623,78 Euro
+Metri AG;MensaFix fuer braune Pampe;25000 Gramm;23,75;Euro;23,75 Euro
+Metri AG;Ei;4210 Stueck;408,37;Euro;408,37 Euro
+Metri AG;Rinderroulade;830 Stueck;826,68;Euro;826,68 Euro
+Metri AG;Emmentaler;22000 Gramm;112,86;Euro;112,86 Euro
+Metri AG;Pfeffer;38000 Gramm;289,94;Euro;289,94 Euro
+Metri AG;Haehnchenbrustfilet;267000 Gramm;1.714,14;Euro;1.714,14 Euro
+Metri AG;Vollmilchschokolade;98000 Gramm;632,10;Euro;632,10 Euro
+Metri AG;Passierte Tomaten;61000 Gramm;143,96;Euro;143,96 Euro
+Metri AG;Penne;249000 Gramm;438,24;Euro;438,24 Euro
+Metri AG;Tomatenmark;3000 Gramm;13,11;Euro;13,11 Euro
+Metri AG;Dill;17000 Gramm;112,20;Euro;112,20 Euro
+Metri AG;Lebensmittelfarbe rot;31 Liter;54,25;Euro;54,25 Euro
+Metri AG;Zwiebel;3200 Stueck;278,40;Euro;278,40 Euro
+Metri AG;Schnittlauch;13000 Gramm;90,61;Euro;90,61 Euro
+Metri AG;Italienische Gewuerzmischung;2000 Gramm;10,52;Euro;10,52 Euro
+Metri AG;Eiweissrohmasse;76000 Gramm;148,20;Euro;148,20 Euro
+Metri AG;Pesto Rosso;16000 Gramm;282,40;Euro;282,40 Euro
+Metri AG;Hokkaido-Kuerbis;34000 Gramm;65,28;Euro;65,28 Euro
+Metri AG;Sojasprossen;32000 Gramm;193,92;Euro;193,92 Euro
+Metri AG;Salbei;5000 Gramm;35,40;Euro;35,40 Euro
+Metri AG;Petersilie;18000 Gramm;123,66;Euro;123,66 Euro
+Metri AG;Basmatireis;160000 Gramm;598,40;Euro;598,40 Euro
+Metri AG;Zucchini;153000 Gramm;394,74;Euro;394,74 Euro
+Metri AG;Pflanzenoel;132000 Gramm;176,88;Euro;176,88 Euro
+Metri AG;Kidneybohnen;102000 Gramm;629,34;Euro;629,34 Euro
+Metri AG;Weissweinverschnitt;151 Liter;110,23;Euro;110,23 Euro
+Metri AG;Grundsauce Dunkel;7000 Gramm;76,65;Euro;76,65 Euro
+Metri AG;Scheiblettenkaese;61000 Gramm;229,36;Euro;229,36 Euro
+Metri AG;Pizzateig vorgebacken;310 Stueck;269,08;Euro;269,08 Euro
+Metri AG;Joghurt;16000 Gramm;32,96;Euro;32,96 Euro
+Metri AG;Ketchup;38000 Gramm;125,40;Euro;125,40 Euro
+Metri AG;Spaghetti;38000 Gramm;73,72;Euro;73,72 Euro
+Metri AG;Spinat;83000 Gramm;489,70;Euro;489,70 Euro
+Metri AG;Milch;441 Liter;357,21;Euro;357,21 Euro
+Metri AG;Paprika;1940 Stueck;1.891,50;Euro;1.891,50 Euro
+Metri AG;Buttergemuese TK;31000 Gramm;155,62;Euro;155,62 Euro
+Metri AG;Birnen;194000 Gramm;1.018,50;Euro;1.018,50 Euro
+Metri AG;Kokosmilch;237 Liter;820,02;Euro;820,02 Euro
+Metri AG;Broccoli;42000 Gramm;157,92;Euro;157,92 Euro
+Metri AG;Salami;19000 Gramm;83,60;Euro;83,60 Euro
+Metri AG;Cocktailsauce;31 Liter;142,60;Euro;142,60 Euro
+Metri AG;Dosenmais;72000 Gramm;220,32;Euro;220,32 Euro
+Metri AG;Oregano;14000 Gramm;116,34;Euro;116,34 Euro
+Metri AG;Halbbitterschokolade;98000 Gramm;882,98;Euro;882,98 Euro
+Metri AG;Ringli;62000 Gramm;123,38;Euro;123,38 Euro
+Metri AG;Rotkohl;62000 Gramm;247,38;Euro;247,38 Euro
+Metri AG;Toastbrot;117000 Gramm;277,29;Euro;277,29 Euro
+Metri AG;Fischreste gepresst;29000 Gramm;171,68;Euro;171,68 Euro
+Metri AG;Banane;490 Stueck;296,94;Euro;296,94 Euro
+Metri AG;Analogkaese;31000 Gramm;81,84;Euro;81,84 Euro
+Metri AG;Seelachs;120000 Gramm;927,60;Euro;927,60 Euro
+Metri AG;Zaziki;31000 Gramm;123,38;Euro;123,38 Euro
+Metri AG;Kochschinken;72000 Gramm;314,64;Euro;314,64 Euro
+Metri AG;Gemuesebratling;420 Stueck;380,52;Euro;380,52 Euro
+Metri AG;Salz;64000 Gramm;48,00;Euro;48,00 Euro
+Metri AG;Pesto Verde;16000 Gramm;385,28;Euro;385,28 Euro
+Metri AG;Ingwer;6000 Gramm;54,42;Euro;54,42 Euro
+Metri AG;Mehl;132000 Gramm;176,88;Euro;176,88 Euro
+Metri AG;Pommes Frites TK;71000 Gramm;149,81;Euro;149,81 Euro
+Metri AG;Garnelenaroma;2000 Gramm;9,34;Euro;9,34 Euro
+Metri AG;Truthahnfilet;106000 Gramm;949,76;Euro;949,76 Euro
+Metri AG;Raeuchertofu;122000 Gramm;1.562,82;Euro;1.562,82 Euro
+Metri AG;Kirschen;169000 Gramm;1.069,77;Euro;1.069,77 Euro
+Metri AG;Butter;125000 Gramm;412,50;Euro;412,50 Euro
+Metri AG;Schweinefilet;46000 Gramm;633,88;Euro;633,88 Euro
+Metri AG;Forelle;104000 Gramm;1.520,48;Euro;1.520,48 Euro
+Metri AG;Erdbeeren;49000 Gramm;278,81;Euro;278,81 Euro
+Metri AG;Parmesan;14000 Gramm;60,76;Euro;60,76 Euro
+;;;;Kosten fuer Metri AG:;43.198,01 Euro
+
+;;;;Gesamtkosten:;53.077,85 Euro
