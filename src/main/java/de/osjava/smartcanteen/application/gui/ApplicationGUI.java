@@ -187,12 +187,41 @@ public class ApplicationGUI {
         pnlOptionArea.add(pnlControlOptionArea);
 
         // **** GENERIERUNG: OPTION-INPUT -- Füllen des Bereichs Input-Option mit Einstellmöglichkeiten ****
-        JLabel lblInputText = new JLabel(
-                "<html>Bitte geben Sie die Eingabedateien, die für die<br> Datenverarbeitung herangezogen werden sollen, wie folgt ein: " +
-                        "ABC.csv;DEF.csv;XYZ.csv;</html>");
+        JLabel lblInputText = new JLabel();
         pnlInputOptionArea.add(lblInputText);
 
-        final JTextArea displayInputFiles = new JTextArea(application.getInputFiles(), 2, 1);
+        final JTextArea displayInputFiles = new JTextArea(2, 1);
+
+        String inputOfParam = application.getInputFiles();
+        String inputOfFileSystem = FileHelper.lookupInputFiles();
+
+        // Wenn dem Programm Daten als Parameter übergeben wurde werden diese angezeigt und das Label entsprechend
+        // gesetzt
+        // Prüfung auf nullPoint und leeren String
+        if (!(inputOfParam == null) && !inputOfParam.isEmpty()) {
+            displayInputFiles.setText(inputOfParam);
+            lblInputText
+                    .setText(
+                    "<html>Folgende CSV-Dateien wurden dem Programm als Parameter übergeben. Bitte passen Sie die Eingabe-Dateien nach Ihrem Bedarf, wie folgt an: " +
+                            "ABC.csv;DEF.csv;XYZ.csv;</html>");
+        }
+        // schreiben aller Dateinamen getrennt mit ; die im Input Ordner gefunden werden
+        // Prüfung auf nullPoint und leeren String
+        else if (!(inputOfFileSystem == null) && !inputOfFileSystem.isEmpty()) {
+            displayInputFiles.setText(inputOfFileSystem);
+            lblInputText
+                    .setText(
+                    "<html>Folgende CSV-Dateien wurden im Input-Ordner gefunden. Bitte passen Sie die Eingabe-Dateien nach Ihrem Bedarf, wie folgt an: " +
+                            "ABC.csv;DEF.csv;XYZ.csv;</html>");
+        }
+        // wenn keine Dateien im Input-Ordner sind den User darauf hinweisen
+        else {
+            displayInputFiles.setText("keine Dateien gefunden");
+            lblInputText
+                    .setText(
+                    "<html>Es konnten keine Dateien im Input-Ordner gefunden werden. Bitte legen Sie die einzulesenden Dateien dort ab und geben die Namen, wie folgt an: " +
+                            "ABC.csv;DEF.csv;XYZ.csv; </html>");
+        }
 
         pnlInputOptionArea.add(displayInputFiles);
         displayInputFiles.setLineWrap(true);
