@@ -43,7 +43,6 @@ public class FileOutput implements IOutput {
     /**
      * Standardkonstruktor
      * 
-     * @param canteens
      */
     public FileOutput() {
 
@@ -58,7 +57,6 @@ public class FileOutput implements IOutput {
      * @param canteen
      *            Kantinen-Objekt wird übergeben
      * @throws IOException
-     * @author Marcel Baxmann
      */
     @Override
     public void outputMenuPlan(Canteen canteen) throws IOException {
@@ -157,7 +155,6 @@ public class FileOutput implements IOutput {
      * 
      * @param shoppingList
      *            Einkaufslisten-Objekt wird übergeben
-     * @author Marcel Baxmann
      * @throws IOException
      */
     @Override
@@ -224,7 +221,6 @@ public class FileOutput implements IOutput {
      * 
      * @param shoppingList
      *            Einkaufslisten-Objekt wird übergeben
-     * @author Marcel Baxmann
      * @throws IOException
      */
     @Override

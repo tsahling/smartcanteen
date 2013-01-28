@@ -44,7 +44,6 @@ public class HTMLOutput implements IOutput {
      * @param canteen
      *            Kantinen-Objekt wird übergeben
      * @throws IOException
-     * @author Marcel Baxmann
      */
     @Override
     public void outputMenuPlan(Canteen canteen) throws IOException {
@@ -144,7 +143,6 @@ public class HTMLOutput implements IOutput {
      * 
      * @param shoppingList
      *            Einkaufslisten-Objekt wird übergeben
-     * @author Marcel Baxmann
      * @throws IOException
      */
     @Override
@@ -246,7 +244,6 @@ public class HTMLOutput implements IOutput {
      * 
      * @param shoppingList
      *            Einkaufslisten-Objekt wird übergeben
-     * @author Marcel Baxmann
      * @throws IOException
      */
     @Override
@@ -413,10 +410,7 @@ public class HTMLOutput implements IOutput {
      * @author Marcel Baxmann
      */
     private String pictureCheck(Meal sortedMeal) {
-        // TODO(Marcel Baxmann) Pfadangabe für spätere Ergebnisse?
-        // TODO(Tim Sahling) Pfadangabe für spätere Ergebnisse?
-
-        // vordefinierte Bildergrößte wird aus Properties ausgelesen
+        // vordefinierte Bildergröße wird aus Properties ausgelesen
         int size = Integer.parseInt(PropertyHelper.getProperty("outputData.picSize"));
         // auslesen der Pfadangabe
         String outputPath = PropertyHelper.getProperty("outputData.saveTo");

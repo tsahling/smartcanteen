@@ -35,7 +35,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 import de.osjava.smartcanteen.application.Application;
-import de.osjava.smartcanteen.application.SmartCanteen;
 import de.osjava.smartcanteen.builder.result.Meal;
 import de.osjava.smartcanteen.data.Canteen;
 import de.osjava.smartcanteen.datatype.Amount;
@@ -45,23 +44,23 @@ import de.osjava.smartcanteen.helper.NumberHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 
 /**
- * Die {@link AplicationGUI} wird von der Klasse {@link Aplication} verwendet.
+ * Die {@link ApplicationGUI} wird von der Klasse {@link Application} verwendet.
  * Sie ist für die Generierung der grafischen Benutzeroberfläche zuständig.
  * Sie bietet Steuerungmöglichkeitn für den Start des Berechnungsvorgangs,
  * Eingabe von Variablen für die Verarbeitung als auch die Ausgabe.
  * In Tabellenform werden exemplarisch für die Ergebnisse der Berechnungsvorgänge
  * die erstellten Menüpläne sowie als Einzelangabe die Gesamtkosten angezeigt.
- * Nach einmaliger Generierung der Ergebnisse können erneut Pläne generiert werden,
- * es erfolgt eine automatische Aktualisierung der Daten in der Voransichgt.
- * * Weiterhin kann die Ausgabe der aktuell generierten und in der Voransicht
- * dargestellten Daten in Dateien anstossen.
+ * Nach einmaliger Generierung der Ergebnisse können erneut Pläne generiert werden.
+ * Es erfolgt eine automatische Aktualisierung der Daten in der Voransicht.
+ * Weiterhin kann die Ausgabe der aktuell generierten und in der Voransicht
+ * dargestellten Daten in Dateien ausgelöst werden.
  * 
  * @author Marcel Baxmann
  */
 public class ApplicationGUI {
-	
+
     private static final Logger LOG = LogHelper.getLogger(ApplicationGUI.class.getName());
-    
+
     // Angabe der Breite des Fensters aus Properties auslesen und speichern in lokale Variable (geparstes int)
     private static final int PROP_GUI_WINDOWWIDTH = Integer.parseInt(PropertyHelper.getProperty("gui.windowWidth"));
 
@@ -112,7 +111,6 @@ public class ApplicationGUI {
     /**
      * Methode zum initalisieren der Benutzeroberfläche
      * 
-     * @author Marcel Baxmann
      */
     public void initialize() {
         // Anlegen des Rahmens für die Anzeige
@@ -122,7 +120,6 @@ public class ApplicationGUI {
         frame.setLocation(getDisplayCenter());
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new DialogWindowClosingListener());
-
         frame.setLayout(new GridLayout(1, 2));
 
         // **** LAYOUT: OPTION/ANSICHT -- Aufteilen des Anzeigerahmens in Rechts (Output) und Links (Optionen) ****
@@ -163,12 +160,12 @@ public class ApplicationGUI {
         JScrollPane scrlOutputArea = new JScrollPane(tblMenuPlan);
         pnlOutputArea.add(scrlOutputArea);
 
-        // Label für die Ausgabe der Gesamtkosten erstellen dun auf Panel für Voransicht einfügen
+        // Label für die Ausgabe der Gesamtkosten erstellen und auf Panel für Voransicht einfügen
         lblPreviewText2 = new JLabel("Gesamtkosten für den Einkauf: noch nicht berechnet");
         pnlOutputArea.add(lblPreviewText2);
 
         // **** LAYOUT: OPTIONSUNTERTEILUNG -- Unterteilen des Optionsbereich in die Kategorien Input-Option,
-        // Process-Option und Output-Option ****
+        // Process-Option, Output-Option und Kontroll-Panel ****
         // Input-Option
         JPanel pnlInputOptionArea = new JPanel();
         pnlInputOptionArea.setLayout(new GridLayout(2, 1));
@@ -190,7 +187,6 @@ public class ApplicationGUI {
         // Kontroll-Panel
         JPanel pnlControlOptionArea = new JPanel();
         pnlControlOptionArea.setLayout(new GridLayout(1, 2));
-        // pnlControlOptionArea.setBorder(BorderFactory.createTitledBorder("Ausgabe-Einstellungen"));
         pnlOptionArea.add(pnlControlOptionArea);
 
         // **** GENERIERUNG: OPTION-INPUT -- Füllen des Bereichs Input-Option mit Einstellmöglichkeiten ****
@@ -212,7 +208,7 @@ public class ApplicationGUI {
                     "<html>Folgende CSV-Dateien wurden dem Programm als Parameter übergeben. Bitte passen Sie die Eingabe-Dateien nach Ihrem Bedarf, wie folgt an: " +
                             "ABC.csv;DEF.csv;XYZ.csv;</html>");
         }
-        // schreiben aller Dateinamen getrennt mit ; die im Input Ordner gefunden werden
+        // schreiben aller Dateinamen getrennt mit ; die im Input-Ordner gefunden werden
         // Prüfung auf nullPoint und leeren String
         else if (!(inputOfFileSystem == null) && !inputOfFileSystem.isEmpty()) {
             displayInputFiles.setText(inputOfFileSystem);
@@ -236,7 +232,7 @@ public class ApplicationGUI {
 
         // **** GENERIERUNG: OPTION-PROCESS -- Füllen des Bereichs Process-Option mit Einstellmöglichkeiten ****
 
-        // Verarbeitungsmethode: RadioButton für Abfragegenerieren
+        // Verarbeitungsmethode: RadioButton für Abfrage generieren
         JLabel lblProcessText = new JLabel("<html>Menü-Verteilung auf Tage:</html>");
         pnlProcessOptionArea.add(lblProcessText);
 
@@ -266,7 +262,7 @@ public class ApplicationGUI {
 
         final JSlider sldPriceForOneUnitMax = new JSlider(JSlider.HORIZONTAL, 50, 1000, priceForOneUnit.intValue());
 
-        // Lininen in Slider anzeigen (Major bei jedem 5ten Euro und Minor bei jedem Euro)
+        // Lininen in Slider anzeigen (lange Linie bei jedem 5ten Euro und kurze Linie bei jedem Euro)
         sldPriceForOneUnitMax.setMajorTickSpacing(500);
         sldPriceForOneUnitMax.setMinorTickSpacing(100);
         sldPriceForOneUnitMax.setPaintTicks(true);
@@ -277,11 +273,6 @@ public class ApplicationGUI {
         lbProcessText4 = new JLabel(FileHelper.formatBD(new BigDecimal(PropertyHelper
                 .getProperty("ingredient.priceForOneUnit.max"))) + " Euro");
         pnlProcessOptionArea.add(lbProcessText4);
-
-        // Anlegen eines Buttons für den Start der Verarbeitung
-        final JButton btnStartProcess = new JButton("Verarbeitung starten");
-        btnStartProcess.setEnabled(true);
-        pnlControlOptionArea.add(btnStartProcess);
 
         // **** GENERIERUNG: OPTION-OUTPUT -- Füllen des Bereichs Output-Option mit Einstellmöglichkeiten ***
 
@@ -316,6 +307,13 @@ public class ApplicationGUI {
         rbtnOutputSeperatorGroup.add(rbtnOutputSeperator2);
         pnlOutputOptionArea.add(rbtnOutputSeperator1);
         pnlOutputOptionArea.add(rbtnOutputSeperator2);
+
+        // **** GENERIERUNG: Kontroll-Panel -- Schaltflächen für Steuerung ***
+
+        // Anlegen eines Buttons für den Start der Verarbeitung
+        final JButton btnStartProcess = new JButton("Verarbeitung starten");
+        btnStartProcess.setEnabled(true);
+        pnlControlOptionArea.add(btnStartProcess);
 
         // Anlegen eines Buttons für den Start der Dateiausgabe und setzen des Actionlisteners
         final JButton btnSaveResults = new JButton("Speichern der Ergebnisse");
@@ -433,9 +431,9 @@ public class ApplicationGUI {
                     } catch (IOException ioe) {
                         LOG.log(Level.SEVERE, ioe.getMessage(), ioe);
                     } catch (IllegalArgumentException iae) {
-                    	LOG.log(Level.SEVERE, iae.getMessage(), iae);
+                        LOG.log(Level.SEVERE, iae.getMessage(), iae);
                     } catch (Exception ex) {
-                    	LOG.log(Level.SEVERE, ex.getMessage(), ex);
+                        LOG.log(Level.SEVERE, ex.getMessage(), ex);
                     }
                 }
                 else {
@@ -464,7 +462,7 @@ public class ApplicationGUI {
                                 PROP_MESSAGE_SAVEOPERATION_MSG, PROP_MESSAGE_SAVEOPERATION_TITLE,
                                 JOptionPane.INFORMATION_MESSAGE);
                     } catch (IOException ioe) {
-                    	LOG.log(Level.SEVERE, ioe.getMessage(), ioe);
+                        LOG.log(Level.SEVERE, ioe.getMessage(), ioe);
                     }
                 }
                 else {

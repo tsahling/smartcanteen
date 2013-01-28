@@ -20,7 +20,7 @@ public class Canteen {
     /**
      * Standardkonstruktor
      * 
-     * @param CanteenLocation
+     * @param lcoation
      *            Standort der Kantine
      * @param numberOfEmployees
      *            Anzahl der Mitarbeiter am Standort der Kantine

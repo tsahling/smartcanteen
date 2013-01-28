@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Die Klasse {@lin FileHelper} bietet Methoden
+ * Die Klasse {@link FileHelper} bietet Methoden
  * für Tätigkeiten die hinischtlich dem Schreiben von Dateien anfallen.
  * Dazu zählt unter anderem die Formatierung der zu schreibenden Daten,
  * überprüfen der Dateinamen und das Schreiben der Daten in eine Datei
@@ -31,18 +31,16 @@ public class FileHelper {
     /**
      * Schreiben der übergebenen Daten in Datei
      * 
-     * @param String für auszugebene Daten
-     * @param String für die Bezeichnung des Dateinamens
-     * @param Boolean Wert ob die Datei überschrieben werden soll oder angehangen wird
+     * @param ausgabeDaten
+     *            Text für auszugebene Daten
+     * @param dateiname
+     *            Text für die Bezeichnung des Dateinamens
+     * @param anhaengen
+     *            Wahrheitswert ob die Datei überschrieben werden soll oder angehangen wird
      * @return liefert Wahrheitswert zurück wenn abgeschlossen
      * @throws IOException
-     * @author Marcel Baxmann
      */
     public static boolean ausgebenInDatei(String ausgabeDaten, String dateiname, boolean anhaengen) throws IOException {
-        // TODO (Marcel Baxmann) Prüfung der Strings auf Zeichen die HTML nicht ausgeben kann
-        // TODO (Tim Sahling) bräuchte hier deine Unterstützung: Prüfung der Strings auf Zeichen die HTML nicht ausgeben
-        // kann
-
         File file = new File(dateiname);
         FileWriter writer = new FileWriter(file, anhaengen);
 
@@ -62,7 +60,8 @@ public class FileHelper {
      * existiert. Ist dies der Fall wird solanger der Dateiname hochgezählt,
      * bis die Datei unter einem neuen Dateinamen gespeichert werden kann
      * 
-     * @return
+     * @return dateiname
+     *         den generierten Dateinamen
      */
     public static String generateFilename(String customName, String fileExt) {
         // setzen der übergebenen Parameter für den Filenamen
@@ -107,7 +106,6 @@ public class FileHelper {
      * 
      * @param date
      * @return String eines Datums im Format dd.mm.yyyy
-     * @author Marcel Baxmann
      */
     public static String shortendDate(Date date) {
         // Typsisierung Rückgabewert als String
@@ -128,9 +126,8 @@ public class FileHelper {
      * in das Format ###,###.00
      * Für den Wert 99999900 entspricht Ausagbe: 999.999,00
      * 
-     * @param BigDecimal
+     * @param input in Form eines BigDecimal
      * @return String eines im Format ###,###.00
-     * @author Marcel Baxmann
      */
     public static String formatBD(BigDecimal input) {
         // Formatierungsformat festlegen
@@ -145,9 +142,9 @@ public class FileHelper {
      * Die Methode prüft ob unter dem angegebenen Pfad
      * die Datei zu finden ist.
      * 
-     * @param String des Pfads und Dateinamens
-     * @return boolean Wahrheitswert ob Bild vorhanden
-     * @author Marcel Baxmann
+     * @param fullPath
+     *            der Pfad und Dateiname
+     * @return foundpicture Wahrheitswert ob Bild vorhanden
      */
     public static boolean foundPicture(String fullPath) {
         // Standardwert für Rueckgabe setzen
@@ -165,11 +162,9 @@ public class FileHelper {
 
     /**
      * Die Methode liest die Dateinamen der CSV-Dateien aus dem Input-Ordner aus
-     * *
      * 
      * @return String
      *         der Dateinamen der CSV-Dateiem im Input-Ordner
-     * @author Marcel Baxmann
      */
     public static String lookupInputFiles() {
         // StringBuilder wird erzeugt
