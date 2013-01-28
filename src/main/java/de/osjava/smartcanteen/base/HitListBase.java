@@ -16,13 +16,6 @@ public class HitListBase {
     private List<HitListItem> hitListItems;
 
     /**
-     * Standardkonstruktor
-     */
-    public HitListBase() {
-
-    }
-
-    /**
      * Methode um ein Datenobjekt {@link HitListItem} in die Liste hinzuzufügen.
      * 
      * @param hitListItem Das einzufügende Datenobjekt
@@ -81,5 +74,4 @@ public class HitListBase {
     public String toString() {
         return "HitListBase [hitListItems=" + hitListItems + "]";
     }
-
 }

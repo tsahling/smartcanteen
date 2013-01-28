@@ -44,25 +44,6 @@ public class Wholesaler extends AbstractProvider {
     }
 
     /**
-     * Liefert die Versandkostenpauschale des Grosshändlers
-     * 
-     * @return Die Versandkostenpauschale des Grosshändlers
-     */
-    public Amount getTransportFee() {
-        return transportFee;
-    }
-
-    /**
-     * Setzt die Versandkostenpauschale des Grosshändlers.
-     * 
-     * @param transportFee
-     *            Die zu setzende Versandkostenpauschale des Grosshändlers
-     */
-    public void setTransportFee(Amount transportFee) {
-        this.transportFee = transportFee;
-    }
-
-    /**
      * Diese Methode gibt den HashCode-Wert für das Objekt zurück, von dem die
      * Methode aufgerufen wurde.
      * 

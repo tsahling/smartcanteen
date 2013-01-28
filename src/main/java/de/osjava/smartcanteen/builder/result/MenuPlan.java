@@ -85,16 +85,6 @@ public class MenuPlan {
     }
 
     /**
-     * Setzt die Speisenliste
-     * 
-     * @param meals
-     *            Die zu setzende Speisenliste
-     */
-    public void setMeals(List<Meal> meals) {
-        this.meals = meals;
-    }
-
-    /**
      * Erstellt die String-Representation des Objekts {@link MenuPlan}.
      * 
      * @return Die String-Representation von {@link MenuPlan}
@@ -103,5 +93,4 @@ public class MenuPlan {
     public String toString() {
         return "MenuPlan [meals=" + meals + "]";
     }
-
 }

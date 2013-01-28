@@ -115,15 +115,6 @@ public class PriceListItem {
     }
 
     /**
-     * Methode um die Größe des Gebindes zu setzen.
-     * 
-     * @param size Die zu setzende Größe des Gebindes
-     */
-    public void setSize(Amount size) {
-        this.size = size;
-    }
-
-    /**
      * Methode das Gebinde abzufragen.
      * 
      * @return Das Gebinde
@@ -133,30 +124,12 @@ public class PriceListItem {
     }
 
     /**
-     * Methode um ein Gebinde zu setzen.
-     * 
-     * @param Das zu setzende Gebinde
-     */
-    public void setIngredient(Ingredient ingredient) {
-        this.ingredient = ingredient;
-    }
-
-    /**
      * Methode um den Preis des Gebindes abzufragen
      * 
      * @return Der Preis des Gebindes
      */
     public Amount getPrice() {
         return price;
-    }
-
-    /**
-     * Methode um den Preis eines Gebindest zu setzen
-     * 
-     * @param price Der zu setzende Preis des Gebindes
-     */
-    public void setPrice(Amount price) {
-        this.price = price;
     }
 
     /**

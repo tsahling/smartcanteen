@@ -202,32 +202,12 @@ public abstract class AbstractProvider {
     }
 
     /**
-     * Setzt den Namen des Anbieters.
-     * 
-     * @param name
-     *            Der zu setzende Name des Anbieters
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
      * Liefert eine Liste mit Preislistenpositionen
      * 
      * @return Die Preislistenpositionen
      */
     public Set<PriceListItem> getPriceList() {
         return priceList;
-    }
-
-    /**
-     * Setzt die Preislistenpositionen.
-     * 
-     * @param priceList
-     *            Die zu setzenden Preislistenpositionen
-     */
-    public void setPriceList(Set<PriceListItem> priceList) {
-        this.priceList = priceList;
     }
 
     /**

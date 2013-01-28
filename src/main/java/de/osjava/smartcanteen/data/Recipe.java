@@ -31,17 +31,6 @@ public class Recipe {
     }
 
     /**
-     * Konstruktor mit Name und Rang des Gerichts
-     * 
-     * @param name Name des Gerichts
-     * @param rank Rang des Gerichts
-     */
-    public Recipe(String name, int rank) {
-        this.name = name;
-        this.rank = rank;
-    }
-
-    /**
      * Ermittelt den Typ des {@link Recipe} auf Basis aller {@link Ingredient} des {@link Recipe}.
      * 
      * @return Den Typ des {@link Recipe}
@@ -134,16 +123,6 @@ public class Recipe {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Methode um den Namen des Rezepts {@link Recipe} zu setzen
-     * 
-     * @param name
-     *            Name des Rezept
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -244,5 +223,4 @@ public class Recipe {
     public String toString() {
         return "Recipe [name=" + name + ", ingredientList=" + ingredientList + ", rank=" + rank + "]";
     }
-
 }

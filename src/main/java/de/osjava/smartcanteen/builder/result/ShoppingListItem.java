@@ -60,16 +60,6 @@ public class ShoppingListItem {
     }
 
     /**
-     * Setzt eine Zutat
-     * 
-     * @param ingredient
-     *            Die zu setzende Zutat
-     */
-    public void setIngredient(Ingredient ingredient) {
-        this.ingredient = ingredient;
-    }
-
-    /**
      * Liefert die {@link Amount}.
      * 
      * @return Die {@link Amount} der {@link Ingredient} die bestellt werden soll
@@ -79,30 +69,12 @@ public class ShoppingListItem {
     }
 
     /**
-     * 
-     * @param quantity
-     */
-    public void setQuantity(Amount quantity) {
-        this.quantity = quantity;
-    }
-
-    /**
      * Liefert den Anbieter
      * 
      * @return Ein Anbieter
      */
     public AbstractProvider getProvider() {
         return provider;
-    }
-
-    /**
-     * Setzt einen Anbieter
-     * 
-     * @param provider
-     *            Der zu setzende Anbieter
-     */
-    public void setProvider(AbstractProvider provider) {
-        this.provider = provider;
     }
 
     /**

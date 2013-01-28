@@ -43,15 +43,6 @@ public class Ingredient {
     }
 
     /**
-     * Methode um den Namen des Lebensmittels zu setzen
-     * 
-     * @param name Der zu setzende Name des Lebensmittels
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
      * Methode um den Type des Lebensmittels abzufragen
      * 
      * @return Typ des Lebensmittels
