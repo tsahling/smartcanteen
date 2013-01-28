@@ -29,13 +29,6 @@ public class ProviderBase {
     private Set<AbstractProvider> providers;
 
     /**
-     * Standardkonstruktor
-     */
-    public ProviderBase() {
-
-    }
-
-    /**
      * Methode um einen neuen Lebensmittelanbieter {@link AbstractProvider} dem
      * Set hinzuzufügen
      * 
@@ -55,7 +48,6 @@ public class ProviderBase {
      * 
      * @param ingredient
      * @return
-     * @author Tim Sahling
      */
     public Amount findBestPriceForOneUnitOfIngredient(Ingredient ingredient) {
         Amount result = null;
@@ -80,9 +72,10 @@ public class ProviderBase {
     }
 
     /**
+     * Ermittelt eine Liste von {@link PriceListItem} auf Basis einer {@link Ingredient}.
      * 
-     * @param ingredient
-     * @return
+     * @param ingredient Die {@link Ingredient}, mit der gesucht wird
+     * @return Eine Liste von {@link PriceListItem}
      */
     private List<PriceListItem> findPriceListItemsByIngredient(Ingredient ingredient) {
         List<PriceListItem> result = new ArrayList<PriceListItem>();
@@ -102,7 +95,6 @@ public class ProviderBase {
         }
 
         return result;
-
     }
 
     /**
@@ -256,10 +248,10 @@ public class ProviderBase {
     }
 
     /**
-     * Methode um die Anbieter zu ermitteln, die eine bestimmte Zutat vorrätig haben.
+     * Ermittelt die {@link AbstractProvider}, die eine bestimmte {@link Ingredient} vorrätig haben.
      * 
-     * @param ingredient
-     * @return
+     * @param ingredient Die {@link Ingredient}, mit der gesucht wird
+     * @return Ein Set von {@link AbstractProvider}
      */
     public Set<AbstractProvider> findProvidersByIngredient(Ingredient ingredient) {
         Set<AbstractProvider> result = new HashSet<AbstractProvider>();
@@ -314,11 +306,12 @@ public class ProviderBase {
     }
 
     /**
-     * Vergleicht die Preise von zwei {@link PriceListItem}s miteinander.
+     * Vergleicht die Preise von zwei {@link PriceListItem} miteinander.
      * 
-     * @param pli1
-     * @param pli2
-     * @return
+     * @param pli1 Das erste {@link PriceListItem}
+     * @param pli2 Das zweite {@link PriceListItem}
+     * @return 0, -1 oder 1, je nachdem wie sich die Preise der beiden zu vergleichenden {@link PriceListItem}
+     *         zueinander verhalten
      */
     private int comparePriceOfPriceListItems(PriceListItem pli1, PriceListItem pli2) {
         // Wenn eine Preislistenposition nicht gesetzt ist, wird von Gleichheit ausgegangen. Dieser Fall dürfte aber
@@ -395,16 +388,6 @@ public class ProviderBase {
      */
     public Set<AbstractProvider> getProvider() {
         return providers;
-    }
-
-    /**
-     * Setzt die Lebensmittelanbieter.
-     * 
-     * @param provider
-     *            Die zu setzenden Lebensmittelanbieter
-     */
-    public void setProvider(Set<AbstractProvider> provider) {
-        this.providers = provider;
     }
 
     /**

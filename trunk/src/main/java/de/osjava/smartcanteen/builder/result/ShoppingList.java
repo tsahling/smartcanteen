@@ -27,12 +27,6 @@ public class ShoppingList {
     private List<ShoppingListItem> shoppingListItems;
 
     /**
-     * Standardkonstruktor
-     */
-    public ShoppingList() {
-    }
-
-    /**
      * Summiert die Preise aller Einkaufslistenpositionen zu einer Gesamtsumme.
      * 
      * @return Die Gesamtsumme aller Einkaufslistenpositionen
@@ -102,13 +96,6 @@ public class ShoppingList {
     }
 
     /**
-     * @return Die Einkaufslistenpositionen
-     */
-    public List<ShoppingListItem> getShoppingListItems() {
-        return shoppingListItems;
-    }
-
-    /**
      * Setzt die Einkaufslistenpositionen.
      * 
      * @param shoppingListItems
@@ -127,5 +114,4 @@ public class ShoppingList {
     public String toString() {
         return "ShoppingList [shoppingListItems=" + shoppingListItems + "]";
     }
-
 }

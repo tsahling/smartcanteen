@@ -25,7 +25,6 @@ public class Meal {
     public Meal(Recipe recipe, Date date) {
         this.recipe = recipe;
         this.date = date;
-
     }
 
     /**
@@ -38,32 +37,12 @@ public class Meal {
     }
 
     /**
-     * Setzen eines Rezeptes
-     * 
-     * @param recipe
-     *            Das zu setzende Rezept
-     */
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
-
-    /**
      * Rückgabe des Datums, an welchem das Essen auf dem Speiseplan steht.
      * 
      * @return Das Datum
      */
     public Date getDate() {
         return date;
-    }
-
-    /**
-     * Setzen des Datums, an welchem das Essen auf dem Speiseplan steht.
-     * 
-     * @param date
-     *            the date to set
-     */
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     /**

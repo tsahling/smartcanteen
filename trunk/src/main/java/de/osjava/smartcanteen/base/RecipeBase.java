@@ -20,12 +20,6 @@ public class RecipeBase {
     private Set<Recipe> recipes;
 
     /**
-     * Standardkonstruktor
-     */
-    public RecipeBase() {
-    }
-
-    /**
      * Methode um ein Datenobjekt {@link Recipe} in das Set hinzuzufügen.
      * 
      * @param recipe
@@ -104,16 +98,6 @@ public class RecipeBase {
      */
     public Set<Recipe> getRecipes() {
         return recipes;
-    }
-
-    /**
-     * Setzt die Rezepte
-     * 
-     * @param recipes
-     *            Die zu setzenden Rezepte
-     */
-    public void setRecipes(Set<Recipe> recipes) {
-        this.recipes = recipes;
     }
 
     /**

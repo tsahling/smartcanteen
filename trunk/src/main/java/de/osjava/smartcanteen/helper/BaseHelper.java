@@ -467,10 +467,7 @@ public class BaseHelper {
     /**
      * Eingebettete Klasse RecipeListItem ist eine Datentraegerklasse die eine Zeile aus der Datei der Rezepte
      * repraesentiert. Sie wird nur als zwischenspeicher gebraucht um ein Object vom Typ Recipe zu fuellen.
-     * 
-     * @author Francesco Luciano
      */
-
     private static final class RecipeListItem {
         String quantityOfIngredient;
         String unitOfQuantity;

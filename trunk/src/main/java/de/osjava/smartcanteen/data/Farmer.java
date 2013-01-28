@@ -44,25 +44,6 @@ public class Farmer extends AbstractProvider {
     }
 
     /**
-     * Liefert die Entfernung zur Zentrale der VAWi GmbH
-     * 
-     * @return Die Entfernung zur Zentrale der VAWi GmbH
-     */
-    public Amount getDistanceToCentral() {
-        return distanceToCentral;
-    }
-
-    /**
-     * Setzt die Entfernung zur Zentrale der VAWi GmbH.
-     * 
-     * @param distanceToCentral
-     *            Die zu setzende Entfernung zur Zentrale der VAWi GmbH
-     */
-    public void setDistanceToCentral(Amount distanceToCentral) {
-        this.distanceToCentral = distanceToCentral;
-    }
-
-    /**
      * Diese Methode gibt den HashCode-Wert für das Objekt zurück, von dem die
      * Methode aufgerufen wurde.
      * 
