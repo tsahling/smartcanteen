@@ -469,6 +469,7 @@ public class HTMLOutput implements IOutput {
                 "<head>" + lineSeparator +
                 "<title>" + title +
                 "</title>" + lineSeparator +
+                "<META HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=utf-8\">" + lineSeparator +
                 "</head>" + lineSeparator +
                 "<body>" + lineSeparator);
 
