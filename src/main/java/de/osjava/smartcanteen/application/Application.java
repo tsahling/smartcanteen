@@ -23,15 +23,11 @@ import de.osjava.smartcanteen.output.FileOutput;
 import de.osjava.smartcanteen.output.HTMLOutput;
 
 /**
- * Die Klasse {@link Application} versetzt das Programm anhand der übergebenen
- * Aufparameter in einen initialen und konstanten Zustand. Dabei werden zu
- * Beginn die übergebenen Aufparameter (in Form von Dateinamen) validiert und
- * anhand der Klasse {@link InputFileHandler} eingelesen sowie in die entsprechenden
- * Containerklassen übergeben.
- * 
- * Nach erfolgreicher Initialisierung startet die Klasse {@link Application} die
- * eigentliche Programmlogik und sorgt ganz am Ende des Ablaufs für die Ausgabe
- * der Ergebnisse.
+ * Die Klasse {@link Application} versetzt das Programm anhand der übergebenen Aufparameter in einen initialen und
+ * konstanten Zustand. Dabei werden zu Beginn die übergebenen Aufparameter (in Form von Dateinamen) validiert und anhand
+ * der Klasse {@link InputFileHandler} eingelesen sowie in die entsprechenden Datenträgerklassen übergeben. Nach
+ * erfolgreicher Initialisierung startet die Klasse {@link Application} die eigentliche Programmlogik und sorgt ganz am
+ * Ende des Ablaufs für die Ausgabe der Ergebnisse.
  * 
  * @author Franceso Luciano und Tim Sahling und Marcel Baxmann
  */
@@ -85,16 +81,8 @@ public class Application {
     private String inputFiles;
 
     /**
-     * Standardkonstruktor
-     */
-    public Application() {
-
-    }
-
-    /**
-     * Versetzt die Anwendung in einen initialen und konstanten Zustand und ruft
-     * nach erfolgreichem Einlesen der Eingabedaten die Logiken der
-     * Applikationsroutine auf.
+     * Versetzt die Anwendung in einen initialen und konstanten Zustand und ruft nach erfolgreichem Einlesen der
+     * Eingabedaten die Logiken der Applikationsroutine auf.
      * 
      * @param args Aufparameter der Applikation
      * @throws Exception Alle auftretenden Fehler in der Applikation
@@ -105,6 +93,8 @@ public class Application {
 
             boolean fillBases = fillBases();
 
+            // Start der Applikation soll nur erfolgen wenn die Methode fillBases erfolgreich durchgelaufen ist, oder
+            // sie nicht erfolgreich durchgelaufen ist und gleichzeitig ein GUI-Start vorgesehen ist
             if (fillBases || (!fillBases && IS_PROP_APPLICATION_STARTGUI)) {
                 startApplication();
             }
@@ -115,14 +105,15 @@ public class Application {
     }
 
     /**
-     * Liest die Eingabedaten ein.
+     * Verarbeitet die Aufparameter der Applikation.
      * 
-     * @param args
-     * @throws Exception
+     * @param args Aufparameter der Applikation
+     * @return wahr/falsch, je nachdem ob die Verarbeitung erfolgreich war
      */
     private boolean initInputArgs(final String[] args) {
 
         if (args.length == 0) {
+            // Eingabefeld für Eingabedaten soll nur erscheinen wenn kein GUI-Start vorgesehen ist
             if (!IS_PROP_APPLICATION_STARTGUI) {
                 this.inputFiles = JOptionPane.showInputDialog(null, PROP_MESSAGE_WRONGORMISSINGINPUTFILES_MSG,
                         PROP_MESSAGE_WRONGORMISSINGINPUTFILES_TITLE, JOptionPane.QUESTION_MESSAGE);
@@ -148,9 +139,10 @@ public class Application {
     }
 
     /**
+     * Füllt den String für die Eingabedaten auf Basis der übergebenen Aufparameter.
      * 
-     * @param args
-     * @param result
+     * @param args Aufparameter für die Eingabedaten (z.B. ABC.csv;DEF.csv;)
+     * @param result String für die Eingabedaten
      */
     private String setApplicationInputFilesFromArgs(String[] args) {
         String result = null;
@@ -166,8 +158,9 @@ public class Application {
     }
 
     /**
+     * Setzt die Properties der Applikation auf Basis der übergebenen Aufparameter.
      * 
-     * @param args
+     * @param arg Aufparameter für die zu setzenden Properties
      */
     private void setApplicationParamsFromArgs(String arg) {
 
@@ -190,16 +183,14 @@ public class Application {
     }
 
     /**
-     * Füllt die Datenträgerklassen auf Basis der übergebenen Dateien.
+     * Füllt die Datenträgerklassen auf Basis der Eingabedaten.
      * 
-     * @return
-     * @throws Exception
-     * @throws IOException
+     * @return wahr/falsch, je nachdem ob die Verarbeitung funktioniert
+     * @throws IOException Alle auftretenden IO-Fehler in der Verarbeitung der Methode
      */
-    public boolean fillBases() throws Exception {
+    public boolean fillBases() throws IOException {
         boolean wrongInputFile = false;
 
-        // Leeren und löschen aller erzeugten Objekte
         cleanUp();
 
         if (this.inputFiles != null && !this.inputFiles.isEmpty()) {
@@ -211,9 +202,8 @@ public class Application {
 
                     URL inputFileUrl = null;
 
-                    // Aus dem inputFile String wird versucht eine Datei zu instanziieren. Wenn diese Datei im
-                    // Dateisystem existiert, wird diese als Input genommen. Ansonsten wird versucht anhand des
-                    // übergebenen inputFile String, die Datei aus dem internen Input-Ordner zu lesen.
+                    // Aus dem String inputFile inkl. des input-Pfades wird versucht eine Datei zu instanziieren. Wenn
+                    // diese Datei im Dateisystem existiert, wird diese als Input genommen.
                     File file = new File(PROP_APPLICATION_INPUTFILEPATH + inputFile);
 
                     if (file.exists()) {
@@ -253,25 +243,41 @@ public class Application {
 
     /**
      * Leeren, löschen und deinstanzieren aller erzeugten Objekte.
-     * 
      */
     private void cleanUp() {
         this.hitListBase = null;
         this.providerBase = null;
         this.recipeBase = null;
-
         this.canteens = null;
         this.shoppingList = null;
     }
 
+    /**
+     * Validiert die Datenträgerklasse {@link HitListBase}.
+     * 
+     * @param hitListBase Die Datenträgerklasse {@link HitListBase}
+     * @return wahr/falsch, je nachdem ob die Datenträgerklasse {@link HitListBase} richtig gefüllt wurde
+     */
     private boolean validateHitListBase(HitListBase hitListBase) {
         return hitListBase != null && hitListBase.getHitListItems() != null && !hitListBase.getHitListItems().isEmpty();
     }
 
+    /**
+     * Validiert die Datenträgerklasse {@link RecipeBase}.
+     * 
+     * @param hitListBase Die Datenträgerklasse {@link RecipeBase}
+     * @return wahr/falsch, je nachdem ob die Datenträgerklasse {@link RecipeBase} richtig gefüllt wurde
+     */
     private boolean validateRecipeBase(RecipeBase recipeBase) {
         return recipeBase != null && recipeBase.getRecipes() != null && !recipeBase.getRecipes().isEmpty();
     }
 
+    /**
+     * Validiert die Datenträgerklasse {@link ProviderBase}.
+     * 
+     * @param hitListBase Die Datenträgerklasse {@link ProviderBase}
+     * @return wahr/falsch, je nachdem ob die Datenträgerklasse {@link ProviderBase} richtig gefüllt wurde
+     */
     private boolean validateProviderBase(ProviderBase providerBase) {
         return providerBase != null && providerBase.getProvider() != null && !providerBase.getProvider().isEmpty();
     }
@@ -280,8 +286,7 @@ public class Application {
      * Diese Methode stellt dem User zur Auswahl ob die Anwendung in der Konsole
      * oder mit GUI-Unterstützung geladen werden soll
      * 
-     * @throws IOException
-     * @author Tim Sahling und Marcel Baxmann
+     * @throws IOException Alle auftretenden IO-Fehler in der Verarbeitung der Methode
      */
     private void startApplication() throws IOException {
 
@@ -345,7 +350,7 @@ public class Application {
      * Methode in der die Ergebnisse der Builderklassen {@link MenuPlanBuilder} und {@link ShoppingListBuilder}
      * ausgegeben werden.
      * 
-     * @throws IOException
+     * @throws IOException Alle auftretenden IO-Fehler in der Verarbeitung der Methode
      */
     public void outputApplicationResult() throws IOException {
 
@@ -402,30 +407,65 @@ public class Application {
         LOG.log(Level.INFO, "Ausgabe erfolgreich abgeschlossen");
     }
 
+    /**
+     * Abfrage der Datenträgerklasse {@link HitListBase}.
+     * 
+     * @return Die Datenträgerklasse {@link HitListBase}
+     */
     public HitListBase getHitListBase() {
         return hitListBase;
     }
 
+    /**
+     * Abfrage der Datenträgerklasse {@link RecipeBase}.
+     * 
+     * @return Die Datenträgerklasse {@link RecipeBase}
+     */
     public RecipeBase getRecipeBase() {
         return recipeBase;
     }
 
+    /**
+     * Abfrage der Datenträgerklasse {@link ProviderBase}.
+     * 
+     * @return Die Datenträgerklasse {@link ProviderBase}
+     */
     public ProviderBase getProviderBase() {
         return providerBase;
     }
 
+    /**
+     * Abfrage der generierten Ergebnisklassen {@link Canteen} als Array.
+     * 
+     * @return Ein Array der Ergebnisklasse {@link Canteen}
+     */
     public Canteen[] getCanteens() {
         return canteens;
     }
 
+    /**
+     * Abfragen der generierten Ergebnisklasse {@link ShoppingList}.
+     * 
+     * @return Die Ergebnisklasse {@link ShoppingList}
+     */
     public ShoppingList getShoppingList() {
         return shoppingList;
     }
 
+    /**
+     * Abfragen der eingelesenen Eingabedaten.
+     * 
+     * @return Die Eingabedaten als {@link String}
+     */
     public String getInputFiles() {
         return inputFiles;
     }
 
+    /**
+     * Setzen der Eingabedaten.
+     * 
+     * @param inputFiles Die zu setzenden Eingabedaten
+     */
     public void setInputFiles(String inputFiles) {
         this.inputFiles = inputFiles;
     }
