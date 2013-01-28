@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.params=
+comment0.target=CSVTokenizer()
+comment0.text=\r\n\ Standardkonstruktor\r\n
+comment1.params=
+comment1.target=boolean\ hasMoreLines()
+comment1.text=\r\n\ Fragt\ ob\ es\ weitere\ Zeilen\ vorhanden\ sind\r\n\ \r\n\ @return\ \ wahr/falsch,\ je\ nachdem\ ob\ weitere\ Zeilen\ vorhanden\ sind\r\n
+comment2.params=
+comment2.target=java.lang.Object\ nextLine()
+comment2.text=\r\n\ Liest\ die\ naechste\ Zeile\ ein.\r\n\ \r\n\ @return\ Die\ naechste\ Zeile\r\n
+comment3.params=line
+comment3.target=java.lang.Object[]\ splitLine(java.lang.Object)
+comment3.text=\r\n\ Zerlegt\ die\ uebergebene\ Zeile\ in\ einzelne\ Datenfelder\ und\ gibt\ diese\ zurueck\r\n\ \r\n\ @param\ line\ Eine\ Zeile\ die\ zerlegt\ werden\ solle\r\n\ @return\ Ein\ Array\ mit\ Zeilenelementen\r\n
+numComments=4

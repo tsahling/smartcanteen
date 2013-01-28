@@ -1,0 +1,26 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Farmer()
+comment0.text=\r\n\ Standardkonstruktor\r\n
+comment1.params=provider
+comment1.target=Farmer\ createProvider(Provider)
+comment2.params=provider
+comment2.target=Farmer\ updateProvider(Provider)
+comment3.params=provider
+comment3.target=void\ deleteProvider(Provider)
+comment4.params=
+comment4.target=Amount\ getDistanceToCentral()
+comment4.text=\r\n\ @return\ Die\ Entfernung\ zur\ Zentrale\ der\ VAWi\ GmbH\r\n
+comment5.params=distanceToCentral
+comment5.target=void\ setDistanceToCentral(Amount)
+comment5.text=\r\n\ Setzt\ die\ Entfernung\ zur\ Zentrale\ der\ VAWi\ GmbH.\r\n\ \r\n\ @param\ distanceToCentral\ Die\ zu\ setzende\ Entfernung\ zur\ Zentrale\ der\ VAWi\ GmbH\r\n
+comment6.params=
+comment6.target=int\ hashCode()
+comment6.text=\r\n\ Diese\ Methode\ gibt\ den\ HashCode-Wert\ fuer\ das\ Objekt\ zurueck,\ von\ dem\ die\ Methode\ aufgerufen\ \r\n\ wurde.\r\n\ \r\n\ @return\ Der\ HashCode-Wert\ des\ Objekts\ als\ int-Representation\r\n
+comment7.params=obj
+comment7.target=boolean\ equals(java.lang.Object)
+comment7.text=\r\n\ Diese\ Methode\ prueft,\ ob\ das\ uebergebene\ Objekt\ gleich\ dem\ Objekt\ ist,\ von\ dem\ die\ Methode\ \r\n\ aufgerufen\ wurde.\r\n\ \r\n\ @return\ wahr/falsch,\ je\ nachdem\ ob\ zu\ vergleichende\ Objekte\ gleich\ sind\r\n
+comment8.params=
+comment8.target=java.lang.String\ toString()
+comment8.text=\r\n\ Erstellt\ die\ String-Representation\ des\ Objekts\ {@link\ Farmer}.\r\n\ \r\n\ @return\ Die\ String-Representation\ von\ {@link\ Farmer}\r\n
+numComments=9
