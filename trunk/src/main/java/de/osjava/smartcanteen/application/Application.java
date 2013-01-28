@@ -286,7 +286,8 @@ public class Application {
      * Diese Methode stellt dem User zur Auswahl ob die Anwendung in der Konsole
      * oder mit GUI-Unterstützung geladen werden soll
      * 
-     * @throws IOException Alle auftretenden IO-Fehler in der Verarbeitung der Methode
+     * @throws IOException
+     *             Alle auftretenden IO-Fehler in der Verarbeitung der Methode
      */
     private void startApplication() throws IOException {
 

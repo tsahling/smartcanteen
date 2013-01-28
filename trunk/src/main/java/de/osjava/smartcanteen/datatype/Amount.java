@@ -47,7 +47,7 @@ public class Amount implements Comparable<Amount> {
      * aktualisierten Wert zurück.
      * 
      * @param amount
-     * @return
+     * @return this
      */
     public Amount add(Amount amount) {
         if (this.unit.equals(amount.getUnit())) {
@@ -60,7 +60,7 @@ public class Amount implements Comparable<Amount> {
      * Fügt der bestehenden Menge eine weitere Menge hinzu.
      * 
      * @param value
-     * @return
+     * @return this
      */
     private BigDecimal addValue(BigDecimal value) {
         return this.value.add(value);
@@ -71,7 +71,7 @@ public class Amount implements Comparable<Amount> {
      * aktualisierten Wert zurück.
      * 
      * @param amount
-     * @return
+     * @return this
      */
     public Amount subtract(Amount amount) {
         if (this.unit.equals(amount.getUnit())) {
@@ -84,7 +84,7 @@ public class Amount implements Comparable<Amount> {
      * Subtrahiert von der bestehenden Menge eine weitere Menge.
      * 
      * @param value
-     * @return
+     * @return this
      */
     private BigDecimal subtractValue(BigDecimal value) {
         return this.value.subtract(value);

@@ -1,7 +1,7 @@
 package de.osjava.smartcanteen.datatype;
 
 /**
- * {@link UnitofMeasurement} stellt ein Datenobjekt vom Typ Enumeration dar. Ein
+ * {@link UnitOfMeasurement} stellt ein Datenobjekt vom Typ Enumeration dar. Ein
  * Enum verhält sich wie eine Klasse mit Attributen und Methoden kann jedoch
  * nicht vererben. Durch die Klasse {@link Amount} wird der Typ (z.B. GRM oder
  * EUR) eines Amount deklariert. Die Werte werden final gespeichert und daher
