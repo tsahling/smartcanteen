@@ -142,7 +142,7 @@ public class Application {
      * Füllt den String für die Eingabedaten auf Basis der übergebenen Aufparameter.
      * 
      * @param args Aufparameter für die Eingabedaten (z.B. ABC.csv;DEF.csv;)
-     * @param result String für die Eingabedaten
+     * @return String für die Eingabedaten
      */
     private String setApplicationInputFilesFromArgs(String[] args) {
         String result = null;
@@ -265,7 +265,7 @@ public class Application {
     /**
      * Validiert die Datenträgerklasse {@link RecipeBase}.
      * 
-     * @param hitListBase Die Datenträgerklasse {@link RecipeBase}
+     * @param recipeBase Die Datenträgerklasse {@link RecipeBase}
      * @return wahr/falsch, je nachdem ob die Datenträgerklasse {@link RecipeBase} richtig gefüllt wurde
      */
     private boolean validateRecipeBase(RecipeBase recipeBase) {
@@ -275,7 +275,7 @@ public class Application {
     /**
      * Validiert die Datenträgerklasse {@link ProviderBase}.
      * 
-     * @param hitListBase Die Datenträgerklasse {@link ProviderBase}
+     * @param providerBase Die Datenträgerklasse {@link ProviderBase}
      * @return wahr/falsch, je nachdem ob die Datenträgerklasse {@link ProviderBase} richtig gefüllt wurde
      */
     private boolean validateProviderBase(ProviderBase providerBase) {

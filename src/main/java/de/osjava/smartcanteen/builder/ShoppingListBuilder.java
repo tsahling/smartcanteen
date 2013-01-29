@@ -29,11 +29,9 @@ import de.osjava.smartcanteen.helper.BuilderHelper;
 import de.osjava.smartcanteen.helper.NumberHelper;
 
 /**
- * Die Klasse {@link ShoppingListBuilder} ist eine der Geschäftslogikklassen und
- * für die Erstellung einer Einkaufsliste zuständig, die angibt welche Zutaten
- * in welcher Menge bei welchem Anbieter beschafft werden sollen. Als Ergebnis
- * liefert die Klasse eine {@link ShoppingList}, die dann im Output verwendet
- * werden kann.
+ * Die Klasse {@link ShoppingListBuilder} ist eine der Geschäftslogikklassen und für die Erstellung einer Einkaufsliste
+ * zuständig, die angibt welche Zutaten in welcher Menge bei welchem Anbieter beschafft werden sollen. Als Ergebnis
+ * liefert die Klasse eine {@link ShoppingList}, die dann im Output verwendet werden kann.
  * 
  * @author Tim Sahling
  */
@@ -43,13 +41,11 @@ public class ShoppingListBuilder {
     private Canteen[] canteens;
 
     /**
-     * Der Standardkonstruktor der {@link ShoppingListBuilder} initialisiert die
-     * Klasse beim Erstellen und nimmt einige wichtige Eingangsdaten entgegen.
+     * Der Standardkonstruktor der {@link ShoppingListBuilder} initialisiert die Klasse beim Erstellen und nimmt einige
+     * wichtige Eingangsdaten entgegen.
      * 
-     * @param providerBase
-     *            Die {@link ProviderBase} Verwaltungs- bzw. Containerklasse
-     * @param canteens
-     *            Eine oder mehrere {@link Canteen}
+     * @param providerBase Die {@link ProviderBase} Verwaltungs- bzw. Containerklasse
+     * @param canteens Eine oder mehrere {@link Canteen}
      */
     public ShoppingListBuilder(ProviderBase providerBase, Canteen... canteens) {
         this.providerBase = providerBase;
@@ -68,8 +64,7 @@ public class ShoppingListBuilder {
         // Summieren der Mengen aller für die Speisepläne benötigten Zutaten
         Map<Ingredient, Amount> ingredientQuantities = sumMenuPlanIngredientQuantities();
 
-        // Ermitteln bei welchem Anbieter, welche Konstellationen von Zutaten am günstigsten eingekauft werden
-        // können
+        // Ermitteln bei welchem Anbieter, welche Konstellationen von Zutaten am günstigsten eingekauft werden können
         Map<AbstractProvider, Set<IngredientQuantity>> bestPriceProviders = determineBestPriceProviders(ingredientQuantities);
 
         // Erstellen der Einkaufslistenpositionen
@@ -93,8 +88,9 @@ public class ShoppingListBuilder {
      * Ermittelt bei welchem {@link AbstractProvider}, welche Konstellationen von Zutaten am günstigsten eingekauft
      * werden können.
      * 
-     * @param ingredientQuantities
-     * @return
+     * @param ingredientQuantities Zuordnung von {@link Ingredient} zu der jeweilgs benötigten {@link Amount}
+     * @return Eine Zuordnung von {@link AbstractProvider} zu den jeweils bei ihm zu bestellenden
+     *         {@link IngredientQuantity}
      */
     private Map<AbstractProvider, Set<IngredientQuantity>> determineBestPriceProviders(
             Map<Ingredient, Amount> ingredientQuantities) {
@@ -125,10 +121,10 @@ public class ShoppingListBuilder {
     /**
      * Berechnet den Fall, dass nur ein einzelner {@link AbstractProvider} die {@link Ingredient} vorrätig hat.
      * 
-     * @param result
-     * @param provider
-     * @param ingredient
-     * @param ingredientQuantity
+     * @param result Das Ergebnis
+     * @param provider Der {@link AbstractProvider}, der ins Ergebnis eingefügt werden soll
+     * @param ingredient Die {@link Ingredient}, die ins Ergebnis eingefügt werden soll
+     * @param ingredientQuantity Der {@link Amount}, der ins Ergebnis eingefügt werden soll
      */
     private void computeOneProviderWithIngredient(Map<AbstractProvider, Set<IngredientQuantity>> result,
             AbstractProvider provider, Ingredient ingredient, Amount ingredientQuantity) {
@@ -139,14 +135,15 @@ public class ShoppingListBuilder {
     /**
      * Berechnet den Fall, dass mehrere {@link AbstractProvider} die {@link Ingredient} vorrätig haben.
      * 
-     * @param result
-     * @param providers
-     * @param ingredient
-     * @param ingredientQuantity
+     * @param result Das Ergebnis
+     * @param providers Die {@link AbstractProvider}s, die die Zutat vorrätig haben
+     * @param ingredient Die {@link Ingredient}, die ins Ergebnis eingefügt werden soll
+     * @param ingredientQuantity Der {@link Amount}, der ins Ergebnis eingefügt werden soll
      */
     private void computeMoreProvidersWithIngredient(Map<AbstractProvider, Set<IngredientQuantity>> result,
             Set<AbstractProvider> providers, Ingredient ingredient, Amount ingredientQuantity) {
 
+        // Ermittelt die Anbieter die Zutat in der benötigten Menge vorrätig haben
         Set<AbstractProvider> providersWithIngredientAndQuantity = providerBase.findProvidersByIngredientAndQuantity(
                 providers, ingredient, ingredientQuantity);
 
@@ -155,8 +152,8 @@ public class ShoppingListBuilder {
         if (providersWithIngredientAndQuantity.size() == 0) {
             computeNoProviderWithIngredientAndQuantity(result, providers, ingredient, ingredientQuantity);
         }
-        // Wenn ein Anbieter die Zutat und die benötigte Menge vorrätig hat, bestellen wir bei ihm, da eine
-        // Bestellung bei nur einem Anbieter Transportkosten spart.
+        // Wenn ein Anbieter die Zutat und die benötigte Menge vorrätig hat, bestellen wir bei ihm, da eine Bestellung
+        // bei nur einem Anbieter Transportkosten spart. Dementsprechend wird die benötigte Menge nicht aufgeteilt.
         else if (providersWithIngredientAndQuantity.size() == 1) {
             computeOneProviderWithIngredientAndQuantity(result, providersWithIngredientAndQuantity.iterator().next(),
                     ingredient, ingredientQuantity);
@@ -173,10 +170,11 @@ public class ShoppingListBuilder {
      * Berechnet den Fall, dass kein {@link AbstractProvider} die {@link Ingredient} in der benötigten {@link Amount}
      * vorrätig hat.
      * 
-     * @param result
-     * @param providers
-     * @param ingredient
-     * @param ingredientQuantity
+     * @param result Das Ergebnis
+     * @param providers Die {@link AbstractProvider}s, die die Zutat vorrätig haben, aber nicht in der benötigten
+     *            {@link Amount}
+     * @param ingredient Die {@link Ingredient}, die ins Ergebnis eingefügt werden soll
+     * @param ingredientQuantity Der {@link Amount}, der auf die {@link AbstractProvider} aufgeteilt werden muss
      */
     private void computeNoProviderWithIngredientAndQuantity(Map<AbstractProvider, Set<IngredientQuantity>> result,
             Set<AbstractProvider> providers, Ingredient ingredient, Amount ingredientQuantity) {
@@ -217,13 +215,14 @@ public class ShoppingListBuilder {
      * Berechnet den Fall, dass ein {@link AbstractProvider} die {@link Ingredient} in der benötigten {@link Amount}
      * vorrätig hat.
      * 
-     * @param result
-     * @param provider
-     * @param ingredient
-     * @param ingredientQuantity
+     * @param result Das Ergebnis
+     * @param provider Der {@link AbstractProvider}, der ins Ergebnis eingefügt werden soll
+     * @param ingredient Die {@link Ingredient}, die ins Ergebnis eingefügt werden soll
+     * @param ingredientQuantity Der {@link Amount}, der ins Ergebnis eingefügt werden soll
      */
     private void computeOneProviderWithIngredientAndQuantity(Map<AbstractProvider, Set<IngredientQuantity>> result,
             AbstractProvider provider, Ingredient ingredient, Amount ingredientQuantity) {
+        // Zutat wird bei dem Anbieter bestellt, der die Menge in der benötigten Zutat vorrätig hat
         addAndSubtractIngredientAndQuantity(result, provider, ingredient, ingredientQuantity, ingredientQuantity);
     }
 
@@ -231,10 +230,10 @@ public class ShoppingListBuilder {
      * Berechnet den Fall, dass mehrere {@link AbstractProvider} die {@link Ingredient} in der benötigten {@link Amount}
      * vorrätig haben.
      * 
-     * @param result
-     * @param providers
-     * @param ingredient
-     * @param ingredientQuantity
+     * @param result Das Ergebnis
+     * @param providers Die {@link AbstractProvider}s, die die Zutat in der benötigten {@link Amount} vorrätig haben
+     * @param ingredient Die {@link Ingredient}, die ins Ergebnis eingefügt werden soll
+     * @param ingredientQuantity Der {@link Amount}, der ins Ergebnis eingefügt werden soll
      */
     private void computeMoreProvidersWithIngredientAndQuantity(Map<AbstractProvider, Set<IngredientQuantity>> result,
             Set<AbstractProvider> providers, Ingredient ingredient, Amount ingredientQuantity) {
@@ -365,9 +364,9 @@ public class ShoppingListBuilder {
     /**
      * Erstellt eine Einkaufslistenposition.
      * 
-     * @param provider
-     * @param ingredientQuantity
-     * @return
+     * @param provider Der {@link AbstractProvider}, der der Einkaufslistenposition hinzugefügt werden soll
+     * @param ingredientQuantity Die {@link IngredientQuantity}, die der Einkaufslistenposition hinzugefügt werden soll
+     * @return Eine Einkaufslistenposition
      */
     private ShoppingListItem createShoppingListItem(AbstractProvider provider, IngredientQuantity ingredientQuantity) {
         return new ShoppingListItem(ingredientQuantity.getIngredient(), ingredientQuantity.getQuantity(), provider);
@@ -376,7 +375,7 @@ public class ShoppingListBuilder {
     /**
      * Summiert alle Mengen der für die Speisepläne benötigten Zutaten bzw. Rezepte.
      * 
-     * @return
+     * @return Eine Zuordnung von {@link Ingredient} zu der jeweilgs benötigten {@link Amount}
      */
     private Map<Ingredient, Amount> sumMenuPlanIngredientQuantities() {
         Map<Ingredient, Amount> result = new HashMap<Ingredient, Amount>();

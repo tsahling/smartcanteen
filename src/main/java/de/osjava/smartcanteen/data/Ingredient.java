@@ -26,7 +26,7 @@ public class Ingredient {
      * Konstruktor mit Name und Typ der Zutat.
      * 
      * @param name Name der Zutat
-     * @param name Typ (Fisch, Gemüse, Fleisch) der Zutat
+     * @param ingredientType Typ (Fisch, Gemüse, Fleisch) der Zutat
      */
     public Ingredient(String name, IngredientType ingredientType) {
         this.name = name;

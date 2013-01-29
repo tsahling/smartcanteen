@@ -8,10 +8,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Die Klasse {@link PropertyHelper} bietet Methoden zum Ein- und Auslesen von
- * Konfigurationsparametern der Applikation, die an diversen Stellen eingesetzt
- * werden (Fehlermeldungen, Pfade, Einstellungen, etc.). Diese Klasse greift auf
- * eine fest im Projektpfad hinterlegte .properties-Datei zu.
+ * Die Klasse {@link PropertyHelper} bietet Methoden zum Ein- und Auslesen von Konfigurationsparametern der Applikation,
+ * die an diversen Stellen eingesetzt werden (Fehlermeldungen, Pfade, Einstellungen, etc.). Diese Klasse greift auf eine
+ * fest im Projektpfad hinterlegte .properties-Datei zu.
  * 
  * @author Tim Sahling
  */
@@ -63,16 +62,18 @@ public class PropertyHelper {
     /**
      * Setzt einen Einstellungswert für einen übergebenen Einstellungsnamen.
      * 
-     * @param propertyName
-     * @param propertyValue
+     * @param propertyName Der Name der Property
+     * @param propertyValue Der Wert der Property
      */
     public static void setProperty(String propertyName, String propertyValue) {
         loadProperties().setProperty(propertyName, propertyValue);
     }
 
     /**
+     * Lädt die Properties der Anwendung initial aus der Properties-Datei und fügt diese danach einer Klassenvariable
+     * hinzu, um bei späteren Zugriffen, diese nicht immer wieder aus der Datei laden zu müssen.
      * 
-     * @return
+     * @return Die Properties der Anwendung
      */
     private static Properties loadProperties() {
         if (properties != null) {
