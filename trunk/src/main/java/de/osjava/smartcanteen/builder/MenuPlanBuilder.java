@@ -33,11 +33,9 @@ import de.osjava.smartcanteen.helper.NumberHelper;
 import de.osjava.smartcanteen.helper.PropertyHelper;
 
 /**
- * Die Klasse {@link MenuPlanBuilder} ist eine der Geschäftslogikklassen und für
- * die Erstellung je eines optimalen Speiseplans für die Kantinen in Essen und
- * Muelheim zuständig. Als Ergebnis füllt die Klasse die {@link MenuPlan} Attribute der {@link Canteen}, die dann im
- * Output bzw. zur Weiterverarbeitung
- * verwendet werden können.
+ * Die Klasse {@link MenuPlanBuilder} ist eine der Geschäftslogikklassen und für die Erstellung je eines optimalen
+ * Speiseplans für die Kantinen in Essen und Muelheim zuständig. Als Ergebnis füllt die Klasse die {@link MenuPlan}
+ * Attribute der {@link Canteen}, die dann im Output bzw. zur Weiterverarbeitung verwendet werden können.
  * 
  * @author Tim Sahling
  */
@@ -95,9 +93,8 @@ public class MenuPlanBuilder {
     }
 
     /**
-     * Die einzige öffentliche Methode der Klasse {@link MenuPlanBuilder} ruft
-     * die Applikationslogik und den damit verbundenen Optimierungsalgorithmus
-     * für die Generierung des {@link MenuPlan} und der {@link Meal}s auf.
+     * Die einzige öffentliche Methode der Klasse {@link MenuPlanBuilder} ruft die Applikationslogik und den damit
+     * verbundenen Optimierungsalgorithmus für die Generierung des {@link MenuPlan} und der {@link Meal}s auf.
      * 
      * @return Ein Array von Kantinen für die Verwendung im Output
      */
@@ -166,8 +163,8 @@ public class MenuPlanBuilder {
      * werden. Dies muss erfolgen, da in der Rezepte Eingangsdatei keine Typen definiert sind, sondern nur in den Listen
      * der Anbieter.
      * 
-     * @param recipe
-     * @return
+     * @param recipe Das zu überprüfende {@link Recipe}
+     * @return wahr/falsch, je nachdem ob das {@link Recipe} valide ist
      */
     private boolean validateRecipe(Recipe recipe) {
         // Überprüfung ob ein Zutatentyp nicht gefüllt ist
@@ -220,7 +217,7 @@ public class MenuPlanBuilder {
     /**
      * Erstellt einen {@link MenuPlan}.
      * 
-     * @return
+     * @return Der erstellte {@link MenuPlan}
      */
     private MenuPlan createMenuPlan() {
         return new MenuPlan(new ArrayList<Meal>(PROP_PLANINGPERIOD_TOTALMEALS));
@@ -229,9 +226,9 @@ public class MenuPlanBuilder {
     /**
      * Erstellt ein {@link Meal}.
      * 
-     * @param date
-     * @param recipe
-     * @return
+     * @param date Das Datum an dem das {@link Meal} serviert werden soll
+     * @param recipe Das {@link Recipe}, dass gekocht werden soll
+     * @return Das erzeugte {@link Meal}
      */
     private Meal createMeal(Date date, Recipe recipe) {
         return new Meal(recipe, date);
@@ -242,8 +239,8 @@ public class MenuPlanBuilder {
      * entsprechende Woche und den jeweiligen Tag. Annahme ist, dass es immer eine Woche dauert bis alle Zutaten
      * beschafft werden konnten. Feiertage werden nicht berücksichtigt.
      * 
-     * @param weekWorkday
-     * @return
+     * @param weekWorkday Der {@link WeekWorkday} der zur Berechnung der Daten genutzt wird
+     * @return Ein berechnetes {@link Date}
      */
     private Date createMealDate(WeekWorkday weekWorkday) {
         Date nextMonday = getNextMonday();
@@ -257,7 +254,7 @@ public class MenuPlanBuilder {
     /**
      * Ermittelt den nächsten Montag, ausgehend vom derzeitigen Datum.
      * 
-     * @return
+     * @return Der nächste Montag im Kalender
      */
     private Date getNextMonday() {
         Calendar cal = Calendar.getInstance();
@@ -277,8 +274,8 @@ public class MenuPlanBuilder {
     /**
      * Versucht auf Basis verschiedener {@link WeekWorkday}s, Gerichte in die Planungsperiode einzufügen.
      * 
-     * @param recipe
-     * @param planingPeriod
+     * @param recipe Das hinzuzufügende {@link Recipe}
+     * @param planingPeriod Die Planungsperiode
      */
     private void addRecipeToPlaningPeriod(Recipe recipe, Map<WeekWorkday, Set<Recipe>> planingPeriod) {
 
@@ -310,15 +307,15 @@ public class MenuPlanBuilder {
     }
 
     /**
-     * Fügt der Planungsperiode ein {@link Recipe} hinzu.
+     * Fügt der Planungsperiode ein {@link Recipe} hinzu, vorausgesetzt dieses ist auch beschaffbar.
      * 
-     * @param planingPeriod
-     * @param weekAndWorkday
-     * @param recipe
+     * @param planingPeriod Die Planungsperiode
+     * @param weekWorkday Der {@link WeekWorkday} an dem das {@link Recipe} hinzugefügt werden soll
+     * @param recipe Das {@link Recipe}, dass hinzugefügt werden soll
      */
-    private boolean addRecipeToPlaningPeriod(Map<WeekWorkday, Set<Recipe>> planingPeriod, WeekWorkday weekAndWorkday,
+    private boolean addRecipeToPlaningPeriod(Map<WeekWorkday, Set<Recipe>> planingPeriod, WeekWorkday weekWorkday,
             Recipe recipe) {
-        Set<Recipe> weekWorkDayRecipes = planingPeriod.get(weekAndWorkday);
+        Set<Recipe> weekWorkDayRecipes = planingPeriod.get(weekWorkday);
 
         if (!weekWorkDayRecipes.contains(recipe)) {
             weekWorkDayRecipes.add(recipe);
@@ -338,17 +335,20 @@ public class MenuPlanBuilder {
     }
 
     /**
-     * Überprüft ob ein {@link Recipe} bei den Anbietern beschaffbar ist.
+     * Überprüft ob ein {@link Recipe} bei den Anbietern in der benötigten Menge beschaffbar ist.
      * 
-     * @return
+     * @return wahr/falsch, je nachdem ob das {@link Recipe} bei den Anbietern in der benötigten Menge beschaffbar ist
      */
     private boolean isRecipeObtainable(Set<Recipe> weekWorkDayRecipes, Recipe recipe) {
         boolean result = true;
 
+        // Ermittelt die Position des Gerichts an dem Wochentag, da diese ausschlaggend für die zu kochende Menge und
+        // damit auch die benötigte Zutatenmenge ist
         Integer weekWorkdayPositionOfRecipe = getWeekWorkdayPositionOfRecipe(weekWorkDayRecipes, recipe);
 
         if (weekWorkdayPositionOfRecipe != null) {
 
+            // Berechnet den Gerichtprioritätsfaktor
             BigDecimal mealMultiplyFactor = BuilderHelper.calculateMealMultiplyFactor(weekWorkdayPositionOfRecipe,
                     this.canteenContext.getTotalMealsForCanteen());
 
@@ -359,8 +359,10 @@ public class MenuPlanBuilder {
 
                 if (this.providerIngredientQuantities.containsKey(ingredient)) {
 
+                    // Ermittelt die Gesamtmenge aller Zutaten von den Anbietern auf Basis der benötigten Zutat
                     Amount providerIngredientQuantity = this.providerIngredientQuantities.get(ingredient);
 
+                    // Multipliziert die Menge der Zutat mit dem Gerichtprioritätsfaktor
                     BigDecimal quantityForIngredient = NumberHelper.multiply(ingredientQuantity.getValue(),
                             mealMultiplyFactor);
 
@@ -379,17 +381,18 @@ public class MenuPlanBuilder {
     }
 
     /**
-     * Ermittelt die Position des {@link Recipe} innerhalb eines {@link WeekWorkday}. Die Position stellt gleichzeitig
-     * die Priorität des {@link Recipe} dar, weil das übergebene Set nach dem Rang des {@link Recipe} sortiert ist.
+     * Ermittelt die Position des {@link Recipe} innerhalb einer Menge von {@link Recipe}s eines {@link WeekWorkday}.
+     * Die Position stellt gleichzeitig die Priorität des {@link Recipe} dar, weil die übergebene Menge nach dem Rang
+     * des {@link Recipe} sortiert ist.
      * 
-     * @param weekWorkDayRecipes
-     * @param recipe
-     * @return Die Position des {@link Recipe} innerhalb eines {@link WeekWorkday}
+     * @param recipes Die {@link Recipe}s, die durchlaufen werden sollen
+     * @param recipe Das {@link Recipe} nach dem gesucht wird
+     * @return Die Position des {@link Recipe} innerhalb einer Menge von {@link Recipe}s
      */
-    private Integer getWeekWorkdayPositionOfRecipe(Set<Recipe> weekWorkDayRecipes, Recipe recipe) {
+    private Integer getWeekWorkdayPositionOfRecipe(Set<Recipe> recipes, Recipe recipe) {
         Integer result = null;
 
-        Iterator<Recipe> iterator = weekWorkDayRecipes.iterator();
+        Iterator<Recipe> iterator = recipes.iterator();
         int index = 0;
 
         while (iterator.hasNext()) {
@@ -406,30 +409,30 @@ public class MenuPlanBuilder {
     }
 
     /**
-     * Überprüft anhand der vorgegebenen Regeln ob ein Gericht in die übergebene Planungsperiode zu dem übergebenen
-     * {@link WeekWorkday} hinzugefügt werden darf.
+     * Überprüft anhand der vorgegebenen Regeln ob ein {@link Recipe} in die übergebene Planungsperiode zu dem
+     * übergebenen {@link WeekWorkday} hinzugefügt werden darf.
      * 
-     * @param planingPeriod
-     * @param weekAndWorkday
-     * @param recipe
-     * @return
+     * @param planingPeriod Die Planungsperiode
+     * @param weekWorkday Der {@link WeekWorkday} an dem das {@link Recipe} eingefügt werden soll
+     * @param recipe Das {@link Recipe}, dass eingefügt werden soll
+     * @return wahr/falsch, je nachdem ob das {@link Recipe} in den {@link WeekWorkday} eingefügt werden konnte
      */
     private boolean validateRecipeBeforeInsertIntoWeekWorkday(Map<WeekWorkday, Set<Recipe>> planingPeriod,
-            WeekWorkday weekAndWorkday,
-            Recipe recipe) {
-        Set<Recipe> recipes = planingPeriod.get(weekAndWorkday);
+            WeekWorkday weekWorkday, Recipe recipe) {
+        Set<Recipe> recipes = planingPeriod.get(weekWorkday);
 
         // Bisher keine Rezepte für diesen Tag vorhanden
         if (recipes.isEmpty()) {
             return true;
         }
-        else { // Bereits Rezepte für diesen Tag vorhanden
+        // Bereits Rezepte für diesen Tag vorhanden
+        else {
 
             // Wenn Rezept ein Fleischgericht ist, muss überprüft werden ob bereits die maximale Anzahl an
             // Fleischgerichten für diesen Tag erreicht ist
             if (recipe.isMeatRecipe()) {
 
-                if (countRecipesForWeekWorkdayAndIngredientType(planingPeriod, weekAndWorkday, IngredientType.MEAT) == PROP_PLANINGPERIOD_MEATMEALSPERDAY_MAX) {
+                if (countRecipesForWeekWorkdayAndIngredientType(planingPeriod, weekWorkday, IngredientType.MEAT) == PROP_PLANINGPERIOD_MEATMEALSPERDAY_MAX) {
                     return false;
                 }
             }
@@ -438,20 +441,21 @@ public class MenuPlanBuilder {
             // mindestens ein vegetarisches Gericht und ein Fleischgericht angeboten werden müssen
             else if (recipe.isFishRecipe()) {
 
-                if (countRecipesForWeekWorkdayAndIngredientType(planingPeriod, weekAndWorkday, IngredientType.FISH) == PROP_PLANINGPERIOD_FISHMEALSPERDAY_MAX) {
+                if (countRecipesForWeekWorkdayAndIngredientType(planingPeriod, weekWorkday, IngredientType.FISH) == PROP_PLANINGPERIOD_FISHMEALSPERDAY_MAX) {
                     return false;
                 }
             }
 
-            Set<Recipe> weekWorkdayRecipes = planingPeriod.get(weekAndWorkday);
+            Set<Recipe> weekWorkdayRecipes = planingPeriod.get(weekWorkday);
 
             // Wenn nur noch ein Platz für ein Gericht an dem ausgewählten Tag frei ist, muss eine gesonderte Prüfung
             // stattfinden
             if (weekWorkdayRecipes.size() == (PROP_PLANINGPERIOD_MEALSPERDAY - 1)) {
-                return validateLastRecipeForWeekWorkday(planingPeriod, weekAndWorkday, recipe);
+                return validateLastRecipeForWeekWorkday(planingPeriod, weekWorkday, recipe);
             }
-            else { // Gericht darf eingefügt werden
-                return validateMaxRecipesForWeekWorkday(planingPeriod, weekAndWorkday);
+            // Gericht darf eingefügt werden
+            else {
+                return validateMaxRecipesForWeekWorkday(planingPeriod, weekWorkday);
             }
         }
     }
@@ -463,19 +467,20 @@ public class MenuPlanBuilder {
      * Gericht vorhanden sind. Bei einem vegetarischen Gericht muss geprüft werden, ob mindestens ein Fleischgericht
      * vorhanden ist.
      * 
-     * @param planingPeriod
-     * @param weekAndWorkday
-     * @param recipe
-     * @return
+     * @param planingPeriod Die Planungsperiode
+     * @param weekWorkday Der {@link WeekWorkday} an dem das {@link Recipe} eingefügt werden soll
+     * @param recipe Das {@link Recipe}, dass eingefügt werden soll
+     * @return wahr/falsch, je nachdem ob das übergebene {@link Recipe} als letztes {@link Recipe} des
+     *         {@link WeekWorkday} gültig ist
      */
     private boolean validateLastRecipeForWeekWorkday(Map<WeekWorkday, Set<Recipe>> planingPeriod,
-            WeekWorkday weekAndWorkday, Recipe recipe) {
+            WeekWorkday weekWorkday, Recipe recipe) {
 
         if (recipe.isMeatRecipe()) {
 
             // Fleischgericht darf nur eingefügt werden, wenn mindestens ein vegetarisches Gericht vorhanden ist
-            if (countRecipesForWeekWorkdayAndIngredientType(planingPeriod, weekAndWorkday, IngredientType.VEGETABLE) >= PROP_PLANINGPERIOD_VEGETABLEMEALSPERDAY_MIN) {
-                return validateMaxRecipesForWeekWorkday(planingPeriod, weekAndWorkday);
+            if (countRecipesForWeekWorkdayAndIngredientType(planingPeriod, weekWorkday, IngredientType.VEGETABLE) >= PROP_PLANINGPERIOD_VEGETABLEMEALSPERDAY_MIN) {
+                return validateMaxRecipesForWeekWorkday(planingPeriod, weekWorkday);
             }
             else {
                 return false;
@@ -485,9 +490,9 @@ public class MenuPlanBuilder {
 
             // Fischgericht darf nur eingefügt werden, wenn ein Fleischgericht und ein vegetarisches Gericht vorhanden
             // sind
-            if (countRecipesForWeekWorkdayAndIngredientType(planingPeriod, weekAndWorkday, IngredientType.MEAT) == PROP_PLANINGPERIOD_MEATMEALSPERDAY_MIN && countRecipesForWeekWorkdayAndIngredientType(
-                    planingPeriod, weekAndWorkday, IngredientType.VEGETABLE) == PROP_PLANINGPERIOD_VEGETABLEMEALSPERDAY_MIN) {
-                return validateMaxRecipesForWeekWorkday(planingPeriod, weekAndWorkday);
+            if (countRecipesForWeekWorkdayAndIngredientType(planingPeriod, weekWorkday, IngredientType.MEAT) == PROP_PLANINGPERIOD_MEATMEALSPERDAY_MIN && countRecipesForWeekWorkdayAndIngredientType(
+                    planingPeriod, weekWorkday, IngredientType.VEGETABLE) == PROP_PLANINGPERIOD_VEGETABLEMEALSPERDAY_MIN) {
+                return validateMaxRecipesForWeekWorkday(planingPeriod, weekWorkday);
             }
             else {
                 return false;
@@ -496,8 +501,8 @@ public class MenuPlanBuilder {
         else if (recipe.isVegetableRecipe()) {
 
             // Vegetarisches Gericht darf nur eingefügt werden, wenn mindestens ein Fleischgericht vorhanden ist
-            if (countRecipesForWeekWorkdayAndIngredientType(planingPeriod, weekAndWorkday, IngredientType.MEAT) >= PROP_PLANINGPERIOD_MEATMEALSPERDAY_MIN) {
-                return validateMaxRecipesForWeekWorkday(planingPeriod, weekAndWorkday);
+            if (countRecipesForWeekWorkdayAndIngredientType(planingPeriod, weekWorkday, IngredientType.MEAT) >= PROP_PLANINGPERIOD_MEATMEALSPERDAY_MIN) {
+                return validateMaxRecipesForWeekWorkday(planingPeriod, weekWorkday);
             }
             else {
                 return false;
@@ -509,35 +514,36 @@ public class MenuPlanBuilder {
 
     /**
      * Für den Fall, dass {@link MenuPlanBuilder#validateRecipeBeforeInsertIntoWeekWorkday(Map, WeekWorkday, Recipe)}
-     * WAHR zurückgibt, findet in dieser Methode die finale Überprüfung statt ob ein {@link Recipe} wirklich hinzugefügt
+     * "wahr" zurückgibt, findet in dieser Methode die finale Überprüfung statt ob ein {@link Recipe} wirklich
+     * hinzugefügt
      * werden darf oder nicht. Das {@link Recipe} darf nur dann hinzugefügt werden wenn bisher kein Gericht diesem Tag
      * zugeordnet ist oder die Anzahl der Gerichte an diesem Tag kleiner der maximal erlaubten Anzahl an Gerichten für
      * einen Tag ist.
      * 
-     * @param planingPeriod
-     * @param weekAndWorkday
-     * @return
+     * @param planingPeriod Die Planungsperiode
+     * @param weekWorkday Der {@link WeekWorkday}, der überprüft werden soll
+     * @return wahr/falsch, je nachdem ob der {@link WeekWorkday} valide ist
      */
     private boolean validateMaxRecipesForWeekWorkday(Map<WeekWorkday, Set<Recipe>> planingPeriod,
-            WeekWorkday weekAndWorkday) {
-        return planingPeriod.get(weekAndWorkday).isEmpty() ? true : planingPeriod.get(weekAndWorkday).size() < PROP_PLANINGPERIOD_MEALSPERDAY ? true : false;
+            WeekWorkday weekWorkday) {
+        return planingPeriod.get(weekWorkday).isEmpty() ? true : planingPeriod.get(weekWorkday).size() < PROP_PLANINGPERIOD_MEALSPERDAY ? true : false;
     }
 
     /**
      * Zählt die Anzahl der Rezepte für einen übergebenen {@link WeekWorkday} und einen {@link IngredientType}.
      * 
-     * @param planingPeriod
-     * @param weekAndWorkday
-     * @param ingredientType
-     * @return
+     * @param planingPeriod Die Planungsperiode
+     * @param weekWorkday Der {@link WeekWorkday}, der überprüft werden soll
+     * @param ingredientType Der {@link IngredientType} nach dem überprüft werden soll
+     * @return Anzahl der gezählten {@link Recipe}
      */
     private int countRecipesForWeekWorkdayAndIngredientType(Map<WeekWorkday, Set<Recipe>> planingPeriod,
-            WeekWorkday weekAndWorkday, IngredientType ingredientType) {
+            WeekWorkday weekWorkday, IngredientType ingredientType) {
         int result = 0;
 
         for (Entry<WeekWorkday, Set<Recipe>> entry : planingPeriod.entrySet()) {
 
-            if (entry.getKey().equals(weekAndWorkday)) {
+            if (entry.getKey().equals(weekWorkday)) {
 
                 for (Recipe recipe : entry.getValue()) {
 
@@ -552,11 +558,11 @@ public class MenuPlanBuilder {
     }
 
     /**
+     * Zählt die {@link Recipe} für einen bestimmten {@link IngredientType}.
      * 
-     * @param planingPeriod
-     * @param weekAndWorkday
-     * @param ingredientType
-     * @return
+     * @param recipes Die {@link Recipe}s, die überprüft werden sollen
+     * @param ingredientType Der {@link IngredientType} nach dem überprüft werden soll
+     * @return Anzahl der gezählten {@link Recipe}
      */
     private int countRecipesForIngredientType(Set<Recipe> recipes, IngredientType ingredientType) {
         int result = 0;
@@ -575,7 +581,7 @@ public class MenuPlanBuilder {
     /**
      * Validiert die Planungsperiode abschließend.
      * 
-     * @param planingPeriod
+     * @param planingPeriod Die Planungsperiode
      */
     private void validatePlaningPeriod(Map<WeekWorkday, Set<Recipe>> planingPeriod) {
 
@@ -599,9 +605,10 @@ public class MenuPlanBuilder {
     }
 
     /**
+     * Fügt der Planungsperiode die fehlenden Fischrezepte hinzu.
      * 
-     * @param planingPeriod
-     * @param weeksWithoutFishRecipes
+     * @param planingPeriod Die Planungsperiode
+     * @param weeksWithoutFishRecipes Die Wochen ohne Fischrezepte
      */
     private void addMissingFishRecipesToPlaningPeriod(Map<WeekWorkday, Set<Recipe>> planingPeriod,
             Set<Integer> weeksWithoutFishRecipes) {
@@ -611,13 +618,16 @@ public class MenuPlanBuilder {
 
             Set<WeekWorkday> weekWorkdays = getWeekAndWorkdaysByWeek(planingPeriod, week);
 
+            // Ermittelt die bereits ausgewählten Fischrezepte
             Set<Recipe> usedFishRecipes = this.canteenContext.getFishRecipes();
 
+            // Ermittelt alle Fischrezepte sortiert nach Rang
             Set<Recipe> availableFishRecipes = this.recipeBase
                     .getRecipesForIngredientTypeSortedByRank(IngredientType.FISH);
 
             if (availableFishRecipes != null && !availableFishRecipes.isEmpty()) {
 
+                // Subtrahiert von der Menge der verfügbaren Fischrezepte die bereits ausgewählten Fischrezepte
                 if (usedFishRecipes != null && !usedFishRecipes.isEmpty()) {
                     availableFishRecipes.removeAll(usedFishRecipes);
                 }
@@ -626,14 +636,19 @@ public class MenuPlanBuilder {
 
                     Set<Recipe> weekWorkdayRecipes = planingPeriod.get(weekWorkday);
 
+                    // Zählt die Fleischrezepte für den Wochentag
                     int meatRecipes = countRecipesForIngredientType(weekWorkdayRecipes, IngredientType.MEAT);
+
+                    // Zählt die vegetarischen Rezepte für den Wochentag
                     int vegetableRecipes = countRecipesForIngredientType(weekWorkdayRecipes, IngredientType.VEGETABLE);
 
+                    // Es kommen nur Wochentage in Frage, die bereits mindestens ein Fleischgericht und ein
+                    // vegetarisches Gericht haben
                     if (meatRecipes >= PROP_PLANINGPERIOD_MEATMEALSPERDAY_MIN && vegetableRecipes >= PROP_PLANINGPERIOD_VEGETABLEMEALSPERDAY_MIN) {
 
                         Recipe recipeToRemove;
 
-                        // Wenn es mehr Fleischgerichte als vegetarische Gerichte an dem Tag gibt, wird ein
+                        // Wenn es mehr Fleischgerichte als vegetarische Gerichte an dem Wochentag gibt, wird ein
                         // Fleischgericht entfernt...
                         if (meatRecipes > vegetableRecipes) {
                             recipeToRemove = removeRecipeFromWeekWorkday(weekWorkdayRecipes, IngredientType.MEAT);
@@ -643,18 +658,24 @@ public class MenuPlanBuilder {
                             recipeToRemove = removeRecipeFromWeekWorkday(weekWorkdayRecipes, IngredientType.VEGETABLE);
                         }
 
+                        // Verfügbare Rezepte werden durchlaufen...
                         for (Recipe fishRecipe : availableFishRecipes) {
 
+                            // ...und versucht das Rezept in den Wochentag einzufügen
                             if (addRecipeToPlaningPeriod(planingPeriod, weekWorkday, fishRecipe)) {
+                                // Entfernen der benötigten Menge der Zutaten eines Rezepts aus der Gesamtmenge aller
+                                // Zutaten
                                 removeQuantityFromProviderIngredientQuantities(weekWorkdayRecipes, fishRecipe);
                                 fishRecipeForWeekAdded = true;
                                 break;
                             }
                         }
 
+                        // Wenn ein Fischrezept hinzugefügt werden konnte, wird der Ablauf unterbrochen...
                         if (fishRecipeForWeekAdded) {
                             break;
                         }
+                        // ...ansonsten wird das vorherige Löschen des Rezept rückgängig gemacht
                         else {
                             undoRemoveRecipeFromWeekWorkday(weekWorkdayRecipes, recipeToRemove);
                         }
@@ -671,8 +692,8 @@ public class MenuPlanBuilder {
     /**
      * Ermittelt die Wochen in denen kein Fischrezept vorhanden ist.
      * 
-     * @param planingPeriod
-     * @return
+     * @param planingPeriod Die Planungsperiode
+     * @return Eine Menge mit Wochen in denen kein Fischrezept vorhanden ist
      */
     private Set<Integer> getWeeksWithoutFishRecipes(Map<WeekWorkday, Set<Recipe>> planingPeriod) {
         Set<Integer> result = new HashSet<Integer>();
@@ -691,9 +712,9 @@ public class MenuPlanBuilder {
      * Überprüft ob in der übergebenen Planungsperiode und in der übergegebenen Woche bereits ein Fischrezept vorhanden
      * ist.
      * 
-     * @param planingPeriod
-     * @param weekAndWorkday
-     * @return
+     * @param planingPeriod Die Planungsperiode
+     * @param weekAndWorkday Der {@link WeekWorkday}, der überprüft werden soll
+     * @return wahr/falsch, je nachdem ob in der {@link WeekWorkday} bereits ein Fischgericht existiert
      */
     private boolean existsFishRecipeInWeek(Map<WeekWorkday, Set<Recipe>> planingPeriod, WeekWorkday weekAndWorkday) {
         for (Entry<WeekWorkday, Set<Recipe>> entry : planingPeriod.entrySet()) {
@@ -713,10 +734,11 @@ public class MenuPlanBuilder {
     }
 
     /**
+     * Ermittelt alle Wochentage für eine Woche.
      * 
-     * @param planingPeriod
-     * @param week
-     * @return
+     * @param planingPeriod Die Planungsperiode
+     * @param week Die Woche zu der die Wochentage ermittelt werden sollen
+     * @return Eine Menge von Wochentagen, die in einer Woche vorkommen
      */
     private Set<WeekWorkday> getWeekAndWorkdaysByWeek(Map<WeekWorkday, Set<Recipe>> planingPeriod, Integer week) {
         Set<WeekWorkday> result = new HashSet<WeekWorkday>();
@@ -737,11 +759,13 @@ public class MenuPlanBuilder {
     }
 
     /**
+     * Entfernt ein {@link Recipe} von einem {@link WeekWorkday}. Dabei wird versucht das unbeliebteste der
+     * {@link Recipe}s zu entfernen.
      * 
-     * @param recipes
-     * @param ingredientType
+     * @param recipes Die {@link Recipe}s, die für einen {@link WeekWorkday} ausgewählt wurden
+     * @param ingredientType Der {@link IngredientType}, den ein {@link Recipe} haben muss um entfernt zu werden
      */
-    private Recipe removeRecipeFromWeekWorkday(Set<Recipe> weekWorkdayRecipes, IngredientType ingredientType) {
+    private Recipe removeRecipeFromWeekWorkday(Set<Recipe> recipes, IngredientType ingredientType) {
         Recipe result = null;
 
         // Rezepte für den übergebenen Wochentag werden nach Rang sortiert, allerdings in umgekehrter Reihenfolge um
@@ -754,7 +778,7 @@ public class MenuPlanBuilder {
             }
         });
 
-        sortedRecipes.addAll(weekWorkdayRecipes);
+        sortedRecipes.addAll(recipes);
 
         // Das erste Rezept welches für den übergebenen IngredientType gefunden wird, wird aus dem Wochentag entfernt
         for (Recipe recipe : sortedRecipes) {
@@ -762,10 +786,10 @@ public class MenuPlanBuilder {
             if (ingredientType.equals(recipe.getIngredientType())) {
 
                 // Hinzufügen der Zutatenmengen des Rezepts in die Gesamtmenge
-                addQuantityToProviderIngredientQuantities(weekWorkdayRecipes, recipe);
+                addQuantityToProviderIngredientQuantities(recipes, recipe);
 
                 // Entfernen des Rezepts aus dem Wochentag
-                weekWorkdayRecipes.remove(recipe);
+                recipes.remove(recipe);
 
                 // Entfernen des Rezepts auf dem Kantinenkontext
                 this.canteenContext.getRecipes().remove(recipe);
@@ -780,32 +804,37 @@ public class MenuPlanBuilder {
     }
 
     /**
+     * Macht ein Entfernen eines {@link Recipe} aus einer Menge von {@link Recipe}s rückgängig.
      * 
-     * @param weekWorkdayRecipes
-     * @param recipe
+     * @param recipes Die {@link Recipe}s, die durchlaufen werden sollen
+     * @param recipe Das {@link Recipe}, welches wieder eingefügt werden soll
      */
-    private void undoRemoveRecipeFromWeekWorkday(Set<Recipe> weekWorkdayRecipes, Recipe recipe) {
+    private void undoRemoveRecipeFromWeekWorkday(Set<Recipe> recipes, Recipe recipe) {
         // Hinzufügen des Rezepts in den Wochentag
-        weekWorkdayRecipes.add(recipe);
+        recipes.add(recipe);
 
         // Hinzufügen des Rezepts in den Kantinenkontext
         this.canteenContext.getRecipes().add(recipe);
 
         // Entfernen der Zutatenmengen des Rezepts aus der Gesamtmenge
-        removeQuantityFromProviderIngredientQuantities(weekWorkdayRecipes, recipe);
+        removeQuantityFromProviderIngredientQuantities(recipes, recipe);
     }
 
     /**
+     * Fügt der Gesamtmenge der Zutaten die Menge der Zutaten des übergebenen {@link Recipe} hinzu.
      * 
-     * @param weekWorkdayRecipes
-     * @param recipe
+     * @param recipes Die {@link Recipe}s, die durchlaufen werden sollen
+     * @param recipe Das {@link Recipe}, dessen Zutaten in die Gesamtmenge hinzugefügt werden sollen
      */
-    private void addQuantityToProviderIngredientQuantities(Set<Recipe> weekWorkdayRecipes, Recipe recipe) {
+    private void addQuantityToProviderIngredientQuantities(Set<Recipe> recipes, Recipe recipe) {
 
-        Integer weekWorkdayPositionOfRecipe = getWeekWorkdayPositionOfRecipe(weekWorkdayRecipes, recipe);
+        // Ermittelt die Position des Gerichts an dem Wochentag, da diese ausschlaggend für die zu kochende Menge und
+        // damit auch die benötigte Zutatenmenge ist
+        Integer weekWorkdayPositionOfRecipe = getWeekWorkdayPositionOfRecipe(recipes, recipe);
 
         if (weekWorkdayPositionOfRecipe != null) {
 
+            // Berechnet den Gerichtprioritätsfaktor
             BigDecimal mealMultiplyFactor = BuilderHelper.calculateMealMultiplyFactor(weekWorkdayPositionOfRecipe,
                     this.canteenContext.getTotalMealsForCanteen());
 
@@ -816,9 +845,11 @@ public class MenuPlanBuilder {
 
                 if (this.providerIngredientQuantities.containsKey(ingredient)) {
 
+                    // Multipliziert die Menge der Zutat mit dem Gerichtprioritätsfaktor
                     BigDecimal quantityForIngredient = NumberHelper.multiply(ingredientQuantity.getValue(),
                             mealMultiplyFactor);
 
+                    // Fügt der Gesamtmenge aller Zutaten die entsprechende Menge der Zutat hinzu
                     this.providerIngredientQuantities.get(ingredient).add(
                             new Amount(quantityForIngredient, ingredientQuantity.getUnit()));
                 }
@@ -827,16 +858,20 @@ public class MenuPlanBuilder {
     }
 
     /**
+     * Entfernt die Menge der Zutaten des übergebenen {@link Recipe} von der Gesamtmenge der Zutaten.
      * 
-     * @param weekWorkdayRecipes
-     * @param recipe
+     * @param recipes Die {@link Recipe}s, die durchlaufen werden sollen
+     * @param recipe Das {@link Recipe}, dessen Zutaten von der Gesamtmenge subtrahiert werden sollen
      */
-    private void removeQuantityFromProviderIngredientQuantities(Set<Recipe> weekWorkdayRecipes, Recipe recipe) {
+    private void removeQuantityFromProviderIngredientQuantities(Set<Recipe> recipes, Recipe recipe) {
 
-        Integer weekWorkdayPositionOfRecipe = getWeekWorkdayPositionOfRecipe(weekWorkdayRecipes, recipe);
+        // Ermittelt die Position des Gerichts an dem Wochentag, da diese ausschlaggend für die zu kochende Menge und
+        // damit auch die benötigte Zutatenmenge ist
+        Integer weekWorkdayPositionOfRecipe = getWeekWorkdayPositionOfRecipe(recipes, recipe);
 
         if (weekWorkdayPositionOfRecipe != null) {
 
+            // Berechnet den Gerichtprioritätsfaktor
             BigDecimal mealMultiplyFactor = BuilderHelper.calculateMealMultiplyFactor(weekWorkdayPositionOfRecipe,
                     this.canteenContext.getTotalMealsForCanteen());
 
@@ -847,9 +882,11 @@ public class MenuPlanBuilder {
 
                 if (this.providerIngredientQuantities.containsKey(ingredient)) {
 
+                    // Multipliziert die Menge der Zutat mit dem Gerichtprioritätsfaktor
                     BigDecimal quantityForIngredient = NumberHelper.multiply(ingredientQuantity.getValue(),
                             mealMultiplyFactor);
 
+                    // Subtrahiert die entsprechende Menge der Zutat von der Gesamtmenge aller Zutaten
                     this.providerIngredientQuantities.get(ingredient).subtract(
                             new Amount(quantityForIngredient, ingredientQuantity.getUnit()));
 
@@ -865,11 +902,11 @@ public class MenuPlanBuilder {
      * ermittelt werden. Bei dem Zufallsmodus wird außerdem darauf geachtet, dass keine Woche/Wochentag-Kombination
      * doppelt ausgewählt wird.
      * 
-     * @param planingPeriod
-     * @param weekWorkdays
-     * @return
+     * @param planingPeriod Die Planungsperiode
+     * @param weekWorkdays Die bereits ausgewählten {@link WeekWorkday}s
+     * @return Einen gefundenen {@link WeekWorkday} oder null, wenn keiner mehr verfügbar ist
      */
-    public WeekWorkday getWeekAndWorkday(Map<WeekWorkday, Set<Recipe>> planingPeriod, Set<WeekWorkday> weekWorkdays) {
+    private WeekWorkday getWeekAndWorkday(Map<WeekWorkday, Set<Recipe>> planingPeriod, Set<WeekWorkday> weekWorkdays) {
 
         String propPlaningPeriodPlaningMode = PropertyHelper.getProperty("planingPeriod.planingMode");
 
@@ -884,22 +921,27 @@ public class MenuPlanBuilder {
     }
 
     /**
+     * Bei dem sequentiellen Modus werden die Wochen und Wochentage sequentiell, also aufeinanderfolgend durchlaufen.
      * 
-     * @param planingPeriod
-     * @param weekWorkdays
-     * @return
+     * @param planingPeriod Die Planungsperiode
+     * @param weekWorkdays Die bereits ausgewählten {@link WeekWorkday}s
+     * @return Einen gefundenen {@link WeekWorkday} oder null, wenn keiner mehr verfügbar ist
      */
     private WeekWorkday getSequentialWeekAndWorkday(Map<WeekWorkday, Set<Recipe>> planingPeriod,
             Set<WeekWorkday> weekWorkdays) {
 
+        // Wenn noch kein Wochentag ausgewählt wurde, kann einfach der erste Tag der Planungsperiode genommen werden
         if (weekWorkdays.isEmpty()) {
             return planingPeriod.keySet().iterator().next();
         }
 
+        // Wenn die Anzahl an bereits ausgewählten Wochentagen + 1 größer ist als die Gesamtzahl der Wochentage, kann
+        // die Verarbeitung abgebrochen werden da kein freier Wochentag mehr verfügbar ist
         if (weekWorkdays.size() + 1 > PROP_PLANINGPERIOD_TOTALWEEKANDWORKDAYS) {
             return null;
         }
 
+        // Letzter ausgewählter Wochentag wird ausgewählt
         WeekWorkday lastWeekWorkday = new LinkedList<WeekWorkday>(weekWorkdays).getLast();
 
         Iterator<WeekWorkday> iterator = planingPeriod.keySet().iterator();
@@ -907,6 +949,8 @@ public class MenuPlanBuilder {
         while (iterator.hasNext()) {
             WeekWorkday weekWorkday = iterator.next();
 
+            // Wenn der Wochentag aus der Planungsperiode übereinstimmt, wird versucht den nächsten Wochentag
+            // auszuwählen, vorausgesetzt es gibt noch einen
             if (weekWorkday.equals(lastWeekWorkday)) {
 
                 if (iterator.hasNext()) {
@@ -922,19 +966,26 @@ public class MenuPlanBuilder {
     }
 
     /**
+     * Bei dem zufälligen Modus werden die Wochen und Wochentage zufällig ermittelt, wobei darauf geachtet wird, dass
+     * kein Wochentag doppelt ausgewählt wird.
      * 
-     * @param planingPeriod
-     * @param weekWorkdays
-     * @return
+     * @param planingPeriod Die Planungsperiode
+     * @param weekWorkdays Die bereits ausgewählten {@link WeekWorkday}s
+     * @return Einen gefundenen {@link WeekWorkday} oder null, wenn keiner mehr verfügbar ist
      */
     private WeekWorkday getRandomWeekAndWorkday(Map<WeekWorkday, Set<Recipe>> planingPeriod,
             Set<WeekWorkday> weekWorkdays) {
+
+        // In der Planungsperiode vorhandene Wochentage werden gespeichert
         List<WeekWorkday> keys = new ArrayList<WeekWorkday>(planingPeriod.keySet());
 
+        // Danach werden die bereits ausgewählten Wochentage aus der Zwischenspeicherung der Wochentage gelöscht
         if (!keys.isEmpty() && !weekWorkdays.isEmpty()) {
             keys.removeAll(weekWorkdays);
         }
 
+        // Solange noch Werte in der Zwischenspeicherung vorhanden sind, wird ein zufälliger Wert auf Basis der Größe
+        // der Zwischenspeicherung ausgewählt
         if (!keys.isEmpty()) {
             int size = keys.size();
             int item = new Random().nextInt(size);
@@ -954,7 +1005,7 @@ public class MenuPlanBuilder {
 
     /**
      * Initalisiert die Planungsperiode und erstellt eine entsprechende Datenstruktur mit einem {@link WeekWorkday} und
-     * einem Set von {@link Recipe}.
+     * einem Set von {@link Recipe}, welches automatisch beim Einfügen sortiert wird nach dem jeweiligen Rang.
      * 
      * @return Die initiale Struktur für die Planungsperiode
      */
@@ -991,13 +1042,13 @@ public class MenuPlanBuilder {
         public CanteenContext(Canteen canteen) {
             this.canteen = canteen;
             this.recipes = new LinkedHashSet<Recipe>();
-            this.totalMealsForCanteen = BuilderHelper.calculateTotalMealsForCanteen(canteen);
+            this.totalMealsForCanteen = BuilderHelper.calculateTotalMealsForCanteen(this.canteen);
         }
 
         /**
-         * Ermittelt die zu kochenden Fischrezepte für eine Kantine.
+         * Ermittelt die zu kochenden Fischrezepte für eine {@link Canteen}.
          * 
-         * @return
+         * @return Eine Menge von Fischrezepten
          */
         public Set<Recipe> getFishRecipes() {
             Set<Recipe> result = new HashSet<Recipe>();
@@ -1015,10 +1066,6 @@ public class MenuPlanBuilder {
             return result;
         }
 
-        public Canteen getCanteen() {
-            return canteen;
-        }
-
         public Set<Recipe> getRecipes() {
             return recipes;
         }
@@ -1026,7 +1073,6 @@ public class MenuPlanBuilder {
         public BigDecimal getTotalMealsForCanteen() {
             return totalMealsForCanteen;
         }
-
     }
 
     /**

@@ -20,10 +20,8 @@ public class Canteen {
     /**
      * Standardkonstruktor
      * 
-     * @param lcoation
-     *            Standort der Kantine
-     * @param numberOfEmployees
-     *            Anzahl der Mitarbeiter am Standort der Kantine
+     * @param location Standort der Kantine
+     * @param numberOfEmployees Anzahl der Mitarbeiter am Standort der Kantine
      */
     public Canteen(CanteenLocation location, int numberOfEmployees) {
         this.location = location;

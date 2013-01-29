@@ -35,7 +35,7 @@ public class Wholesaler extends AbstractProvider {
      * der mit der Anzahl Artikel, die bei ihm bestellt werden sollen, multipliziert wird. Dieses Berechnungsverfahren
      * gilt für alle {@link Wholesaler}.
      * 
-     * @param numberOfItemsToOrder Anzahl an Zutaten, die bei dem {@link Wholesaler} bestellt werden
+     * @param numberOfIngredientsToOrder Anzahl an Zutaten, die bei dem {@link Wholesaler} bestellt werden
      * @return Die Transportkosten für einen {@link Wholesaler}
      */
     public Amount calculateTransportCosts(BigDecimal numberOfIngredientsToOrder) {

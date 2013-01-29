@@ -82,7 +82,7 @@ public class Recipe {
      * vegetarisch zu deklarieren.
      * 
      * @param ingredientType Der zu überprüfende {@link IngredientType}
-     * @return
+     * @return wahr/falsch, je nachdem ob die oben beschriebenen Szenarien zutreffen
      */
     private boolean checkTypeOfIngredients(IngredientType ingredientType) {
         if (ingredientList == null || (ingredientList != null && ingredientList.isEmpty())) {
