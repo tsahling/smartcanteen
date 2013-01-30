@@ -16,7 +16,7 @@ public class HitListBase {
     private List<HitListItem> hitListItems;
 
     /**
-     * Methode um ein Datenobjekt {@link HitListItem} in die Liste hinzuzufügen.
+     * Methode um ein Element {@link HitListItem} in die Liste hinzuzufügen.
      * 
      * @param hitListItem Das einzufügende Datenobjekt
      * @return Das aktualisierte Datenobjekt wird zurückgegeben
@@ -30,7 +30,7 @@ public class HitListBase {
     }
 
     /**
-     * Methode um ein bestimmtes Datenobjekt in der Liste nach Namen zu suchen.
+     * Methode um ein bestimmtes Element in der Liste nach Namen zu suchen.
      * 
      * @param name Name des Datenobjekts
      * @return Das gefundene Datenobjekt wird zurückgegeben
@@ -47,7 +47,7 @@ public class HitListBase {
     }
 
     /**
-     * Methode um alle Datenobjekte aus der Liste zu ermitteln
+     * Methode um alle Element aus der Liste zu ermitteln
      * 
      * @return Alle Datenobjekte die in der Liste vorhanden sind.
      */
@@ -56,7 +56,7 @@ public class HitListBase {
     }
 
     /**
-     * Setzt die Hitlistpositionen.
+     * Setzt den Rang eines Gericht.
      * 
      * @param hitListItems
      *            Die zu setzenden Hitlistpositionen

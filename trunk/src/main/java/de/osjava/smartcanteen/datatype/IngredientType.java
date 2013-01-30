@@ -1,9 +1,11 @@
 package de.osjava.smartcanteen.datatype;
 
 /**
- * Die Klasse {@link IngredientType} stellt ein Datenobjekt vom Typ Enumeration dar.
- * Durch die Klasse {@link IngredientType} wird der Typ (Fisch, Fleisch,
- * Vegetarisch) eines Lebensmittel deklariert.
+ * Die Klasse {@link IngredientType} stellt ein Datenobjekt vom Typ Enumeration dar. Ein
+ * Enum verhält sich wie eine Klasse mit Attributen und Methoden kann jedoch
+ * nicht vererben. Durch die Klasse {@link IngredientType} wird der Typ (z.B. Fisch, Genüse oder Fleisch )
+ * eines Gericht deklariert. Die Werte werden final gespeichert und daher
+ * nur get-Methoden bereit gestellt.
  * 
  * @author Francesco Luciano
  */

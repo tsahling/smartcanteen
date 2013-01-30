@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Die zur Verfügung gestellten CSV-Dateien werden mit Hilfe der Klasse {@link InputFileHandler} eingelesen. Die Klasse
- * stellt Methoden zur Verfügung, mit denen die Datei zeilenweise eingelesen werden kann. Die Methoden zum Einlesen
- * werden eine rudimentaere Fehlerbehandlung beinhalten, welche das Einlesen von inkonsistenten Zeilen abfängt. Die
- * Logik der Zerlegung der eingelesenen Zeilen in die einzelnen Datenfelder stellt die Klassenmethode splitLine() zur
- * Verfügung.
+ * 
+ * Die Klasse {@link InputFileHandler} ist für das Einlesen und Verarbeiten der Input-Dateien zuständig.
+ * {@link InputFileHandler} besitzt Methoden für das zeilenweise Einlesen einer Datei und das Aufteilen der
+ * Zeilen in Datenfelder an einem definierten Trennzeichen. Die Methode {@link hasMoreLines} besitzt eine rudimentaere
+ * Fehlerbehandlung, die das Einlesen von inkonsistenten Zeilen abfaengt.
  * 
  * @author Francesco Luciano
  */
@@ -23,7 +23,7 @@ public class InputFileHandler {
 
     private BufferedReader reader;
 
-    // Die Variable delimiter speichert das Trennzeichnen ab, das in den CSV Datein verwendet wird.
+    // Die Variable delimiter speichert das Trennzeichnen ab, das in den einzulesenden Datein verwendet wird.
     private char delimiter;
 
     // Die Variable nextLine speichert die naechste Zeile der Datei fuer die weiterverarbeitung ab.
@@ -31,7 +31,7 @@ public class InputFileHandler {
 
     // Die Variable countfields wird fuer Error Handling verwendet, es wird ueberprueft ob eine Zeile immer aus der
     // selben Anzahl Feldern besteht.
-    // Sie wird auf -1 initialisert weil keine Zeile mit -1 Feldern existiert. Die erste Zeile der CSV Datei
+    // Sie wird auf -1 initialisert weil keine Zeile mit -1 Feldern existiert. Die erste Zeile der Datei
     // (Header) wird als Referenz fuer alle weiteren Zeilen genommen. Wenn der Header von der Feldlaenge bereits
     // inkonsistenz ist, dann funktioniert die weitere verabeitung nicht.
     private int countFields = -1;
@@ -39,7 +39,7 @@ public class InputFileHandler {
     /**
      * Konstruktor der Pfad der Datei und ein Trennzeichen erwartet
      * 
-     * @param filename Pfad & name der Datei
+     * @param filename Pfad
      * @param delimiter Trennzeichen der CSV Datei
      * @throws IOException
      */
@@ -49,6 +49,7 @@ public class InputFileHandler {
 
         // Variable reader wird eine neue Instanz von BufferedReader uebergeben
         // Der BufferedReader wird ein InpuStream mit der zu oeffenen Datei uebergeben
+        // Laut JavaDoc ist dies das effizienteste Vorgehen eine Datei Zeilenweise einzulesen.
         this.reader = new BufferedReader(new InputStreamReader(filename.openStream()));
 
         // Trennzeichen wird gesetzt
@@ -56,18 +57,20 @@ public class InputFileHandler {
     }
 
     /**
-     * Liest die naechste Zeile in der Datei und speichert sie in nextLine
-     * Leerzeilen werden uebersprungen
-     * Zeilen mit einer abweichenden Feldgroeße gemessen zum Header werden uebersprungen
+     * Die Methode {@link hasMoreLines} überpüft ob es noch eine Zeile in der Datei vorhanden ist. Wenn
+     * eine eine nächste Zeile vorhanden ist, wird diese eingelesen und auf eine Variable gespeichert.
+     * Die Feldgröße der Zeile gemessen zum Header wird überprüft, wird eine ikonsistente
+     * Zeile entdeckt, dann ist die Fehlerbehandlung das überspringen der ikonsistenten Zeile. Die Zeile wird von der
+     * Methode {@link hasMoreLines} Methode
+     * nicht verändert.
      * 
-     * @return Liefert TRUE wenn noch eine Zeile vorhanden und FALSE wenn nicht
+     * @return Liefert TRUE wenn noch eine Zeile vorhanden und FALSE keine mehr vorhanden ist
      * @throws IOException
      */
     public boolean hasMoreLines() throws IOException {
-        // Array Variable vom Typ Array of String der den Inhalt der Felder einer Zeile aufnimmt. Der Inhalt der felder
-        // wird in
-        // dieser Methode eigentlich noch nicht gebraucht, um jedoch Syntax Fehler in der CSV abzufangen ist es
-        // notwendig die Feldlaenge der Zeile zu ermitteln. Dafuer muss die Zeile in einzelteile zerlegt werden.
+        // Array Variable vom Typ Array of String der den Inhalt der Felder einer Zeile aufnimmt.Um Fehler in der Datei
+        // abzufangen ist es notwendig die Feldlaenge der Zeile zu ermitteln, dafuer muss die Zeile in einzelteile
+        // zerlegt werden.
         String[] lineInFields = null;
 
         // Wenn die Variable nextline den Wert null hat dann wird in die Logik eingestiegen
@@ -77,11 +80,6 @@ public class InputFileHandler {
             // zurueckgibt. Der reader gibt den Wert null zurueck wenn das Ende der Datei erreicht wurde.
 
             while ((nextLine = reader.readLine()) != null) {
-                // Die Leerzeichen aus der Variable nextline werden durch .trim() entfernt
-                nextLine = nextLine.trim();
-
-                // Sonderzeichen ersetzen
-                nextLine = nextLine.replace((char) 8211, (char) '-');
 
                 // Das Array fields wird mithilfe der Methode splitline mit dem Inhalt der Zeile gefuellt
                 lineInFields = splitLine(nextLine, delimiter);
@@ -112,45 +110,50 @@ public class InputFileHandler {
 
     /**
      * 
-     Die Methode readCSVFile() uebernimmt als Argumente den Namen der CSV-Datei und das Trennzeichen. In einer
-     * einzigen while-Schleife werden die einzelnen Zeilen eingelesen, von Whitespace
-     * an den Enden befreit und dann mit Hilfe von split() in Felder aufgeteilt. (Leerzei- len werden zuvor
-     * ausgesondert.)
+     * Die Methode {@link nextLine} ist für die Verarbeitung der nächsten Zeile verantwortlich. In
+     * dieser Methode {@link nextLine} wird die Original eingelesene Zeile verändert z.b. werden Leerzeichen am Anfang
+     * und Ende wegeschnitten und ein Unicode Zeichen ersetzt. Die Methode ruft die private Klassenmethode
+     * {@link splitLine} zum trennen der Datenfelder auf.
      * 
-     * @return Array mit Inhalt der Zeile als Array of String
+     * @return lineInfields Array of String mit den Elementen der Zeile
      * @throws IOException
      */
     public String[] nextLine() throws IOException {
 
+        // Die Leerzeichen am Anfang und am Ende werden weggeschnitten, die inneren Leerzeichen bleiben.
+        nextLine = nextLine.trim();
+
+        // Es gab probleme mit einem emdash, das wird hier ersetzt gegen ein - Zeichen
+        nextLine = nextLine.replace((char) 8211, (char) '-');
+
         // Variable vom Typ String[]
         String[] lineInfields = null;
 
-        // Wenn es keine Zeilen mehr gibt Null zurueckgeben
-        if (!hasMoreLines())
-            return null;
-
-        // Kklassenmethode splitLine aufrufen um Zeile zu zerlegen
+        // Klassenmethode splitLine aufrufen um Zeile zu zerlegen
         lineInfields = splitLine(nextLine, delimiter);
 
         // nextLine auf null setzen
         nextLine = null;
+        // Array mit Elementen zurückgeben
         return lineInfields;
     }
 
     /**
-     * Die Methode splitLine() durchlaeuft die uebergebene Zeile Zeichen fuer Zeichen
-     * und zerlegt sie an den Stellen, wo sie das uebergebene Trennzeichen (delimiter) vorfindet.
+     * Die Methode {@link splitLine} durchlaeuft die uebergebene Zeile zeichenweise
+     * und zerlegt sie an den Stellen wo das uebergebene Trennzeichen (delimiter) auftritt.
      * Trennzeichen, die innerhalb von Anfuehrungszeichen stehen, werden ignoriert.
-     * Endet die Zeile mit einem Trennzeichen, wird nach Durchlaufen der Zeile
+     * Endet die Zeile mit einem Trennzeichen, wird nach durchlaufen der Zeile
      * noch ein leerer String fuer das letzte Feld angehaengt. Die Teilstrings fuer die Felder
      * werden in einer List-Collection gesammelt und zum Schluss in ein String-Array umgewandelt und zurueckgeliefert.
      * 
      * 
      * @param line Eine Zeile die zerlegt werden soll
-     * @param delimiter Trennzeichen in der CSV
-     * @return Ein Array mit Zeilenelementen
+     * @param delimiter Trennzeichen
+     * @return Ein Array mit Elementen der Zeile
      */
     private String[] splitLine(String line, char delimiter) {
+
+        // Es wird eine List benutzt, da das Handling dynamischer gegenüber eines Array ist
         List<String> fields = new ArrayList<String>();
 
         // Anzahl Zeichen in Zeile

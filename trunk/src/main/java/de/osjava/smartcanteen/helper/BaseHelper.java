@@ -27,10 +27,18 @@ import de.osjava.smartcanteen.datatype.IngredientType;
 import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
 
 /**
- * Die Klasse {@link BaseHelper} bietet Methoden zum Einlesen der Datenträgerklassen.
  * 
- * @author Francesco Luciano
+ * Die Klasse {@link BaseHelper} ist für die Verarbeitung von fachlichen Dateien zuständig. Die Klassenmethoden
+ * benutzen die Klasse {@link InputFileHandler} für das einlesen der Rohdaten, diese werden dann in einen fachlichen
+ * Kontext gebracht.
+ * 
+ * Die Methode {@link readPriceList} ist für das einlesen und verarbeiten von Preislisten zuständig.
+ * Die Methode {@link readHitlist} ist für das einlesen und verarbeiten der Datei der beliebtesten Gerichte zuständig.
+ * Die Methode {@link readRecipeList} ist für das einlesen und verarbeiten der Rezeptliste zuständig.
+ * 
+ * 
  */
+
 public class BaseHelper {
 
     // Feste Werte aus Properties Datei auslesen und String Variablen zuweisen
@@ -78,12 +86,12 @@ public class BaseHelper {
         // Die Variable mealName speichert den Namen des Gericht
         String mealName = null;
 
-        // Instanz vom Typ CSVTokenizer um die Datei einzulesen und zu verarbeiten
-        InputFileHandler csv = new InputFileHandler(inputFileURL, ',');
+        // Instanz vom Typ InputFileHandler um die Datei einzulesen und zu verarbeiten
+        InputFileHandler aInputFileHandler = new InputFileHandler(inputFileURL, ',');
 
         // Solange es Zeilen in der Datei gibt, werden diese in den List lines gespeichert
-        while (csv.hasMoreLines()) {
-            lines.add(csv.nextLine());
+        while (aInputFileHandler.hasMoreLines()) {
+            lines.add(aInputFileHandler.nextLine());
         }
 
         // Wenn keine Zeile mehr in der einzulesenden Datei vorhanden sind,
@@ -165,11 +173,11 @@ public class BaseHelper {
         Set<PriceListItem> priceList = new HashSet<PriceListItem>();
 
         // s.o
-        InputFileHandler csv = new InputFileHandler(inputFileURL, ',');
+        InputFileHandler aInputFileHandler = new InputFileHandler(inputFileURL, ',');
         // Solange hasMoreLines() == true in der Schleife bleiben
-        while (csv.hasMoreLines()) {
+        while (aInputFileHandler.hasMoreLines()) {
             // String[] in lines hinzufügen
-            lines.add(csv.nextLine());
+            lines.add(aInputFileHandler.nextLine());
         }
 
         // Kopfzeile der Preisliste auslesen
@@ -280,9 +288,9 @@ public class BaseHelper {
         Map<String, List<RecipeListItem>> recipeGroupingMap = new HashMap<String, List<RecipeListItem>>();
 
         // s.o
-        InputFileHandler csv = new InputFileHandler(inputFileURL, ',');
-        while (csv.hasMoreLines()) {
-            lines.add(csv.nextLine());
+        InputFileHandler aInputFileHandler = new InputFileHandler(inputFileURL, ',');
+        while (aInputFileHandler.hasMoreLines()) {
+            lines.add(aInputFileHandler.nextLine());
         }
 
         // Die Laufvariable i laeuft die Elemnte des Lists ab
