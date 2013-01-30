@@ -114,12 +114,6 @@ public class Application {
 
     	if(args.length == 0) {
             this.startGui = JOptionPane.showOptionDialog(null, PROP_MESSAGE_APPLICATIONSTART_MSG, PROP_MESSAGE_APPLICATIONSTART_TITLE, JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{ PROP_MESSAGE_APPLICATIONSTART_OPTION1, PROP_MESSAGE_APPLICATIONSTART_OPTION2 }, PROP_MESSAGE_APPLICATIONSTART_OPTION2);
-    	} else {
-        	if(getPropertyAppliationStartGui() != null && !getPropertyAppliationStartGui().equals(EMPTY)) {
-        		if(isApplicationStartGui()) {
-        			this.startGui = 1;
-        		}   		
-        	}
     	}
     	
     	if (args.length == 1 && args[0].equals(PROP_PARAM_HELP)) {
@@ -139,6 +133,12 @@ public class Application {
                 setApplicationParamsFromArgs(arg.substring(PROP_PARAM_PROPERTIES.length() + 1));
             }
     		
+    	}
+    	
+    	if(getPropertyAppliationStartGui() != null && !getPropertyAppliationStartGui().equals(EMPTY)) {
+    		if(isApplicationStartGui()) {
+    			this.startGui = 1;
+    		}   		
     	}
     	
     	if(!inputFiles) {
