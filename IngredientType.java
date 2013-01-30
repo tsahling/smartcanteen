@@ -5,7 +5,7 @@
  *  
  * @author Francesco Luciano
  */
-public enum RecipeType {
+public enum IngredientType {
 
     MEAT("MEAT", "Fleischgericht", "Fleisch"),
     FISH("FISH", "Fischgericht", "Fisch"),
@@ -23,7 +23,7 @@ public enum RecipeType {
      * @param name Beschreibung des ENUM z.B. Fleischgericht
      * @param shortName Kurzbeschreibung des ENUM z.B. Fleisch
      */
-    private RecipeType(String code, String name, String shortName) {
+    private IngredientType(String code, String name, String shortName) {
         this.code = code;
         this.name = name;
         this.shortName = shortName;

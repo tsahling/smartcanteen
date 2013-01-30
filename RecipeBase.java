@@ -61,7 +61,7 @@ public class RecipeBase {
      * @param recipeType Typ {@link RecipeType} des Rezepts
      * @return Set {@link Recipe} mit dem Inhalt aller Datenobjekte (@link Recipe) die auf den angebenen Typ {@link RecipeTyp} matchen
      */
-    public Set<Recipe> findRecipesByRecipeType(RecipeType recipeType) {
+    public Set<Recipe> findRecipesByRecipeType(IngredientType recipeType) {
         return null;
     }
 

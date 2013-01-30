@@ -10,7 +10,7 @@ import java.util.Set;
 public class Recipe {
 
     private String name;
-    private RecipeType type;
+    private IngredientType type;
     private Set<IngredientListItem> ingredientList;
     private int rank;
 
@@ -27,7 +27,7 @@ public class Recipe {
      * @return Wenn das Rezept {@link Recipe} vom Typ {@link RecipeType} Fleisch ist TRUE sonst FALSE
      */
     public boolean isMeatRecipe() {
-        return RecipeType.MEAT.equals(type);
+        return IngredientType.MEAT.equals(type);
     }
 
    /**
@@ -36,7 +36,7 @@ public class Recipe {
     * @return Wenn das Rezept {@link Recipe} vom Typ {@link RecipeType} Fisch ist TRUE sonst FALSE
     */  
     public boolean isFishRecipe() {
-        return RecipeType.FISH.equals(type);
+        return IngredientType.FISH.equals(type);
     }
 
    /**
@@ -45,7 +45,7 @@ public class Recipe {
     * @return Wenn das Rezept {@link Recipe} vom Typ {@link RecipeType} Vegetarisch ist TRUE sonst FALSE
     */
     public boolean isVegetableRecipe() {
-        return RecipeType.VEGETABLE.equals(type);
+        return IngredientType.VEGETABLE.equals(type);
     }
 
     /**
@@ -71,7 +71,7 @@ public class Recipe {
      * 
      * @return Typ {@link RecipeType} des Rezepts {@link Recipe}
      */
-    public RecipeType getType() {
+    public IngredientType getType() {
         return type;
     }
 
@@ -80,7 +80,7 @@ public class Recipe {
      * 
      * @param type Typ {@link RecipeType} eines Rezepts {@link Recipe} 
      */
-    public void setType(RecipeType type) {
+    public void setType(IngredientType type) {
         this.type = type;
     }
 
