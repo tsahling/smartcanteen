@@ -78,6 +78,8 @@ public class Application {
     private ShoppingList shoppingList;
     private String inputFiles;
     
+    private int startGui = 0;
+    
     /**
      * Versetzt die Anwendung in einen initialen und konstanten Zustand und ruft nach erfolgreichem Einlesen der
      * Eingabedaten die Logiken der Applikationsroutine auf.
@@ -93,7 +95,7 @@ public class Application {
 
             // Start der Applikation soll nur erfolgen wenn die Methode fillBases erfolgreich durchgelaufen ist, oder
             // sie nicht erfolgreich durchgelaufen ist und gleichzeitig ein GUI-Start vorgesehen ist
-            if (fillBases || (!fillBases && isApplicationStartGui())) {
+            if (fillBases || (!fillBases && this.startGui == 1)) {
                 startApplication();
             }
             else {
@@ -110,28 +112,40 @@ public class Application {
      */
     private boolean initInputArgs(final String[] args) {
 
-        if (args.length == 0) {
-            // Eingabefeld für Eingabedaten soll nur erscheinen wenn kein GUI-Start vorgesehen ist
-            if (!isApplicationStartGui()) {
-                this.inputFiles = JOptionPane.showInputDialog(null, PROP_MESSAGE_WRONGORMISSINGINPUTFILES_MSG,
-                        PROP_MESSAGE_WRONGORMISSINGINPUTFILES_TITLE, JOptionPane.QUESTION_MESSAGE);
-            }
-        }
-        else if (args.length == 1 && args[0].equals(PROP_PARAM_HELP)) {
+    	if(args.length == 0) {
+            this.startGui = JOptionPane.showOptionDialog(null, PROP_MESSAGE_APPLICATIONSTART_MSG, PROP_MESSAGE_APPLICATIONSTART_TITLE, JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{ PROP_MESSAGE_APPLICATIONSTART_OPTION1, PROP_MESSAGE_APPLICATIONSTART_OPTION2 }, PROP_MESSAGE_APPLICATIONSTART_OPTION2);
+    	} else {
+        	if(getPropertyAppliationStartGui() != null && !getPropertyAppliationStartGui().equals(EMPTY)) {
+        		if(isApplicationStartGui()) {
+        			this.startGui = 1;
+        		}   		
+        	}
+    	}
+    	
+    	if (args.length == 1 && args[0].equals(PROP_PARAM_HELP)) {
             System.out.println(PROP_APPLICATION_USAGEINFO);
-            return false;
-        }
-        else {
-            for (String arg : args) {
-
-                if (arg.contains(PROP_PARAM_INPUTFILES)) {
-                    this.inputFiles = setApplicationInputFilesFromArgs(arg.split(ARG_SPLIT));
-                }
-                else if (arg.contains(PROP_PARAM_PROPERTIES)) {
-                    setApplicationParamsFromArgs(arg.substring(PROP_PARAM_PROPERTIES.length() + 1));
-                }
+            return false;   		
+    	}
+    	
+    	boolean inputFiles = false;
+    	
+    	for(String arg : args) {
+    		
+            if (arg.contains(PROP_PARAM_INPUTFILES)) {
+                this.inputFiles = setApplicationInputFilesFromArgs(arg.split(ARG_SPLIT));
+                inputFiles = true;
             }
-        }
+            else if (arg.contains(PROP_PARAM_PROPERTIES)) {
+                setApplicationParamsFromArgs(arg.substring(PROP_PARAM_PROPERTIES.length() + 1));
+            }
+    		
+    	}
+    	
+    	if(!inputFiles) {
+            if (this.startGui == 0) {
+                this.inputFiles = JOptionPane.showInputDialog(null, PROP_MESSAGE_WRONGORMISSINGINPUTFILES_MSG, PROP_MESSAGE_WRONGORMISSINGINPUTFILES_TITLE, JOptionPane.QUESTION_MESSAGE);
+            }
+    	}
 
         return true;
     }
@@ -289,26 +303,8 @@ public class Application {
      */
     private void startApplication() throws IOException {
 
-        int startGui = 0;
-
-        // Wenn Property für Application GUI Start nicht gesetzt ist, kommt eine Benutzerabfrage, ob die Software in der
-        // Konsole ohne User-Interaktion (0) durchlaufen soll oder mit einer GUI (1) gestartet wird
-        if (getPropertyAppliationStartGui() == null || getPropertyAppliationStartGui().equals(EMPTY)) {
-            startGui = JOptionPane.showOptionDialog(null, PROP_MESSAGE_APPLICATIONSTART_MSG,
-                    PROP_MESSAGE_APPLICATIONSTART_TITLE, JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE,
-                    null, new String[]{ PROP_MESSAGE_APPLICATIONSTART_OPTION1, PROP_MESSAGE_APPLICATIONSTART_OPTION2 },
-                    PROP_MESSAGE_APPLICATIONSTART_OPTION2);
-        }
-        // Wenn Property für Application GUI Start gesetzt ist, wird dieser Wert verwendet um abzufragen ob Applikation
-        // mit GUI oder ohne gestartet werden soll
-        else {
-            if (isApplicationStartGui()) {
-                startGui = 1;
-            }
-        }
-
         // Wenn startGui wahr ist dann generiere Benutzeroberfläche
-        if (startGui == 1) {
+        if (this.startGui == 1) {
             ApplicationGUI applicationGUI = new ApplicationGUI(this);
             applicationGUI.initialize();
         }
