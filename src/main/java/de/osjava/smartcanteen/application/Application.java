@@ -51,10 +51,8 @@ public class Application {
 
     private static final String PROP_APPLICATION_INPUTFILEPATH = PropertyHelper
             .getProperty("application.inputFilePath");
-    private static final String PROP_APPLICATION_STARTGUI = PropertyHelper.getProperty("application.startGui");
+    
     private static final String PROP_APPLICATION_USAGEINFO = PropertyHelper.getProperty("application.usageInfo");
-
-    private static final Boolean IS_PROP_APPLICATION_STARTGUI = Boolean.parseBoolean(PROP_APPLICATION_STARTGUI);
 
     private static final String PROP_MESSAGE_WRONGORMISSINGINPUTFILES_TITLE = PropertyHelper
             .getProperty("message.wrongOrMissingInputFiles.title");
@@ -79,7 +77,7 @@ public class Application {
     private Canteen[] canteens;
     private ShoppingList shoppingList;
     private String inputFiles;
-
+    
     /**
      * Versetzt die Anwendung in einen initialen und konstanten Zustand und ruft nach erfolgreichem Einlesen der
      * Eingabedaten die Logiken der Applikationsroutine auf.
@@ -95,7 +93,7 @@ public class Application {
 
             // Start der Applikation soll nur erfolgen wenn die Methode fillBases erfolgreich durchgelaufen ist, oder
             // sie nicht erfolgreich durchgelaufen ist und gleichzeitig ein GUI-Start vorgesehen ist
-            if (fillBases || (!fillBases && IS_PROP_APPLICATION_STARTGUI)) {
+            if (fillBases || (!fillBases && isApplicationStartGui())) {
                 startApplication();
             }
             else {
@@ -114,7 +112,7 @@ public class Application {
 
         if (args.length == 0) {
             // Eingabefeld für Eingabedaten soll nur erscheinen wenn kein GUI-Start vorgesehen ist
-            if (!IS_PROP_APPLICATION_STARTGUI) {
+            if (!isApplicationStartGui()) {
                 this.inputFiles = JOptionPane.showInputDialog(null, PROP_MESSAGE_WRONGORMISSINGINPUTFILES_MSG,
                         PROP_MESSAGE_WRONGORMISSINGINPUTFILES_TITLE, JOptionPane.QUESTION_MESSAGE);
             }
@@ -295,7 +293,7 @@ public class Application {
 
         // Wenn Property für Application GUI Start nicht gesetzt ist, kommt eine Benutzerabfrage, ob die Software in der
         // Konsole ohne User-Interaktion (0) durchlaufen soll oder mit einer GUI (1) gestartet wird
-        if (PROP_APPLICATION_STARTGUI == null || PROP_APPLICATION_STARTGUI.equals(EMPTY)) {
+        if (getPropertyAppliationStartGui() == null || getPropertyAppliationStartGui().equals(EMPTY)) {
             startGui = JOptionPane.showOptionDialog(null, PROP_MESSAGE_APPLICATIONSTART_MSG,
                     PROP_MESSAGE_APPLICATIONSTART_TITLE, JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE,
                     null, new String[]{ PROP_MESSAGE_APPLICATIONSTART_OPTION1, PROP_MESSAGE_APPLICATIONSTART_OPTION2 },
@@ -304,7 +302,7 @@ public class Application {
         // Wenn Property für Application GUI Start gesetzt ist, wird dieser Wert verwendet um abzufragen ob Applikation
         // mit GUI oder ohne gestartet werden soll
         else {
-            if (IS_PROP_APPLICATION_STARTGUI) {
+            if (isApplicationStartGui()) {
                 startGui = 1;
             }
         }
@@ -327,6 +325,14 @@ public class Application {
         }
     }
 
+    private String getPropertyAppliationStartGui() {
+    	return PropertyHelper.getProperty("application.startGui");
+    }
+    
+    private boolean isApplicationStartGui() {
+    	return Boolean.parseBoolean(getPropertyAppliationStartGui());
+    }
+    
     /**
      * Start der Applikationslogik für die Erstellung der Speisepläne. Erstellt ein Objekt der Klasse
      * {@link MenuPlanBuilder} und erhält von dieser ein Array von {@link Canteen} zurück.
