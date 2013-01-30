@@ -14,9 +14,11 @@ AUTHORS
 Marcel Baxmann, Francesco Luciano und Tim Sahling
 
 SHORT USER INSTRUCTIONS
-Die Anwendung wird standardmäßig mit Benutzeroberfläche gestartet, kann aber auch grundsätzlich vollständig automatisch ablaufen und bei übergebenen Eingabedaten, die erwarteten Ergebnisse generieren.
-Einige Einstellungen lassen sich bei einem Konsolenaufruf über den Parameter --props von außen in die Applikation übergeben, wodurch die Darstellung und das Ergebnis der Applikation individualisiert werden kann.
+Die Anwendung wird als ausführbare Jar-Datei geliefert und bietet in der standardmäßigen Konfiguration bei Start ohne Übergabe von Parametern ein Abfragefenster, ob die Software mit „GUI-Unterstützung“ oder als „Konsolenanwendung“ durchlaufen soll.
+Grundsätzlich kann die Anwendung via Aufruf über die Konsole vollständig automatisch ablaufen und bei übergebenen Eingabedaten, die erwarteten Ergebnisse ohne weitere Interaktion generieren.
+Einige Einstellungen lassen sich bei einem Konsolenaufruf über den Parameter --props von außen in die Applikation übergeben, wodurch die Darstellung und das Ergebnis der Applikation individualisiert werden kann. 
 Einzulesende Dateien im Ordner “input” ablegen. Die Ausgabe erfolgt im Ordner “output”.
+Eine ausführliche Beschreibung findet sich im Abschnitt „LONG USER INSTRUCTIONS“.
 
 TIPS FOR USING
 Ein kostenoptimaler Speiseplan kann, unter Berücksichtigung der Beispiel-Daten (im Input-Ordner) erreicht werden, indem die Parameter auf 
@@ -31,7 +33,7 @@ Dementsprechend kann es, auf Basis der Anforderung, dass das Gericht mit der hö
 dazu kommen, dass teurere Gerichte im randomisierten Modus öfter mit oberster Priorität gekocht werden als im sequentiellen Modus.
 
 PROPERTIES PARAMETER
-Folgende Einstellungen sind verfügbar:
+Folgende Einstellungen sind bei einem Konsolenaufruf über die Eingabe mit dem Parameter --props konfigurierbar:
 application.startGui=true|false|
 	-true: GUI wird geladen
 	-false: Konsolenanwendung starten
@@ -53,9 +55,13 @@ outputData.dataSetSeperator=;|,
 
 
 LONG USER INSTRUCTIONS
-Die Anwendung wird als ausführbare JAR-Datei geliefert und ist sowohl über die Konsole als auch über Doppelklick ausführbar. Im Applikationsordner „SmartCanteen“ sind zwei Ordner, die README.txt als auch die eigentliche Applikation „SmartCanteen.jar“ auffindbar. 
-Im Ordner „input“ erfolgt die Ablage der einzulesenden Dateien, die die Software bearbeiten soll.
-Im Ordner „output“ werden die Ergebnisse der Verarbeitung abgelegt. Für das Komfortfeature HTML-Ausgabe sind im Unterordner „images“ Bilder hinterlegt. Sollen die HTML-Ausgaben an andere Pfade im Dateisystem kopiert werden, ist es erforderlich den „images“-Ordner mitzukopieren. Andernfalls werden die Bilder in den HTML-Dokumenten nicht korrekt dargestellt.
+Die Anwendung wird als ausführbare JAR-Datei geliefert und ist sowohl über die Konsole als auch über einen Doppelklick ausführbar. Werden der Applikation keine Properties übergeben, wird bei dem Aufruf der Software dem User in der standardmäßigen Konfiguration ein Abfragefenster angezeigt, in dem er auswählen kann, ob die Software mit „GUI-Unterstützung“ oder als „Konsolenanwendung“ durchlaufen soll.
+Einige Einstellungen lassen sich bei einem Konsolenaufruf über den Parameter --props von außen in die Applikation übergeben, wodurch die Darstellung und das Ergebnis der Applikation individualisiert werden kann.
+Zum Beispiel führt ein Aufruf mit dem Parameter “--props  application.startGui=true” direkt zur Ausführung mit Benutzeroberfläche.
+Der Aufruf mit “--props  application.startGui=false” führt zu einer Ausführung als Konsolenanwendung.
+Im Applikationsordner „SmartCanteen“ sind zwei Ordner, die README.txt als auch die eigentliche Applikation „SmartCanteen.jar“ auffindbar. 
+Im Ordner „input“ erfolgt die Ablage der einzulesenden Dateien die die Software bearbeiten soll.
+Im Ordner „output“ werden die Ergebnisse der Verarbeitung abgelegt. Für das Komfortfeature HTML-Ausgabe sind im Unterordner „images“ Bilder hinterlegt. Sollen die HTML-Ausgaben an andere Pfade im Dateisystem kopiert werden ist es erforderlich den „images“-Ordner mitzukopieren. Andernfalls werden die Bilder in den HTML-Dokumenten nicht korrekt dargestellt.
 
 1) Konsolenanwendung:
 Die Applikation SmartCanteen läuft grundsätzlich vollständig automatisch ab und generiert, bei übergebenen Eingabedaten, die erwarteten Ergebnisse. Folgende Parameter beim Aufruf des Programms stehen zur Verfügung:
@@ -74,7 +80,7 @@ um grundsätzlich einen reibungslosen Ablauf der Applikation zu gewährleisten. 
 angepasst und damit das Ergebnis individualisiert werden.
 
 2) GUI-Anwendung:
-Das grafische User-Inferface (Benutzeroberfläche) ist in die Bereiche Option (links) und Voransicht (rechts) unterteilt. Dargestellt in der folgenden Abbildung.
+Das grafische User-Inferface (Benutzeroberfläche) ist in die Bereiche Option (links) und Voransicht (rechts) unterteilt. 
 
 Optionen - Eingabe-Dateien:
 Bei den Input-Optionen ist es möglich die Dateien anzugeben, welche aus dem Input-Ordner in das Programm eingelesen werden sollen.
@@ -103,7 +109,7 @@ Optionen - Schaltflächen:
 eines kompletten Menü-Plans für alle Standorte ausreichen, gestartet werden.
 
 Nach einem erfolgreichen Durchgang wird die Schaltfläche in „Neu berechnen“ umbenannt. Der User kann Einstellungen anpassen und zum Beispiel weitere 
-Anbieter zu Berechnung hinzuziehen und danach über die Beätigung „Neu berechnen“ die Generierung erneut starten.
+Anbieter zu Berechnung hinzuziehen und danach über die Betätigung „Neu berechnen“ die Generierung erneut starten.
 
 Hat der User einen Menü-Plan generiert der einem zusagt hat er die Möglichkeit die Ergebnisse über die Schaltfläche „Speichern der Ergebnisse“ in die 
 definierten Ausgabeformate zu speichern. Die Ergebnisse werden in den Ordner „output“ abgelegt.
