@@ -11,8 +11,8 @@ import java.util.List;
  * 
  * Die Klasse {@link InputFileHandler} ist für das Einlesen und Verarbeiten der Input-Dateien zuständig.
  * {@link InputFileHandler} besitzt Methoden für das zeilenweise Einlesen einer Datei und das Aufteilen der
- * Zeilen in Datenfelder an einem definierten Trennzeichen. Die Methode {@link hasMoreLines} besitzt eine rudimentaere
- * Fehlerbehandlung, die das Einlesen von inkonsistenten Zeilen abfaengt.
+ * Zeilen in Datenfelder an einem definierten Trennzeichen. Die Methode hasMoreLines besitzt eine rudimentäre
+ * Fehlerbehandlung, die das Einlesen von inkonsistenten Zeilen abfängt.
  * 
  * @author Francesco Luciano
  */
@@ -41,7 +41,7 @@ public class InputFileHandler {
      * 
      * @param filename Pfad
      * @param delimiter Trennzeichen der CSV Datei
-     * @throws IOException
+     * @throws IOException Alle auftretenden IO-Fehler in der Methode
      */
 
     // Sollte die Datei nicht gefunden werden wird eine Exception ausgegeben
@@ -57,15 +57,14 @@ public class InputFileHandler {
     }
 
     /**
-     * Die Methode {@link hasMoreLines} überpüft ob es noch eine Zeile in der Datei vorhanden ist. Wenn
+     * Die Methode hasMoreLines überpüft ob es noch eine Zeile in der Datei vorhanden ist. Wenn
      * eine eine nächste Zeile vorhanden ist, wird diese eingelesen und auf eine Variable gespeichert.
      * Die Feldgröße der Zeile gemessen zum Header wird überprüft, wird eine ikonsistente
      * Zeile entdeckt, dann ist die Fehlerbehandlung das überspringen der ikonsistenten Zeile. Die Zeile wird von der
-     * Methode {@link hasMoreLines} Methode
-     * nicht verändert.
+     * Methode hasMoreLines Methode nicht verändert.
      * 
      * @return Liefert TRUE wenn noch eine Zeile vorhanden und FALSE keine mehr vorhanden ist
-     * @throws IOException
+     * @throws IOException Alle auftretenden IO-Fehler in der Methode
      */
     public boolean hasMoreLines() throws IOException {
         // Array Variable vom Typ Array of String der den Inhalt der Felder einer Zeile aufnimmt.Um Fehler in der Datei
@@ -110,13 +109,13 @@ public class InputFileHandler {
 
     /**
      * 
-     * Die Methode {@link nextLine} ist für die Verarbeitung der nächsten Zeile verantwortlich. In
-     * dieser Methode {@link nextLine} wird die Original eingelesene Zeile verändert z.b. werden Leerzeichen am Anfang
+     * Die Methode nextLine ist für die Verarbeitung der nächsten Zeile verantwortlich. In
+     * dieser Methode nextLine wird die Original eingelesene Zeile verändert z.b. werden Leerzeichen am Anfang
      * und Ende wegeschnitten und ein Unicode Zeichen ersetzt. Die Methode ruft die private Klassenmethode
-     * {@link splitLine} zum trennen der Datenfelder auf.
+     * splitLine zum trennen der Datenfelder auf.
      * 
      * @return lineInfields Array of String mit den Elementen der Zeile
-     * @throws IOException
+     * @throws IOException Alle auftretenden IO-Fehler in der Methode
      */
     public String[] nextLine() throws IOException {
 
@@ -139,7 +138,7 @@ public class InputFileHandler {
     }
 
     /**
-     * Die Methode {@link splitLine} durchlaeuft die uebergebene Zeile zeichenweise
+     * Die Methode splitLine durchlaeuft die uebergebene Zeile zeichenweise
      * und zerlegt sie an den Stellen wo das uebergebene Trennzeichen (delimiter) auftritt.
      * Trennzeichen, die innerhalb von Anfuehrungszeichen stehen, werden ignoriert.
      * Endet die Zeile mit einem Trennzeichen, wird nach durchlaufen der Zeile
