@@ -8,9 +8,8 @@ import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.helper.NumberHelper;
 
 /**
- * Die Klasse {@link PriceListItem} stellt eine Preislistenposition dar. Sie
- * enthält einen Verweis auf das jeweilige Lebensmittel ({@link Ingredient}) den
- * Preis und die verfügbare Menge.
+ * Die Klasse {@link PriceListItem} stellt eine Preislistenposition dar. Sie enthält einen Verweis auf das jeweilige
+ * Lebensmittel ({@link Ingredient}) den Preis und die verfügbare Menge.
  * 
  * @author Tim Sahling
  */
@@ -37,9 +36,9 @@ public class PriceListItem {
     }
 
     /**
-     * Multipliziert die verfügbare Menge einer Zutat mit der Größe des Gebindes.
+     * Multipliziert die verfügbare {@link Amount} einer {@link Ingredient} mit der Größe des Gebindes.
      * 
-     * @return Einen {@link Amount} mit dem Produkt aus verfügbarer Menge und Größe des Gebindes
+     * @return Eine {@link Amount} mit dem Produkt aus verfügbarer Menge und Größe des Gebindes
      */
     public Amount multiplyAvailableQuantityWithSize() {
         return new Amount(NumberHelper.multiply(this.availableQuantityOfIngredient, this.size.getValue()),
@@ -47,9 +46,10 @@ public class PriceListItem {
     }
 
     /**
+     * Berechnet den Preis für eine {@link Amount}.
      * 
-     * @param quantity
-     * @return
+     * @param quantity Die {@link Amount}, für die der Preis berechnet werden soll
+     * @return Der berechnete Preis für die übergebene {@link Amount}
      */
     public BigDecimal calculatePriceForQuantity(Amount quantity) {
         BigDecimal result = null;
@@ -67,7 +67,7 @@ public class PriceListItem {
     /**
      * Berechnet den Preis des Gebindes für eine Einheit.
      * 
-     * @return
+     * @return Der berechnete Preis für eine Einheit des Gebindes
      */
     public BigDecimal calculatePriceForOneUnitOfSize() {
         return NumberHelper.divide(this.price.getValue(), this.size.getValue());
@@ -77,10 +77,10 @@ public class PriceListItem {
      * Dividiert die übergebene {@link Amount} mit der Größe des Gebindes. Das Ergebnis wird auf keine Nachkommastelle
      * aufgerundet, da die tatsächliche Anzahl an benötigten Gebinden herausgefunden werden soll.
      * 
-     * Beispiel: Quantity -> 15.050 GRM -> 15.05 => 16 Gebinde
+     * Beispiel: Menge -> 15.050 GRM -> 15.05 => 16 Gebinde
      * 
-     * @param quantity
-     * @return
+     * @param quantity Die {@link Amount}, die mit der Größe des Gebindes dividiert werden soll
+     * @return Ergebnis der Division aus {@link Amount} und Größe des Gebindes
      */
     public BigDecimal divideQuantityWithSize(Amount quantity) {
         BigDecimal result = null;
@@ -96,9 +96,10 @@ public class PriceListItem {
     }
 
     /**
+     * Validiert die Größe des Gebindes und eine übergebene {@link Amount}.
      * 
-     * @param quantity
-     * @return
+     * @param quantity Die {@link Amount}, die überprüft werden soll
+     * @return wahr/falsch, je nachdem ob die Größe des Gebindes und der übergebene {@link Amount} valide sind
      */
     private boolean validateSizeAndQuantity(Amount quantity) {
         return this.size != null && this.size.getUnit() != null && this.size.getValue() != null && quantity != null && quantity
@@ -151,8 +152,7 @@ public class PriceListItem {
     }
 
     /**
-     * Diese Methode gibt den HashCode-Wert für das Objekt zurück, von dem die
-     * Methode aufgerufen wurde.
+     * Diese Methode gibt den HashCode-Wert für das Objekt zurück, von dem die Methode aufgerufen wurde.
      * 
      * @return Der HashCode-Wert des Objekts als int-Representation
      */
@@ -169,8 +169,7 @@ public class PriceListItem {
     }
 
     /**
-     * Diese Methode prüft, ob das übergebene Objekt gleich dem Objekt ist, von
-     * dem die Methode aufgerufen wurde.
+     * Diese Methode prüft, ob das übergebene Objekt gleich dem Objekt ist, von dem die Methode aufgerufen wurde.
      * 
      * @return wahr/falsch, je nachdem ob zu vergleichende Objekte gleich sind
      */

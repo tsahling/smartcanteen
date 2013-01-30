@@ -22,8 +22,8 @@ public class HitListItem {
     /**
      * Standardkonstruktor zum Erzeugen eines Gericht mit Namen und Rang
      * 
-     * @param name
-     * @param rank
+     * @param name Der Name des {@link HitListItem}
+     * @param rank Der Rang des {@link HitListItem}
      */
     public HitListItem(String name, int rank) {
         this.name = name;
@@ -40,9 +40,9 @@ public class HitListItem {
     }
 
     /**
-     * Methode um den Rang eines {@link HitlistItem} zu ermitteln
+     * Methode um den Rang eines {@link HitListItem} zu ermitteln
      * 
-     * @return Rang des {@link HitlistItem}
+     * @return Rang des {@link HitListItem}
      */
     public int getRank() {
         return rank;

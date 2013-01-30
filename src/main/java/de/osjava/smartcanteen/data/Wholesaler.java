@@ -9,8 +9,8 @@ import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
 import de.osjava.smartcanteen.helper.NumberHelper;
 
 /**
- * Die Klasse {@link Wholesaler} ist eine Spezialisierung der Fach- bzw.
- * Datenträgerklasse {@link AbstractProvider} und stellt einen Grosshändler dar.
+ * Die Klasse {@link Wholesaler} ist eine Spezialisierung der Fach- bzw. Datenträgerklasse {@link AbstractProvider} und
+ * stellt einen Grosshändler dar.
  * 
  * @author Tim Sahling
  */
@@ -19,11 +19,11 @@ public class Wholesaler extends AbstractProvider {
     private Amount transportFee;
 
     /**
-     * Standardkonstruktor
+     * Standardkonstruktor mit Parametern.
      * 
-     * @param name
-     * @param priceList
-     * @param transportFee
+     * @param name Der Name des {@link Wholesaler}
+     * @param priceList Die Preisliste des {@link Wholesaler}
+     * @param transportFee Die Transportpauschale des {@link Wholesaler}
      */
     public Wholesaler(String name, Set<PriceListItem> priceList, Amount transportFee) {
         super(name, priceList);

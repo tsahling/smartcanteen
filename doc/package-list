@@ -1,0 +1,10 @@
+de.osjava.smartcanteen.application
+de.osjava.smartcanteen.application.gui
+de.osjava.smartcanteen.base
+de.osjava.smartcanteen.builder
+de.osjava.smartcanteen.builder.result
+de.osjava.smartcanteen.data
+de.osjava.smartcanteen.data.item
+de.osjava.smartcanteen.datatype
+de.osjava.smartcanteen.helper
+de.osjava.smartcanteen.output

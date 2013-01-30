@@ -22,10 +22,10 @@ public class HitListBase {
      * @return Das aktualisierte Datenobjekt wird zurückgegeben
      */
     public HitListItem addHitListItem(HitListItem hitListItem) {
-        if (hitListItems == null) {
-            hitListItems = new ArrayList<HitListItem>();
+        if (this.hitListItems == null) {
+            this.hitListItems = new ArrayList<HitListItem>();
         }
-        hitListItems.add(hitListItem);
+        this.hitListItems.add(hitListItem);
         return hitListItem;
     }
 

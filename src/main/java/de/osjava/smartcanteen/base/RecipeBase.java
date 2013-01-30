@@ -9,9 +9,8 @@ import de.osjava.smartcanteen.data.Recipe;
 import de.osjava.smartcanteen.datatype.IngredientType;
 
 /**
- * Die Klasse {@link RecipeBase} ist eine Datenträgerklasse die in einer Java
- * Collection vom Typ Set die Informationen aus der einzulesenden Datei Rezepte
- * als Datenobjekt {@link Recipe} speichert.
+ * Die Klasse {@link RecipeBase} ist eine Datenträgerklasse die in einer Java Collection vom Typ Set die Informationen
+ * aus der einzulesenden Datei Rezepte als Datenobjekt {@link Recipe} speichert.
  * 
  * @author Francesco Luciano
  */
@@ -22,16 +21,49 @@ public class RecipeBase {
     /**
      * Methode um ein Datenobjekt {@link Recipe} in das Set hinzuzufügen.
      * 
-     * @param recipe
-     *            Das einzufügende Datenobjekt {@link Recipe}
+     * @param recipe Das einzufügende Datenobjekt {@link Recipe}
      * @return Das aktualisierte Rezept {@link Recipe}
      */
     public Recipe addRecipe(Recipe recipe) {
-        if (recipes == null) {
-            recipes = new HashSet<Recipe>();
+        if (this.recipes == null) {
+            this.recipes = new HashSet<Recipe>();
         }
-        recipes.add(recipe);
+        this.recipes.add(recipe);
         return recipe;
+    }
+
+    /**
+     * Methode um die Datenobjekte {@link Recipe} im Set anhand des Rangs der Gerichte zu sortieren.
+     * 
+     * @return Set {@link Recipe} in dem die Datenobjekte aufsteigend sortiert sind
+     */
+    public Set<Recipe> getRecipesSortedByRank(Set<Recipe> recipes) {
+        Set<Recipe> result = new TreeSet<Recipe>(new Comparator<Recipe>() {
+
+            @Override
+            public int compare(Recipe r1, Recipe r2) {
+                return Integer.valueOf(r1.getRank()).compareTo(Integer.valueOf(r2.getRank()));
+            }
+        });
+
+        if (recipes != null && !recipes.isEmpty()) {
+            result.addAll(recipes);
+        }
+        else {
+            result.addAll(this.recipes);
+        }
+
+        return result;
+    }
+
+    /**
+     * Ermittelt die Rezepte für einen bestimmten {@link IngredientType} und sortiert diese nach Rang.
+     * 
+     * @param ingredientType Der {@link IngredientType}, nach dem die Rezepte gesucht werden
+     * @return Eine nach Rang sortierte Menge von Rezepten für den {@link IngredientType}
+     */
+    public Set<Recipe> getRecipesForIngredientTypeSortedByRank(IngredientType ingredientType) {
+        return getRecipesSortedByRank(findRecipesByIngredientType(ingredientType));
     }
 
     /**
@@ -57,42 +89,7 @@ public class RecipeBase {
     }
 
     /**
-     * Methode um die Datenobjekte {@link Recipe} im Set anhand des Rangs der
-     * Gerichte zu sortieren
-     * 
-     * @return Set {@link Recipe} in dem die Datenobjekte aufsteigend sortiert
-     *         sind
-     */
-    public Set<Recipe> getRecipesSortedByRank(Set<Recipe> recipes) {
-        Set<Recipe> result = new TreeSet<Recipe>(new Comparator<Recipe>() {
-
-            @Override
-            public int compare(Recipe r1, Recipe r2) {
-                return Integer.valueOf(r1.getRank()).compareTo(Integer.valueOf(r2.getRank()));
-            }
-        });
-
-        if (recipes != null && !recipes.isEmpty()) {
-            result.addAll(recipes);
-        }
-        else {
-            result.addAll(this.recipes);
-        }
-
-        return result;
-    }
-
-    /**
-     * 
-     * @param ingredientType
-     * @return
-     */
-    public Set<Recipe> getRecipesForIngredientTypeSortedByRank(IngredientType ingredientType) {
-        return getRecipesSortedByRank(findRecipesByIngredientType(ingredientType));
-    }
-
-    /**
-     * Methode um alle Datenobjekte aus dem Set zu ermitteln
+     * Methode um alle Datenobjekte aus dem Set zu ermitteln.
      * 
      * @return Set {@link Recipe}
      */

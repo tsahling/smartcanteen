@@ -9,12 +9,10 @@ import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
 import de.osjava.smartcanteen.helper.NumberHelper;
 
 /**
- * Die Klasse {@link AbstractProvider} ist eine der Fach- bzw.
- * Datenträgerklassen und als abstrakte, generalistische Klasse ausgelegt, die
- * mit den beiden Klassen {@link Farmer} und {@link Wholesaler} verschiedene
- * Spezialisierungen hat. Sie stellt die Basis für die unterschiedlichen
- * Anbieter von für den Kantinenbetrieb benötigten Lebensmitteln und deren
- * jeweiligen Preise dar.
+ * Die Klasse {@link AbstractProvider} ist eine der Fach- bzw. Datenträgerklassen und als abstrakte, generalistische
+ * Klasse ausgelegt, die mit den beiden Klassen {@link Farmer} und {@link Wholesaler} verschiedene Spezialisierungen
+ * hat. Sie stellt die Basis für die unterschiedlichen Anbieter von für den Kantinenbetrieb benötigten Lebensmitteln und
+ * deren jeweiligen Preise dar.
  * 
  * @author Tim Sahling
  */
@@ -26,8 +24,8 @@ public abstract class AbstractProvider {
     /**
      * Standardkonstruktor
      * 
-     * @param name Name des Anbieters
-     * @param priceList Preisliste des Anbieters
+     * @param name Name des {@link AbstractProvider}
+     * @param priceList Preisliste des {@link AbstractProvider}
      */
     public AbstractProvider(String name, Set<PriceListItem> priceList) {
         this.name = name;
@@ -35,11 +33,12 @@ public abstract class AbstractProvider {
     }
 
     /**
-     * Überprüft ob ein Anbieter eine Zutat in einer bestimmten Menge vorrätig hat
+     * Überprüft ob ein {@link AbstractProvider} eine Zutat in einer bestimmten Menge vorrätig hat
      * 
-     * @param ingredient
-     * @param quantity
-     * @return
+     * @param ingredient Die {@link Ingredient}, die überprüft werden soll
+     * @param quantity Die {@link Amount}, der überprüft werden soll
+     * @return wahr/falsch, je nachdem ob der {@link AbstractProvider} die {@link Ingredient} in der benötigten
+     *         {@link Amount} vorrätig hat
      */
     public boolean hasIngredientWithQuantity(Ingredient ingredient, Amount quantity) {
         boolean result = false;
@@ -59,12 +58,13 @@ public abstract class AbstractProvider {
     }
 
     /**
-     * Berechnet auf Basis der {@link Ingredient} und der {@link Amount} die tatsächlich vom {@link AbstractProvider} zu
-     * bestellende {@link Amount}.
+     * Berechnet auf Basis der {@link Ingredient} und der {@link Amount} den tatsächlich vom {@link AbstractProvider} zu
+     * bestellenden {@link Amount}. Diese Funktion liegt darin begründet, dass {@link AbstractProvider} nur ganze
+     * Gebinde verkaufen und der benötigte {@link Amount} zwischen Gebindegrößen liegen kann.
      * 
-     * @param ingredient
-     * @param quantity
-     * @return
+     * @param ingredient Die {@link Ingredient}, die bestellt werden soll
+     * @param quantity Die {@link Amount}, der bestellt werden soll
+     * @return Die {@link Amount} an Gebinden, die bestellt werden muss
      */
     public Amount calculateQuantityFromIngredientAndQuantity(Ingredient ingredient, Amount quantity) {
         Amount result = null;
@@ -75,6 +75,7 @@ public abstract class AbstractProvider {
             BigDecimal quantityOfIngredient = priceListItem.divideQuantityWithSize(quantity);
 
             if (quantityOfIngredient != null) {
+                // Multipliziert die Größe des Gebindes mit der berechneten und benötigten Menge an Gebinden
                 result = new Amount(NumberHelper.multiply(priceListItem.getSize().getValue(), quantityOfIngredient),
                         priceListItem.getSize().getUnit());
             }
@@ -84,10 +85,12 @@ public abstract class AbstractProvider {
     }
 
     /**
+     * Berechnet auf Basis der {@link Ingredient} und der {@link Amount} die Ausschussmenge die erzeugt werden würde,
+     * wenn diese Zutaten/Mengen-Kombination bei dem {@link AbstractProvider} tatsächlich bestellt werden würde.
      * 
-     * @param ingredient
-     * @param quantity
-     * @return
+     * @param ingredient Die {@link Ingredient}, die bestellt werden soll
+     * @param quantity Die {@link Amount}, der bestellt werden soll
+     * @return Die {@link Amount} an Ausschuss, der erzeugt werden würde
      */
     public Amount calculateWasteQuantityFromIngredientAndQuantity(Ingredient ingredient, Amount quantity) {
         Amount result = null;
@@ -98,6 +101,8 @@ public abstract class AbstractProvider {
             BigDecimal quantityOfIngredient = priceListItem.divideQuantityWithSize(quantity);
 
             if (quantityOfIngredient != null) {
+                // Multipliziert die Größe des Gebindes mit der berechneten und benötigten Menge an Gebinden und
+                // subtrahiert danach von diesem Produkt, die tatsächlich benötigte Menge
                 result = new Amount(NumberHelper.subtract(
                         NumberHelper.multiply(priceListItem.getSize().getValue(), quantityOfIngredient),
                         quantity.getValue()), priceListItem.getSize().getUnit());
@@ -108,10 +113,11 @@ public abstract class AbstractProvider {
     }
 
     /**
-     * Subtrahiert eine Menge von einer Zutat von der beim Anieter verfügbaren Menge.
+     * Subtrahiert eine {@link Amount} von einer {@link Ingredient} von der beim {@link AbstractProvider} verfügbaren
+     * Menge.
      * 
-     * @param ingredient
-     * @param quantity
+     * @param ingredient Die {@link Ingredient}, die subtrahiert werden soll
+     * @param quantity Die {@link Amount}, der subtrahiert werden soll
      */
     public void subtractQuantityFromIngredient(Ingredient ingredient, Amount quantity) {
 
@@ -128,13 +134,13 @@ public abstract class AbstractProvider {
     }
 
     /**
-     * Kalkuliert einen Preis für eine {@link Ingredient} und eine {@link Amount} bei einem {@link AbstractProvider}.
+     * Berechnet einen Preis für eine {@link Ingredient} und eine {@link Amount} bei einem {@link AbstractProvider}.
      * Transportkosten der Anbieter werden an dieser Stelle nicht berücksichtigt, sondern nur beim Berechnen der
      * gesamten Einkaufsliste.
      * 
-     * @param ingredient
-     * @param quantity
-     * @return
+     * @param ingredient Die {@link Ingredient}, die berechnet werden soll
+     * @param quantity Die {@link Amount}, die berechnet werden soll
+     * @return Die berechnete {@link Amount} für die übergebene {@link Ingredient} und benötigte {@link Amount}
      */
     public Amount calculatePriceForIngredientAndQuantity(Ingredient ingredient, Amount quantity) {
         Amount result = new Amount(BigDecimal.valueOf(0), UnitOfMeasurement.EUR);
@@ -156,7 +162,7 @@ public abstract class AbstractProvider {
      * Methode um den {@link Amount} einer {@link Ingredient} zu ermitteln.
      * 
      * @param ingredient Die zu suchende {@link Ingredient}
-     * @return Den {@link Amount} der {@link Ingredient}
+     * @return Die {@link Amount} der {@link Ingredient}
      */
     public Amount findQuantityByIngredient(Ingredient ingredient) {
         Amount result = null;
@@ -171,16 +177,17 @@ public abstract class AbstractProvider {
     }
 
     /**
+     * Methode um ein {@link PriceListItem} auf Basis einer {@link Ingredient} zu ermitteln.
      * 
-     * @param ingredient
-     * @return
+     * @param ingredient Die zu suchende {@link Ingredient}
+     * @return Das {@link PriceListItem}, dass auf Basis der {@link Ingredient} gefunden wurde
      */
     public PriceListItem findPriceListItemByIngredient(Ingredient ingredient) {
         PriceListItem result = null;
 
-        if (priceList != null && !priceList.isEmpty()) {
+        if (this.priceList != null && !this.priceList.isEmpty()) {
 
-            for (PriceListItem priceListItem : priceList) {
+            for (PriceListItem priceListItem : this.priceList) {
 
                 if (priceListItem.getIngredient().equals(ingredient)) {
                     result = priceListItem;
@@ -193,7 +200,7 @@ public abstract class AbstractProvider {
     }
 
     /**
-     * Liefert den Namen des Anbieters
+     * Liefert den Namen des Anbieters.
      * 
      * @return Der Name des Anbieters
      */
@@ -202,7 +209,7 @@ public abstract class AbstractProvider {
     }
 
     /**
-     * Liefert eine Liste mit Preislistenpositionen
+     * Liefert eine Liste mit Preislistenpositionen.
      * 
      * @return Die Preislistenpositionen
      */
@@ -232,7 +239,6 @@ public abstract class AbstractProvider {
      * 
      * @return wahr/falsch, je nachdem ob zu vergleichende Objekte gleich sind
      */
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

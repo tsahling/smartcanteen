@@ -8,17 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Die zur Verfuegung gestellten CSV-Dateien werden mit Hilfe der Klasse {@link CSVInputHandler} eingelesen. Die Klasse
- * stellt Methoden zur Verfuegung, mit denen die Datei zeilenweise eingelesen werden kann. Die Methoden zum Einlesen
- * werden eine rudimentaere Fehlerbehandlung beinhalten, welche das Einlesen von inkonsistenten Zeilen abfaengt. Die
- * Logik
- * der Zerlegung der eingelesenen Zeilen in die einzelnen Datenfelder stellt die Klassenmethode splitLine() zur
- * Verfuegung
+ * Die zur Verfügung gestellten CSV-Dateien werden mit Hilfe der Klasse {@link InputFileHandler} eingelesen. Die Klasse
+ * stellt Methoden zur Verfügung, mit denen die Datei zeilenweise eingelesen werden kann. Die Methoden zum Einlesen
+ * werden eine rudimentaere Fehlerbehandlung beinhalten, welche das Einlesen von inkonsistenten Zeilen abfängt. Die
+ * Logik der Zerlegung der eingelesenen Zeilen in die einzelnen Datenfelder stellt die Klassenmethode splitLine() zur
+ * Verfügung.
  * 
  * @author Francesco Luciano
- * 
  */
-
 public class InputFileHandler {
 
     // Ein Buffered Reader ist ein Java Reader welcher ein Zeichen Datenstrom verarbeiten kann. Der BufferedReader

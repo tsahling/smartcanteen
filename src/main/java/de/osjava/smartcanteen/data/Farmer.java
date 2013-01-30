@@ -22,9 +22,9 @@ public class Farmer extends AbstractProvider {
     /**
      * Standardkonstruktor mit Parametern.
      * 
-     * @param name
-     * @param priceList
-     * @param distanceToCentral
+     * @param name Der Name des {@link Farmer}
+     * @param priceList Die Preisliste des {@link Farmer}
+     * @param distanceToCentral Die Distanz zur zentrale der VAWi GmbH des {@link Farmer}
      */
     public Farmer(String name, Set<PriceListItem> priceList, Amount distanceToCentral) {
         super(name, priceList);
@@ -44,8 +44,7 @@ public class Farmer extends AbstractProvider {
     }
 
     /**
-     * Diese Methode gibt den HashCode-Wert für das Objekt zurück, von dem die
-     * Methode aufgerufen wurde.
+     * Diese Methode gibt den HashCode-Wert für das Objekt zurück, von dem die Methode aufgerufen wurde.
      * 
      * @return Der HashCode-Wert des Objekts als int-Representation
      */
@@ -61,8 +60,7 @@ public class Farmer extends AbstractProvider {
     }
 
     /**
-     * Diese Methode prüft, ob das übergebene Objekt gleich dem Objekt ist, von
-     * dem die Methode aufgerufen wurde.
+     * Diese Methode prüft, ob das übergebene Objekt gleich dem Objekt ist, von dem die Methode aufgerufen wurde.
      * 
      * @return wahr/falsch, je nachdem ob zu vergleichende Objekte gleich sind
      */
@@ -93,5 +91,4 @@ public class Farmer extends AbstractProvider {
     public String toString() {
         return "Farmer [distanceToCentral=" + distanceToCentral + "]";
     }
-
 }

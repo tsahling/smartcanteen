@@ -3,6 +3,8 @@ package de.osjava.smartcanteen.helper;
 import java.math.BigDecimal;
 
 /**
+ * Die Klasse {@link NumberHelper} bietet Methoden zum Rechnen mit {@link BigDecimal}s und einige andere nummerische
+ * Hilfsmethoden, die an diversen Stellen in der Applikation eingesetzt werden.
  * 
  * @author Tim Sahling
  */
@@ -36,30 +38,33 @@ public class NumberHelper {
     }
 
     /**
+     * Subtrahiert übergebenen Wert 2 von Wert 1.
      * 
-     * @param value1
-     * @param value2
-     * @return
+     * @param value1 Wert 1
+     * @param value2 Wert 2
+     * @return Subtraktion aus Wert 1 und Wert 2
      */
     public static BigDecimal subtract(BigDecimal value1, BigDecimal value2) {
         return value1.subtract(value2);
     }
 
     /**
+     * Multipliziert zwei übergebene Werte miteinander.
      * 
-     * @param value1
-     * @param value2
-     * @return
+     * @param value1 Wert 1
+     * @param value2 Wert 2
+     * @return Produkt aus Wert 1 und Wert 2
      */
     public static BigDecimal multiply(BigDecimal value1, BigDecimal value2) {
         return value1.multiply(value2);
     }
 
     /**
+     * Dividiert zwei übergebene Werte miteinander.
      * 
-     * @param value1
-     * @param value2
-     * @return
+     * @param value1 Wert 1
+     * @param value2 Wert 2
+     * @return Division aus Wert 1 und Wert 2
      */
     public static BigDecimal divide(BigDecimal value1, BigDecimal value2) {
         return value1.divide(value2);
