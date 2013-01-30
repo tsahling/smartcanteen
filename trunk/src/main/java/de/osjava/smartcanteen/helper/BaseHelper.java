@@ -32,13 +32,12 @@ import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
  * benutzen die Klasse {@link InputFileHandler} für das einlesen der Rohdaten, diese werden dann in einen fachlichen
  * Kontext gebracht.
  * 
- * Die Methode {@link readPriceList} ist für das einlesen und verarbeiten von Preislisten zuständig.
- * Die Methode {@link readHitlist} ist für das einlesen und verarbeiten der Datei der beliebtesten Gerichte zuständig.
- * Die Methode {@link readRecipeList} ist für das einlesen und verarbeiten der Rezeptliste zuständig.
+ * Die Methode readPriceList ist für das einlesen und verarbeiten von Preislisten zuständig.
+ * Die Methode readHitlist ist für das einlesen und verarbeiten der Datei der beliebtesten Gerichte zuständig.
+ * Die Methode readRecipeList ist für das einlesen und verarbeiten der Rezeptliste zuständig.
  * 
- * 
+ * @author Francesco Luciano
  */
-
 public class BaseHelper {
 
     // Feste Werte aus Properties Datei auslesen und String Variablen zuweisen
