@@ -8,12 +8,7 @@ VERSION & DATE
 Version 1.0 vom 30.01.2013
 
 HOW TO START THIS PROJECT
-java
--jar
-SmartCanteen.jar
-[--help] 
-[--inputFiles=Filename;Filename;Filename]
-[--props=PathToProperty=Value;PathToProperty=Value;PathToProperty=Value]
+java -jar SmartCanteen.jar [--help] [--inputFiles=Filename;Filename;Filename] [--props=PathToProperty=Value;PathToProperty=Value;PathToProperty=Value]
 
 AUTHORS
 Marcel Baxmann, Francesco Luciano und Tim Sahling
@@ -38,25 +33,23 @@ dazu kommen, dass teurere Gerichte im randomisierten Modus öfter mit oberster P
 PROPERTIES PARAMETER
 Folgende Einstellungen sind verfügbar:
 application.startGui=true|false|
-
--true: GUI wird geladen
-
--false: Konsolenanwendung starten
--keine Angabe: Abfrage ob Konsole oder GUI
+	-true: GUI wird geladen
+	-false: Konsolenanwendung starten
+	-keine Angabe: Abfrage ob Konsole oder GUI
 planingPeriod.planingMode=sequential|random
--sequential: Tage der Planungsperiode werden nacheinander ausgewählt
--random: Tage der Planungsperiode werden zufällig ausgewählt
+	-sequential: Tage der Planungsperiode werden nacheinander ausgewählt
+	-random: Tage der Planungsperiode werden zufällig ausgewählt
 ingredient.priceForOneUnit.max=Zahlenwert
--Wert muss größer 50 (in Cent) sein und als Dezimalstelle muss ein Punkt [ . ] verwendet werden
+	-Wert muss größer 50 (in Cent) sein und als Dezimalstelle muss ein Punkt [ . ] verwendet werden
 outputData.generateCSV=true|false
--true: CSV-Dateien werden ausgegeben
--false: CSV-Dateien werden NICHT ausgegeben
+	-true: CSV-Dateien werden ausgegeben
+	-false: CSV-Dateien werden NICHT ausgegeben
 outputData.generateHTML=true|false
--true: HTML-Dateien werden ausgegeben
--false: HTML-Dateien werden NICHT ausgegeben
+	-true: HTML-Dateien werden ausgegeben
+	-false: HTML-Dateien werden NICHT ausgegeben
 outputData.dataSetSeperator=;|,
--Semikolon [ ; ]:  CSV-Daten werden mit einem Semikolon [ ; ] getrennt
--Komma [ , ]: CSV-Daten werden mit einem Komma [ , ] getrennt
+	-Semikolon [ ; ]:  CSV-Daten werden mit einem Semikolon [ ; ] getrennt
+	-Komma [ , ]: CSV-Daten werden mit einem Komma [ , ] getrennt
 
 
 LONG USER INSTRUCTIONS
@@ -73,9 +66,7 @@ Die Applikation SmartCanteen läuft grundsätzlich vollständig automatisch ab u
 
 Für einen vollautomatischen Ablauf der Applikation mit Hilfe der Beispieldaten ist folgender Befehl zu verwenden:
 
-java -jar SmartCanteen.jar
---inputFiles=hitliste.csv;preisliste_1.csv;preisliste_2.csv;preisliste_3.csv;preisliste_4.csv;preisliste_5.csv;preisliste_6.csv;preisliste_7.csv;Rezepte.csv;
---props=application.startGui=false
+java -jar SmartCanteen.jar --inputFiles=hitliste.csv;preisliste_1.csv;preisliste_2.csv;preisliste_3.csv;preisliste_4.csv;preisliste_5.csv;preisliste_6.csv;preisliste_7.csv;Rezepte.csv; --props=application.startGui=false
 
 
 Es sind bewusst nicht alle Einstellungen der Anwendung von außen zur Laufzeit konfigurierbar (wird erreicht durch die Deklarierung als static final) 
