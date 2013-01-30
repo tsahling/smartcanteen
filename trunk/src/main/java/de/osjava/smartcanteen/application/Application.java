@@ -135,10 +135,16 @@ public class Application {
     		
     	}
     	
-    	if(getPropertyAppliationStartGui() != null && !getPropertyAppliationStartGui().equals(EMPTY)) {
-    		if(isApplicationStartGui()) {
-    			this.startGui = 1;
-    		}   		
+    	if(args.length != 0) {
+    		
+    		if(getPropertyAppliationStartGui() != null && !getPropertyAppliationStartGui().equals(EMPTY)) {
+    			
+        		if(isApplicationStartGui()) {
+        			this.startGui = 1;
+        		} else {
+        			this.startGui = 0;
+        		}
+    		}
     	}
     	
     	if(!inputFiles) {
