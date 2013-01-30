@@ -21,7 +21,7 @@ import de.osjava.smartcanteen.helper.NumberHelper;
  * Die Klasse {@link ProviderBase} ist eine Datenträgerklasse die in einem Set die Datenobjekte eines
  * Lebensmittelanbieters {@link AbstractProvider} speichert.
  * 
- * @author Francesco Luciano
+ * @author Tim Sahling
  */
 public class ProviderBase {
 
@@ -42,6 +42,7 @@ public class ProviderBase {
     }
 
     /**
+     * 
      * Ermittelt den niedrigsten (günstigsten) Preis für eine Einheit einer {@link Ingredient}.
      * 
      * @param ingredient Die {@link Ingredient}, nach der gesucht wird
@@ -71,10 +72,11 @@ public class ProviderBase {
     }
 
     /**
+     * 
      * Ermittelt eine Liste von {@link PriceListItem}s auf Basis einer {@link Ingredient}.
      * 
      * @param ingredient Die {@link Ingredient}, mit der gesucht wird
-     * @return Eine Liste von {@link PriceListItem}
+     * @return Eine Liste von {@link PriceListItem} >>>>>>> .r232
      */
     private List<PriceListItem> findPriceListItemsByIngredient(Ingredient ingredient) {
         List<PriceListItem> result = new ArrayList<PriceListItem>();

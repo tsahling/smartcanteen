@@ -57,6 +57,7 @@ public class RecipeBase {
     }
 
     /**
+     * 
      * Ermittelt die Rezepte für einen bestimmten {@link IngredientType} und sortiert diese nach Rang.
      * 
      * @param ingredientType Der {@link IngredientType}, nach dem die Rezepte gesucht werden
