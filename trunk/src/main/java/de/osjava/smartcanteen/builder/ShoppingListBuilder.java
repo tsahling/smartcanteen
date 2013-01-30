@@ -246,6 +246,7 @@ public class ShoppingListBuilder {
 
         if (bestPriceProviders != null && !bestPriceProviders.isEmpty()) {
 
+            // Fügt die ermittelten Anbieter in ein Ranking ein
             for (int i = 0; i < bestPriceProviders.size(); i++) {
                 providerRankings.add(new ProviderRanking(bestPriceProviders.get(i), i));
             }
@@ -254,6 +255,8 @@ public class ShoppingListBuilder {
             List<AbstractProvider> optimalQuantityProviders = providerBase
                     .findOptimalQuantityProvidersByIngredientAndQuantity(providers, ingredient, ingredientQuantity);
 
+            // Zuvor ermitteltes Ranking der preisgünstigsten Anbieter wird durch das Ergebnis der geringsten
+            // Ausschussmenge von Anbietern aktualisiert
             for (ProviderRanking providerRanking : providerRankings) {
                 int lastIndexOf = optimalQuantityProviders.lastIndexOf(providerRanking.getProvider());
                 providerRanking.setRank(providerRanking.getRank() + lastIndexOf + 1);
@@ -268,28 +271,31 @@ public class ShoppingListBuilder {
                 }
             });
 
-            // 4. Schritt: Vergleicht ob Anbieter mit gleichem Rank bereits im Ergebnis sind. Wenn ja, wird dieser
-            // bevorzugt verwendet.
-            Iterator<ProviderRanking> iterator = providerRankings.iterator();
+            // 4. Schritt: Vergleicht ob Anbieter mit gleichem Rang bereits im Ergebnis sind. Wenn ja, wird der Anbieter
+            // bevorzugt, der bereits im Ergebnis ist um Transportkosten zu sparen
+            Iterator<ProviderRanking> itr = providerRankings.iterator();
 
-            while (iterator.hasNext()) {
+            while (itr.hasNext()) {
 
-                ProviderRanking next = iterator.next();
+                ProviderRanking pr1 = itr.next();
 
-                if (iterator.hasNext()) {
+                if (itr.hasNext()) {
 
-                    ProviderRanking next2 = iterator.next();
+                    ProviderRanking pr2 = itr.next();
 
-                    if (next.getRank().equals(next2.getRank())) {
+                    // Rang der ersten beiden Anbieter ist gleich
+                    if (pr1.getRank().equals(pr2.getRank())) {
 
-                        if (result.containsKey(next.getProvider())) {
-                            next.setRank(next.getRank() - 1);
+                        if (result.containsKey(pr1.getProvider())) {
+                            pr1.setRank(pr1.getRank() - 1);
                         }
 
-                        if (result.containsKey(next2.getProvider())) {
-                            next2.setRank(next2.getRank() - 1);
+                        if (result.containsKey(pr2.getProvider())) {
+                            pr2.setRank(pr2.getRank() - 1);
                         }
                     }
+                    // Rang ist nicht gleich, dann kann die Iteration unterbrochen werden, da der erste Anbieter sowieso
+                    // das beste Ranking hat
                     else {
                         break;
                     }
@@ -300,7 +306,8 @@ public class ShoppingListBuilder {
 
             }
 
-            // 5. Schritt: Sortiert final die Anbieter nach Ranking
+            // 5. Schritt: Sortiert abschließend die Anbieter nach Ranking, wobei der Anbieter mit dem geringsten
+            // Ranking gewinnt
             Collections.sort(providerRankings, new Comparator<ProviderRanking>() {
 
                 @Override
@@ -309,24 +316,28 @@ public class ShoppingListBuilder {
                 }
             });
 
+            // Fügt den besten Anbieter mitsamt Zutat und Menge in das Ergebnis ein
             addAndSubtractIngredientAndQuantity(result, providerRankings.iterator().next().getProvider(), ingredient,
                     ingredientQuantity, ingredientQuantity);
         }
     }
 
     /**
+     * Fügt den {@link AbstractProvider}, die {@link Ingredient} und einen {@link Amount} in das Ergebnis ein und
+     * subtrahiert den {@link Amount} von der zu subtrahierenden Menge.
      * 
-     * @param result
-     * @param provider
-     * @param ingredient
-     * @param ingredientQuantity
-     * @param quantityToSubtractFrom
+     * @param result Das Ergebnis
+     * @param provider {@link AbstractProvider}, der in das Ergebnis eingefügt wird
+     * @param ingredient {@link Ingredient}, die in das Ergebnis eingefügt wird
+     * @param ingredientQuantity {@link Amount}, die in das Ergebnis eingefügt wird
+     * @param ingredientQuantityToSubtractFrom {@link Amount} von der subtrahiert werden soll
      */
     private void addAndSubtractIngredientAndQuantity(Map<AbstractProvider, Set<IngredientQuantity>> result,
             AbstractProvider provider, Ingredient ingredient, Amount ingredientQuantity,
             Amount ingredientQuantityToSubtractFrom) {
 
-        // Berechnet auf Basis der Zutat und der Menge der Zutat die tatsächlich vom Anbieter zu bestellende Menge
+        // Berechnet auf Basis der Zutat und der Menge der Zutat die tatsächlich vom Anbieter zu bestellende Menge, da
+        // immer nur ganze Gebinde bestellt werden können
         Amount quantityToStore = provider.calculateQuantityFromIngredientAndQuantity(ingredient, ingredientQuantity);
 
         // Überprüfen ob Anbieter die Zutat in gewünschter Menge hat
@@ -341,11 +352,13 @@ public class ShoppingListBuilder {
     }
 
     /**
+     * Fügt die entsprechenden Werte in das Ergebnis ein und erstellt dabei immer ein neues {@link IngredientQuantity}
+     * Objekt.
      * 
-     * @param result
-     * @param provider
-     * @param ingredient
-     * @param quantity
+     * @param result Das Ergebnis
+     * @param provider {@link AbstractProvider}, der in das Ergebnis eingefügt wird
+     * @param ingredient {@link Ingredient}, die in das Ergebnis eingefügt wird
+     * @param quantity {@link Amount}, die in das Ergebnis eingefügt wird
      */
     private void addIngredientAndQuantity(Map<AbstractProvider, Set<IngredientQuantity>> result,
             AbstractProvider provider, Ingredient ingredient, Amount quantity) {
@@ -397,15 +410,11 @@ public class ShoppingListBuilder {
 
                         for (Entry<Date, List<Meal>> entry : mealsGroupedByDate.entrySet()) {
 
-                            Iterator<Meal> iterator = entry.getValue().iterator();
+                            for (int i = 0; i < entry.getValue().size(); i++) {
+                                Recipe recipe = entry.getValue().get(i).getRecipe();
 
-                            int index = 0;
-
-                            while (iterator.hasNext()) {
-
-                                Recipe recipe = iterator.next().getRecipe();
-
-                                BigDecimal mealMultiplyFactor = BuilderHelper.calculateMealMultiplyFactor(index,
+                                // Berechnet den Gerichtprioritätsfaktor
+                                BigDecimal mealMultiplyFactor = BuilderHelper.calculateMealMultiplyFactor(i,
                                         totalMealsForCanteen);
 
                                 if (recipe != null && recipe.getIngredientList() != null && !recipe.getIngredientList()
@@ -435,8 +444,6 @@ public class ShoppingListBuilder {
                                         }
                                     }
                                 }
-
-                                index++;
                             }
                         }
                     }

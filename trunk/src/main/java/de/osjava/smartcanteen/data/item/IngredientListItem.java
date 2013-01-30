@@ -5,14 +5,12 @@ import de.osjava.smartcanteen.data.Recipe;
 import de.osjava.smartcanteen.datatype.Amount;
 
 /**
- * Die Klasse {@link IngredientListItem} stellt eine Lebensmittelposition {@link Ingriedent} aus einem Rezept
- * {@link Recipe} dar. Sie enthält einen
- * Verweis auf die jeweilige zu verwendende Zutat ({@link Ingredient}) und einer
+ * Die Klasse {@link IngredientListItem} stellt eine Lebensmittelposition {@link Ingredient} aus einem Rezept
+ * {@link Recipe} dar. Sie enthält einen Verweis auf die jeweilige zu verwendende Zutat ({@link Ingredient}) und einer
  * Menge ({@link Amount}) die angibt, wieviel von der Zutat benutzt werden muss.
  * 
  * @author Francesco Luciano
  */
-
 public class IngredientListItem {
 
     private Ingredient ingredient;
@@ -21,10 +19,8 @@ public class IngredientListItem {
     /**
      * Standardkonstruktor der Klasse {@link IngredientListItem}
      * 
-     * @param ingredient
-     *            Das Lebenmittel {@link Ingredient}
-     * @param quantity
-     *            Die benötigte Menge {@link Amount} die in dem Rezept {@link Recipe} angegeben ist
+     * @param ingredient Das Lebenmittel {@link Ingredient}
+     * @param quantity Die benötigte Menge {@link Amount} die in dem Rezept {@link Recipe} angegeben ist
      */
     public IngredientListItem(Ingredient ingredient, Amount quantity) {
         this.ingredient = ingredient;

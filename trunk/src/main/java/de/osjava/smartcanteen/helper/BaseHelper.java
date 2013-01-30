@@ -27,8 +27,9 @@ import de.osjava.smartcanteen.datatype.IngredientType;
 import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
 
 /**
- * @author Francesco Luciano
+ * Die Klasse {@link BaseHelper} bietet Methoden zum Einlesen der Datenträgerklassen.
  * 
+ * @author Francesco Luciano
  */
 public class BaseHelper {
 
@@ -51,11 +52,9 @@ public class BaseHelper {
     /**
      * Diese Methode liest die beliebtesten Gerichte der Input Datei HitList
      * 
-     * @param inputFileURL Url der einzulesenden Datei
-     * 
-     * @throws IOException
-     * @author Francesco Luciano
-     * @return hitlist Java List mit Gerichten
+     * @param inputFileURL URL der einzulesenden Datei
+     * @return Eine gefüllte {@link HitListBase}
+     * @throws IOException Alle auftretenden IO-Fehler in der Methode
      */
     public static HitListBase readHitlist(URL inputFileURL) throws IOException {
 
@@ -113,17 +112,16 @@ public class BaseHelper {
     /**
      * Methode um eine Preisliste einzulesen.
      * 
-     * @author Francesco Luciano
      * @param inputFileURL URL der einzulesenden Datei
-     * @return
-     * @throws IOException
+     * @return Eine gefüllte {@link ProviderBase}
+     * @throws IOException Alle IO-Fehler in der Methode
      */
     public static ProviderBase readPriceList(URL inputFileURL, ProviderBase providerBase) throws IOException {
 
         // s.o.
         List<String[]> lines = new ArrayList<String[]>();
 
-        // TODO(Francesco Luciano) Tim Fragen was hier passiert!
+        // Erzeugt eine neue Instanz von der Datenträgerklassen sofern diese noch nicht existiert
         if (providerBase == null) {
             providerBase = new ProviderBase();
         }
@@ -247,14 +245,12 @@ public class BaseHelper {
     }
 
     /**
-     * Methode um eine Rezepte Datei einzulesen
+     * Methode um eine Rezepte Datei einzulesen.
      * 
-     * @author Francesco Luciano
      * @param inputFileURL URL der einzulesenden Datei
-     * @return RecipeBase
-     * @throws IOException
+     * @return Eine gefüllte {@link RecipeBase}
+     * @throws IOException Alle IO-Fehler in der Methode
      */
-
     public static RecipeBase readRecipeList(URL inputFileURL) throws IOException {
 
         // s.o
@@ -330,7 +326,7 @@ public class BaseHelper {
             // Erzeugung eines Rezept mit dem Namen des Rezept (Key des Map Element)
             Recipe recipe = new Recipe(entry.getKey());
 
-            // TODO(Francesco Luciano) Diese Zeile Code von Tim erklaeren lassen
+            // Füllt die Zutatenliste des Rezepts initial mit einem leeren HashSet
             recipe.setIngredientList(new HashSet<IngredientListItem>());
 
             // Erweitertes for um duch die Liste zu iterieren
@@ -345,8 +341,7 @@ public class BaseHelper {
                 // Aufruf der Klassenmethode unitOfMeasurement um den Typ der Masseinheit abzufragen
                 uom = unitOfMeasurement(recipeListItem.getUnit());
 
-                // Erzeugen eines Lebensmittel fuer ein Rezept und hinzufuegen zur Liste
-                // TODO(Francesco Luciano) Diese Zeile Code von Tim erklaeren lassen
+                // Erzeugen eines Lebensmittel fuer ein Rezept und hinzufuegen zur Zutatenliste des Rezepts
                 recipe.getIngredientList().add(
                         new IngredientListItem(new Ingredient(recipeListItem.getNameOfIngredient()), new Amount(value,
                                 uom)));
@@ -354,7 +349,6 @@ public class BaseHelper {
 
             // Rezept in Datentraegerklasse speichern
             recipeBase.addRecipe(recipe);
-
         }
 
         return recipeBase;
@@ -363,8 +357,8 @@ public class BaseHelper {
     /**
      * Methode die ein Rezept mit dem Rang aus der Hitliste setzt
      * 
-     * @param recipeBase sind die eingelesenen Rezepte
-     * @param hitListBase sind die eigelesenen Gerichte der Hitliste
+     * @param recipeBase Die eingelesenen Rezepte
+     * @param hitListBase Die eigelesenen Gerichte der Hitliste
      */
     public static void addRankToRecipes(RecipeBase recipeBase, HitListBase hitListBase) {
 
@@ -392,8 +386,8 @@ public class BaseHelper {
      * gesetzt. Dies muss erfolgen, da in der Rezepte Eingangsdatei keine Typen definiert sind, sondern nur in den
      * Listen der Anbieter.
      * 
-     * @param recipeBase
-     * @param providerBase
+     * @param recipeBase Die eingelesenen Rezepte
+     * @param providerBase Die eingelesenen Anbieter
      */
     public static void addIngredientTypeToIngredientsOfRecipes(RecipeBase recipeBase, ProviderBase providerBase) {
         for (Recipe r : recipeBase.getRecipes()) {
@@ -407,12 +401,12 @@ public class BaseHelper {
 
     /**
      * In den Rezepten und Preislisten sind Masseinheiten als String angeben, diese Strings sollen
-     * in Variablen vom Typ UnitOfMeasurement umgewandelt werden. Um keine keinen redundanten Quellcode in den
-     * Methoden {@link readPriceList} und {@link readRecipeList} zu erzeugen, wird das Vergleichen und erzeugen der
-     * Variable vom Typ UnitOfMeasurement mit dem passenden ENUM diese externe Methode ausgelagert.
+     * in Variablen vom Typ UnitOfMeasurement umgewandelt werden. Um keinen redundanten Quellcode in den
+     * Methoden zu erzeugen, wird das Vergleichen und erzeugen der Variable vom Typ UnitOfMeasurement mit dem passenden
+     * ENUM diese externe Methode ausgelagert.
      * 
      * @param inputUnit String Masseinheit der aus der Datei eingelesen wurde
-     * @return uom Variable vom Typ UnitOfMeasurement mit richtigem ENUM Typ
+     * @return Variable vom Typ UnitOfMeasurement mit richtigem ENUM Typ
      */
     private static UnitOfMeasurement unitOfMeasurement(String inputUnit) {
 
@@ -438,11 +432,11 @@ public class BaseHelper {
     /**
      * In den Rezepten und Preislisten sind Lebensmittel als String angeben, diese Strings sollen
      * in Variablen vom Typ IngredientType umgewandelt werden. Um keinen redundanten Quellcode in den
-     * Methoden {@link readPriceList} und {@link readRecipeList} zu erzeugen, wird das Vergleichen und erzeugen der
+     * Methoden zu erzeugen, wird das Vergleichen und erzeugen der
      * Variable vom Typ IngredientType mit dem passenden ENUM diese externe Methode ausgelagert.
      * 
-     * @param inputUnit String Masseinheit der aus der Datei eingelesen wurde
-     * @return uom Variable vom Typ UnitOfMeasurement mit richtigem ENUM Typ
+     * @param typeOfIngredient String Typ der Zutat
+     * @return Variable vom Typ UnitOfMeasurement mit richtigem ENUM Typ
      */
     private static IngredientType typeOfIngredient(String typeOfIngredient) {
 
@@ -545,5 +539,4 @@ public class BaseHelper {
             return "RecipeListItem [quantityOfIntredient=" + quantityOfIngredient + ", unit=" + unitOfQuantity + ", nameOfIngredient=" + nameOfIngredient + "]";
         }
     }
-
 }

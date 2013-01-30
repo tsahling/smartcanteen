@@ -405,9 +405,7 @@ public class HTMLOutput implements IOutput {
      * Die Ausgabe wird auf Basis der Daten eines Objekts {@link Meal} gestaltet. Dieses
      * Objekt muss der Methode beim Aufruf übergeben werden.
      * 
-     * @param sortedMeal
-     *            ein Gericht
-     * @author Marcel Baxmann
+     * @param sortedMeal Ein Gericht
      */
     private String pictureCheck(Meal sortedMeal) {
         // vordefinierte Bildergröße wird aus Properties ausgelesen
@@ -449,9 +447,7 @@ public class HTMLOutput implements IOutput {
     /**
      * Methode zum generieren eines HTML-Headers mit Überschrift
      * 
-     * @param String
-     *            Titel der im Mail-Header und in Überschrift stehen soll
-     * @author Marcel Baxmann
+     * @param title Titel der im Mail-Header und in Überschrift stehen soll
      * @return String
      */
     private String generateHTMLHeader(String title) {

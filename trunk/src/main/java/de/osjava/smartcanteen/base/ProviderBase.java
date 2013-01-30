@@ -15,12 +15,11 @@ import de.osjava.smartcanteen.data.Ingredient;
 import de.osjava.smartcanteen.data.item.PriceListItem;
 import de.osjava.smartcanteen.datatype.Amount;
 import de.osjava.smartcanteen.datatype.IngredientType;
-import de.osjava.smartcanteen.datatype.UnitOfMeasurement;
 import de.osjava.smartcanteen.helper.NumberHelper;
 
 /**
- * Die Klasse {@link ProviderBase} ist eine Datenträgerklasse die in einem Set
- * die Datenobjekte eines Lebensmittelanbieters {@link AbstractProvider} speichert.
+ * Die Klasse {@link ProviderBase} ist eine Datenträgerklasse die in einem Set die Datenobjekte eines
+ * Lebensmittelanbieters {@link AbstractProvider} speichert.
  * 
  * @author Francesco Luciano
  */
@@ -29,25 +28,24 @@ public class ProviderBase {
     private Set<AbstractProvider> providers;
 
     /**
-     * Methode um einen neuen Lebensmittelanbieter {@link AbstractProvider} dem
-     * Set hinzuzufügen
+     * Methode um einen neuen Lebensmittelanbieter {@link AbstractProvider} dem Set hinzuzufügen.
      * 
-     * @param provider
-     *            Der hinzuzufügende Anbieter
+     * @param provider Der hinzuzufügende Anbieter
      * @return Aktualiserter Anbieter {@link AbstractProvider}
      */
     public AbstractProvider addProvider(AbstractProvider provider) {
-        if (providers == null) {
-            providers = new HashSet<AbstractProvider>();
+        if (this.providers == null) {
+            this.providers = new HashSet<AbstractProvider>();
         }
-        providers.add(provider);
+        this.providers.add(provider);
         return provider;
     }
 
     /**
+     * Ermittelt den niedrigsten (günstigsten) Preis für eine Einheit einer {@link Ingredient}.
      * 
-     * @param ingredient
-     * @return
+     * @param ingredient Die {@link Ingredient}, nach der gesucht wird
+     * @return Die {@link Amount} mit dem niedrigsten Preis
      */
     public Amount findBestPriceForOneUnitOfIngredient(Ingredient ingredient) {
         Amount result = null;
@@ -64,15 +62,16 @@ public class ProviderBase {
                 }
             });
 
-            result = new Amount(priceListItems.iterator().next().calculatePriceForOneUnitOfSize(),
-                    UnitOfMeasurement.EUR);
+            PriceListItem priceListItem = priceListItems.iterator().next();
+
+            result = new Amount(priceListItem.calculatePriceForOneUnitOfSize(), priceListItem.getPrice().getUnit());
         }
 
         return result;
     }
 
     /**
-     * Ermittelt eine Liste von {@link PriceListItem} auf Basis einer {@link Ingredient}.
+     * Ermittelt eine Liste von {@link PriceListItem}s auf Basis einer {@link Ingredient}.
      * 
      * @param ingredient Die {@link Ingredient}, mit der gesucht wird
      * @return Eine Liste von {@link PriceListItem}
@@ -100,11 +99,11 @@ public class ProviderBase {
     /**
      * Methode um den {@link IngredientType} auf Basis des übergebenen Namen zu finden.
      * 
-     * @param name
-     * @return
+     * @param name Der Name nach dem gesucht wird
+     * @return Der {@link IngredientType} dessen Name dem übergebenen Namen entspricht
      */
     public IngredientType findIngredientTypeByIngredientName(String name) {
-        if (providers != null && !providers.isEmpty()) {
+        if (this.providers != null && !this.providers.isEmpty()) {
 
             for (AbstractProvider provider : providers) {
 
@@ -121,14 +120,14 @@ public class ProviderBase {
     }
 
     /**
-     * Summiert für alle Anbieter die Mengen der Zutaten.
+     * Summiert für alle {@link AbstractProvider} die {@link Amount} der {@link Ingredient}s.
      * 
-     * @return
+     * @return Eine Zuordnung von {@link Ingredient} zu deren {@link Amount} über alle {@link AbstractProvider}
      */
     public Map<Ingredient, Amount> sumIngredientQuantities() {
         Map<Ingredient, Amount> result = new HashMap<Ingredient, Amount>();
 
-        if (providers != null && !providers.isEmpty()) {
+        if (this.providers != null && !this.providers.isEmpty()) {
 
             for (AbstractProvider provider : providers) {
 
@@ -151,11 +150,12 @@ public class ProviderBase {
 
     /**
      * Methode um die {@link AbstractProvider} zu ermitteln, die für eine {@link Ingredient} den besten Preis bieten.
-     * Die Auswahl beschränkt sich dabei auf {@link AbstractProvider}, welche die Zutat auch vorrätig haben.
+     * Die Auswahl beschränkt sich dabei auf {@link AbstractProvider}, welche die {@link Ingredient} auch vorrätig
+     * haben.
      * 
-     * @param providersWithIngredient
-     * @param ingredient
-     * @return
+     * @param providersWithIngredient Menge an {@link AbstractProvider}, die die {@link Ingredient} vorrätig haben
+     * @param ingredient Die {@link Ingredient}, nach der gesucht wird
+     * @return Eine nach dem besten (günstigsten) Preis sortierte Liste von {@link AbstractProvider}
      */
     public List<AbstractProvider> findBestPriceProvidersByIngredient(
             final Set<AbstractProvider> providersWithIngredient, final Ingredient ingredient) {
@@ -181,13 +181,14 @@ public class ProviderBase {
 
     /**
      * Methode um die {@link AbstractProvider} zu ermitteln, die für eine {@link Ingredient} und eine {@link Amount} den
-     * besten Preis bieten. Die Auswahl beschränkt sich dabei auf {@link AbstractProvider}, welche die Zutat auch
-     * vorrätig haben.
+     * besten Preis bieten. Die Auswahl beschränkt sich dabei auf {@link AbstractProvider}, welche die
+     * {@link Ingredient} in der benötigten {@link Amount} auch vorrätig haben.
      * 
-     * @param providersWithIngredientAndQuantity
-     * @param ingredient
-     * @param ingredientQuantity
-     * @return
+     * @param providersWithIngredientAndQuantity Menge an {@link AbstractProvider}, die die {@link Ingredient} in der
+     *            benötigten {@link Amount} vorrätig haben
+     * @param ingredient Die {@link Ingredient}, nach der gesucht wird
+     * @param ingredientQuantity Die {@link Amount}, nach der gesucht wird
+     * @return Eine nach dem besten (günstigsten) Preis sortierte Liste von {@link AbstractProvider}
      */
     public List<AbstractProvider> findBestPriceProvidersByIngredientAndQuantity(
             final Set<AbstractProvider> providersWithIngredientAndQuantity, final Ingredient ingredient,
@@ -214,13 +215,14 @@ public class ProviderBase {
 
     /**
      * Methode um die {@link AbstractProvider} zu ermitteln, die für eine {@link Ingredient} und eine {@link Amount} den
-     * geringsten Ausschuss haben. Die Auswahl beschränkt sich dabei auf {@link AbstractProvider}, welche die Zutat auch
-     * vorrätig haben.
+     * geringsten Ausschuss haben. Die Auswahl beschränkt sich dabei auf {@link AbstractProvider}, welche die
+     * {@link Ingredient} in der benötigten {@link Amount} auch vorrätig haben.
      * 
-     * @param providersWithIngredientAndQuantity
-     * @param ingredient
-     * @param ingredientQuantity
-     * @return
+     * @param providersWithIngredientAndQuantity Menge an {@link AbstractProvider}, die die {@link Ingredient} in der
+     *            benötigten {@link Amount} vorrätig haben
+     * @param ingredient Die {@link Ingredient}, nach der gesucht wird
+     * @param ingredientQuantity Die {@link Amount}, nach der gesucht wird
+     * @return Eine nach dem geringsten Ausschuss sortierte Liste von {@link AbstractProvider}
      */
     public List<AbstractProvider> findOptimalQuantityProvidersByIngredientAndQuantity(
             final Set<AbstractProvider> providersWithIngredientAndQuantity, final Ingredient ingredient,
@@ -244,21 +246,20 @@ public class ProviderBase {
         }
 
         return result;
-
     }
 
     /**
      * Ermittelt die {@link AbstractProvider}, die eine bestimmte {@link Ingredient} vorrätig haben.
      * 
      * @param ingredient Die {@link Ingredient}, mit der gesucht wird
-     * @return Ein Set von {@link AbstractProvider}
+     * @return Ein Menge von {@link AbstractProvider}, die die {@link Ingredient} vorrätig haben
      */
     public Set<AbstractProvider> findProvidersByIngredient(Ingredient ingredient) {
         Set<AbstractProvider> result = new HashSet<AbstractProvider>();
 
-        if (providers != null && !providers.isEmpty() && ingredient != null) {
+        if (this.providers != null && !this.providers.isEmpty() && ingredient != null) {
 
-            for (AbstractProvider provider : providers) {
+            for (AbstractProvider provider : this.providers) {
 
                 Set<PriceListItem> priceList = provider.getPriceList();
 
@@ -280,13 +281,14 @@ public class ProviderBase {
 
     /**
      * Methode um die {@link AbstractProvider} zu ermitteln, die eine bestimmte {@link Ingredient} in einer bestimmten
-     * {@link Amount} vorrätig haben. Die Auswahl beschränkt sich dabei auf {@link AbstractProvider}, welche die Zutat
-     * vollständig vorrätig haben.
+     * {@link Amount} vorrätig haben. Die Auswahl beschränkt sich dabei auf {@link AbstractProvider}, welche die
+     * {@link Ingredient} vorrätig haben.
      * 
-     * @param providersWithIngredient
-     * @param ingredient
-     * @param quantity
-     * @return
+     * @param providersWithIngredient Menge an {@link AbstractProvider}, die die {@link Ingredient} vorrätig haben
+     * @param ingredient Die {@link Ingredient}, nach der gesucht wird
+     * @param quantity Die {@link Amount}, nach der gesucht wird
+     * @return Ein Menge von {@link AbstractProvider}, die die {@link Ingredient} und die {@link Amount} vollständig
+     *         vorrätig haben
      */
     public Set<AbstractProvider> findProvidersByIngredientAndQuantity(Set<AbstractProvider> providersWithIngredient,
             Ingredient ingredient, Amount quantity) {
@@ -306,11 +308,11 @@ public class ProviderBase {
     }
 
     /**
-     * Vergleicht die Preise von zwei {@link PriceListItem} miteinander.
+     * Vergleicht die Preise von zwei {@link PriceListItem}s miteinander.
      * 
      * @param pli1 Das erste {@link PriceListItem}
      * @param pli2 Das zweite {@link PriceListItem}
-     * @return 0, -1 oder 1, je nachdem wie sich die Preise der beiden zu vergleichenden {@link PriceListItem}
+     * @return 0, -1 oder 1, je nachdem wie sich die Preise der beiden zu vergleichenden {@link PriceListItem}s
      *         zueinander verhalten
      */
     private int comparePriceOfPriceListItems(PriceListItem pli1, PriceListItem pli2) {
@@ -357,12 +359,13 @@ public class ProviderBase {
     }
 
     /**
-     * Vergleicht die Preise von zwei {@link PriceListItem}s miteinander auf Basis einer übergebenen Menge.
+     * Vergleicht die Preise von zwei {@link PriceListItem}s miteinander auf Basis einer übergebenen {@link Amount}.
      * 
-     * @param pli1
-     * @param pli2
-     * @param quantity
-     * @return
+     * @param pli1 Das erste {@link PriceListItem}
+     * @param pli2 Das zweite {@link PriceListItem}
+     * @param quantity Die {@link Amount}, mit der verglichen wird
+     * @return 0, -1 oder 1, je nachdem wie sich die Preise der beiden zu vergleichenden {@link PriceListItem}s unter
+     *         Berücksichtigung der übergebenen {@link Amount} zueinander verhalten
      */
     private int comparePriceOfPriceListItemsWithQuantity(PriceListItem pli1, PriceListItem pli2, Amount quantity) {
         // Wenn eine Preislistenposition oder die Menge nicht gesetzt ist, wird von Gleichheit ausgegangen. Dieser Fall
