@@ -1,0 +1,1 @@
+Smart canteen is a group project in OSJAVA modul for VAWi
